@@ -29,3 +29,8 @@ gem*
 Desktop
 .heroku
 projects
+.fontconfig
+.gkrellm2
+.local
+erlang
+.npm
