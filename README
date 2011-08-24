@@ -1,0 +1,8 @@
+Linkup vim if you haven't already
+
+ln -s dotvim .vim &&
+ln -s dotvim/vimrc .vimrc
+
+rvm install 1.9.2
+rvm --default 1.9.2
+
