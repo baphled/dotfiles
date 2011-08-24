@@ -1,6 +1,8 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
+plugins=(rails3 git ruby git github rvm vi-mode bundler heroku history-substring-search)
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -30,3 +32,5 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
