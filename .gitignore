@@ -3,3 +3,5 @@
 .zcompdump
 .zsh_history
 .ssh
+.gem
+.rvm
