@@ -6,3 +6,10 @@ dotvim:
   squashed: true
   type: git
   url: git@github.com:baphled/dotvim.git
+oh-my-zsh: 
+  branch: master
+  remote: braid/oh-my-zsh
+  revision: 9f46eafae0bed7df50a0004fca5d25539425ff85
+  squashed: true
+  type: git
+  url: git://github.com/robbyrussell/oh-my-zsh.git
