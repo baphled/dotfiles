@@ -6,7 +6,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="random"
+ZSH_THEME="Soliah"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -25,7 +25,7 @@ DISABLE_AUTO_UPDATE="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(rails3 ruby github rvm vi-mode bundler heroku)
+plugins=(rails3 ruby gem git github rvm vi-mode bundler heroku)
 
 source $ZSH/oh-my-zsh.sh
 
