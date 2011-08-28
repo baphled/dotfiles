@@ -27,7 +27,6 @@ yankring_history_v2.txt
 *.log
 .mediatomb
 .sinan
-.rvmrc
 gem*
 .gconf*
 .ICEauthority
