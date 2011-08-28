@@ -251,6 +251,13 @@ bundle/vim-ruby-sinatra:
   squashed: true
   type: git
   url: git://github.com/hallison/vim-ruby-sinatra
+bundle/vim-rvm: 
+  branch: master
+  remote: master/braid/bundle/vim-rvm
+  revision: f8af571631ee8f7712beb7537bc71574331821ea
+  squashed: true
+  type: git
+  url: git://github.com/csexton/rvm.vim.git
 bundle/vim-textobj-rubyblock: 
   branch: master
   remote: braid/bundle/vim-textobj-rubyblock
