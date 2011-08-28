@@ -28,7 +28,7 @@ DISABLE_AUTO_UPDATE="true"
 plugins=(rails3 ruby gem git github rvm vi-mode bundler heroku history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
-source /home/codechimp/.agile_ruby_workflow.zsh
+source $HOME/.agile_ruby_workflow.zsh
 
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:$PATH
