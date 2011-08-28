@@ -1,4 +1,4 @@
-PROMPT='%{$fg[magenta]%}%n@%M%{$reset_color%}:%{$fg[yellow]%}%~%b%{$reset_color%} $(git_time_since_commit)$(check_git_prompt_info)
+PROMPT='%{$fg[cyan]%}%n@%M%{$reset_color%}:%{$fg[yellow]%}%~%b%{$reset_color%} $(git_time_since_commit)$(check_git_prompt_info)
 $(prompt_char) '
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}"
@@ -32,13 +32,13 @@ function check_git_prompt_info() {
 
 # Determine if we are using a gemset.
 function rvm_gemset() {
-    GEMSET=`rvm gemset list | grep '=>' | cut -b4-`
+    GEMSET=`rvm current`
     if [[ -n $GEMSET ]]; then
         echo "%{$fg[yellow]%}$GEMSET%{$reset_color%}|"
     fi 
-
 }
 
+# Display a different prompt dependant of whether we're using a VC or not
 function prompt_char {
     git branch >/dev/null 2>/dev/null && echo '±' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
