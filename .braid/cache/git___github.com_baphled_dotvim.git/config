@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	ignorecase = true
+[remote "origin"]
+	fetch = +refs/*:refs/*
+	mirror = true
+	url = git://github.com/baphled/dotvim.git
