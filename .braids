@@ -1,11 +1,4 @@
 --- 
-dotvim: 
-  branch: master
-  remote: braid/dotvim
-  revision: c57a7ca150b9c1e07a3cd98b9a121e04e3eca446
-  squashed: true
-  type: git
-  url: git@github.com:baphled/dotvim.git
 oh-my-zsh: 
   branch: master
   remote: braid/oh-my-zsh
