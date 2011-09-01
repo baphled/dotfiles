@@ -1,11 +1,11 @@
 #!/bin/zsh
 # Agile Development Workflow
 #
-# Focuses on speeding up the intial steps of working with on a project
+# Focuses on speeding up the initial steps of working with on a project
 #
  
 # Very useful for quickly refreshing a consoles settings and config.
-alias src_screen='source ~/.zshrc'
+alias shell_src='source ~/.zshrc'
 
 alias cukewip='cucumber -p wip features/'
 # Aliases for my development workflow the main idea
@@ -51,3 +51,4 @@ function _codemonkey_command() {
   echo "Entering $@ for Codemonkey mode:"
   vim $@
 }
+
