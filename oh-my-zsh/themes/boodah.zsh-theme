@@ -1,4 +1,24 @@
-PROMPT='%{$fg[cyan]%}%n@%M%{$reset_color%}:%{$fg[yellow]%}%~%b%{$reset_color%} $(git_time_since_commit)$(check_git_prompt_info)
+let TotalBytes=0
+for Bytes in $(ls -l | grep "^-" | awk '{ print $5 }')
+do
+   let TotalBytes=$TotalBytes+$Bytes
+done
+                # should it say b, kb, Mb, or Gb
+if [ $TotalBytes -lt 1024 ]; then
+   TotalSize=$(echo -e "scale=3 \n$TotalBytes \nquit" | bc)
+   suffix="b"
+elif [ $TotalBytes -lt 1048576 ]; then
+   TotalSize=$(echo -e "scale=3 \n$TotalBytes/1024 \nquit" | bc)
+   suffix="kb"
+elif [ $TotalBytes -lt 1073741824 ]; then
+   TotalSize=$(echo -e "scale=3 \n$TotalBytes/1048576 \nquit" | bc)
+   suffix="Mb"
+else
+   TotalSize=$(echo -e "scale=3 \n$TotalBytes/1073741824 \nquit" | bc)
+   suffix="Gb"
+fi
+
+PROMPT='%{$fg[cyan]%}%n@%M%{$reset_color%}:%{$fg[yellow]%}%~%b%{$reset_color%} $(git_time_since_commit)$(check_git_prompt_info) [%{$TotalBytes%}%{$suffix%}]
 $(prompt_char) '
 
 export LSCOLORS="exfxcxdxbxegedabagacad"
