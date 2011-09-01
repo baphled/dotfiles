@@ -9,7 +9,7 @@ dotvim:
 oh-my-zsh: 
   branch: master
   remote: master/braid/oh-my-zsh
-  revision: 359c0307c7e1a98f7ba7ccc7027dd8b95dfac5ad
+  revision: 6b406b25d2f6899ac56ba7df2d9b0c20c7e7f57b
   squashed: true
   type: git
   url: git://github.com/baphled/oh-my-zsh.git
