@@ -5,7 +5,7 @@
 #
  
 # Very useful for quickly refreshing a consoles settings and config.
-alias shell_src='source ~/.zshrc'
+alias src_shell='source ~/.zshrc'
 
 alias cukewip='cucumber -p wip features/'
 # Aliases for my development workflow the main idea
