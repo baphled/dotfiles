@@ -15,5 +15,6 @@ This is a working progress which includes my personal development settings
 * Be able to start pomodoro sessions
 * Easy deployment of projects
 * Create script to setup rvm and bundler
+* display number of jobs in prompt
 
 * Create seperate branches for OS dependent settings
