@@ -6,13 +6,6 @@ bundle/ack.vim:
   squashed: true
   type: git
   url: http://github.com/mileszs/ack.vim.git
-bundle/align: 
-  branch: master
-  remote: braid/bundles/align
-  revision: fa5fdeeea25269c3e83262c03dfa1ccd27dbd3c9
-  squashed: true
-  type: git
-  url: http://github.com/tsaleh/vim-align.git
 bundle/colors-solarized: 
   branch: master
   remote: master/braid/bundle/colors-solarized
