@@ -50,3 +50,4 @@ erlang
 .irb-history
 .braid
 .macports
+.serverauth.*
