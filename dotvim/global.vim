@@ -86,3 +86,14 @@ set nofoldenable        "dont fold by default "
 " extended '%' mapping for if/then/else/end etc
 runtime macros/matchit.vim
 
+" Automatic fold settings for specific files. Uncomment to use.
+" autocmd FileType ruby setlocal foldmethod=syntax
+" autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
+
+" For ejs templates. Needs a happy home.
+autocmd BufNewFile,BufRead *jst.ejs set filetype=html
+autocmd BufNewFile,BufRead *.zsh-theme set filetype=zsh
+
+" For the MakeGreen plugin and Ruby RSpec. Uncomment to use.
+autocmd BufNewFile,BufRead *_spec.rb compiler rspec
+

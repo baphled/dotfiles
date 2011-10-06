@@ -59,8 +59,6 @@ set laststatus=2                  " Show the status line all the time
 " Useful status information at bottom of screen
 "set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%y%{exists('g:loaded_fugitive')?fugitive#statusline():''}%{exists('g:loaded_rvm')?rvm#statusline():''}%=%-16(\ %l,%c-%v\ %)%P
-" Or use vividchalk
-colorscheme vividchalk
 
 " Tab mappings.
 map <leader>tb :tabnew<cr>
@@ -82,11 +80,3 @@ map <leader>tm :tabmove
 
 "vnoremap ; :
 "vnoremap : ;
-
-" Automatic fold settings for specific files. Uncomment to use.
-" autocmd FileType ruby setlocal foldmethod=syntax
-" autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
-"
-" For ejs templates. Needs a happy home.
-autocmd BufNewFile,BufRead *jst.ejs set filetype=html
-autocmd BufNewFile,BufRead *.zsh-theme set filetype=zsh
