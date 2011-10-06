@@ -85,4 +85,3 @@ map <leader>T :call RunNearestTest()<cr>
 map <leader>a :call RunTests('')<cr>
 map <leader>c :w\|:!bundle exec cucumber<cr>
 map <leader>C :w\|:!bundle exec cucumber --profile wip<cr>
-map <leader>pc :w\|:!RAILS_ENV=cucumber bundle exec rake assets:precompile<cr>
