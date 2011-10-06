@@ -34,7 +34,7 @@ source $HOME/.agile_ruby_workflow.zsh
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:$PATH
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-rvm use 1.9.2@global
+rvm use 1.9.2-head@global
 
 export EDITOR=vim
 
