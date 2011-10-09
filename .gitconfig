@@ -22,3 +22,5 @@
   added = yellow
   changed = green
   untracked = magenta
+[github]
+	user = baphled
