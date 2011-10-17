@@ -2,7 +2,7 @@
 dotvim: 
   branch: master
   remote: master/braid/dotvim
-  revision: de466d9d0dc00711eaf8f309e582f78e8a9f1d2c
+  revision: b6e150ffe95fe4ed158d2608d98784fdd3c59bbf
   squashed: true
   type: git
   url: git://github.com/baphled/dotvim.git
