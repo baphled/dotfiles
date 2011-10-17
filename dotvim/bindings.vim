@@ -81,5 +81,5 @@ endfunction
 map <leader>t :call RunTestFile()<cr>
 map <leader>T :call RunNearestTest()<cr>
 map <leader>a :call RunTests('')<cr>
-map <leader>c :w\|:!cucumber<cr>
-map <leader>C :w\|:!cucumber --profile wip<cr>
+map <leader>c :w\|:!bundle exec cucumber<cr>
+map <leader>C :w\|:!bundle exec cucumber --profile wip<cr>
