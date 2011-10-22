@@ -51,3 +51,5 @@ erlang
 .braid
 .macports
 .serverauth.*
+.NERDTreeBookmarks
+.swt
