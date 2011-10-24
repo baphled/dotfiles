@@ -42,6 +42,8 @@ function! RunTests(filename)
     :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
     if match(a:filename, '\.feature$') != -1
         exec ":!bundle exec cucumber " . a:filename
+    elseif match(a:filename, '_spec\.js\.coffee$') != -1
+        exec ":!jasmine-headless-webkit " . a:filename
     else
         if filereadable("script/test")
             exec ":!script/test " . a:filename
@@ -64,7 +66,7 @@ function! RunTestFile(...)
     endif
 
     " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\)$') != -1
+    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|_spec.js.coffee\)$') != -1
     if in_test_file
         call SetTestFile()
     elseif !exists("t:grb_test_file")
@@ -83,3 +85,4 @@ map <leader>T :call RunNearestTest()<cr>
 map <leader>a :call RunTests('')<cr>
 map <leader>c :w\|:!bundle exec cucumber<cr>
 map <leader>C :w\|:!bundle exec cucumber --profile wip<cr>
+map <leader>j :w\|:!jasmine-headless-webkit %<cr>
