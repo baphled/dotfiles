@@ -86,3 +86,5 @@ map <leader>a :call RunTests('')<cr>
 map <leader>c :w\|:!bundle exec cucumber<cr>
 map <leader>C :w\|:!bundle exec cucumber --profile wip<cr>
 map <leader>j :w\|:!jasmine-headless-webkit %<cr>
+map <leader>J :w\|:!jasmine-headless-webkit<cr>
+map <leader>pc :w\|:!RAILS_ENV=test rake assets:precompile<cr>
