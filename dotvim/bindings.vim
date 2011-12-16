@@ -43,7 +43,7 @@ function! RunTests(filename)
     if match(a:filename, '\.feature$') != -1
         exec ":!bundle exec cucumber " . a:filename
     elseif match(a:filename, '_spec\.js\.coffee$') != -1
-        exec ":!jasmine-headless-webkit " . a:filename
+        exec ":!bundle exec jasmine-headless-webkit " . a:filename
     else
         if filereadable("script/test")
             exec ":!script/test " . a:filename
@@ -85,6 +85,4 @@ map <leader>T :call RunNearestTest()<cr>
 map <leader>a :call RunTests('')<cr>
 map <leader>c :w\|:!bundle exec cucumber<cr>
 map <leader>C :w\|:!bundle exec cucumber --profile wip<cr>
-map <leader>j :w\|:!jasmine-headless-webkit %<cr>
-map <leader>J :w\|:!jasmine-headless-webkit<cr>
-map <leader>pc :w\|:!RAILS_ENV=test rake assets:precompile<cr>
+map <leader>pc :w\|:!RAILS_ENV=cucumber bundle exec rake assets:precompile<cr>
