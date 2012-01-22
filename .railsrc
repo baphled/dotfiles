@@ -1,0 +1,6 @@
+--skip-test-unit
+--full
+--dummy-path=spec/dummy
+--skip-active-record
+--skip-gemfile
+--skip-bundle
