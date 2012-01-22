@@ -1,0 +1,4 @@
+- Fix indentation algorithm to parse correctly:
+  `try..of..catch..after..end'
+  (see http://github.com/jimenezrick/vimerl/issues/7)
+- Review indent file from branch `experimental-indent-aszlig'.

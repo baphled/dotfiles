@@ -342,11 +342,12 @@ function! s:Open(cmd,gem,lcd)
   elseif a:gem ==# ''
     return a:cmd.' `=bundler#buffer().project().path("Gemfile.lock")`'
   elseif has_key(s:project().gems(),a:gem)
-    let exec = a:cmd.' `=bundler#buffer().project().gems()['.string(a:gem).']`'
+    let path = fnameescape(bundler#buffer().project().gems()[a:gem])
+    let exec = a:cmd.' '.path
     if a:cmd =~# '^pedit' && a:lcd
-      let exec .= '|wincmd P|lcd %|wincmd p'
+      let exec .= '|wincmd P|lcd '.path.'|wincmd p'
     elseif a:lcd
-      let exec .= '|lcd %'
+      let exec .= '|lcd '.path
     endif
     return exec
   else
@@ -381,20 +382,18 @@ function! s:buffer_alter_paths() dict abort
       call insert(new,remove(new,index))
     endif
     let old = type(self.getvar('bundler_paths')) == type([]) ? self.getvar('bundler_paths') : []
-    if old !=# new
-      for [option, suffix] in [['path', 'lib'], ['tags', 'tags']]
-        let value = self.getvar('&'.option)
-        if !empty(old)
-          let drop = s:build_path_option(old,suffix)
-          let index = stridx(value,drop)
-          if index > 0
-            let value = value[0:index-1] . value[index+strlen(drop):-1]
-          endif
+    for [option, suffix] in [['path', 'lib'], ['tags', 'tags']]
+      let value = self.getvar('&'.option)
+      if !empty(old)
+        let drop = s:build_path_option(old,suffix)
+        let index = stridx(value,drop)
+        if index > 0
+          let value = value[0:index-1] . value[index+strlen(drop):-1]
         endif
-        call self.setvar('&'.option,value.s:build_path_option(new,suffix))
-      endfor
-      call self.setvar('bundler_paths',new)
-    endif
+      endif
+      call self.setvar('&'.option,value.s:build_path_option(new,suffix))
+    endfor
+    call self.setvar('bundler_paths',new)
   endif
 endfunction
 
