@@ -6,6 +6,13 @@ bundle/ack.vim:
   squashed: true
   type: git
   url: http://github.com/mileszs/ack.vim.git
+bundle/autocomplpop: 
+  branch: master
+  remote: master/braid/bundle/autocomplpop
+  revision: e9ae85ba10ab3a5126e5a667f47ba8a50ac1a725
+  squashed: true
+  type: git
+  url: git://github.com/ayang/AutoComplPop.git
 bundle/colors-solarized: 
   branch: master
   remote: master/braid/bundle/colors-solarized
@@ -27,6 +34,13 @@ bundle/cucumber:
   squashed: true
   type: git
   url: git://github.com/tpope/vim-cucumber.git
+bundle/delimitMate: 
+  branch: master
+  remote: master/braid/bundle/delimitMate
+  revision: 39b8298390a9171c796df077ad3c5f3c0f111c56
+  squashed: true
+  type: git
+  url: git://github.com/Raimondi/delimitMate.git
 bundle/endwise: 
   branch: master
   remote: master/braid/bundles/endwise
