@@ -1,6 +1,4 @@
 .Trash/
-.braid/cache/git___github.com_vim-scripts_ShowMarks.git/
-.dev_stack.sh
 .lesshst
 .profile
 Books
@@ -57,7 +55,6 @@ dotvim/gist.vim
 .dropbox/
 .mysql_history
 Dropbox/
-dotvim/spell/
 .quik_cv.rc.yaml
 .xsession-errors
 .adobe/
