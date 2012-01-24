@@ -60,3 +60,14 @@ Dropbox/
 dotvim/spell/
 .quik_cv.rc.yaml
 .xsession-errors
+.adobe/
+.directory
+.dmrc
+.gstreamer-0.10/
+.pki/
+.pulse-cookie
+.pulse/
+.purple/
+.qt/
+.thumbnails/
+.xine/
