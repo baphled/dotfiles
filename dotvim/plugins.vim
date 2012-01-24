@@ -63,9 +63,28 @@ nmap <leader>k :Ack
 " add Markdown to the list of indentation based languages
 let g:indentobject_meaningful_indentation = ["haml", "sass", "python", "yaml", "markdown"]
 
+" Custom bindings for moving lines alah TextMate
 nmap <C-Up> [e
 nmap <C-Down> ]e
 
 vmap <C-Up> [egv
 vmap <C-Down> ]egv
 
+" Vimerl custom bindings
+
+" Automatic folding
+:let erlang_folding = 0
+
+" Hide and show errors
+nmap <leader>ee :ErlangEnableShowErrors<CR>
+nmap <leader>ede :ErlangDisableShowErrors<CR>
+
+" Skeleton header
+:let erlang_skel_header = {"author": "Yomi Collection", "owner" : "Yomi Colledge"}
+
+" Skeleton bindings
+nmap <leader>ea :ErlangApplication<CR>
+nmap <leader>es :ErlangSupervisor<CR>
+nmap <leader>eg :ErlangGenServer<CR>
+nmap <leader>ef :ErlangGenFsm<CR>
+nmap <leader>ege :ErlangGenEvent<CR>
