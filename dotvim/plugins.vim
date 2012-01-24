@@ -80,7 +80,7 @@ nmap <leader>ee :ErlangEnableShowErrors<CR>
 nmap <leader>ede :ErlangDisableShowErrors<CR>
 
 " Skeleton header
-:let erlang_skel_header = {"author": "Yomi Collection", "owner" : "Yomi Colledge"}
+:let erlang_skel_header = {"author": "Yomi Colledge", "owner" : "Yomi Colledge"}
 
 " Skeleton bindings
 nmap <leader>ea :ErlangApplication<CR>
