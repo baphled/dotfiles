@@ -17,6 +17,7 @@ alias gca='git commit -v -a'
 compdef _git gca=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
+alias gcm='git checkout master'
 alias gb='git branch'
 compdef _git gb=git-branch
 alias gba='git branch -a'
@@ -35,6 +36,8 @@ alias ga='git add'
 compdef _git ga=git-add
 alias gm='git merge'
 compdef _git gm=git-merge
+alias grh='git reset HEAD'
+alias grhh='git reset HEAD --hard'
 
 # Git and svn mix
 alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
