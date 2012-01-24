@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# A basic bash script to help with mass adding files to .gitignore
+# 
+# Doing so mainually can get annoying quick, so this was created to help with
+# moving files you don't care about into the ignore list
+#
+# @TODO Add a flag to include files not to add to the ignore list
+#
+
+set -e
+
+uncommitted_list=`git status | sed '/On branch/,/to include in what/d'| sed '1d' | cut -d '#' -f 2 | sed 's/^[[:space:]]*//'| sed '/nothing added to commit/d'`
+
+for uncommitted in $uncommitted_list; do
+  echo $uncommitted >> ~/.gitignore
+done
