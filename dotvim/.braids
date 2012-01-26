@@ -174,6 +174,13 @@ bundle/vim-indentobject:
   squashed: true
   type: git
   url: git://github.com/austintaylor/vim-indentobject
+bundle/vim-puppet: 
+  branch: master
+  remote: master/braid/bundle/vim-puppet
+  revision: b0dbf8e43a12ec52efd541b594a0a6c4b41f5f40
+  squashed: true
+  type: git
+  url: git://github.com/rodjek/vim-puppet.git
 bundle/vim-ragtag: 
   branch: master
   remote: braid/bundle/vim-ragtag
