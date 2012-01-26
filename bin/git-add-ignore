@@ -10,7 +10,7 @@
 
 set -e
 
-uncommitted_list=`git status | sed '/On branch/,/to include in what/d'| sed '1d' | cut -d '#' -f 2 | sed 's/^[[:space:]]*//'| sed '/nothing added to commit/d'`
+uncommitted_list=`git status | sed '/On branch/,/to include in what/d'| sed '1d' | cut -d '#' -f 2 | sed 's/^[[:space:]]*//'| sed '/added to commit/d'`
 
 for uncommitted in $uncommitted_list; do
   echo $uncommitted >> ~/.gitignore
