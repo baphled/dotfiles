@@ -69,3 +69,6 @@ Dropbox/
 .thumbnails/
 .xine/
 .vagrant.d/
+.CFUserTextEncoding
+.DS_Store
+Public/
