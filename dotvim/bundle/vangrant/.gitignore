@@ -1,0 +1,12 @@
+#
+# Excluded objects
+#
+.*
+tags
+TAGS
+
+#
+# Included objects
+#
+!.gitignore
+

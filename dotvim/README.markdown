@@ -9,7 +9,7 @@ Plugins that are available from a git repository were added with
 
 From your homedirectory (on Linux/Mac OSX):
 
-* `git clone git://github.com/astrails/dotvim.git`
+* `git clone git://github.com/baphled/dotvim.git`
 * `ln -sfn dotvim .vim`
 * `ln -sfn dotvim/vimrc .vimrc`
 * you create and edit ~/.vim\_local if you want to have your some
@@ -19,6 +19,11 @@ From your homedirectory (on Linux/Mac OSX):
   just run `make` at the top of .vim directory
 
 Note: if you already have `~/.vim` `~/.vimrc` REMOVE THEM (you might want to backup them first :)
+
+If your running brew and OSX
+* `brew install mercurial`
+* `brew install https://raw.github.com/adamv/homebrew-alt/master/duplicates/vim.rb`
+* `cd dotvim && make`
 
 #### General configuration
 
@@ -130,12 +135,6 @@ Check out the 'vimrc' file for more...
 
     To see the list of available snippets type `Ctrl-R <Tab>` in the insert mode
 
-*   space ([github](http://github.com/scrooloose/vim-space))
-
-    Smart Space key for Vim
-
-    press SPACE to repeat last motion command
-
 *   surround ([github](http://github.com/tpope/vim-surround))
 
     Delete/change/add parentheses/quotes/XML-tags/much more with ease
@@ -147,30 +146,9 @@ Check out the 'vimrc' file for more...
 
     You should REALLY read the docs if you want to use this one
 
-*   align ([github](http://github.com/tsaleh/vim-align))
-
-    Align and AlignMaps lets you align statements on their equal signs, make comment boxes, align comments, align declarations, etc.
-
-    * `,t=` - align on =
-    * `,tsp` - align on whitespace
-    * `,t,` - align on commas
-    * `,t|` - align on vertical bars
-    * `,acom` - align comments (C/C++)
-    * `:AlignSEPARATORS` - align on separators
-    * `:h align` - see help for more options
-
 *   vividchalk ([vim.org](http://www.vim.org/scripts/script.php?script_id=1891)) ([github](http://github.com/vitaly/vim-vividchalk))
 
     A colorscheme strangely reminiscent of Vibrant Ink for a certain OS X editor
-
-*   sessionman ([vim.org](http://www.vim.org/scripts/script.php?script_id=2010))
-
-    work with Vim sessions by keeping them in the dedicated location and by providing commands to list, open, and save sessions.
-
-    * `,S`, `:SessionList` - list sessions
-    * `,SS`, `:SessionSave` - save session
-    * `,SA`, `:SessionSaveAs` - save new session
-    * check out "Sessions" submenu under "File"
 
 *   ack.vim ([github](http://github.com/mileszs/ack.vim))
 
