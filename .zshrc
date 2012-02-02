@@ -32,6 +32,7 @@ source $HOME/.agile_ruby_workflow.zsh
 
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bin:$PATH
+export LSCOLORS='ExGxFxdxCxDxDxBxBxExEx'
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 rvm use 1.9.2-head@global
