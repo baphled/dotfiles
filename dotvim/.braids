@@ -83,6 +83,13 @@ bundle/nerdcommenter:
   squashed: true
   type: git
   url: git://github.com/scrooloose/nerdcommenter.git
+bundle/nerdtree: 
+  branch: master
+  remote: master/braid/bundles/nerdtree
+  revision: eced5f98a0724cd6498b70024b3edec1e7b29b2e
+  squashed: true
+  type: git
+  url: git://github.com/scrooloose/nerdtree.git
 bundle/pastie: 
   branch: master
   remote: braid/bundles/pastie
