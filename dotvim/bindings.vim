@@ -22,11 +22,29 @@ nmap <leader>e :e **/
 map <S-Insert> <MiddleMouse>
 map! <S-Insert> <MiddleMouse>
 
-" ,n to get the next location (compilation errors, grep etC)
-nmap <leader>n :cn<CR>
+" ,j to get the next location (compilation errors, grep etC)
+nmap <leader>j :cn<CR>
+" ,k to get the previous location (compilation errors, grep etC)
+nmap <leader>k :cp<CR>
+
+" ,; for toggling highlighted search
+noremap <leader>; :set hlsearch! hlsearch?<CR>
+
+" Calling bundle shouldn't be so much of a pain
+nmap <leader>B :Bundle<CR>
 
 "set completeopt=menuone,preview,longest
 set completeopt=menuone,preview
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom bindings for moving lines around alah TextMate
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nmap <C-Up> [e
+nmap <C-Down> ]e
+
+vmap <C-Up> [egv
+vmap <C-Down> ]egv
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Running tests

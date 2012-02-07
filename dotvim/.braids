@@ -20,13 +20,13 @@ bundle/colors-solarized:
   squashed: true
   type: git
   url: git://github.com/altercation/vim-colors-solarized
-bundle/command-t: 
+bundle/ctrlp: 
   branch: master
-  remote: master/braid/bundle/command-t
-  revision: 18686a82a2e4d015b877bf0b6867a269aa8a284f
+  remote: master/braid/bundle/ctrlp
+  revision: ec31fa8bb86aade1da6a5067a908ba59652193fb
   squashed: true
   type: git
-  url: git://git.wincent.com/command-t.git
+  url: https://github.com/kien/ctrlp.vim.git
 bundle/cucumber: 
   branch: master
   remote: master/braid/bundles/cucumber

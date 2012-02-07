@@ -14,8 +14,6 @@ let g:delimitMate_expand_space = 1
 let g:delimitMate_expand_cr = 1
 
 " nerdtree
-" Ctrl-P to Display the file browser tree
-nmap <C-P> :NERDTreeToggle<CR>
 " ,p to show current file in the tree
 nmap <leader>p :NERDTreeFind<CR>
 
@@ -24,21 +22,10 @@ nmap <leader>p :NERDTreeFind<CR>
 nmap <leader>/ :call NERDComment(0, "invert")<cr>
 vmap <leader>/ :call NERDComment(0, "invert")<cr>
 
-" sessionman
-nmap <leader>S :SessionList<CR>
-nmap <leader>SS :SessionSave<CR>
-nmap <leader>SA :SessionSaveAs<CR>
-
-" minibufexpl
-let g:miniBufExplVSplit = 25
-let g:miniBufExplorerMoreThanOne = 100
-let g:miniBufExplUseSingleClick = 1
-" ,b to display current buffers list
-nmap <Leader>b :MiniBufExplorer<cr>
-
 " yankring
 let g:yankring_replace_n_pkey = '<leader>['
 let g:yankring_replace_n_nkey = '<leader>]'
+
 " ,y to show the yankring
 nmap <leader>y :YRShow<cr>
 
@@ -47,13 +34,23 @@ nmap <leader>y :YRShow<cr>
 "let g:rubycomplete_rails = 1
 
 " command-t
-nmap <unique> <silent> <Leader><Leader> :CommandT<CR>
-nmap <unique> <silent> <Leader><Leader><Leader> :CommandTFlush<CR>:CommandT<CR>
+nmap <unique> <silent> <Leader><Leader> :CtrlP<CR>
+nmap <unique> <silent> <Leader><Leader><Leader> :CommandTFlush<CR>:CtrlP<CR>
 let g:CommandTMatchWindowAtTop=1
 
 " Fugitive
 " ,e for Ggrep
 nmap <leader>g :Ggrep 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom bindings for Fugitive
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>gra :Git ra<CR>
+nmap <leader>gp :Git push<CR>
+nmap <leader>gb :Git checkout -b
+nmap <leader>gr :Git rebase -i
+nmap <leader>gdc :Git dc<CR>
+nmap <leader>gst :Git status<CR>
 
 " Ack
 " ,a for Ack
@@ -63,14 +60,9 @@ nmap <leader>k :Ack
 " add Markdown to the list of indentation based languages
 let g:indentobject_meaningful_indentation = ["haml", "sass", "python", "yaml", "markdown"]
 
-" Custom bindings for moving lines alah TextMate
-nmap <C-Up> [e
-nmap <C-Down> ]e
-
-vmap <C-Up> [egv
-vmap <C-Down> ]egv
-
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vimerl custom bindings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Automatic folding
 :let erlang_folding = 0
