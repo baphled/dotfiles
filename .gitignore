@@ -73,3 +73,6 @@ Dropbox/
 .DS_Store
 Public/
 VirtualBox VMs/
+Calibre Library
+.calibre_calibre GUI.lock
+.fonts/
