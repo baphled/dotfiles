@@ -54,7 +54,7 @@ nmap <leader>gst :Git status<CR>
 
 " Ack
 " ,a for Ack
-nmap <leader>k :Ack 
+nmap <leader>ack :Ack 
 
 " vim-indentobject
 " add Markdown to the list of indentation based languages
