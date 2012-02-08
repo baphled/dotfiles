@@ -50,7 +50,7 @@ nmap <leader>gp :Git push<CR>
 nmap <leader>gb :Git checkout -b
 nmap <leader>gr :Git rebase -i
 nmap <leader>gdc :Git dc<CR>
-nmap <leader>gst :Git status<CR>
+nmap <leader>gst :Gstatus<CR>
 
 " Ack
 " ,a for Ack
