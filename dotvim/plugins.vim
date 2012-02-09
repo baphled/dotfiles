@@ -15,7 +15,7 @@ let g:delimitMate_expand_cr = 1
 
 " nerdtree
 " ,p to show current file in the tree
-nmap <leader>p :NERDTreeFind<CR>
+nmap <leader>p :NERDTreeToggle<CR>
 
 " nerdcommenter
 " ,/ to invert comment on the current line/selection
@@ -40,7 +40,7 @@ let g:CommandTMatchWindowAtTop=1
 
 " Fugitive
 " ,e for Ggrep
-nmap <leader>g :Ggrep 
+nmap <leader>grep :Ggrep 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom bindings for Fugitive

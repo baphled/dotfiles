@@ -195,6 +195,13 @@ bundle/vim-rake:
   squashed: true
   type: git
   url: git://github.com/tpope/vim-rake
+bundle/vim-ruby-block-conv: 
+  branch: master
+  remote: master/braid/bundle/vim-ruby-block-conv
+  revision: 8ab3cd3764e5a74e4ccd5ec9c07d6b4a1f76dd68
+  squashed: true
+  type: git
+  url: https://github.com/bronson/vim-ruby-block-conv.git
 bundle/vim-ruby-sinatra: 
   branch: master
   remote: braid/bundle/vim-ruby-sinatra
@@ -209,6 +216,13 @@ bundle/vim-rvm:
   squashed: true
   type: git
   url: git://github.com/csexton/rvm.vim.git
+bundle/vim-snipmate-ruby-snippets: 
+  branch: master
+  remote: master/braid/bundle/vim-snipmate-ruby-snippets
+  revision: be64ced1bf780069571f1d8d40a827f2558c96f8
+  squashed: true
+  type: git
+  url: git://github.com/kaichen/vim-snipmate-ruby-snippets.git
 bundle/vim-textobj-rubyblock: 
   branch: master
   remote: master/braid/bundle/vim-textobj-rubyblock

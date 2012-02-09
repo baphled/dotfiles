@@ -27,6 +27,9 @@ nmap <leader>j :cn<CR>
 " ,k to get the previous location (compilation errors, grep etC)
 nmap <leader>k :cp<CR>
 
+" Toggle spellchecker
+nmap <leader>sp :set spell!<CR>
+
 " ,; for toggling highlighted search
 noremap <leader>; :set hlsearch! hlsearch?<CR>
 
@@ -35,6 +38,15 @@ nmap <leader>B :Bundle<CR>
 
 "set completeopt=menuone,preview,longest
 set completeopt=menuone,preview
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom bindings for increasing/decreasing the height and width of a buffer
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <esc>< :vertical res +10^M<CR>
+nmap <esc>> :vertical res -10^M<CR>
+
+" Toggle paste
+set pastetoggle=<F12>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom bindings for moving lines around alah TextMate
