@@ -15,6 +15,8 @@ main([ModName]) ->
     Edoc = try
         module_edoc(Mod)
     catch
+        exit:error ->
+            [];
         throw:not_found ->
             []
     end,
@@ -27,7 +29,8 @@ main([ModName]) ->
     FunSpecs = merge_functions(Edoc, Info),
     lists:foreach(fun(Fun) -> print_function(Fun) end, FunSpecs);
 main(_) ->
-    bad_module.
+    io:format("Usage: ~s <module>~n", [escript:script_name()]),
+    halt(1).
 
 module_edoc(Mod) ->
     File = case filename:find_src(Mod) of
@@ -99,8 +102,18 @@ analyze_return(Fun) ->
             throw(no_spec)
     end.
 
+simplify_return({typevar, [{name, Name}], _}) ->
+    Name;
 simplify_return({type, _, [Type]}) ->
     simplify_return(Type);
+simplify_return({abstype, _, [Type]}) ->
+    {erlangName, Attrs, _} = Type,
+    Name = proplists:get_value(name, Attrs),
+    Name ++ "()";
+simplify_return({record, _, [Type]}) ->
+    simplify_return(Type) ++ "()";
+simplify_return({nonempty_list, _, [Type]}) ->
+    "[" ++ simplify_return(Type) ++ "]";
 simplify_return({tuple, _, Types}) ->
     Elems = lists:map(fun(Type) -> simplify_return(Type) end, Types),
     "{" ++ string:join(Elems, ", ") ++ "}";
@@ -115,12 +128,8 @@ simplify_return({union, _, Types}) ->
     string:join(Elems, " | ");
 simplify_return({atom, [{value, Val}], _}) ->
     Val;
-simplify_return({typevar, [{name, Name}], _}) ->
-    Name;
-simplify_return({abstype, _, [Type]}) ->
-    {erlangName, Attrs, _} = Type,
-    Name = proplists:get_value(name, Attrs),
-    Name ++ "()".
+simplify_return({nil, _, _}) ->
+    "[]".
 
 get_attribute(Elem, AttrName) ->
     [Attr] = xmerl_xpath:string("@" ++ AttrName, Elem),

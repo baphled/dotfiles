@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:     Erlang
-" Author:       Oscar Hellström <oscar@oscarh.net> (http://oscar.hellstrom.st)
-" Contributors: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
+" Author:       Oscar HellstrÃ¶m <oscar@oscarh.net> (http://oscar.hellstrom.st)
+" Contributors: Ricardo Catalinas JimÃ©nez <jimenezrick@gmail.com>
 " License:      Vim license
 " Version:      2012/01/18
 
@@ -64,7 +64,7 @@ syn match erlangRecordDef                    /^-record\s*(\@=/
 syn match erlangDefine                       /^-\%(define\|undef\)\s*(\@=/
 syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|else\|endif\)\%(\s*(\@=\)\?/
 
-syn match erlangType                         /^-\%(spec\|type\|callback\)[( ]\@=/
+syn match erlangType                         /^-\%(spec\|type\|opaque\|callback\)[( ]\@=/
 
 syn match erlangMacro                        /\%(-define(\)\@<=\w\+/
 syn match erlangMacro                        /?\??\w\+/
