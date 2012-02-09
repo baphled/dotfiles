@@ -13,13 +13,6 @@ bundle/autocomplpop:
   squashed: true
   type: git
   url: git://github.com/ayang/AutoComplPop.git
-bundle/colors-solarized: 
-  branch: master
-  remote: master/braid/bundle/colors-solarized
-  revision: 528a59f26d12278698bb946f8fb82a63711eec21
-  squashed: true
-  type: git
-  url: git://github.com/altercation/vim-colors-solarized
 bundle/ctrlp: 
   branch: master
   remote: master/braid/bundle/ctrlp
@@ -55,13 +48,6 @@ bundle/fugitive:
   squashed: true
   type: git
   url: git://github.com/tpope/vim-fugitive.git
-bundle/greplace: 
-  branch: master
-  remote: braid/bundle/greplace
-  revision: e7fb26ec95ecf97bfe4b99683b95cb37c654460a
-  squashed: true
-  type: git
-  url: git://github.com/skwp/greplace.vim.git
 bundle/jasmine: 
   branch: master
   remote: master/braid/bundle/jasmine
