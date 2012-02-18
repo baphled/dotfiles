@@ -16,6 +16,7 @@ let g:delimitMate_expand_cr = 1
 " nerdtree
 " ,p to show current file in the tree
 nmap <leader>p :NERDTreeToggle<CR>
+nmap <leader>f :NERDTreeFind<CR>
 
 " nerdcommenter
 " ,/ to invert comment on the current line/selection
@@ -50,6 +51,7 @@ nmap <leader>gr :Git rebase -i
 nmap <leader>gcf :Git checkout -- %<CR>
 nmap <leader>gst :Gstatus<CR>
 nmap <leader>gp :Git push<CR>
+nmap <leader>gl :Glog --<CR>
 
 " Bindings to custom git commands
 nmap <leader>gra :Git ra<CR>

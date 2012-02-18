@@ -5,6 +5,9 @@ Plugins that are available from a git repository were added with
 
 *Some* help tips are provided for *some* of the plugins. please check out the plugin's docs for more info.
 
+##### Requirements
+Vim with python & ruby support
+
 ##### Installation
 
 From your homedirectory (on Linux/Mac OSX):
@@ -15,15 +18,7 @@ From your homedirectory (on Linux/Mac OSX):
 * you create and edit ~/.vim\_local if you want to have your some
   local/personal settings you don't want to commit into the repo
 
-* If you want to use command-t file finder plugin you need to compile native extension first.
-  just run `make` at the top of .vim directory
-
 Note: if you already have `~/.vim` `~/.vimrc` REMOVE THEM (you might want to backup them first :)
-
-If your running brew and OSX
-* `brew install mercurial`
-* `brew install https://raw.github.com/adamv/homebrew-alt/master/duplicates/vim.rb`
-* `cd dotvim && make`
 
 #### General configuration
 
@@ -38,37 +33,24 @@ Check out the 'vimrc' file for more...
 
 #### "Interesting" Plugins:
 
+*   conque ([github](http://github.com/rson/conque))
+
+    requires vim compiled with python support
+
+    plugin which allows you to run interactive programs
+
 *   nerdtree ([github](http://github.com/scrooloose/nerdtree))
 
     hax0r vim script to give you a tree explorer
 
-    * `Ctrl-P` - open directory browser
-    * `,p` - to find and highlight the currently open file in the tree
-
-*   command-t 1.0 ([git](git://git.wincent.com/command-t.git))
-
-    TextMate Command-T like file finder for vim
-
-    * `,,` - find file
-    * while at the finder prompt:
-      * `Ctrl-Enter` - open file in a new split
-      * `Ctrl-s` - open file in a new split
-      * `Ctrl-v` - open file in a new vertical split
-      * `Ctrl-U` - clear current partial path
-      * `Esc` - cancel
-      * `Ctrl-c` - cancel
+    * `,P` - open directory browser
+    * `,f` - to find and highlight the currently open file in the tree
 
 *   autocomplpop 2.14.1 ([vim.org](http://www.vim.org/scripts/script.php?script_id=1879))
 
     Automatically opens popup menu for completions
 
     Shouldn't require config.
-
-*   taglist ([vim.org](http://www.vim.org/scripts/script.php?script_id=273))
-
-    Source code browser (supports C/C++, java, perl, python, tcl, sql, php, etc)
-
-    * `,t` - toggle tags window
 
 *    yankring 100 ([vim.org](http://www.vim.org/scripts/script.php?script_id=1234))
 
@@ -141,7 +123,7 @@ Check out the 'vimrc' file for more...
 
     * `dsX` - delete surround X
     * `csXY` - change surround X with Y
-    * `s/S` in visual mode - wrap selection
+    * `S` in visual mode - wrap selection
     * `ysMovementX` - surround movement with X
 
     You should REALLY read the docs if you want to use this one

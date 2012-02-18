@@ -5,7 +5,7 @@ bundle/ack.vim:
   revision: 9895285042a2fd5691b2f6582aa979e4d1bdffea
   squashed: true
   type: git
-  url: http://github.com/mileszs/ack.vim.git
+  url: git://github.com/mileszs/ack.vim.git
 bundle/autocomplpop: 
   branch: master
   remote: master/braid/bundle/autocomplpop
@@ -16,10 +16,10 @@ bundle/autocomplpop:
 bundle/ctrlp: 
   branch: master
   remote: master/braid/bundle/ctrlp
-  revision: ec31fa8bb86aade1da6a5067a908ba59652193fb
+  revision: 93cb20dbfbab723e1557801469ae70f4f46499da
   squashed: true
   type: git
-  url: https://github.com/kien/ctrlp.vim.git
+  url: git://github.com/kien/ctrlp.vim.git
 bundle/cucumber: 
   branch: master
   remote: master/braid/bundles/cucumber
@@ -30,7 +30,7 @@ bundle/cucumber:
 bundle/delimitMate: 
   branch: master
   remote: master/braid/bundle/delimitMate
-  revision: 5cc5d8d9b31fd4089b04deb7e48a2963fb42b275
+  revision: 646794cbda005e090e5f35548581eb34fedd2f6b
   squashed: true
   type: git
   url: git://github.com/Raimondi/delimitMate.git
@@ -51,7 +51,7 @@ bundle/fugitive:
 bundle/jasmine: 
   branch: master
   remote: master/braid/bundle/jasmine
-  revision: 525ba3857ab4628091f67a9b14638b3f9fa77568
+  revision: d9041a4d81672998ecdbfa33a05eb41ba182e6cc
   squashed: true
   type: git
   url: git://github.com/claco/jasmine.vim.git
@@ -72,7 +72,7 @@ bundle/nerdcommenter:
 bundle/nerdtree: 
   branch: master
   remote: master/braid/bundles/nerdtree
-  revision: 2a0578227ebcc334da64f5e93137926388f71ce6
+  revision: 678bb2816874d92bca4eea46e0f5f40a15ddab68
   squashed: true
   type: git
   url: git://github.com/scrooloose/nerdtree.git
@@ -107,7 +107,7 @@ bundle/surround:
 bundle/syntastic: 
   branch: master
   remote: master/braid/bundles/syntastic
-  revision: 258812abc0a3fa7ede038f1041eb669ad97e8108
+  revision: b4a7d4729447f1c912eca390f3e4c9d9d98e62ef
   squashed: true
   type: git
   url: git://github.com/scrooloose/syntastic.git
@@ -141,11 +141,18 @@ bundle/vim-bundler:
   url: git://github.com/tpope/vim-bundler.git
 bundle/vim-coffee-script: 
   branch: master
-  remote: master/braid/bundles/vim-coffee-script
-  revision: 049c8cc01c32931ff115f15b44dfc3a8d3a35872
+  remote: master/braid/bundle/vim-coffee-script
+  revision: d7ec146b7cdfb274bf6a6273d945d7608ea67d5f
   squashed: true
   type: git
-  url: http://github.com/kchmck/vim-coffee-script.git
+  url: git://github.com/kchmck/vim-coffee-script.git
+bundle/vim-conque: 
+  branch: master
+  remote: master/braid/bundle/vim-conque
+  revision: da35739921a258ecce991040f9b1537897a8ff57
+  squashed: true
+  type: git
+  url: git://github.com/rson/vim-conque.git
 bundle/vim-gist: 
   branch: master
   remote: master/braid/bundle/vim-gist
@@ -187,7 +194,14 @@ bundle/vim-ruby-block-conv:
   revision: 8ab3cd3764e5a74e4ccd5ec9c07d6b4a1f76dd68
   squashed: true
   type: git
-  url: https://github.com/bronson/vim-ruby-block-conv.git
+  url: git://github.com/bronson/vim-ruby-block-conv.git
+bundle/vim-ruby-refactoring: 
+  branch: master
+  remote: master/braid/bundle/vim-ruby-refactoring
+  revision: 6447a4debc3263a0fa99feeab5548edf27ecf045
+  squashed: true
+  type: git
+  url: git://github.com/ecomba/vim-ruby-refactoring.git
 bundle/vim-ruby-sinatra: 
   branch: master
   remote: braid/bundle/vim-ruby-sinatra
@@ -233,7 +247,7 @@ bundle/vim-textobj-user:
 bundle/vimerl: 
   branch: master
   remote: master/braid/bundle/vimerl
-  revision: 4c4d1f01068bd9e3f8fa84bf882dc474934ff2fe
+  revision: d9240ec4a31c8a50a029f96d20a22e6d57864100
   squashed: true
   type: git
   url: git://github.com/jimenezrick/vimerl.git
