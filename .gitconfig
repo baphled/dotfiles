@@ -51,6 +51,7 @@
   pom = push origin master
   b = branch
   lstat = log --stat
+  pu = !git fetch origin -v; git fetch upstream -v; git merge upstream/master
 
 [format]
   pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
