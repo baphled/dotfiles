@@ -27,7 +27,7 @@ nmap <leader>j :cn<CR>
 " ,k to get the previous location (compilation errors, grep etC)
 nmap <leader>k :cp<CR>
 
-" Toggle spellchecker
+" Toggle spell checker
 nmap <leader>sp :set spell!<CR>
 
 " ,; for toggling highlighted search
@@ -42,8 +42,8 @@ set completeopt=menuone,preview
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom bindings for increasing/decreasing the height and width of a buffer
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <esc>< :vertical res +10^M<CR>
-nmap <esc>> :vertical res -10^M<CR>
+nmap <esc>> :vertical res +10^M<CR>
+nmap <esc>< :vertical res -10^M<CR>
 
 " Toggle paste
 set pastetoggle=<F12>
@@ -125,5 +125,6 @@ endfunction
 map <leader>t :call RunTestFile()<cr>
 map <leader>T :call RunNearestTest()<cr>
 map <leader>a :call RunTests('')<cr>
+
 nnoremap <leader>c :exec "!clear; bundle exec cucumber " . bufname("%") . ":" . line(".")<CR>
 map <leader>C :w\|:!bundle exec cucumber --profile wip<cr>
