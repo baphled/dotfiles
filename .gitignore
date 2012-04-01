@@ -55,7 +55,6 @@ dotvim/gist.vim
 .dropbox/
 .mysql_history
 Dropbox/
-.quik_cv.rc.yaml
 .xsession-errors
 .adobe/
 .directory
@@ -76,3 +75,7 @@ VirtualBox VMs/
 Calibre Library
 .calibre_calibre GUI.lock
 .fonts/
+.cpan/
+.cups/
+.irb_history
+.rnd
