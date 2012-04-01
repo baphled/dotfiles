@@ -57,6 +57,20 @@ nmap <C-Down> ]e
 
 vmap <C-Up> [egv
 vmap <C-Down> ]egv
+ 
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Shortcuts
+"
+" Change Working Directory to that of the current file
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+cmap cwd lcd %:p:h
+cmap cd. lcd %:p:h
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Format raw JSON string
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Automatically set syntax

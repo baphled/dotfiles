@@ -10,30 +10,35 @@
 
 "let delimitMate_loaded = 1
 
-function! delimitMate#ShouldJump() "{{{
+function! delimitMate#ShouldJump(...) "{{{
 	" Returns 1 if the next character is a closing delimiter.
 	let char = delimitMate#GetCharFromCursor(0)
 	let list = b:_l_delimitMate_right_delims + b:_l_delimitMate_quotes_list
 
 	" Closing delimiter on the right.
-	if index(list, char) > -1
+	if (!a:0 && index(list, char) > -1)
+				\ || (a:0 && char == a:1)
 		return 1
 	endif
 
 	" Closing delimiter with space expansion.
 	let nchar = delimitMate#GetCharFromCursor(1)
-	if b:_l_delimitMate_expand_space && char == " "
+	if !a:0 && b:_l_delimitMate_expand_space && char == " "
 		if index(list, nchar) > -1
-			return 1
+			return 2
 		endif
+	elseif a:0 && b:_l_delimitMate_expand_space && nchar == a:1
+		return 3
 	endif
 
 	" Closing delimiter with CR expansion.
-	let uchar = getline(line('.') + 1)[0]
-	if b:_l_delimitMate_expand_cr && char == ""
+	let uchar = matchstr(getline(line('.') + 1), '^\s*\zs\S')
+	if !a:0 && b:_l_delimitMate_expand_cr && char == ""
 		if index(list, uchar) > -1
-			return 1
+			return 4
 		endif
+	elseif a:0 && b:_l_delimitMate_expand_cr && uchar == a:1
+		return 5
 	endif
 
 	return 0
@@ -70,18 +75,17 @@ function! delimitMate#GetCharFromCursor(...) "{{{
 	return matchstr(line, '.\ze'.repeat('.', pos).'$')
 endfunction "delimitMate#GetCharFromCursor }}}
 
-function! delimitMate#IsCRExpansion() " {{{
+function! delimitMate#IsCRExpansion(...) " {{{
 	let nchar = getline(line('.')-1)[-1:]
-	let schar = getline(line('.')+1)[:0]
-	" TODO: Consider whitespace?
-	let isEmpty = getline('.') == ""
-	if index(b:_l_delimitMate_left_delims, nchar) > -1 &&
-				\ index(b:_l_delimitMate_left_delims, nchar) == index(b:_l_delimitMate_right_delims, schar) &&
-				\ isEmpty
+	let schar = matchstr(getline(line('.')+1), '^\s*\zs\S')
+	let isEmpty = a:0 ? getline('.') =~ '^\s*$' : empty(getline('.'))
+	if index(b:_l_delimitMate_left_delims, nchar) > -1
+				\ && index(b:_l_delimitMate_left_delims, nchar) == index(b:_l_delimitMate_right_delims, schar)
+				\ && isEmpty
 		return 1
-	elseif index(b:_l_delimitMate_quotes_list, nchar) > -1 &&
-				\ index(b:_l_delimitMate_quotes_list, nchar) == index(b:_l_delimitMate_quotes_list, schar) &&
-				\ isEmpty
+	elseif index(b:_l_delimitMate_quotes_list, nchar) > -1
+				\ && index(b:_l_delimitMate_quotes_list, nchar) == index(b:_l_delimitMate_quotes_list, schar)
+				\ && isEmpty
 		return 1
 	else
 		return 0
@@ -244,7 +248,7 @@ function! delimitMate#IsSmartQuote(char) "{{{
 	endif
 	let char_at = delimitMate#GetCharFromCursor(0)
 	let char_before = delimitMate#GetCharFromCursor(-1)
-	let valid_char_re = '\w\|[^[:punct:]]'
+	let valid_char_re = '\w\|[^[:punct:][:space:]]'
 	let word_before = char_before =~ valid_char_re
 	let word_at = char_at  =~ valid_char_re
 	let escaped = delimitMate#CursorIdx() >= 1 && delimitMate#GetCharFromCursor(-1) == '\'
@@ -320,14 +324,13 @@ function! delimitMate#QuoteDelim(char) "{{{
 	endif
 	let char_at = delimitMate#GetCharFromCursor(0)
 	let char_before = delimitMate#GetCharFromCursor(-1)
-	if delimitMate#IsSmartQuote(a:char)
-		" Seems like a smart quote, insert a single char.
-		return a:char
-	"elseif line[col + 1] == a:char &&
-	elseif char_at == a:char &&
+	if char_at == a:char &&
 				\ index(b:_l_delimitMate_nesting_quotes, a:char) < 0
 		" Get out of the string.
 		return a:char . delimitMate#Del()
+	elseif delimitMate#IsSmartQuote(a:char)
+		" Seems like a smart quote, insert a single char.
+		return a:char
 	elseif (char_before == a:char && char_at != a:char) && b:_l_delimitMate_smart_quotes
 		" Seems like we have an unbalanced quote, insert one quotation mark and jump to the middle.
 		call delimitMate#AddToBuffer(a:char)
@@ -344,8 +347,15 @@ function! delimitMate#JumpOut(char) "{{{
 	if delimitMate#IsForbidden(a:char)
 		return a:char
 	endif
-	if delimitMate#GetCharFromCursor(0) == a:char
+	let jump = delimitMate#ShouldJump(a:char)
+	if jump == 1
 		return a:char . delimitMate#Del()
+	elseif jump == 3
+		return ' '.a:char.delimitMate#Del().delimitMate#Del()
+	elseif jump == 5
+		call delimitMate#FlushBuffer()
+		return "\<CR>" . matchstr(getline(line('.') + 1), '^\s*\S')
+					\ . delimitMate#Del() .  "\<Del>"
 	else
 		return a:char
 	endif
@@ -405,11 +415,10 @@ function! delimitMate#ExpandReturn() "{{{
 	if delimitMate#WithinEmptyPair()
 		" Expand:
 		call delimitMate#FlushBuffer()
-		let char = delimitMate#GetCharFromCursor(0)
-		"return "\<Esc>a\<CR>x\<CR>\<Esc>k$\"_xa"
-		"return "\<Esc>a\<CR>\<UP>\<Esc>o"
-		call feedkeys("\<Esc>a\<Del>\<Esc>ox\<BS>\<CR>".char."\<Esc>kA", 't')
-		return ''
+
+		" Not sure why I used the previous combos, but I'm sure somebody will tell
+		" me about it.
+		return "\<Esc>a\<CR>\<Esc>O"
 	else
 		return "\<CR>"
 	endif
@@ -443,7 +452,7 @@ function! delimitMate#BS() " {{{
 		return "\<BS>" . delimitMate#Del()
 	endif
 	if delimitMate#IsCRExpansion()
-		return "\<BS>\<Del>"
+		return "\<BS>" . repeat("\<Del>", len(matchstr(getline(line('.') + 1), '^\s*\S')))
 	endif
 	return "\<BS>"
 endfunction " }}} delimitMate#BS()
@@ -488,6 +497,15 @@ endfunction " }}}
 
 " Tools: {{{
 function! delimitMate#TestMappings() "{{{
+	if &modified
+		echohl WarningMsg
+		let answer = input("Modified buffer, type \"yes\" to write and proceed with test: ") !~ '\c^yes$'
+		echohl NONE
+		if answer != '\c^yes$'
+			return
+		endif
+		write
+	endif
 	let options = sort(keys(delimitMate#OptionsList()))
 	let optoutput = ['delimitMate Report', '==================', '', '* Options: ( ) default, (g) global, (b) buffer','']
 	for option in options
@@ -512,24 +530,18 @@ function! delimitMate#TestMappings() "{{{
 				\ b:_l_delimitMate_left_delims +
 				\ b:_l_delimitMate_quotes_list
 
-	let ibroken = []
+	let imappings = []
 	for map in imaps
-		if maparg(map, "i") !~? 'delimitMate'
-			let output = ''
-			if map == '|'
-				let map = '<Bar>'
-			endif
-			redir => output | execute "verbose imap ".map | redir END
-			let ibroken = ibroken + [map.": is not set:"] + split(output, '\n')
+		let output = ''
+		if map == '|'
+			let map = '<Bar>'
 		endif
+		redir => output | execute "verbose imap ".map | redir END
+		let imappings = imappings + split(output, '\n')
 	endfor
 
 	unlet! output
-	if ibroken == []
-		let output = ['* Mappings:', '', 'All mappings were set-up.', '--------------------', '', '']
-	else
-		let output = ['* Mappings:', ''] + ibroken + ['--------------------', '']
-	endif
+	let output = ['* Mappings:', ''] + imappings + ['--------------------', '']
 	call append('$', output+['* Showcase:', ''])
 	" }}}
 	if b:_l_delimitMate_autoclose
@@ -594,7 +606,7 @@ function! delimitMate#TestMappings() "{{{
 			call append(line('$'), '')
 		endfor
 	endif "}}}
-	redir => setoptions | set | filetype | redir END
+	redir => setoptions | set | filetype | version | redir END
 	call append(line('$'), split(setoptions,"\n")
 				\ + ['--------------------'])
 	setlocal nowrap

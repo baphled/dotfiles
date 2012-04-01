@@ -23,6 +23,29 @@
     X :: iter(),
     Key :: integer().
 
+bar() ->
+    begin
+        more(),
+        any()
+    end.
+
+bar() ->
+    Foo = begin
+        more(),
+        begin
+            no()
+        end,
+        any()
+    end,
+    case neee() of
+        1 ->
+            begin
+                more()
+            end;
+        _ ->
+            fdf
+    end.
+
 foo() ->
     L = [1, 2
          3
@@ -64,7 +87,27 @@ foo() ->
     [{X, Y, Z} ||
         X <- L1,
         Y <- L2,
-        Z <- L3].
+        Z <- L3],
+    [{X, Y, Z}
+     || X <- L1,
+        Y <- L2,
+        Z <- L3],
+    Foo = [{X, Y, Z} || X <- L1,
+                        Y <- L2,
+                        Z <- L3],
+    Foo = [{X, Y, Z} ||
+            X <- L1,
+            Y <- L2,
+            Z <- L3],
+    Foo = [{X, Y, Z}
+           || X <- L1,
+              Y <- L2,
+              Z <- L3],
+    Z = [
+            begin
+                some(X, Y)
+            end || X <- L1,
+                   Y <- L2].
 
 foo() ->
     bar(fun foo/0,

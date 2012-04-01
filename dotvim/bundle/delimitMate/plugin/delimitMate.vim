@@ -143,7 +143,9 @@ function! s:Map() "{{{
 		let save_keymap = &keymap
 		let save_iminsert = &iminsert
 		let save_imsearch = &imsearch
+		let save_cpo = &cpo
 		set keymap=
+		set cpo&vim
 		if b:_l_delimitMate_autoclose
 			call s:AutoClose()
 		else
@@ -151,6 +153,7 @@ function! s:Map() "{{{
 		endif
 		call s:ExtraMappings()
 	finally
+		let &cpo = save_cpo
 		let &keymap = save_keymap
 		let &iminsert = save_iminsert
 		let &imsearch = save_imsearch
@@ -190,7 +193,7 @@ endfunction " }}} s:Unmap()
 function! s:TestMappingsDo() "{{{
 	%d
 	if !exists("g:delimitMate_testing")
-		silent call delimitMate#TestMappings()
+		call delimitMate#TestMappings()
 	else
 		let temp_varsDM = [b:_l_delimitMate_expand_space, b:_l_delimitMate_expand_cr, b:_l_delimitMate_autoclose]
 		for i in [0,1]
@@ -361,6 +364,15 @@ function! s:ExtraMappings() "{{{
 			exec 'silent! imap <unique> <buffer> <'.map.'> <Plug>delimitMate'.map
 		endif
 	endfor
+	" Also for default MacVim movements:
+	if has('gui_macvim')
+		for [key, map] in [['D-Left','Home'], ['D-Right','End'], ['M-Left','C-Left'], ['M-Right','C-Right']]
+			exec 'inoremap <silent> <Plug>delimitMate'.key.' <C-R>=<SID>Finish()<CR><'.map.'>'
+			if mapcheck('<'.key.'>', 'i') == '<'.map.'>'
+				exec 'silent! imap <buffer> <'.key.'> <Plug>delimitMate'.key
+			endif
+		endfor
+	endif
 	" Except when pop-up menu is active:
 	for map in ['Up', 'Down', 'PageUp', 'PageDown', 'S-Down', 'S-Up']
 		exec 'inoremap <silent> <expr> <Plug>delimitMate'.map.' pumvisible() ? "\<'.map.'>" : "\<C-R>=\<SID>Finish()\<CR>\<'.map.'>"'
@@ -385,7 +397,7 @@ function! s:ExtraMappings() "{{{
 	" The following simply creates an ambiguous mapping so vim fully processes
 	" the escape sequence for terminal keys, see 'ttimeout' for a rough
 	" explanation, this just forces it to work
-	if !has('gui_running')
+	if !has('gui_running') && (!exists('g:delimitMate_no_esc_mapping') || !g:delimitMate_no_esc_mapping)
 		imap <silent> <C-[>OC <RIGHT>
 	endif
 endfunction "}}}
@@ -400,7 +412,7 @@ call s:DelimitMateDo()
 command! -bar DelimitMateReload call s:DelimitMateDo(1)
 
 " Quick test:
-command! -bar DelimitMateTest silent call s:TestMappingsDo()
+command! -bar DelimitMateTest call s:TestMappingsDo()
 
 " Switch On/Off:
 command! -bar DelimitMateSwitch call s:DelimitMateSwitch()

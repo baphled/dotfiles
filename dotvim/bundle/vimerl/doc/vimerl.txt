@@ -56,7 +56,8 @@ use the |=| or |v_=| command.
 The code indenting feature it's implemented as an Erlang escript that helps
 Vim parsing code and calculating the indentation level of each line. This
 escript communicates with Vim through a pair of named pipes located in the
-"indent/" folder where Vimerl is installed.
+"indent/" directory where Vimerl is installed or in "/tmp" if "indent/" is
+not writeable.
 
 It is recommended to enable the Vim option |'expandtab'|, with it the code
 will be indented more nicely lining up columns when possible.

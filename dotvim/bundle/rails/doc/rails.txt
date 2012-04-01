@@ -352,7 +352,7 @@ itself!).
 			Otherwise, find the newest migration containing the
 			given pattern.  Omitting the pattern selects the
 			latest migration.  Give a numeric argument of 0 to edit
-			db/schema.rb.
+			db/seeds.rb.
 
 						*rails-:Rmodel*
 :Rmodel [{name}]	Edit the specified or current model.
@@ -548,6 +548,8 @@ A limited amount of completion with <Tab> is supported.
 :Rserver! {options}	Same as |:Rserver|, only first attempts to kill any
 			other server using the same port.  On non-Windows
 			systems, lsof must be installed for this to work.
+			Pass - as an argument to kill the server without
+			restarting it.
 
 REFACTORING HELPERS				*rails-refactoring*
 
