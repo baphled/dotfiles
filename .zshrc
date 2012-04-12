@@ -35,7 +35,6 @@ export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bi
 export LSCOLORS='ExGxFxdxCxDxDxBxBxExEx'
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-rvm use 1.9.2-head@global
 
 alias rake='noglob rake'
 
