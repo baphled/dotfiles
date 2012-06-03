@@ -10,17 +10,14 @@ if exists('g:loaded_ctrlp_tag') && g:loaded_ctrlp_tag
 en
 let g:loaded_ctrlp_tag = 1
 
-let s:tag_var = {
+cal add(g:ctrlp_ext_vars, {
 	\ 'init': 'ctrlp#tag#init()',
 	\ 'accept': 'ctrlp#tag#accept',
 	\ 'lname': 'tags',
 	\ 'sname': 'tag',
 	\ 'enter': 'ctrlp#tag#enter()',
 	\ 'type': 'tabs',
-	\ }
-
-let g:ctrlp_ext_vars = exists('g:ctrlp_ext_vars') && !empty(g:ctrlp_ext_vars)
-	\ ? add(g:ctrlp_ext_vars, s:tag_var) : [s:tag_var]
+	\ })
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
 " Utilities {{{1
@@ -43,19 +40,27 @@ fu! s:findcount(str)
 endf
 
 fu! s:filter(tags)
-	let [nr, alltags] = [0, a:tags]
+	let nr = 0
 	wh 0 < 1
-		if alltags[nr] =~ '^!' && alltags[nr] !~ '^!_TAG_'
+		if a:tags == [] | brea | en
+		if a:tags[nr] =~ '^!' && a:tags[nr] !~ '^!_TAG_'
 			let nr += 1
 			con
 		en
-		if alltags[nr] =~ '^!_TAG_' && len(alltags) > nr
-			cal remove(alltags, nr)
+		if a:tags[nr] =~ '^!_TAG_' && len(a:tags) > nr
+			cal remove(a:tags, nr)
 		el
 			brea
 		en
 	endw
-	retu alltags
+	retu a:tags
+endf
+
+fu! s:syntax()
+	if !ctrlp#nosy()
+		cal ctrlp#hicheck('CtrlPTabExtra', 'Comment')
+		sy match CtrlPTabExtra '\zs\t.*\ze$'
+	en
 endf
 " Public {{{1
 fu! ctrlp#tag#init()
@@ -66,12 +71,7 @@ fu! ctrlp#tag#init()
 		let alltags = s:filter(ctrlp#utils#readfile(each))
 		cal extend(g:ctrlp_alltags, alltags)
 	endfo
-	if has('syntax') && exists('g:syntax_on')
-		if !hlexists('CtrlPTabExtra')
-			hi link CtrlPTabExtra Comment
-		en
-		sy match CtrlPTabExtra '\zs\t.*\ze$'
-	en
+	cal s:syntax()
 	retu g:ctrlp_alltags
 endf
 

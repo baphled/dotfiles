@@ -10,7 +10,7 @@ if ( exists('g:loaded_ctrlp_undo') && g:loaded_ctrlp_undo )
 en
 let g:loaded_ctrlp_undo = 1
 
-let s:undo_var = {
+cal add(g:ctrlp_ext_vars, {
 	\ 'init': 'ctrlp#undo#init()',
 	\ 'accept': 'ctrlp#undo#accept',
 	\ 'lname': 'undo',
@@ -19,10 +19,8 @@ let s:undo_var = {
 	\ 'exit': 'ctrlp#undo#exit()',
 	\ 'type': 'line',
 	\ 'sort': 0,
-	\ }
-
-let g:ctrlp_ext_vars = exists('g:ctrlp_ext_vars') && !empty(g:ctrlp_ext_vars)
-	\ ? add(g:ctrlp_ext_vars, s:undo_var) : [s:undo_var]
+	\ 'nolim': 1,
+	\ })
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
 
@@ -82,11 +80,10 @@ fu! s:elapsed(nr)
 endf
 
 fu! s:syntax()
+	if ctrlp#nosy() | retu | en
 	for [ke, va] in items({'T': 'Directory', 'Br': 'Comment', 'Nr': 'String',
 		\ 'Sv': 'Comment', 'Po': 'Title'})
-		if !hlexists('CtrlPUndo'.ke)
-			exe 'hi link CtrlPUndo'.ke va
-		en
+		cal ctrlp#hicheck('CtrlPUndo'.ke, va)
 	endfo
 	sy match CtrlPUndoT '\v\d+ \zs[^ ]+\ze|\d+:\d+:\d+'
 	sy match CtrlPUndoBr '\[\|\]'
@@ -115,16 +112,13 @@ endf
 fu! s:formatul(...)
 	let parts = matchlist(a:1,
 		\ '\v^\s+(\d+)\s+\d+\s+([^ ]+\s?[^ ]+|\d+\s\w+\s\w+)(\s*\d*)$')
-	retu parts[2].' ['.parts[1].']'.( parts[3] != '' ? ' saved' : '' )
+	retu parts == [] ? '----'
+		\ : parts[2].' ['.parts[1].']'.( parts[3] != '' ? ' saved' : '' )
 endf
 " Public {{{1
 fu! ctrlp#undo#init()
 	let entries = s:undos[0] ? s:undos[1]['entries'] : s:undos[1]
 	if empty(entries) | retu [] | en
-	if has('syntax') && exists('g:syntax_on')
-		cal s:syntax()
-	en
-	let g:ctrlp_nolimit = 1
 	if !exists('s:lines')
 		if s:undos[0]
 			let entries = s:dict2list(s:flatten(entries, s:undos[1]['seq_cur']))
@@ -133,6 +127,7 @@ fu! ctrlp#undo#init()
 			let s:lines = map(reverse(entries), 's:formatul(v:val)')
 		en
 	en
+	cal s:syntax()
 	retu s:lines
 endf
 

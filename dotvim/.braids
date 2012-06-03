@@ -16,7 +16,7 @@ bundle/autocomplpop:
 bundle/ctrlp: 
   branch: master
   remote: master/braid/bundle/ctrlp
-  revision: 448a15c841b40f0af2cd744d4483ae98fa4dd799
+  revision: 96bd4b37f4459f30cc6963142aff6697e42bf69e
   squashed: true
   type: git
   url: git://github.com/kien/ctrlp.vim.git
@@ -30,7 +30,7 @@ bundle/cucumber:
 bundle/delimitMate: 
   branch: master
   remote: master/braid/bundle/delimitMate
-  revision: 93d4a373fb7af25636f930c81a2e1336d1df4a37
+  revision: 9c1564a22f19867c6ce6781ae72da785795b1e84
   squashed: true
   type: git
   url: git://github.com/Raimondi/delimitMate.git
@@ -44,7 +44,7 @@ bundle/endwise:
 bundle/fugitive: 
   branch: master
   remote: master/braid/bundles/fugitive
-  revision: 3c641a7ef5e97d26737e91eaa555ff72a709cfc4
+  revision: 6515bd43acc28c86fcf3bea64ce8a6b3d7db19ff
   squashed: true
   type: git
   url: git://github.com/tpope/vim-fugitive.git
@@ -72,7 +72,7 @@ bundle/nerdcommenter:
 bundle/nerdtree: 
   branch: master
   remote: master/braid/bundles/nerdtree
-  revision: 678bb2816874d92bca4eea46e0f5f40a15ddab68
+  revision: 2cb0fc78fb4c7a1db5f51c042a447cc50f09983d
   squashed: true
   type: git
   url: git://github.com/scrooloose/nerdtree.git
@@ -86,7 +86,7 @@ bundle/pastie:
 bundle/rails: 
   branch: master
   remote: master/braid/bundles/rails
-  revision: 100c82d9883d0551f1079fdfad0e55502ec796da
+  revision: 8412c9b9fef6225696be6c4a97e58a7eb1bbbf1a
   squashed: true
   type: git
   url: git://github.com/tpope/vim-rails.git
@@ -107,7 +107,7 @@ bundle/surround:
 bundle/syntastic: 
   branch: master
   remote: master/braid/bundles/syntastic
-  revision: e961f17c7c19c9888e16f714b37085e0cb833111
+  revision: ec9bf2e983463445b15e1df20c2d774e9bf7361b
   squashed: true
   type: git
   url: git://github.com/scrooloose/syntastic.git
@@ -142,7 +142,7 @@ bundle/vim-bundler:
 bundle/vim-coffee-script: 
   branch: master
   remote: master/braid/bundle/vim-coffee-script
-  revision: e63094684bf6c6a99485e76b786999443d346d94
+  revision: d6dcb9b0fb5beac9e84cfb84c1917b7e0df5850f
   squashed: true
   type: git
   url: git://github.com/kchmck/vim-coffee-script.git
@@ -156,7 +156,7 @@ bundle/vim-conque:
 bundle/vim-gist: 
   branch: master
   remote: master/braid/bundle/vim-gist
-  revision: 9779df862d52ec331674d609288eb3b5ab4dbc5b
+  revision: 5954a994fba2ce75c92d9d211487534c2a525824
   squashed: true
   type: git
   url: git://github.com/mattn/gist-vim.git
@@ -177,14 +177,14 @@ bundle/vim-puppet:
 bundle/vim-ragtag: 
   branch: master
   remote: master/braid/bundle/vim-ragtag
-  revision: 1b82b6726c9894acd37b70ec1cd451d412bdb0f7
+  revision: 22b8dbe92df63ba546960f288fc1551699b9410f
   squashed: true
   type: git
   url: git://github.com/tpope/vim-ragtag
 bundle/vim-rake: 
   branch: master
   remote: master/braid/bundle/vim-rake
-  revision: 8bccbe434e0c79c09523e5ebd062c64ec06604e4
+  revision: af98f573714d0a3c2bec5ca8003762a32dafa925
   squashed: true
   type: git
   url: git://github.com/tpope/vim-rake
@@ -226,7 +226,7 @@ bundle/vim-snipmate-ruby-snippets:
 bundle/vim-tabular: 
   branch: master
   remote: master/braid/bundle/vim-tabular
-  revision: b7b4d8791a50013b56c2d68b6c5708c808203b54
+  revision: ad2a5a1d54443ab27f1282c5617f55b8e0819623
   squashed: true
   type: git
   url: git://github.com/godlygeek/tabular.git
@@ -247,7 +247,7 @@ bundle/vim-textobj-user:
 bundle/vimerl: 
   branch: master
   remote: master/braid/bundle/vimerl
-  revision: d8730f4144c5949e98a3b5246f3cd5976751d7e5
+  revision: 1b24ac6069eeb987d424dbee8e752e8a1981f674
   squashed: true
   type: git
   url: git://github.com/jimenezrick/vimerl.git
@@ -258,10 +258,17 @@ bundle/vividchalk:
   squashed: true
   type: git
   url: git://github.com/vitaly/vim-vividchalk.git
+bundle/webapi-vim: 
+  branch: master
+  remote: master/braid/bundle/webapi-vim
+  revision: d18dc67d6d4747f084848280a7b44f0ed51a2f48
+  squashed: true
+  type: git
+  url: git://github.com/mattn/webapi-vim.git
 vim-pathogen: 
   branch: master
   remote: master/braid/vim-pathogen
-  revision: c9fb89dd6efdeedb95c411ec78b3a9493602d33d
+  revision: 09f2c3b7d3666124157de759a68afe47d0bb8d25
   squashed: true
   type: git
   url: git://github.com/tpope/vim-pathogen.git

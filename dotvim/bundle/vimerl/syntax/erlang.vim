@@ -3,7 +3,7 @@
 " Author:       Oscar Hellström <oscar@oscarh.net> (http://oscar.hellstrom.st)
 " Contributors: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
 " License:      Vim license
-" Version:      2012/01/18
+" Version:      2012/05/07
 
 if exists("b:current_syntax")
 	finish
@@ -20,7 +20,7 @@ syn case match
 
 " Match groups
 syn match erlangStringModifier               /\\./ contained
-syn match erlangStringModifier               /\~\%(-\?[0-9*]\+\)\?\%(\.[0-9*]\+\..\?\)\?\%(c\|f\|e\|g\|s\|w\|p\|W\|P\|B\|X\|#\|b\|+\|n\|i\)/ contained
+syn match erlangStringModifier               /\~\%(-\?[0-9*]\+\)\?\%(\.[0-9*]*\%(\..\?t\?\)\?\)\?\%(\~\|c\|f\|e\|g\|s\|w\|p\|W\|P\|B\|X\|#\|b\|x\|+\|n\|i\)/ contained
 syn match erlangModifier                     /\$\\\?./
 
 syn match erlangInteger                      /\<\%([0-9]\+#[0-9a-fA-F]\+\|[0-9]\+\)\>/
