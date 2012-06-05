@@ -30,9 +30,6 @@ nmap <leader>k :cp<CR>
 " Toggle spell checker
 nmap <leader>sp :set spell!<CR>
 
-" ,; for toggling highlighted search
-noremap <leader>; :set hlsearch! hlsearch?<CR>
-
 " Calling bundle shouldn't be so much of a pain
 nmap <leader>B :Bundle<CR>
 
@@ -77,7 +74,6 @@ function! MapCR()
   nnoremap <cr> :nohlsearch<cr>
 endfunction
 call MapCR()
-nnoremap <leader><leader> <c-^>
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Shortcuts
