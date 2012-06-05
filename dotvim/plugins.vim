@@ -34,10 +34,9 @@ nmap <leader>y :YRShow<cr>
 " completing Rails hangs a lot
 "let g:rubycomplete_rails = 1
 
-" command-t
+" CtrlP
 nmap <unique> <silent> <Leader><Leader> :CtrlP<CR>
-nmap <unique> <silent> <Leader><Leader><Leader> :CommandTFlush<CR>:CtrlP<CR>
-let g:CommandTMatchWindowAtTop=1
+nnoremap <unique> <silent> <Leader><Leader><Leader> :CtrlPClearAllCaches<CR>:CtrlP<CR>
 
 " Fugitive
 " ,e for Ggrep
