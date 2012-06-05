@@ -35,7 +35,7 @@ nmap <leader>y :YRShow<cr>
 "let g:rubycomplete_rails = 1
 
 " CtrlP
-let g:ctrlp_working_path_mode = 1                               "Set to the directory of the current file
+let g:ctrlp_working_path_mode = 2                               "Set to a directory that contains .git
 nmap <unique> <silent> <Leader><Leader> :CtrlP<CR>
 nnoremap <unique> <silent> <Leader><Leader><Leader> :CtrlPClearAllCaches<CR>:CtrlP<CR>
 
