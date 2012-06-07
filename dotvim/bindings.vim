@@ -30,6 +30,9 @@ nmap <leader>k :cp<CR>
 " Toggle spell checker
 nmap <leader>sp :set spell!<CR>
 
+" ,; for toggling highlighted search
+noremap <leader>; :set hlsearch! hlsearch?<CR>
+
 " Calling bundle shouldn't be so much of a pain
 nmap <leader>B :Bundle<CR>
 
@@ -99,21 +102,6 @@ if getline(1) =~ '^#!.*\<mine\>'
 elseif getline(1) =~? '\<drawing\>'
     setfiletype drawing
 endif
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" MULTIPURPOSE TAB KEY
-" Indent if we're at the beginning of a line. Else, do completion.
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
-endfunction
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
-inoremap <s-tab> <c-n>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ARROW KEYS ARE UNACCEPTABLE
