@@ -1,0 +1,53 @@
+SERVER irc.freenode.net
+# /w [<nickname>]                        get info on someone
+# /q [<nickname>]                        query someone
+# /m  <nickname> <text>                  send a message
+# /n  <nickname> <text>                  send a notice
+# /r <text>                              reply to last message I got
+# /a <text>                              followup on my last message
+alias w whois
+alias q query
+alias m msg
+alias n notice
+alias r msg $,
+alias a msg $.
+alias c clear
+alias q query
+
+alias wb window balance
+alias wg window grow
+alias wh window hide
+alias wi whois
+alias wk window kill
+alias wl window list
+alias wn window new
+alias ws window shrink
+
+# /j <channel>                           join a channel
+# /l <channel>                           list people in a channel
+# /ls                                    list in the current channel
+# /i <nickname> [<channel>]              invite someone
+# /hop                                   leave the current channel
+alias j join
+alias l who
+alias ls who *
+alias i invite
+alias hop part $C
+alias ? help    # some convenient aliases to save keystrokes
+alias , msg ,   # reply to the last person who sent you a message
+alias . msg .   # send again to the last person you msg'd
+set novice off
+set history_file ~/.irchistory
+set beep off
+set beep_max 0
+set scroll_lines 1
+set log on
+set suppress_server_motd on
+set auto_away off
+set auto_unmark_away on
+set auto_whowas on
+set clock_24hour on
+set lastlog 1000
+set display on
+
+echo *** .ircrc loaded
