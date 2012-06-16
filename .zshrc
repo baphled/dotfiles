@@ -41,3 +41,4 @@ alias rake='noglob rake'
 export EDITOR=vim
 
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+rvm use 1.9.2-head@devtools
