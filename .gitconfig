@@ -53,6 +53,11 @@
   lstat = log --stat
   pu = !git fetch origin -v; git fetch upstream -v; git merge upstream/master
 
+  wtf = !~/bin/git-wtf
+
+  # Only show my commits with datestamps
+  mine = !git log --pretty=format:"%h' '%ad' '%s" --date=local --date-order --author='baphled'
+
 [format]
   pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
 
