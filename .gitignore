@@ -79,3 +79,7 @@ Calibre Library
 .cups/
 .irb_history
 .rnd
+.*history
+*Log
+.tmuxinator/*.yml
+.gist-vim
