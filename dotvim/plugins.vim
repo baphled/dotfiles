@@ -13,11 +13,6 @@ let g:syntastic_auto_loc_list=1
 let g:delimitMate_expand_space = 1
 let g:delimitMate_expand_cr = 1
 
-" nerdtree
-" ,p to show current file in the tree
-nmap <leader>p :NERDTreeToggle<CR>
-nmap <leader>f :NERDTreeFind<CR>
-
 " nerdcommenter
 " ,/ to invert comment on the current line/selection
 nmap <leader>/ :call NERDComment(0, "invert")<cr>
