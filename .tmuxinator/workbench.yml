@@ -11,6 +11,7 @@ tabs:
       panes:
         - vim
         - #empty, will just run plain zsh
+  - irc: irssi
   - spyhole: tail -f ~/workbench.log
   - shell: gup
   - toybox: be pry
