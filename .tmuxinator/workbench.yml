@@ -13,5 +13,5 @@ tabs:
         - #empty, will just run plain zsh
   - irc: irssi
   - spyhole: tail -f ~/workbench.log
-  - shell: gup
+  - control_centre: git wft
   - toybox: be pry
