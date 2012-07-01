@@ -198,6 +198,13 @@ values: dictionary): >
 Note: the "year" key may be omitted, in that case the current year is used.
 
 ------------------------------------------------------------------------------
+                                                         *'erlang_skel_dir'*
+
+This option allows to define a custom directory to use for loading code
+skeletons (default: "~/.vim/plugin/erlang_skels", values: string): >
+	:let erlang_skel_dir = "~/.vim/plugin/erlang_skels"
+
+------------------------------------------------------------------------------
                                                          *'erlang_keywordprg'*
 
 This option defines the command used to show man pages with the |K| command
