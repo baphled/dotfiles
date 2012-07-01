@@ -83,3 +83,4 @@ Calibre Library
 *Log
 .tmuxinator/*.yml
 .gist-vim
+dotvim/spell
