@@ -13,5 +13,6 @@ tabs:
         - #empty, will just run plain zsh
   - irc: irssi
   - spyhole: tail -f ~/workbench.log
+  - "Development Diary": vi ~/Documents/Diary
   - control_centre: git wft
   - toybox: be pry
