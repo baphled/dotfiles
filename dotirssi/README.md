@@ -1,0 +1,4 @@
+dotirssi
+========
+
+irssi config files

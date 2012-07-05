@@ -1,4 +1,11 @@
 --- 
+dotirssi: 
+  branch: master
+  remote: master/braid/dotirssi
+  revision: 813fde5b031786671b227e21bd39cce90684b38f
+  squashed: true
+  type: git
+  url: git://github.com/baphled/dotirssi.git
 dotvim: 
   branch: master
   remote: master/braid/dotvim
