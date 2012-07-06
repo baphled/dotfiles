@@ -40,5 +40,8 @@ alias rake='noglob rake'
 
 export EDITOR=vim
 
+# We want vi-mode
+set -o vi
+
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 rvm use 1.9.2-head@devtools
