@@ -1,0 +1,4 @@
+# vi-mode like binding
+#
+keymap  F     NEXT_PAGE
+keymap  B     PREV_PAGE
