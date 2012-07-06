@@ -22,6 +22,8 @@ nmap <leader>e :e **/
 map <S-Insert> <MiddleMouse>
 map! <S-Insert> <MiddleMouse>
 
+" TODO: Be nice to have mappings for going to the start and end of a search
+
 " ,j to get the next location (compilation errors, grep etC)
 nmap <leader>j :cn<CR>
 " ,k to get the previous location (compilation errors, grep etC)
@@ -39,8 +41,8 @@ set completeopt=menuone,preview
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom bindings for increasing/decreasing the height and width of a buffer
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <esc>< :vertical res +10^M<CR>
-nmap <esc>> :vertical res -10^M<CR>
+nmap <leader>< :vertical res +10^M<CR>
+nmap <leader>> :vertical res -10^M<CR>
 
 " Toggle paste
 set pastetoggle=<F12>

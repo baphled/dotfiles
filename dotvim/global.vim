@@ -37,7 +37,7 @@ hi User1 term=bold,reverse cterm=bold ctermfg=4 ctermbg=2 gui=bold guifg=Blue gu
                         " ignore these files when completing names and in
                         " explorer
 set wildignore=.svn,CVS,.git,.hg,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
-set shell=/bin/bash     " use bash for shell commands
+set shell=/bin/zsh     " use zsh for shell commands
 set autowriteall        " Automatically save before commands like :next and :make
 set hidden              " enable multiple modified buffers
 set history=1000
@@ -95,3 +95,5 @@ autocmd BufNewFile,BufRead *jst.ejs set filetype=html
 autocmd BufNewFile,BufRead *.zsh-theme set filetype=zsh
 autocmd BufNewFile,BufRead *_spec.rb compiler rspec
 
+" Set Explore to display as a tree
+:let g:netrw_liststyle=3
