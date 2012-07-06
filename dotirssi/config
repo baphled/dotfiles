@@ -303,7 +303,7 @@ settings = {
     twirssi_nick_color = "baphled";
     twitter_poll_interval = "120";
     twitter_usernames = "baphled";
-    browse_command = "tmux send-keys -t interwepts 'lynx %u' C-m &";
+    browse_command = "tmux send-keys -t interwepts 'w3m %u' C-m &";
   };
 };
 windows = {
