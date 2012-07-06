@@ -84,3 +84,9 @@ Calibre Library
 .tmuxinator/*.yml
 .gist-vim
 dotvim/spell
+.w3m/w3mtmp*
+.w3m/w3mcache*
+.w3m/history
+.w3m/cookie
+.w3m/config
+.irc_url_list.html
