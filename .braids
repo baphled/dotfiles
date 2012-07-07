@@ -6,6 +6,13 @@ dotirssi:
   squashed: true
   type: git
   url: git://github.com/baphled/dotirssi.git
+dotmutt: 
+  branch: master
+  remote: master/braid/dotmutt
+  revision: 73dc1aa9ad0a5762329f995b00d0e43730203778
+  squashed: true
+  type: git
+  url: git://github.com/baphled/muttfiles.git
 dotvim: 
   branch: master
   remote: master/braid/dotvim
