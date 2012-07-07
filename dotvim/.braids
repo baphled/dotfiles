@@ -6,6 +6,13 @@ bundle/ack.vim:
   squashed: true
   type: git
   url: git://github.com/mileszs/ack.vim.git
+bundle/asciidoc-vim: 
+  branch: master
+  remote: master/braid/bundle/asciidoc-vim
+  revision: 8789e687c71cef6a5c14603d5aeb398b11e7dd51
+  squashed: true
+  type: git
+  url: git://github.com/dagwieers/asciidoc-vim.git
 bundle/autocomplpop: 
   branch: master
   remote: master/braid/bundle/autocomplpop
