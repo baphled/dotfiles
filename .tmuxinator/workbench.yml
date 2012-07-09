@@ -6,13 +6,15 @@ project_root: ~/
 rvm: 1.9.2-head@workbench
 pre: cd ~/ && bundle
 tabs:
-  - workbench:
+  - Workbench:
       layout: b147,208x73,0,0[208x62,0,0,208x10,0,63{104x10,0,63,103x10,105,63}]
       panes:
         - vim
         - #empty, will just run plain zsh
-  - irc: irssi
-  - spyhole: tail -f ~/workbench.log
-  - "Development Diary": vi ~/Documents/Diary
-  - control_centre: git wft
-  - toybox: be pry
+  - Interwepts: w3m
+  - IRC: irssi
+  - Email: mutt
+  - Spyhole: tail -f ~/workbench.log
+  - "Dotfile Diaries": vi ~/Documents/Diary
+  - 'Control centre': git wft
+  - Toybox: be pry
