@@ -11,7 +11,7 @@ tabs:
       panes:
         - vim
         - #empty, will just run plain zsh
-  - Interwepts: w3m
+  - Interwepts: w3m http://google.com
   - IRC: irssi
   - Email: mutt
   - Spyhole: tail -f ~/workbench.log
