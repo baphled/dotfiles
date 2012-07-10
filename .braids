@@ -2,7 +2,7 @@
 dotirssi: 
   branch: master
   remote: master/braid/dotirssi
-  revision: d24e9b9dd411cb8fdf5e78b2afadcbb660ee1a19
+  revision: 91fcf2cf663da519b60439667019d221d4c934dc
   squashed: true
   type: git
   url: git://github.com/baphled/dotirssi.git

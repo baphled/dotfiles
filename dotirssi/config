@@ -38,6 +38,14 @@ servers = (
     use_ssl = "no";
     ssl_verify = "no";
     autoconnect = "yes";
+  },
+  {
+    address = "localhost";
+    chatnet = "bitlbee";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
   }
 );
 
@@ -113,7 +121,13 @@ channels = (
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
   { name = "#vim"; chatnet = "freenode"; autojoin = "yes"; },
   { name = "#ruby"; chatnet = "freenode"; autojoin = "yes"; },
-  { name = "#cucumber"; chatnet = "freenode"; autojoin = "yes"; }
+  { name = "#cucumber"; chatnet = "freenode"; autojoin = "yes"; },
+  {
+    name = "&bitlbee";
+    chatnet = "bitlbee";
+    autojoin = "yes";
+    autosendcmd = "/say identify; /oper";
+  }
 );
 
 aliases = {
@@ -358,10 +372,9 @@ windows = {
     );
   };
   98 = { name = "nicklist"; sticky = "yes"; };
-  99 = { name = "hilight"; sticky = "yes"; };
 };
 mainwindows = {
-  1 = { first_line = "13"; lines = "52"; };
-  98 = { first_line = "7"; lines = "6"; };
-  99 = { first_line = "1"; lines = "6"; };
+  6 = { first_line = "11"; lines = "54"; };
+  98 = { first_line = "8"; lines = "3"; };
+  7 = { first_line = "1"; lines = "7"; };
 };
