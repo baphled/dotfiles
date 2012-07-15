@@ -1,4 +1,0 @@
-map <C-H> <BS>
-map <Leader> ,
-map <Leader>j :bprev
-map <Leader>k :bnext
