@@ -53,3 +53,7 @@ function zle-line-init zle-keymap-select {
 }
 zle -N zle-line-init
 zle -N zle-keymap-select
+
+# renaming multiple files at once
+autoload -U zmv
+alias mmv='noglob zmv -W'
