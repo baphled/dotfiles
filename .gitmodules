@@ -1,3 +1,6 @@
 [submodule "oh-my-zsh"]
 	path = oh-my-zsh
 	url = git@github.com:baphled/oh-my-zsh.git
+[submodule "dotvim"]
+	path = dotvim
+	url = git@github.com:baphled/dotvim.git
