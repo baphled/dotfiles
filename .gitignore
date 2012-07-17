@@ -91,3 +91,6 @@ dotvim/spell
 .w3m/config
 .irc_url_list.html
 dotmutt/cache
+Mail
+.fetchids
+.netrc

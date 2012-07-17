@@ -1,0 +1,29 @@
+PATH=/usr/bin:/usr/local/bin
+SHELL=/bin/zsh
+
+MAILDIR=$HOME/Mail
+DEFAULT=$HOME/Mail/inbox
+
+# Custom log directory
+LOGFILE=$HOME/logs/procmail.log
+
+# Custom recipes
+:0:
+* ^From.*postmaster.twitter.com
+twitter
+
+:8: # Change this so that it sorts by the digest group
+From:.*group-digests@linkedin.com
+linked-digest
+
+:0:
+*^From:.*linkedin.com
+linkedin
+
+:0:
+*^From:.*facebookmail.com
+facebook
+
+:0:
+* .*
+inbox
