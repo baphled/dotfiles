@@ -24,6 +24,33 @@ linkedin
 *^From:.*facebookmail.com
 facebook
 
+# Stolen from: http://bethesignal.org/dotfiles/procmailrc.html
+
+# ARTFUL PROCMAIL ALERT!
+# Here are two rules that will automagically filter *most* list emails based on
+# sane matches, such as list id. Very funky, and you almost never have to deal
+# with folder-making for lists again.
+
+# MOST LISTS - Automagically handle lists
+:0
+* ^((List-Id|X-(Mailing-)?List):(.*[<]\/[^>]*))
+{
+    LISTID=$MATCH
+
+    :0:
+    * LISTID ?? ^\/[^@\.]*
+    $MATCH
+
+}
+
+# MAJORDOMO - Automagically handle Majordomo lists
+:0
+* ^Sender: owner-[^@]+@[^@\+]+
+* ^Sender: owner-\/[^@\+]+
+{
+    :0:
+    $MATCH
+}
 :0:
 * .*
 inbox
