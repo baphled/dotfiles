@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# A very basic script for running procmail in dry run mode.
+
+function procmail_dryrun {
+  procmail VERBOSE=on DEFAULT=/dev/null   \
+    LOGFILE=~/logs/procmail-dryrun.log		\
+      ~/.procmailrc < ~/emailtest.txt
+}
+
+function main {
+  procmail_dryrun
+}
+
+main
