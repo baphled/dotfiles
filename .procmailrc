@@ -47,6 +47,10 @@ twitter
   $MATCH
 }
 
+:0: # PR crap from various sites
+* ^From:.*(sale|sell|offers|discount|marketing)
+pr-bumph
+
 #
 # Catch the rest
 :0:
