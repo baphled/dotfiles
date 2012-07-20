@@ -47,6 +47,32 @@ LOGFILE=$HOME/logs/procmail.log
 * ^(From|Subject):.*(sale|sell|offers|discount|marketing|feedback)
 pr-bumph
 
+:0: # Personal services
+* ^(From|Subject):.*(account|billing|newrelic)
+paid-services
+
+:0: # Recruitment minutia
+* ^Subject:.*(php|perl|.net|vb|javascript)
+recruitment-noobs
+
+:0: # Recruitment minutia
+* ^Subject:.*(ruby|rails|erlang|recruitment)
+recruitment
+
+#
+# Social
+#
+:0:
+* ^From.*postmaster.twitter.com
+twitter
+
+# Some socmeds use listservs so this should 
+# go after filtering mail servers
+#
+:0:
+* ^From.*(facebookmail|uberlife|klout|twitter|branchout|meetup|schoolfeed)
+socmed
+
 #
 # Catch the rest
 :0:
