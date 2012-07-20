@@ -8,10 +8,6 @@ DEFAULT=$HOME/Mail/inbox
 LOGFILE=$HOME/logs/procmail.log
 
 # Custom recipes
-:0:
-* ^From.*postmaster.twitter.com
-twitter
-
 #
 # Discussion groups
 #
@@ -48,7 +44,7 @@ twitter
 }
 
 :0: # PR crap from various sites
-* ^From:.*(sale|sell|offers|discount|marketing)
+* ^(From|Subject):.*(sale|sell|offers|discount|marketing|feedback)
 pr-bumph
 
 #
