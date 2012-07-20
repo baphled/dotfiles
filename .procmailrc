@@ -14,7 +14,7 @@ LOGFILE=$HOME/logs/procmail.log
 
 :0: # Change this so that it sorts by the digest group
 * ^(From):(\/.*).*\<group-digests@linkedin.com\>
-`echo $MATCH | awk '{$NF=""}1' | sed 's/ //g'`
+In.list.`echo $MATCH | awk '{$NF=""}1' | sed 's/ //g'`
 
 # Stolen from: http://bethesignal.org/dotfiles/procmailrc.html
 
@@ -31,7 +31,7 @@ LOGFILE=$HOME/logs/procmail.log
 
   :0:
   * LISTID ?? ^\/[^@\.]*
-  lists/$MATCH
+  In.list.$MATCH
 }
 
 # MAJORDOMO - Automagically handle Majordomo lists
@@ -40,7 +40,7 @@ LOGFILE=$HOME/logs/procmail.log
 * ^Sender: owner-\/[^@\+]+
 {
   :0:
-  lists/$MATCH
+  In.list.$MATCH
 }
 
 #
@@ -61,13 +61,13 @@ In.paid-services
 * ^(From|Subject):.*(news|shop|sale|sell|offers|discount|marketing|feedback|deals)
 In.pr
 
-:0: # Recruitment minutia
-* ^Subject:.*(php|perl|.net|vb|javascript)
-In.recruitment-noobs
-
-:0: # Recruitment minutia
+:0: # Recruitment agencies
 * ^Subject:.*(ruby|rails|erlang|recruitment)
 In.recruitment
+
+:0: # Recruitment minutia
+* ^Subject:.*(php|perl|.net|vb|javascript|contract|seo)
+In.recruitment-noobs
 
 #
 # Social
@@ -87,6 +87,9 @@ In.twitter.pr
 * ^From.*38degrees.org.uk
 In.social.petitions
 
+:0: # Dev news
+* ^From:.*(peepcode|pragprog)
+In.dev-news
 
 # Some socmeds use listservs so this should 
 # go after filtering mail servers
