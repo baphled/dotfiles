@@ -12,6 +12,10 @@ LOGFILE=$HOME/logs/procmail.log
 * ^From.*postmaster.twitter.com
 twitter
 
+#
+# Discussion groups
+#
+
 :0: # Change this so that it sorts by the digest group
 * ^(From):(\/.*).*\<group-digests@linkedin.com\>
 `echo $MATCH | awk '{$NF=""}1' | sed 's/ //g'`
@@ -43,6 +47,8 @@ twitter
   $MATCH
 }
 
+#
+# Catch the rest
 :0:
 * .*
 inbox
