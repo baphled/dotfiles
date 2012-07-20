@@ -31,7 +31,7 @@ LOGFILE=$HOME/logs/procmail.log
 
   :0:
   * LISTID ?? ^\/[^@\.]*
-  $MATCH
+  lists/$MATCH
 }
 
 # MAJORDOMO - Automagically handle Majordomo lists
@@ -40,41 +40,63 @@ LOGFILE=$HOME/logs/procmail.log
 * ^Sender: owner-\/[^@\+]+
 {
   :0:
-  $MATCH
+  lists/$MATCH
 }
 
-:0: # PR crap from various sites
-* ^(From|Subject):.*(sale|sell|offers|discount|marketing|feedback)
-pr-bumph
+#
+# Garage collection
+#
+# There's a heap of emails that I'm not that bothered about.
+#
+# To easily manage this I've come up with the following recipes these maybe a
+# little niave at the moment but I'll work with them for now and see how they
+# how they go
+#
 
 :0: # Personal services
-* ^(From|Subject):.*(account|billing|newrelic)
-paid-services
+* ^(From|Subject):.*(service|account|billing|newrelic|github)
+In.paid-services
+
+:0: # PR crap from various sites
+* ^(From|Subject):.*(news|shop|sale|sell|offers|discount|marketing|feedback|deals)
+In.pr
 
 :0: # Recruitment minutia
 * ^Subject:.*(php|perl|.net|vb|javascript)
-recruitment-noobs
+In.recruitment-noobs
 
 :0: # Recruitment minutia
 * ^Subject:.*(ruby|rails|erlang|recruitment)
-recruitment
+In.recruitment
 
 #
 # Social
 #
 :0:
+* ^Subject.* retweeted one of your Tweets!
+IN.twitter.retweets
+
+:0:
 * ^From.*postmaster.twitter.com
-twitter
+In.twitter.pr
+
+#
+# Personal
+#
+:0:
+* ^From.*38degrees.org.uk
+In.social.petitions
+
 
 # Some socmeds use listservs so this should 
 # go after filtering mail servers
 #
 :0:
 * ^From.*(facebookmail|uberlife|klout|twitter|branchout|meetup|schoolfeed)
-socmed
+In.socmed
 
 #
 # Catch the rest
 :0:
 * .*
-inbox
+$DEFAULT
