@@ -35,12 +35,11 @@ facebook
 :0
 * ^((List-Id|X-(Mailing-)?List):(.*[<]\/[^>]*))
 {
-    LISTID=$MATCH
+  LISTID=$MATCH
 
-    :0:
-    * LISTID ?? ^\/[^@\.]*
-    $MATCH
-
+  :0:
+  * LISTID ?? ^\/[^@\.]*
+  $MATCH
 }
 
 # MAJORDOMO - Automagically handle Majordomo lists
@@ -48,9 +47,10 @@ facebook
 * ^Sender: owner-[^@]+@[^@\+]+
 * ^Sender: owner-\/[^@\+]+
 {
-    :0:
-    $MATCH
+  :0:
+  $MATCH
 }
+
 :0:
 * .*
 inbox
