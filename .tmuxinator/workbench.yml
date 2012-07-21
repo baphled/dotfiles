@@ -3,7 +3,7 @@
 
 project_name: workbench
 project_root: ~/
-rvm: 1.9.2-head@workbench
+rvm: 1.9.2-head@global
 pre: cd ~/ && bundle
 tabs:
   - Workbench:
