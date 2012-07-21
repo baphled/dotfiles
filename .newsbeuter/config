@@ -1,0 +1,9 @@
+browser                 w3m
+
+urls-source             "googlereader"
+googlereader-login      "baphled@gmail.com"
+
+googlereader-flag-share "a"
+googlereader-flag-star  "b"
+
+macro E set browser "echo %u >> ~/.newsbeuter/queue" ; open ; set browser "w3m %u"
