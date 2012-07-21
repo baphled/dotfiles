@@ -10,7 +10,7 @@ require "fileutils"
 # this script you can simply pass the git repo to clone and sit back whilst it
 # and the workflow needed to work on a given project are setup for you.
 #
-# Example: setup_project git@github.com:baphled/dotfiles.git
+# Example: setup_project git@github.com:username/project.git
 
 # Get project name
 git_repo = ARGV[0]
@@ -27,16 +27,18 @@ STDOUT.puts "Creating repository for #{project_name}"
 #
 %x{mkdir #{project_name} && cd #{project_name}}
 
+ruby_version = ''
 # does the project have a .rvmrc
-ruby_version = %x{rvm current}.strip.split('@').first
-
 #Create gemset for the project
 if not File.exist? File.join project_path, ".rvmrc"
+  ruby_version = %x{rvm current}.strip.split('@').first
+
   STDOUT.puts "Creating a gemset for #{ruby_version}@#{project_name}"
   %x{rvm --create --rvmrc #{ruby_version}@#{project_name}}
 else
   rvm = IO.read File.join project_path, '.rvmrc'
-  STDOUT.puts "Using gemset for #{ruby_version}"
+  ruby_version = rvm.split(' ')[1].split('@')[0]
+  STDOUT.puts "Using gemset for #{rvm}"
   %x{#{rvm}}
 end
 
