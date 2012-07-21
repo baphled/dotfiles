@@ -16,6 +16,6 @@ tabs:
   - "Newsfeed": newsbeuter
   - Email: mutt
   - Spyhole: tail -f ~/workbench.log
-  - "Dotfile Diaries": vi ~/Documents/Diary
+  - "Dotfile Diaries": cd ~/Documents/Diary && vi
   - 'Control centre': git wft
   - Toybox: be pry
