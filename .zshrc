@@ -34,8 +34,6 @@ source $HOME/.agile_ruby_workflow.zsh
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bin:$PATH
 export LSCOLORS='ExGxFxdxCxDxDxBxBxExEx'
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-
 alias rake='noglob rake'
 
 export EDITOR=vim
