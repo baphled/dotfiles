@@ -12,6 +12,5 @@ tabs:
         - vim
         - #empty, will just run plain zsh
   - "Ruby Docs": w3m http://www.ruby-doc.org/core-RUBY_VERSION/
-  - Spyhole: tail -f ~/workbench.log
   - "Project Summary": git wtf
   - Toybox: be pry
