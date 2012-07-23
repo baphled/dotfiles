@@ -6,7 +6,7 @@ require "fileutils"
 # Running this script will automatically clone a project via github and create
 # a new tmux config session file which it then calls.
 #
-# The basic premise is to remove the repeatition of setting up projects. With
+# The basic premise is to remove the repetition of setting up projects. With
 # this script you can simply pass the git repo to clone and sit back whilst it
 # and the workflow needed to work on a given project are setup for you.
 #
