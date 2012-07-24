@@ -42,7 +42,6 @@ export EDITOR=vim
 set -o vi
 
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-rvm use 1.9.2-head@global
 
 # Display the vi-mode your currently in
 function zle-line-init zle-keymap-select {
