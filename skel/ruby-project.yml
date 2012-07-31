@@ -13,4 +13,4 @@ tabs:
   - "Ruby Docs": w3m http://www.ruby-doc.org/core-RUBY_VERSION/
   - "Project Summary": git wtf
   - Console: # Just want an empty shell to tinkering
-  - Toybox: be pry
+  - Toybox: pry
