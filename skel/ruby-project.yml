@@ -10,7 +10,7 @@ tabs:
       layout: b147,208x73,0,0[208x62,0,0,208x10,0,63{104x10,0,63,103x10,105,63}]
       panes:
         - vim
-        - #empty, will just run plain zsh
   - "Ruby Docs": w3m http://www.ruby-doc.org/core-RUBY_VERSION/
   - "Project Summary": git wtf
+  - Console: # Just want an empty shell to tinkering
   - Toybox: be pry
