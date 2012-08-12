@@ -36,3 +36,4 @@ Gemfile.lock
 .fontconfig
 yankring_history_v2.txt
 .m2
+.w3m/w3msrc*
