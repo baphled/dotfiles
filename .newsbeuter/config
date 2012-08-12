@@ -16,4 +16,8 @@ download-timeout    20
 refresh-on-startup  yes
 reload-time         10
 
+download-path       ~/Downloads
+max-downloads       2
+player							afplay
+
 macro E set browser "echo %u >> ~/.newsbeuter/queue" ; open ; set browser "w3m %u"
