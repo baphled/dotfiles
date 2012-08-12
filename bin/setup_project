@@ -10,22 +10,18 @@ require "fileutils"
 # this script you can simply pass the git repo to clone and sit back whilst it
 # and the workflow needed to work on a given project are setup for you.
 #
-# Example: setup_project git@github.com:username/project.git
+# Example: setup_project git@github.com:username/project.git ruby
 
 # Get project name
 git_repo = ARGV[0]
-
+language = ARGV[1] || 'ruby'
 # get the name of the project
 project_name = git_repo.split( '/' ).last.gsub('.git','')
 project_path = File.join Dir.pwd, project_name
 
 #TODO: Clone the repository
 STDOUT.puts "Creating repository for #{project_name}"
-%x{ git clone #{git_repo} }
-
-# CD into the directory
-#
-%x{mkdir #{project_name} && cd #{project_name}}
+%x{ git clone #{git_repo} && cd #{project_name}}
 
 ruby_version = ''
 # does the project have a .rvmrc
@@ -43,7 +39,7 @@ else
 end
 
 #Create tmuxinator config file
-template = YAML.load_file File.join Dir.pwd, '..', 'skel', "ruby-project.yml"
+template = YAML.load_file File.join Dir.pwd, '..', 'skel', "#{language}-project.yml"
 template['project_name'] = project_name
 template['project_root'] = project_path
 template['post'] = template['post'].gsub('PROJECT_PATH', project_path)
