@@ -1,0 +1,17 @@
+# ~/.tmuxinator/comms.yml
+# you can make as many tabs as you wish...
+
+project_name: comms
+project_root: ~/
+rvm: 1.9.2-head@global
+pre: cd ~/ && bundle
+tabs:
+  - Interwepts: w3m http://google.com
+  - IRC: irssi
+  - "Newsfeed": newsbeuter
+  - "Podcasts": podbeuter
+  - Email: mutt
+  - Spyhole: tail -f ~/comms.log
+  - "Dotfile Diaries": cd ~/Documents/Diary && vi book/book.asc
+  - Top: top
+
