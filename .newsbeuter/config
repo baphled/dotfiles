@@ -6,4 +6,14 @@ googlereader-login      "baphled@gmail.com"
 googlereader-flag-share "a"
 googlereader-flag-star  "b"
 
+feedlist-format     "%4i %n %11u %t"
+articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
+notify-format       "%d new articles (%n unread articles, %f unread feeds)"
+
+cleanup-on-quit     yes
+download-retries    10
+download-timeout    20
+refresh-on-startup  yes
+reload-time         10
+
 macro E set browser "echo %u >> ~/.newsbeuter/queue" ; open ; set browser "w3m %u"
