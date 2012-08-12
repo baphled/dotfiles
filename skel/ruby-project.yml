@@ -11,6 +11,7 @@ tabs:
       panes:
         - vim
   - "Ruby Docs": w3m http://www.ruby-doc.org/core-RUBY_VERSION/
+  - "Rails Docs": w3m http://api.rubyonrails.org/
   - "Project Summary": git wtf
   - Console: # Just want an empty shell to tinkering
   - Toybox: pry
