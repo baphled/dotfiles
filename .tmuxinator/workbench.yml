@@ -14,6 +14,7 @@ tabs:
   - Interwepts: w3m http://google.com
   - IRC: irssi
   - "Newsfeed": newsbeuter
+  - "Podcasts": podbeuter
   - Email: mutt
   - Spyhole: tail -f ~/workbench.log
   - "Dotfile Diaries": cd ~/Documents/Diary && vi book/book.asc
