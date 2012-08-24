@@ -10,5 +10,4 @@ require 'bundler'
 
 paths = Bundler.load.specs.map(&:full_gem_path)
 
-STDERR.puts paths.inspect
 system("ctags -f gems.tags #{paths.join(' ')}")
