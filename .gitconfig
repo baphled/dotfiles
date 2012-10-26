@@ -54,6 +54,7 @@
   pu = !git fetch origin -v; git fetch upstream -v; git merge upstream/master
 
   wtf = !~/bin/git-wtf
+  pu = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
 
   # Only show my commits with datestamps
   mine = !git log --pretty=format:"%h' '%ad' '%s" --date=local --date-order --author='baphled'
