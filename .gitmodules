@@ -10,3 +10,9 @@
 [submodule "dotirssi"]
 	path = dotirssi
 	url = git@github.com:baphled/dotirssi.git
+[submodule "tmux-powerline"]
+	path = tmux-powerline
+	url = git@github.com:baphled/tmux-powerline.git
+[submodule "tmux-colors-solarized"]
+	path = tmux-colors-solarized
+	url = git://github.com/seebi/tmux-colors-solarized.git
