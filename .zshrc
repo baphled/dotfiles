@@ -29,7 +29,6 @@ plugins=(rails3 ruby gem git github rake rvm vi-mode bundler brew heroku history
 
 source $ZSH/oh-my-zsh.sh
 source $HOME/.agile_ruby_workflow.zsh
-source $HOME/tmux-colors-solarized/tmuxcolors-light.conf
 
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bin:$PATH
