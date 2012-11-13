@@ -12,4 +12,4 @@
 	url = git://github.com/baphled/dotirssi.git
 [submodule "tmuxfiles"]
 	path = tmuxfiles
-	url = git://github.com/baphled/tmuxfiles.git puppet
+	url = git://github.com/baphled/tmuxfiles.git
