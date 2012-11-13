@@ -1,15 +1,15 @@
 [submodule "oh-my-zsh"]
 	path = oh-my-zsh
-	url = git:github.com/baphled/oh-my-zsh.git
+	url = git://github.com/baphled/oh-my-zsh.git
 [submodule "dotvim"]
 	path = dotvim
-	url = git:github.com/baphled/dotvim/git
+	url = git://github.com/baphled/dotvim/git
 [submodule "dotmutt"]
 	path = dotmutt
-	url = git:github.com/baphled/muttfiles.git
+	url = git://github.com/baphled/muttfiles.git
 [submodule "dotirssi"]
 	path = dotirssi
-	url = git:github.com/baphled/dotirssi.git
+	url = git://github.com/baphled/dotirssi.git
 [submodule "tmuxfiles"]
 	path = tmuxfiles
-	url = git:github.com/baphled/tmuxfiles.git
+	url = git://github.com/baphled/tmuxfiles.git
