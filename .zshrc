@@ -35,6 +35,7 @@ export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bi
 export LSCOLORS='ExGxFxdxCxDxDxBxBxExEx'
 
 alias rake='noglob rake'
+alias tmux='tmux -u2'
 
 export EDITOR=vim
 
