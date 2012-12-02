@@ -11,7 +11,6 @@ Gemfile.lock
 .rvm
 .bundler
 .cache
-.fonts
 .Xauthority
 .mysql_history
 .*_history
