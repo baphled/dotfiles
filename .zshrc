@@ -40,6 +40,7 @@ alias rake='noglob rake'
 alias tmux="TERM=screen-256color-bce tmux"
 
 export EDITOR=vim
+export TERM=xterm-256color
 
 eval `dircolors $HOME/.dir_colors`
 
