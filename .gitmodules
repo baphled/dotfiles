@@ -13,3 +13,6 @@
 [submodule "tmuxfiles"]
 	path = tmuxfiles
 	url = git@github.com:baphled/tmuxfiles.git
+[submodule "colors/dircolors-solarized"]
+	path = colors/dircolors-solarized
+	url = git@github.com:seebi/dircolors-solarized.git

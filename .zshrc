@@ -31,13 +31,17 @@ source $ZSH/oh-my-zsh.sh
 source $HOME/.agile_ruby_workflow.zsh
 
 # Customize to your needs...
+PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bin:/usr/local/rvm/bin:$PATH
-export LSCOLORS='ExGxFxdxCxDxDxBxBxExEx'
+
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 alias rake='noglob rake'
 alias tmux='tmux -u2'
 
 export EDITOR=vim
+
+eval `dircolors $HOME/.dir_colors`
 
 # We want vi-mode
 set -o vi
