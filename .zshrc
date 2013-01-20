@@ -61,4 +61,4 @@ zle -N zle-keymap-select
 autoload -U zmv
 alias mmv='noglob zmv -W'
 
-PROMPT="$PROMPT"'$([ -n "$TMUX"  ] && tmux setenv TMUXPWD_$(tmux display -p "#I_#P") "$PWD")'
+PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
