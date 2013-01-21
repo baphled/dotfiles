@@ -42,7 +42,7 @@ alias tmux="TERM=screen-256color-bce tmux"
 export EDITOR=vim
 export TERM=xterm-256color
 
-eval `dircolors $HOME/.dir_colors`
+eval `dircolors $HOME/colors/dircolors-solarized/dircolors.256dark`
 
 # We want vi-mode
 set -o vi
