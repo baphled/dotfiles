@@ -37,7 +37,7 @@ export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bi
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 alias rake='noglob rake'
-alias tmux="TERM=screen-256color-bce tmux"
+alias tmux="tmux -u2"
 
 export EDITOR=vim
 export TERM=xterm-256color
