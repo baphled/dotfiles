@@ -78,4 +78,4 @@
 [merge]
   tool = vimdiff
 [push]
-	default = current
+  default = current
