@@ -63,3 +63,5 @@ autoload -U zmv
 alias mmv='noglob zmv -W'
 
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
