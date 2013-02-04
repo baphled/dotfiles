@@ -16,3 +16,6 @@
 [submodule "colors/dircolors-solarized"]
 	path = colors/dircolors-solarized
 	url = git@github.com:seebi/dircolors-solarized.git
+[submodule "colors/xfce-terminal"]
+	path = colors/xfce-terminal
+	url = git@github.com:solarized/xfce4-terminal-colors-solarized.git
