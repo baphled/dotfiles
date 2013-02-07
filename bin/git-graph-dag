@@ -1,0 +1,38 @@
+#!/bin/bash
+# Draw a graphviz diagram of the Git DAG
+#
+# Labels consist of the short SHA1 and any refs.
+# Unreachable commits (ignoring the reflog) will be marked with an asterisk and
+# drawn with dashed lines.
+#
+# Largely stolen from https://git.wiki.kernel.org/index.php/ExampleScripts
+#
+# Usage:
+#   git graph-dag HEAD~10.. | dot -Tpng | display -antialias
+#
+# Accepts any range or arguments that git rev-list accepts.
+
+set -e
+
+if [[ -z $@ ]] ; then
+  echo -e "Usage: git graph-dag HEAD~10.. | dot -Tpng > git.png"
+  exit 1
+fi
+
+echo "digraph lattice {"
+
+shape="shape=Mrecord, style=filled,"
+git rev-list --pretty=format:"%H %h|%an:%s" "$@" |
+sed "s/[\"\{\}()<>]/\\\\&/g" |
+sed -n "s/^\([0-9a-f]\{40\}\) \(.*\)$/n\1 [$shape label=\"{\2}\"]/p"
+
+git rev-list --parents "$@" |
+while read commit parents
+do
+  for p in $parents
+  do
+    echo "n$commit -> n$p"
+  done
+done
+
+echo "}"
