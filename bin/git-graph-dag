@@ -11,6 +11,7 @@
 #   git graph-dag HEAD~10.. | dot -Tpng | display -antialias
 #
 # Accepts any range or arguments that git rev-list accepts.
+# TODO SHould only need to pass the name of the graph we want to create and the git ref range
 
 set -e
 
