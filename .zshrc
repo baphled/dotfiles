@@ -1,13 +1,13 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
+ZSH_CUSTOM=~/.themes
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 ZSH_THEME="boodah"
-
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 
@@ -25,7 +25,7 @@ DISABLE_AUTO_TITLE="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(rails3 ruby gem git github rake rvm vi-mode bundler brew heroku history-substring-search vagrant vi-mode)
+plugins=(rails3 ruby gem git github rake rvm vi-mode bundler brew heroku history-substring-search vagrant vi-mode themes)
 
 source $ZSH/oh-my-zsh.sh
 source $HOME/.agile_ruby_workflow.zsh
