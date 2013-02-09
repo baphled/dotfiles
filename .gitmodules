@@ -16,3 +16,6 @@
 [submodule "colors/xfce-terminal"]
 	path = colors/xfce-terminal
 	url = git@github.com:solarized/xfce4-terminal-colors-solarized.git
+[submodule "oh-my-zsh"]
+	path = oh-my-zsh
+	url = git://github.com/robbyrussell/oh-my-zsh.git
