@@ -37,6 +37,7 @@ export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bi
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 alias tmux="tmux -u2"
+alias vino="vim -u NONE -N"
 
 export EDITOR=vim
 export TERM=xterm-256color
