@@ -1,1 +1,1 @@
-source "/Users/yomi.colledge/.rvm/scripts/rvm"
+source "${HOME}/.rvm/scripts/rvm"
