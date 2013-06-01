@@ -32,7 +32,7 @@ source $HOME/.agile_ruby_workflow.zsh
 
 # Customize to your needs...
 PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bin:/usr/local/rvm/bin:$PATH
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bin:/usr/local/rvm/bin:$PATH
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
