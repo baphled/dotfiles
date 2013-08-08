@@ -63,6 +63,8 @@
   wtf = !~/bin/git-wtf
   pu = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
 
+  lg = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+
   # Interactive rebase with the given number of latest commits
   reb = "!r() { git rebase -i HEAD~$1; }; r"
   # Only show my commits with datestamps
