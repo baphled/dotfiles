@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+#
+# Author: Yomi Colledge
+#
+# Generates a Changelog file for a project.
+#
+# git-changelog is used as follows:
+#
+# $ git changelog v0.0.0
+#
+# This script is essentially a hack I did one night to pull together a basic Changelog based on the commits made to a
+# repository. It's by no means perfect but it'll get the job done for now.
+#
+
+from_tag = ARGV[0]
+
+if not from_tag
+  puts "Requires a tag to start from!"
+  puts ""
+  puts "Exiting..."
+  exit
+else
+  puts "Starting from tag: #{from_tag}"
+  puts ""
+end
+
+last_tag = `git describe`.strip
+first_tag = `git describe --tags #{from_tag} --long`.strip
+
+range = "#{first_tag}..#{last_tag}"
+logs = `git log --decorate=full --pretty=format:"%h - %d %s" #{range}`
+
+File.open('Changelog.md', 'w') do |f|
+  puts "Updating Changelog"
+  logs.each_line do |line|
+    shar, rest_of_line = line.split('-')
+    tag = rest_of_line.scan(/tags\/(\d\.\d\.\d)/).flatten.first.to_s
+    if not tag.empty?
+      f.puts "#{tag}"
+    end
+    line = rest_of_line.split(')').last.strip.capitalize
+    f.puts "\t* #{line}" unless line.empty?
+  end
+end
