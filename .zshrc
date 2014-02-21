@@ -25,7 +25,7 @@ DISABLE_AUTO_TITLE="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(rails3 ruby gem git github rake rvm vi-mode bundler brew heroku history-substring-search vagrant vi-mode themes autojump cp)
+plugins=(rails ruby gem git github rake rvm vi-mode bundler brew heroku history-substring-search vagrant vi-mode themes autojump cp)
 
 source $ZSH/oh-my-zsh.sh
 source $HOME/.agile_ruby_workflow.zsh
