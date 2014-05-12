@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Author: Yomi Colledge
+# Author: Yomi Colledge 2013
 #
 # Generates a Changelog file for a project.
 #
@@ -18,7 +18,7 @@ if not from_tag
   puts "Requires a tag to start from!"
   puts ""
   puts "Exiting..."
-  exit
+  exit 1
 else
   puts "Starting from tag: #{from_tag}"
   puts ""
@@ -28,13 +28,12 @@ last_tag = `git describe`.strip
 first_tag = `git describe --tags #{from_tag} --long`.strip
 
 range = "#{first_tag}..#{last_tag}"
-logs = `git log --decorate=full --pretty=format:"%h - %d %s" #{range}`
+logs = `git log --decorate=full --pretty=format:"%d %s" #{range}`
 
 File.open('Changelog.md', 'w') do |f|
   puts "Updating Changelog"
   logs.each_line do |line|
-    shar, rest_of_line = line.split('-')
-    tag = rest_of_line.scan(/tags\/(\d\.\d\.\d)/).flatten.first.to_s
+    tag = line.scan(/tags\/(\d\.\d\.\d)/).flatten.first.to_s
     if not tag.empty?
       f.puts "#{tag}"
     end
@@ -42,3 +41,5 @@ File.open('Changelog.md', 'w') do |f|
     f.puts "\t* #{line}" unless line.empty?
   end
 end
+
+exit 0
