@@ -1,5 +1,7 @@
 #! /bin/bash
 #
+# Author: Yomi Colledge 2013
+
 # Basic script to list all submodules with a project.
 #
 # This is useful when need to work out what dependancies a project has
