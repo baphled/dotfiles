@@ -66,7 +66,7 @@ PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -
 
 export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
