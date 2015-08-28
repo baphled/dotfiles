@@ -21,3 +21,9 @@
 --regex-puppet=/^site[ \t ]*([a-zA-Z0-9_\-]+)[ \t ]*/\1/d,definition/
 --regex-puppet=/^node[ \t ]*([a-zA-Z0-9_\-]+)[ \t ]*/\1/d,definition/
 --regex-puppet=/^define[ \t ]*([:a-zA-Z0-9_\-]+)[ \t ]*/\1/d,definition/
+
+--regex-ruby=/describe ["'](.+)["']/\1/f,function/
+--regex-ruby=/(Given|When|Then) \/\^?(.+)\$?\/\1 \2/f,function/
+--langdef=cucumber
+--langmap=cucumber:.feature
+--regex-cucumber=/Scenario: (.+)/\1/d,definition/
