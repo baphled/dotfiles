@@ -10,7 +10,7 @@ Install
 =======
 
   git init
-  git add remote origin git://github.com/baphled/dotfiles.git
+  git remote add origin git://github.com/baphled/dotfiles.git
   git pull && git submodule init && git submodule update && git submodule status
 
 What's included
