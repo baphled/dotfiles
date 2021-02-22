@@ -69,4 +69,14 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
+# Load RVM if it is installed,
+#  first try to load  user install
+#  then try to load root install, if user install is not there.
+if [ -s "$HOME/.rvm/scripts/rvm" ] ; then
+elif [ -s "/usr/local/rvm/scripts/rvm" ] ; then
+fi
+
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
