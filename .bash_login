@@ -1,2 +1,12 @@
-
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# the fix
+if [ -n $TMUX ] && [ 'function' = `type -t rvm` ]; then
+    # NOTE: rvm does some hanky-panky with STDERR so it can always shout
+    #   its warnings at you, even when you're running the command to fix the
+    #   thing it's warning you about.
+    # We redirect file descriptor 6 here to circumvent this nonsense.
+    rvm use default >/dev/null 2>&1 6>&1
+    cd .
+fi
+
