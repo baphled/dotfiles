@@ -10,3 +10,4 @@ if [ -n $TMUX ] && [ 'function' = `type -t rvm` ]; then
     cd .
 fi
 
+. "$HOME/.cargo/env"
