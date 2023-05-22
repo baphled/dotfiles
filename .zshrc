@@ -47,6 +47,9 @@ eval `dircolors ~/colors/dircolors-solarized/dircolors.ansi-dark`
 # We want vi-mode
 set -o vi
 
+# Ignore all duplicate history entries
+setopt hist_ignore_all_dups
+
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 
 # Display the vi-mode your currently in
