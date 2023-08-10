@@ -19,6 +19,3 @@
 [submodule "oh-my-zsh"]
 	path = oh-my-zsh
 	url = https://github.com/ohmyzsh/ohmyzsh.git
-[submodule ".config/nvim/pack/github/start/copilot.vim"]
-	path = .config/nvim/pack/github/start/copilot.vim
-	url = git@github.com:github/copilot.vim.git
