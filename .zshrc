@@ -96,3 +96,18 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
 
+# Work out whether we're in TMUX, kitty or something else
+#
+# If we are then we should use jp2a, otherwise we should use the default
+if [ -n "$TMUX" ]; then
+  # We're in TMUX
+  # Use catimg
+  neofetch --jp2a
+elif [ -z "$KITTEN_PID" ]; then
+  # We're in kitty
+  # Use the default
+  neofetch
+else
+  # We're in a normal terminal
+  neofetch
+fi
