@@ -1,0 +1,28 @@
+#!/bin/zsh
+
+WALLPAPER_DIR="$HOME/.config/wallpaper"
+
+# List of supported image formats
+IMAGE_FORMATS="jpg|jpeg|png|gif"
+
+# Pick an image at random from the wallpaper directory
+IMAGE=$(find "$WALLPAPER_DIR" -regextype posix-extended -regex ".*\.($IMAGE_FORMATS)" | shuf -n 1)
+
+FASTFETCH_IMG_WIDTH=$(echo $(expr $(echo $(tput cols) / 2)))
+FASTFETCH_IMG_HEIGHT=$(echo $(expr $(echo $FASTFETCH_IMG_WIDTH / 2)))
+
+# Work out whether we're in TMUX, kitty or something else
+#
+# If we are then we should use jp2a, otherwise we should use the default
+if [ -n "$TMUX" ]; then
+  # We're in TMUX
+  # Use catimg
+  fastfetch --chafa "$IMAGE" --logo-width "$FASTFETCH_IMG_WIDTH" --logo-height "$FASTFETCH_IMG_HEIGHT"
+elif [ -z "$KITTEN_PID" ]; then
+  # We're in kitty
+  # Use the default
+  fastfetch --kitty "$IMAGE" --logo-width "$FASTFETCH_IMG_WIDTH" --logo-height "$FASTFETCH_IMG_HEIGHT"
+else
+  # We're in a normal terminal
+  fastfetch --kitty "$IMAGE" --logo-width "$FASTFETCH_IMG_WIDTH" --logo-height "$FASTFETCH_IMG_HEIGHT"
+fi
