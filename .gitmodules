@@ -1,6 +1,3 @@
-[submodule "dotvim"]
-	path = dotvim
-	url = git@github.com:baphled/dotvim.git
 [submodule "dotmutt"]
 	path = dotmutt
 	url = git@github.com:baphled/muttfiles.git
