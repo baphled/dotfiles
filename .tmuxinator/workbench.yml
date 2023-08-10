@@ -3,10 +3,20 @@
 
 project_name: workbench
 project_root: ~/
-rvm: 1.9.2-head@global
-pre: cd ~/ && bundle
-tabs:
-  - Workbench: vim
-  - Spyhole: tail -f ~/workbench.log
-  - Toybox: be pry
-  - 'Control centre': git wtf
+windows:
+  - Tmux:
+      root: ~/tmuxfiles
+      panes:
+        - nvim
+  - Neovim:
+      root: ~/.config/nvim
+      panes:
+        - nvim
+  - Dotfiles:
+      root: ~/
+      panes:
+        - nvim
+  - Top:
+      root: ~/
+      panes:
+        - btm
