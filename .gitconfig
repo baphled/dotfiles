@@ -81,3 +81,11 @@
   tool = vimdiff
 [push]
   default = current
+[init]
+	defaultBranch = main
+[commit]
+	gpgsign = true
+[fetch]
+	prune = true
+[gpg]
+	program = /home/baphled/bin/gpg
