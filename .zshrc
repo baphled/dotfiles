@@ -87,5 +87,12 @@ export PATH="$PATH:$HOME/.rvm/bin"
 # Add python to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.local/bin"
 
+## Add snap bin to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:/snap/bin"
+
+## Add flutter bin to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
+
