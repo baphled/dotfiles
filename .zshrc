@@ -39,7 +39,7 @@ export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 alias tmux="tmux -u2"
 alias vino="vim -u NONE -N"
 
-export EDITOR=vim
+export EDITOR=nvim
 export TERM=xterm-256color
 
 eval `dircolors ~/colors/dircolors-solarized/dircolors.ansi-dark`
