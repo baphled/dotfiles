@@ -1,6 +1,7 @@
 [user]
 	name = Yomi Colledge
 	email = baphled@boodah.net
+  gpgsign = true
 
 [color]
   branch = auto
