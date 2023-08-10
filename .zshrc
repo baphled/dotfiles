@@ -12,7 +12,7 @@ ZSH_THEME="boodah"
 # CASE_SENSITIVE="true"
 
 # Comment this out to disable weekly auto-update checks
-DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="false"
 
 # Uncomment following line if you want to disable colors in ls
 # DISABLE_LS_COLORS="true"
