@@ -2,6 +2,7 @@
 	name = Yomi Colledge
 	email = baphled@boodah.net
   gpgsign = true
+	signingkey = 573A6949D495D966
 
 [color]
   branch = auto
