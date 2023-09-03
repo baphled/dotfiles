@@ -1,5 +1,7 @@
 This is a working progress which includes my personal development settings
 
+![Screenshot_20230903_174548](https://github.com/baphled/dotfiles/assets/37376/48e3cfd2-7468-47e3-bd88-cc75d2f5090a)
+
 Dependencies
 ============
 
