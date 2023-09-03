@@ -47,6 +47,8 @@ of resources touching on them already.
 
 ### btm
 
+![Screenshot_20230903_174243](https://github.com/baphled/dotfiles/assets/37376/ef13970f-0bfb-4caa-b68f-5cdd62f747f7)
+
 `htop` has served us well but `btm` is it's natural successor. Not only is it
 more aesthetically pleasing but it provides us with a wealth of information
 relating to the state of the machine we're working on.
@@ -58,6 +60,8 @@ to day work.
 https://clementtsang.github.io/bottom/nightly/usage/general-usage/
 
 ### Neovim
+
+![Screenshot 2023-08-03 18:54:37](https://github.com/baphled/dotfiles/assets/37376/10eed5f4-f8a9-4842-8b7f-ae4141d926b4)
 
 We've been using `vim` for decades now, and using anything else seemed like a
 complete was of time. That is until we recently spent time exploring `neovim`.
@@ -77,6 +81,8 @@ This has not only greatly improved our workflow but it's also made it a lot more
 visually stimulating to work within.
 
 ### fzf
+
+![Screenshot_20230903_234925](https://github.com/baphled/dotfiles/assets/37376/c007ac17-1bd0-4681-855c-410a53b6c9fe)
 
 We've also adopted `fzf` for fuzzy finding and integrated it into both `zsh`,
 `tmux` and `neovim`. This way we're able to quickly find things without our system
