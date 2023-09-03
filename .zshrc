@@ -25,7 +25,7 @@ DISABLE_AUTO_TITLE="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git vi-mode bundler history-substring-search themes fzf)
+plugins=(git vi-mode bundler history-substring-search themes fzf fzf-tab)
 
 source $ZSH/oh-my-zsh.sh
 source $HOME/.agile_ruby_workflow.zsh
@@ -92,6 +92,10 @@ export PATH="$PATH:/snap/bin"
 
 ## Add flutter bin to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+if [ -f ~/.fzf.zsh ]; then
+  source ~/.fzf.zsh
+fi
 
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
