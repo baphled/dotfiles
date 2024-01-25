@@ -276,6 +276,7 @@ bin/nvim
 .config/systemsettingsrc
 .config/teams/
 .config/trashrc
+.config/touchegg/.touchegg:0.lock
 .config/user-dirs.dirs
 .config/user-dirs.locale
 .config/vlc/
