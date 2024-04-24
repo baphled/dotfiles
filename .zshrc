@@ -40,7 +40,12 @@ alias tmux="tmux -u2"
 alias vino="vim -u NONE -N"
 
 export EDITOR=nvim
-export TERM=xterm-256color
+
+if [ -n "$TMUX" ]; then
+  export TERM=tmux-256color
+else
+  export TERM=xterm-256color
+fi
 
 eval `dircolors ~/colors/dircolors-solarized/dircolors.ansi-dark`
 
