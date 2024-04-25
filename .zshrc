@@ -105,6 +105,6 @@ fi
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
 
-source ~/bin/fastfetch_autoscale
+/usr/bin/neofetch
 echo ""
 echo ""
