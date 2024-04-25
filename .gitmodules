@@ -19,3 +19,6 @@
 [submodule ".config/nvim"]
 	path = .config/nvim
 	url = git@github.com:baphled/dotnvim.git
+[submodule ".themes/plugins/fzf-tab"]
+	path = .themes/plugins/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab
