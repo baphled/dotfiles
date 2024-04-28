@@ -19,4 +19,4 @@ windows:
   - Top:
       root: ~/
       panes:
-        - btm
+        - btop
