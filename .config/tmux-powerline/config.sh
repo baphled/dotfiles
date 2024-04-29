@@ -12,9 +12,9 @@
 	# The theme to use.
 	export TMUX_POWERLINE_THEME="catppuccin"
 	# Overlay directory to look for themes. There you can put your own themes outside the repo. Fallback will still be the "themes" directory in the repo.
-	export TMUX_POWERLINE_DIR_USER_THEMES="${XDG_CONFIG_HOME:-$HOME/}/tmuxfiles/themes"
+	export TMUX_POWERLINE_DIR_USER_THEMES="${HOME/}/tmuxfiles/themes"
 	# Overlay directory to look for segments. There you can put your own segments outside the repo. Fallback will still be the "segments" directory in the repo.
-	export TMUX_POWERLINE_DIR_USER_SEGMENTS="${XDG_CONFIG_HOME:-$HOME}/tmuxfiles/segments"
+	export TMUX_POWERLINE_DIR_USER_SEGMENTS="${HOME}/tmuxfiles/segments"
 
 	# The initial visibility of the status bar. Can be {"on, off"}.
 	export TMUX_POWERLINE_STATUS_VISIBILITY="on"
