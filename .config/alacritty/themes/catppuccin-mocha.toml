@@ -1,75 +1,75 @@
-[[colors.indexed_colors]]
-color = "#fab387"
-index = 16
-
-[[colors.indexed_colors]]
-color = "#f5e0dc"
-index = 17
-
-[colors.bright]
-black = "#585b70"
-blue = "#89b4fa"
-cyan = "#94e2d5"
-green = "#a6e3a1"
-magenta = "#f5c2e7"
-red = "#f38ba8"
-white = "#a6adc8"
-yellow = "#f9e2af"
+[colors.primary]
+background = "#1e1e2e"
+foreground = "#cdd6f4"
+dim_foreground = "#7f849c"
+bright_foreground = "#cdd6f4"
 
 [colors.cursor]
-cursor = "#f5e0dc"
 text = "#1e1e2e"
+cursor = "#f5e0dc"
 
-[colors.dim]
-black = "#45475a"
-blue = "#89b4fa"
-cyan = "#94e2d5"
-green = "#a6e3a1"
-magenta = "#f5c2e7"
-red = "#f38ba8"
-white = "#bac2de"
-yellow = "#f9e2af"
+[colors.vi_mode_cursor]
+text = "#1e1e2e"
+cursor = "#b4befe"
+
+[colors.search.matches]
+foreground = "#1e1e2e"
+background = "#a6adc8"
+
+[colors.search.focused_match]
+foreground = "#1e1e2e"
+background = "#a6e3a1"
 
 [colors.footer_bar]
-background = "#a6adc8"
 foreground = "#1e1e2e"
-
-[colors.hints.end]
 background = "#a6adc8"
-foreground = "#1e1e2e"
 
 [colors.hints.start]
-background = "#f9e2af"
 foreground = "#1e1e2e"
+background = "#f9e2af"
+
+[colors.hints.end]
+foreground = "#1e1e2e"
+background = "#a6adc8"
+
+[colors.selection]
+text = "#1e1e2e"
+background = "#f5e0dc"
 
 [colors.normal]
 black = "#45475a"
-blue = "#89b4fa"
-cyan = "#94e2d5"
-green = "#a6e3a1"
-magenta = "#f5c2e7"
 red = "#f38ba8"
-white = "#bac2de"
+green = "#a6e3a1"
 yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#f5c2e7"
+cyan = "#94e2d5"
+white = "#bac2de"
 
-[colors.primary]
-background = "#1e1e2e"
-bright_foreground = "#cdd6f4"
-dim_foreground = "#7f849c"
-foreground = "#cdd6f4"
+[colors.bright]
+black = "#585b70"
+red = "#f38ba8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#f5c2e7"
+cyan = "#94e2d5"
+white = "#a6adc8"
 
-[colors.search.focused_match]
-background = "#a6e3a1"
-foreground = "#1e1e2e"
+[colors.dim]
+black = "#45475a"
+red = "#f38ba8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#f5c2e7"
+cyan = "#94e2d5"
+white = "#bac2de"
 
-[colors.search.matches]
-background = "#a6adc8"
-foreground = "#1e1e2e"
+[[colors.indexed_colors]]
+index = 16
+color = "#fab387"
 
-[colors.selection]
-background = "#f5e0dc"
-text = "#1e1e2e"
-
-[colors.vi_mode_cursor]
-cursor = "#b4befe"
-text = "#1e1e2e"
+[[colors.indexed_colors]]
+index = 17
+color = "#f5e0dc"

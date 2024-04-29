@@ -78,8 +78,8 @@ save_to_clipboard = false
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [shell]
-program = "/bin/zsh"
-args = ["-l"]
+program = "/usr/bin/zsh"
+args = ["--login"]
 
 [window]
 dynamic_padding = true
