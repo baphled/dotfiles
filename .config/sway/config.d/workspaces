@@ -1,0 +1,8 @@
+#
+# Autostart:
+#
+exec swaymsg "Programming; exec $term"
+exec swaymsg "Browser; exec firefox"
+exec swaymsg "Work; exec $term"
+exec swaymsg "Hacking; exec $term"
+exec swaymsg "Top; exec $term btop"
