@@ -47,7 +47,7 @@ font:
   bold_italic:
     family: AnonymicePro Nerd Font
 
-  size: 12
+  size: 14
 
   # Offset is the extra space around each character.
   # `offset.y` can be thought of as modifying the line spacing
