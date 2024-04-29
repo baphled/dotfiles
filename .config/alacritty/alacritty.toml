@@ -1,0 +1,91 @@
+import = ["/home/baphled/.config/alacritty/themes/catppuccin-mocha.toml"]
+live_config_reload = true
+working_directory = "None"
+
+[font]
+size = 14
+
+[font.normal]
+family = "AnonymicePro Nerd Font"
+
+[font.bold]
+family = "AnonymicePro Nerd Font"
+
+[font.italic]
+family = "AnonymicePro Nerd Font"
+
+[font.bold_italic]
+family = "AnonymicePro Nerd Font"
+
+[cursor]
+style = "Beam"
+unfocused_hollow = true
+vi_mode_style = "Block"
+
+[debug]
+log_level = "Warn"
+persistent_logging = false
+print_events = false
+render_timer = false
+
+[env]
+TERM = "xterm-256color"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.offset]
+x = 0
+y = -2
+
+[[hints.enabled]]
+command = "xdg-open"
+post_processing = true
+regex = "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\" {-}\\^⟨⟩`]+"
+
+[hints.enabled.binding]
+key = "U"
+mods = "Control|Shift"
+
+[hints.enabled.mouse]
+enabled = true
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "Y"
+mode = "Vi"
+
+[[keyboard.bindings]]
+action = "Open"
+key = "Return"
+mode = "Vi"
+
+[mouse]
+hide_when_typing = true
+
+[[mouse.bindings]]
+action = "PasteSelection"
+mouse = "Middle"
+
+[scrolling]
+history = 50000
+multiplier = 3
+
+[selection]
+save_to_clipboard = false
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[shell]
+program = "/bin/zsh"
+args = ["-l"]
+
+[window]
+dynamic_padding = true
+dynamic_title = true
+startup_mode = "Maximized"
+
+[window.padding]
+x = 4
+y = 4
