@@ -140,29 +140,41 @@ input type:keyboard {
 # Workspaces:
 #
     # Switch to workspace
-    bindsym $mod+1 workspace Programming
-    bindsym $mod+2 workspace Browser
-    bindsym $mod+3 workspace Work
-    bindsym $mod+4 workspace Hacking
-    bindsym $mod+5 workspace Learning
-    bindsym $mod+6 workspace number 6
-    bindsym $mod+7 workspace number 7
-    bindsym $mod+8 workspace number 8
-    bindsym $mod+9 workspace Remote
-    bindsym $mod+0 workspace Top
+    bindsym $mod+1 workspace 1:Terminals
+    bindsym $mod+2 workspace 2:Browser
+    bindsym $mod+3 workspace 3:Editor
+    bindsym $mod+4 workspace 4:Communications
+    bindsym $mod+5 workspace 5:Learning
+    bindsym $mod+6 workspace 6:Email
+    bindsym $mod+7 workspace 7:Reader
+    bindsym $mod+8 workspace 8:File Browser
+    bindsym $mod+9 workspace 9:Remote
+    bindsym $mod+0 workspace 10:Top
     # Move focused container to workspace
-    bindsym $mod+Shift+1 move container to workspace Programming
-    bindsym $mod+Shift+2 move container to workspace Browser
-    bindsym $mod+Shift+3 move container to workspace Work
-    bindsym $mod+Shift+4 move container to workspace Hacking
-    bindsym $mod+Shift+5 move container to workspace Learning
-    bindsym $mod+Shift+6 move container to workspace number 6
-    bindsym $mod+Shift+7 move container to workspace number 7
-    bindsym $mod+Shift+8 move container to workspace number 8
-    bindsym $mod+Shift+9 move container to workspace Remote
-    bindsym $mod+Shift+0 move container to workspace Top
+    bindsym $mod+Shift+1 move container to workspace 1:Terminals
+    bindsym $mod+Shift+2 move container to workspace 2:Browser
+    bindsym $mod+Shift+3 move container to workspace 3:Editor
+    bindsym $mod+Shift+4 move container to workspace 4:Communications
+    bindsym $mod+Shift+5 move container to workspace 5:Learning
+    bindsym $mod+Shift+6 move container to workspace 6:Email
+    bindsym $mod+Shift+7 move container to workspace 7:Reader
+    bindsym $mod+Shift+8 move container to workspace 8:File Browser
+    bindsym $mod+Shift+9 move container to workspace 9:Remote
+    bindsym $mod+Shift+0 move container to workspace 10:Top
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
+
+    # Variables
+    set $workspace_terminals     1:Terminals
+    set $workspace_browser       2:Browser
+    set $workspace_editor        3:Editor
+    set $workspace_communications 4:Communications
+    set $workspace_learning      5:Learning
+    set $workspace_email         6:Email
+    set $workspace_reader        7:Reader
+    set $workspace_file_browser  8:File Browser
+    set $workspace_remote        9:Remote
+    set $workspace_top           0:Top
 #
 # Layout stuff:
 #
