@@ -92,6 +92,23 @@ input type:keyboard {
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+    # Control audio
+    #
+    # Requires pulseaudio-utils
+    bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+    bindsym --locked XF86AudioMute exec 'pactl set-sink-mute $audio_sink toggle'
+    bindsym --locked XF86AudioRaiseVolume exec '$audio_unmute ; pactl set-sink-volume $audio_sink +2%'
+    bindsym --locked XF86AudioLowerVolume exec '$audio_unmute ; pactl set-sink-volume $audio_sink -2%'
+    bindsym --locked XF86AudioMicMute exec 'pactl set-source-mute $audio_source toggle'
+
+    # Display Controls
+    bindsym --locked XF86MonBrightnessUp exec 'brightnessctl set +5%'
+    bindsym --locked XF86MonBrightnessDown exec 'brightnessctl set 5%-'
+    bindsym --locked XF86Display exec 'swaymsg "output $output_laptop toggle"'
 #
 # Moving around:
 #
