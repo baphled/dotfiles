@@ -9,12 +9,12 @@
     "all-outputs": true,
     "format": "{icon}",
     "format-icons": {
-      "Terminals": "",
-      "Browser": "",
-      "Editor": "",
-      "File Browser": "",
-      "Communications": "",
-      "Reader": "",
+      "1:Terminals": "",
+      "2:Browser": "",
+      "3:Editor": "",
+      "4:Communications": "",
+      "8:File Browser": "",
+      "9:Reader": "",
     }
   },
   "backlight": {
