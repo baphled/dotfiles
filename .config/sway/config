@@ -75,6 +75,9 @@ input type:keyboard {
 #
     # Start a terminal
     bindsym $mod+Return exec $term
+    bindsym $mod+Shift+v exec $neovim
+    bindsym $mod+Shift+b exec firefox
+    bindsym $mod+Shift+t exec $btop
 
     # Kill focused window
     bindsym $mod+Shift+q kill
@@ -258,3 +261,5 @@ gaps 			            bottom	4
 gaps 			            left	4
 gaps 			            right	4
 gaps 			            inner 	5
+
+include ./startup
