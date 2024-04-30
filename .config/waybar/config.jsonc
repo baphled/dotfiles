@@ -2,45 +2,53 @@
   "position": "top",
   "margin-top": 8,
   "modules-left": ["sway/workspaces"],
-  "modules-right": ["network", "pulseaudio", "battery", "clock"],
+  "modules-center": ["custom/spotify"],
+  "modules-right": ["network", "custom/keyboard-layout", "pulseaudio", "backlight", "battery", "clock"],
   // Modules configuration
   "sway/workspaces": {
     "all-outputs": true,
     "format": "{icon}",
-    "persistent_workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": [],
-      "6": [],
-      "7": [],
-      "8": [],
-      "9": [],
-      "10": []
-    },
     "format-icons": {
-      "default": "",
-      "urgent": "",
-      "focused": ""
+      "Terminals": "",
+      "Browser": "",
+      "Editor": "",
+      "File Browser": "",
+      "Communications": "",
+      "Reader": "",
     }
+  },
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "{percent}% {icon}",
+    "format-icons": ["", ""]
   },
   "clock": {
     "format": "<span foreground='#b4befe'> </span>{:%a %d %H:%M}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
+  "custom/keyboard-layout": {
+    "exec": "swaymsg -t get_inputs | grep -m1 'xkb_active_layout_name' | cut -d '\"' -f4 | cut -d ' ' -f1",
+      // Interval set only as a fallback, as the value is updated by signal
+      "interval": 10,
+      "format": "<span size='13000' foreground='#cdd6f4'> </span> {}", // Icon: keyboard
+      // Signal sent by Sway key binding (~/.config/sway/key-bindings)
+      "signal": 1, // SIGHUP
+      "tooltip": false,
+      "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+      "on-scroll-up": "swaymsg input type:keyboard xkb_switch_layout next",
+      "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev",
+  },
   "battery": {
     "states": {
-      "warning": 30,
-      "critical": 15
+      "warning": 30, "critical": 15
     },
     "format": "<span size='13000' foreground='#a6e3a1'>{icon}</span> {capacity}%",
     "format-warning": "<span size='13000' foreground='#a6e3a1'>{icon}</span> {capacity}%",
     "format-critical": "<span size='13000' foreground='#f38ba8'>{icon}</span> {capacity}%",
-    "format-charging": "<span size='13000' foreground='#a6e3a1'> </span>{capacity}%",
-    "format-plugged": "<span size='13000' foreground='#a6e3a1'> </span>{capacity}%",
+    "format-charging": "<span size='13000' foreground='#a6e3a1'> </span> {capacity}%",
+    "format-plugged": "<span size='13000' foreground='#a6e3a1'> </span> {capacity}%",
     "format-alt": "<span size='13000' foreground='#a6e3a1'>{icon}</span> {time}",
-    "format-full": "<span size='13000' foreground='#a6e3a1'> </span>{capacity}%",
+    "format-full": "<span size='13000' foreground='#a6e3a1'> </span> {capacity}%",
     "format-icons": ["", "", "", "", ""],
     "tooltip-format": "{time}"
   },
@@ -49,7 +57,9 @@
     "format-ethernet": "<span size='13000' foreground='#f5e0dc'>󰤭</span> Disconnected",
     "format-linked": "{ifname} (No IP) ",
     "format-disconnected": "<span size='13000' foreground='#f5e0dc'> </span>Disconnected",
-    "tooltip-format-wifi": "Signal Strenght: {signalStrength}%"
+    "tooltip-format-wifi": "Signal Strenght: {signalStrength}%",
+    "format-disabled": "Disconnected",
+    "on-click": "nm-connection-editor"
   },
   "pulseaudio": {
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
