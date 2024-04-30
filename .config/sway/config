@@ -27,7 +27,7 @@ include /etc/sway/config-vars.d/*
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/.config/wallpaper/gastly__haunter_and_gengar_by_ninjendo-d6uul44.jpg fill
+output * bg `ls -1 ~/.config/wallpaper/* | sort -R | head -1` fit
 #
 # Example configuration:
 #
