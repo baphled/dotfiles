@@ -237,3 +237,10 @@ include /etc/sway/config.d/*
 
 # Hide away cursor after 4 secs idle, put back to the screen on mouse active
 exec hideaway 4 10000 10000 -512 -256
+
+default_border 		        pixel 	4
+gaps 			            top	4
+gaps 			            bottom	4
+gaps 			            left	4
+gaps 			            right	4
+gaps 			            inner 	5
