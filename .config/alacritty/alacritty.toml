@@ -85,6 +85,7 @@ args = ["--login"]
 dynamic_padding = true
 dynamic_title = true
 startup_mode = "Maximized"
+opacity = 0.9
 
 [window.padding]
 x = 4
