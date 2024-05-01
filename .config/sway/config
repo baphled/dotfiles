@@ -15,14 +15,16 @@ set $up k
 set $right l
 # Your preferred terminal emulator
 set $term ~/bin/alacritty -e zsh --login
+
+set $neovim ~/bin/alacritty -e nvim
+set $btop ~/bin/alacritty -e btop
+
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 set $menu wofi --show run
 
 exec mako
-
-font pango:AnonymicePro 14
 
 include /etc/sway/config-vars.d/*
 
@@ -54,26 +56,30 @@ exec swayidle -w \
 #
 # Example configuration:
 #
-#   input "2:14:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
-#       natural_scroll enabled
-#       middle_emulation enabled
-#   }
+input "Apple Inc. Magic Trackpad 2" {
+    dwt enabled
+    tap enabled
+    natural_scroll enabled
+    middle_emulation enabled
+    accel_profile flat
+    tap_button_map lrm
+    pointer_accel 1 # set mouse sensitivity
+}
+
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
-input type:keyboard {
-  xkb_options ctrl:nocaps
-  xkb_layout "gb"
-}
+#input type:keyboard {
+#  xkb_options ctrl:nocaps
+#  xkb_layout "gb"
+#}
 
 ### Key bindings
 #
 # Basics:
 #
-    # Start a terminal
+    # Main applications we use
     bindsym $mod+Return exec $term
     bindsym $mod+Shift+v exec $neovim
     bindsym $mod+Shift+b exec firefox
@@ -116,7 +122,6 @@ input type:keyboard {
     # Display Controls
     bindsym --locked XF86MonBrightnessUp exec 'brightnessctl set +5%'
     bindsym --locked XF86MonBrightnessDown exec 'brightnessctl set 5%-'
-    bindsym --locked XF86Display exec 'swaymsg "output $output_laptop toggle"'
 #
 # Moving around:
 #
@@ -141,45 +146,7 @@ input type:keyboard {
     bindsym $mod+Shift+Down move down
     bindsym $mod+Shift+Up move up
     bindsym $mod+Shift+Right move right
-#
-# Workspaces:
-#
-    # Switch to workspace
-    bindsym $mod+1 workspace 1:Terminals
-    bindsym $mod+2 workspace 2:Browser
-    bindsym $mod+3 workspace 3:Editor
-    bindsym $mod+4 workspace 4:Communications
-    bindsym $mod+5 workspace 5:Learning
-    bindsym $mod+6 workspace 6:Email
-    bindsym $mod+7 workspace 7:Reader
-    bindsym $mod+8 workspace 8:File Browser
-    bindsym $mod+9 workspace 9:Remote
-    bindsym $mod+0 workspace 10:Top
-    # Move focused container to workspace
-    bindsym $mod+Shift+1 move container to workspace 1:Terminals
-    bindsym $mod+Shift+2 move container to workspace 2:Browser
-    bindsym $mod+Shift+3 move container to workspace 3:Editor
-    bindsym $mod+Shift+4 move container to workspace 4:Communications
-    bindsym $mod+Shift+5 move container to workspace 5:Learning
-    bindsym $mod+Shift+6 move container to workspace 6:Email
-    bindsym $mod+Shift+7 move container to workspace 7:Reader
-    bindsym $mod+Shift+8 move container to workspace 8:File Browser
-    bindsym $mod+Shift+9 move container to workspace 9:Remote
-    bindsym $mod+Shift+0 move container to workspace 10:Top
-    # Note: workspaces can have any name you want, not just numbers.
-    # We just use 1-10 as the default.
 
-    # Variables
-    set $workspace_terminals     1:Terminals
-    set $workspace_browser       2:Browser
-    set $workspace_editor        3:Editor
-    set $workspace_communications 4:Communications
-    set $workspace_learning      5:Learning
-    set $workspace_email         6:Email
-    set $workspace_reader        7:Reader
-    set $workspace_file_browser  8:File Browser
-    set $workspace_remote        9:Remote
-    set $workspace_top           0:Top
 #
 # Layout stuff:
 #
@@ -243,6 +210,31 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 #
+# Workspaces:
+#
+# Switch to workspace
+bindsym $mod+1 workspace 1:Terminals
+bindsym $mod+2 workspace 2:Notes
+bindsym $mod+3 workspace 3:Browser
+bindsym $mod+4 workspace 4:Communications
+bindsym $mod+5 workspace 5:Learning
+bindsym $mod+6 workspace 6:Email
+bindsym $mod+7 workspace 7:Reader
+bindsym $mod+8 workspace 8:File Browser
+bindsym $mod+9 workspace 9:Remote
+bindsym $mod+0 workspace 10:Top
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1:Terminals
+bindsym $mod+Shift+2 move container to workspace 2:Notes
+bindsym $mod+Shift+3 move container to workspace 3:Browser
+bindsym $mod+Shift+4 move container to workspace 4:Communications
+bindsym $mod+Shift+5 move container to workspace 5:Learning
+bindsym $mod+Shift+6 move container to workspace 6:Email
+bindsym $mod+Shift+7 move container to workspace 7:Reader
+bindsym $mod+Shift+8 move container to workspace 8:File Browser
+bindsym $mod+Shift+9 move container to workspace 9:Remote
+bindsym $mod+Shift+0 move container to workspace 10:Top
+#
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
@@ -250,16 +242,19 @@ bar {
    swaybar_command waybar
 }
 
+output DP-2 mode 1920x1080 pos 1859,681
+output DVI-D-1 mode 1920x1080 pos 897,1761
+output HDMI-A-1 mode 1920x1080 pos 2817,1761
+
+font pango:AnonymicePro Nerd Font 12
+
 include /etc/sway/config.d/*
 
-# Hide away cursor after 4 secs idle, put back to the screen on mouse active
-exec hideaway 4 10000 10000 -512 -256
+default_border 		    pixel 	4
 
-default_border 		        pixel 	4
-gaps 			            top	4
+gaps 			            top	    4
 gaps 			            bottom	4
-gaps 			            left	4
-gaps 			            right	4
+gaps 			            left  	4
+gaps 			            right	  4
 gaps 			            inner 	5
 
-include ./startup
