@@ -10,11 +10,12 @@
     "format": "{icon}",
     "format-icons": {
       "1:Terminals": "",
-      "2:Browser": "",
-      "3:Editor": "",
-      "4:Communications": "",
+      "2:Notes": "",
+      "3:Browser": "",
+      "4:Communications": "󰒱",
       "8:File Browser": "",
       "9:Reader": "",
+      "10:Top": "",
     }
   },
   "backlight": {
