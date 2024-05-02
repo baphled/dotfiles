@@ -9,7 +9,7 @@ set $workspace_browser       3:Browser
 set $workspace_communications 4:Communications
 set $workspace_learning      5:Learning
 set $workspace_email         6:Email
-set $workspace_reader        7:Reader
+set $workspace_reading        7:Reading
 set $workspace_file_browser  8:File Browser
 set $workspace_remote        9:Remote
 set $workspace_top           0:Top
@@ -21,7 +21,7 @@ workspace $workspace_top output $output_top
 
 workspace $workspace_browser output $output_left
 workspace $workspace_learning output $output_left
-workspace $workspace_reader output $output_left
+workspace $workspace_reading output $output_left
 
 workspace $workspace_communications output $output_right
 workspace $workspace_email output $output_right
