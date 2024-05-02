@@ -2,7 +2,7 @@
   "position": "top",
   "margin-top": 8,
   "modules-left": ["sway/workspaces"],
-  "modules-center": ["tray"],
+  "modules-center": ["custom/waybar-media", "tray"],
   "modules-right": ["network", "idle_inhibitor", "bluetooth", "custom/keyboard-layout", "pulseaudio#mic", "pulseaudio", "backlight", "battery", "clock"],
   "sway/workspaces": {
     "disable-scroll": true,
@@ -52,6 +52,14 @@
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     "on-scroll-up": "swaymsg input type:keyboard xkb_switch_layout next",
     "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev",
+  },
+  "custom/waybar-media": {
+    "return-type": "json",
+    "exec": "waybar-media.py status",
+    "on-click": "waybar-media.py playpause",
+    "on-scroll-up": "waybar-media.py previous",
+    "on-scroll-down": "waybar-media.py next",
+    "escape": true
   },
   "bluetooth": {
     "format-connected": "",

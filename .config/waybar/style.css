@@ -68,6 +68,7 @@ window#waybar {
 }
 
 #custom-spotify,
+#custom-waybar-media,
 #window {
   background: rgba(51, 46, 65, 0.5);
   margin-top: 5px;
@@ -75,6 +76,14 @@ window#waybar {
   padding-right: 15px;
   padding-left: 15px;
   border-radius: 15px;
+}
+
+#custom-waybar-media.playpause {
+    color: #89b4fa;
+}
+
+#custom-waybar-media.paused {
+    color: grey;
 }
 
 #waybar.empty #window {
