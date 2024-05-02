@@ -25,6 +25,7 @@ Gemfile.lock
 .fetchids
 .netrc
 .newsbeuter/*
+.newsboat/*
 .msmtprc
 .swt
 .vagrant.d
