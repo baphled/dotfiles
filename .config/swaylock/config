@@ -1,8 +1,8 @@
 ignore-empty-password
-image=$HOME/.config/wallpaper/pokemon-gengar.jpg
-font=AnonymicePro
+image=$HOME/.config/wallpaper/gastly__haunter_and_gengar_by_ninjendo-d6uul44.jpg
+font=AnonymicePro Nerd Font
 
-scaling=fit
+scaling=fill
 indicator
 clock
 timestr=%I:%M %p
