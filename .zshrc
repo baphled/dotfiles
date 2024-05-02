@@ -107,3 +107,10 @@ source ~/.nvm/nvm.sh
 
 source $HOME/.zsh/zsh-syntax-highting.zsh
 
+if [ -n "$TMUX" ]; then
+  # NO-OP
+else
+  /usr/bin/neofetch
+  echo ""
+  echo ""
+fi
