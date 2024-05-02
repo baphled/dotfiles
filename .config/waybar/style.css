@@ -43,6 +43,7 @@ window#waybar {
 #backlight,
 #workspaces,
 #custom-keyboard-layout,
+#bluetooth,
 #mpd {
   padding: 2px 10px;
   background: rgba(51, 46, 65, 0.5);
@@ -78,4 +79,3 @@ window#waybar {
 #waybar.empty #window {
   background: none;
 }
-

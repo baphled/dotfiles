@@ -2,8 +2,8 @@
   "position": "top",
   "margin-top": 8,
   "modules-left": ["sway/workspaces"],
-  "modules-center": ["custom/spotify"],
-  "modules-right": ["network", "custom/keyboard-layout", "pulseaudio", "backlight", "battery", "clock"],
+  "modules-center": [],
+  "modules-right": ["network", "bluetooth", "custom/keyboard-layout", "pulseaudio", "backlight", "battery", "clock"],
   // Modules configuration
   "sway/workspaces": {
     "all-outputs": true,
@@ -38,6 +38,12 @@
       "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
       "on-scroll-up": "swaymsg input type:keyboard xkb_switch_layout next",
       "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev",
+  },
+  "bluetooth": {
+    "format-connected": "",
+    "format-disconnected": "",
+    "on-click": "blueman-manager",
+    "tooltip-format": "{status}",
   },
   "battery": {
     "states": {
