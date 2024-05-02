@@ -2,20 +2,23 @@
   "position": "top",
   "margin-top": 8,
   "modules-left": ["sway/workspaces"],
-  "modules-center": [],
-  "modules-right": ["network", "bluetooth", "custom/keyboard-layout", "pulseaudio", "backlight", "battery", "clock"],
-  // Modules configuration
+  "modules-center": ["tray"],
+  "modules-right": ["network", "idle_inhibitor", "bluetooth", "custom/keyboard-layout", "pulseaudio#mic", "pulseaudio", "backlight", "battery", "clock"],
   "sway/workspaces": {
+    "disable-scroll": true,
     "all-outputs": true,
-    "format": "{icon}",
+    "format": "{icon}  {name}",
     "format-icons": {
       "1:Terminals": "",
-      "2:Notes": "",
+      "2:Notes": "",
       "3:Browser": "",
       "4:Communications": "󰒱",
+      "5:Learning": "",
+      "6:Email": "",
+      "7:Reading": "",
       "8:File Browser": "",
-      "9:Reader": "",
-      "10:Top": "",
+      "9:Remote": "",
+      "10:Top": "",
     }
   },
   "backlight": {
@@ -23,21 +26,32 @@
     "format": "{percent}% {icon}",
     "format-icons": ["", ""]
   },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "\uf0f4",
+      "deactivated": "\uf0f4"
+    }
+  },
+  "tray": {
+    "spacing": 10,
+    "show-passive-items": true
+  },
   "clock": {
     "format": "<span foreground='#b4befe'> </span>{:%a %d %H:%M}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
   "custom/keyboard-layout": {
     "exec": "swaymsg -t get_inputs | grep -m1 'xkb_active_layout_name' | cut -d '\"' -f4 | cut -d ' ' -f1",
-      // Interval set only as a fallback, as the value is updated by signal
-      "interval": 10,
-      "format": "<span size='13000' foreground='#cdd6f4'> </span> {}", // Icon: keyboard
-      // Signal sent by Sway key binding (~/.config/sway/key-bindings)
-      "signal": 1, // SIGHUP
-      "tooltip": false,
-      "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
-      "on-scroll-up": "swaymsg input type:keyboard xkb_switch_layout next",
-      "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev",
+    // Interval set only as a fallback, as the value is updated by signal
+    "interval": 10,
+    "format": "<span size='13000' foreground='#cdd6f4'> </span> {}", // Icon: keyboard
+    // Signal sent by Sway key binding (~/.config/sway/key-bindings)
+    "signal": 1, // SIGHUP
+    "tooltip": false,
+    "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+    "on-scroll-up": "swaymsg input type:keyboard xkb_switch_layout next",
+    "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev",
   },
   "bluetooth": {
     "format-connected": "",
@@ -67,6 +81,13 @@
     "tooltip-format-wifi": "Signal Strenght: {signalStrength}%",
     "format-disabled": "Disconnected",
     "on-click": "nm-connection-editor"
+  },
+  "pulseaudio#mic": {
+    "format": "{format_source}",
+    "format-source": "",
+    "format-source-muted": "",
+    "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+    "tooltip": false
   },
   "pulseaudio": {
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
