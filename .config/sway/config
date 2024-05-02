@@ -108,7 +108,8 @@ input "Apple Inc. Magic Trackpad 2" {
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
     # lock sesion
-    bindsym $mod+Ctrl+l exec swaylock
+    bindsym $mod+Super_L exec swaylock
+    bindsym $mod+Super_R exec swaylock
 
     # Control audio
     #
