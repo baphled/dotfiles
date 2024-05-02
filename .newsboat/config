@@ -1,0 +1,44 @@
+browser                 w3m
+
+urls-source             "oldreader"
+
+oldreader-flag-share "a"
+oldreader-flag-star  "b"
+
+cookie-cache "~/.newsboat/cookies.txt"
+
+feedlist-format     "%4i %n %11u %t"
+articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
+notify-format       "%d new articles (%n unread articles, %f unread feeds)"
+
+cleanup-on-quit     yes
+download-retries    10
+download-timeout    20
+refresh-on-startup  yes
+reload-time         10
+
+download-path       ~/Downloads
+max-downloads       2
+player							afplay
+
+macro E set browser "echo %u >> ~/.newsboat/queue" ; open ; set browser "w3m %u"
+# externel browser
+browser "/usr/bin/w3m %u"
+macro m set browser "/usr/bin/mpv %u"; open-in-browser ; set browser "/usr/bin/w3m %u"
+macro l set browser "/usr/bin/firefox %u"; open-in-browser ; set browser "/usr/bin/w3m %u"
+
+# unbind keys
+unbind-key j
+unbind-key k
+unbind-key J
+unbind-key K
+
+# bind keys - vim style
+bind-key j down
+bind-key k up
+bind-key l open
+bind-key h quit
+
+include ~/.newsboat/dark
+
+# vim: set ft=config
