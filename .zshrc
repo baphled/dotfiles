@@ -105,6 +105,5 @@ fi
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
 
-/usr/bin/neofetch
-echo ""
-echo ""
+source $HOME/.zsh/zsh-syntax-highting.zsh
+

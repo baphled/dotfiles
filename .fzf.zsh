@@ -8,7 +8,9 @@ export FZF_CTRL_R_OPTS="
   --preview 'echo {}' --preview-window up:3:hidden:wrap
   --bind 'ctrl-/:toggle-preview'
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
-  --color header:italic
+  --color=bg+:#{{palette.surface0.hex}},bg:#{{palette.base.hex}},spinner:#{{palette.rosewater.hex}},hl:#{{palette.red.hex}}
+  --color=fg:#{{palette.text.hex}},header:#{{palette.red.hex}},info:#{{palette.mauve.hex}},pointer:#{{palette.rosewater.hex}}
+  --color=marker:#{{palette.rosewater.hex}},fg+:#{{palette.text.hex}},prompt:#{{palette.mauve.hex}},hl+:#{{palette.red.hex}}
   --header 'Press CTRL-Y to copy command into clipboard'"
 
 # Print tree structure in the preview window
