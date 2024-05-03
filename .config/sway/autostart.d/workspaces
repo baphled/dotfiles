@@ -1,0 +1,11 @@
+exec swaymsg "\
+       workspace $workspace_terminals exec $term; \
+       workspace $workspace_notes; exec $notes; \
+       workspace $workspace_browser; exec firefox; \
+       workspace $workspace_email; exec $neomutt; \
+       workspace $workspace_reading; exec $news_reader \
+       workspace $workspace_file_browser; exec thundar; \
+       workspace $workspace_top; exec $btop; \
+"
+
+# vim: set ft=swayconfig:
