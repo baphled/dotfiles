@@ -14,8 +14,4 @@ bindsym --release Ctrl+$mod+Print exec geometry=$(swaymsg -t get_tree | jq -r '.
 bindsym --release $mod+Shift+Print exec grim -g "$(slurp)" && \
   notify-send "Screenshot" "Selection screenshot saved"
 
-# Record screen
-bindsym --release $mod+F1 exec exec wf-recorder -g "$(slurp)" -f ~/Videos/$(date +%Y-%m-%d-%H-%M-%S).mp4 && \
-  notify-send "Recording" "Screen recording saved"
-
-# vim: set ft=swayconfig:
+# vim: set ft=swayconf+ig:
