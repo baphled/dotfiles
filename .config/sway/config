@@ -171,6 +171,9 @@ input type:keyboard {
     # Toggle the current focus between tiling and floating mode
     bindsym $mod+Shift+space floating toggle
 
+    # Toggle floating mode for the currently focused window
+    bindsym $mod+Shift+s sticky toggle
+
     # Swap focus between the tiling area and the floating area
     bindsym $mod+space focus mode_toggle
 
