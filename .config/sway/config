@@ -16,8 +16,12 @@ set $right l
 # Your preferred terminal emulator
 set $term ~/bin/alacritty -e zsh --login
 
+# Aliases for your preferred applications
 set $neovim $term -c nvim
 set $btop $term -c btop
+set $news_reader $term -c newsboat
+set $notes $term -c nvim -o 'working_directory=~/Documents/Notes'
+set $neomutt $term -c neomutt
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
@@ -87,6 +91,8 @@ input type:keyboard {
     bindsym $mod+Shift+v exec $neovim
     bindsym $mod+Shift+b exec firefox
     bindsym $mod+Shift+t exec $btop
+    bindsym $mod+Shift+m exec $neomutt
+    bindsym $mod+Shift+n exec $newsboat
 
     # Kill focused window
     bindsym $mod+Shift+q kill
@@ -255,7 +261,8 @@ output HDMI-A-1 mode 1920x1080 pos 2817,1761
 
 font pango:AnonymicePro Nerd Font 12
 
-include /etc/sway/config.d/*
+include ~/.config/sway/config.d/*
+include ~/.config/sway/autostart.d/*
 
 default_border 		    pixel 	4
 
@@ -264,4 +271,3 @@ gaps 			            bottom	4
 gaps 			            left  	4
 gaps 			            right	  4
 gaps 			            inner 	5
-
