@@ -80,7 +80,7 @@
     "format-disconnected": "<span size='13000' foreground='#f5e0dc'> </span>Disconnected",
     "tooltip-format-wifi": "Signal Strenght: {signalStrength}%",
     "format-disabled": "Disconnected",
-    "on-click": "nm-connection-editor"
+    "on-click": "nmtui"
   },
   "pulseaudio#mic": {
     "format": "{format_source}",
