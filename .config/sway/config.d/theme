@@ -10,4 +10,14 @@ client.focused_inactive $cl_back $cl_back $cl_fore $cl_back $cl_back
 client.unfocused        $cl_back $cl_back $cl_fore $cl_back $cl_back
 client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
 
+set $gnome-schema org.gnome.desktop.interface
+seat seat0 xcursor_theme "oomox-Catppuccin-Mocha" 36
+
+exec_always {
+  gsettings set $gnome-schema gtk-theme "Catppuccin-Mocha-BL-LB"
+  gsettings set $gnome-schema icon-theme "Catppuccin-Mocha"
+  gsettings set $gnome-schema cursor-theme "Adwaita"
+  gsettings set $gnome-schema font-name "Anonymice Nerd Font 10"
+}
+
 # vim: set ft=swayconfig:
