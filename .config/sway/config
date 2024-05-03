@@ -16,8 +16,8 @@ set $right l
 # Your preferred terminal emulator
 set $term ~/bin/alacritty -e zsh --login
 
-set $neovim ~/bin/alacritty -e nvim
-set $btop ~/bin/alacritty -e btop
+set $neovim $term -c nvim
+set $btop $term -c btop
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
