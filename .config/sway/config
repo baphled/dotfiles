@@ -74,8 +74,8 @@ input "Apple Inc. Magic Trackpad 2" {
 # Read `man 5 sway-input` for more information about this section.
 
 input type:keyboard {
-# xkb_options ctrl:nocaps
-  xkb_layout "gb"
+  xkb_options ctrl:nocaps
+  # xkb_layout "gb"
 }
 
 ### Key bindings
