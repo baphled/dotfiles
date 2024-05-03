@@ -73,10 +73,10 @@ input "Apple Inc. Magic Trackpad 2" {
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
-#input type:keyboard {
-#  xkb_options ctrl:nocaps
-#  xkb_layout "gb"
-#}
+input type:keyboard {
+# xkb_options ctrl:nocaps
+  xkb_layout "gb"
+}
 
 ### Key bindings
 #
