@@ -1,10 +1,35 @@
+# Variables
+set $workspace_terminals      1:Terminals
+set $workspace_notes          2:Notes
+set $workspace_browser        3:Browser
+set $workspace_communications 4:Communications
+set $workspace_learning       5:Learning
+set $workspace_email          6:Email
+set $workspace_reading        7:Reading
+set $workspace_file_browser   8:File Browser
+set $workspace_remote         9:Remote
+set $workspace_top            10:Top
+
+workspace $workspace_terminals output $output_top
+workspace $workspace_notes output $output_top
+workspace $workspace_remote output $output_top
+workspace $workspace_top output $output_top
+
+workspace $workspace_browser output $output_left
+workspace $workspace_learning output $output_left
+workspace $workspace_reading output $output_left
+
+workspace $workspace_communications output $output_right
+workspace $workspace_email output $output_right
+workspace $workspace_file_browser output $output_right
+
 exec swaymsg "\
-       workspace $workspace_terminals exec $term; \
+       workspace $workspace_terminals; exec $term; \
        workspace $workspace_notes; exec $notes; \
        workspace $workspace_browser; exec firefox; \
        workspace $workspace_email; exec $neomutt; \
-       workspace $workspace_reading; exec $news_reader \
-       workspace $workspace_file_browser; exec thundar; \
+       workspace $workspace_reading; exec $news_reader; \
+       workspace $workspace_file_browser; exec thunar; \
        workspace $workspace_top; exec $btop; \
 "
 
