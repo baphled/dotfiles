@@ -1,0 +1,66 @@
+# Assign applications to their designated workspaces
+
+# Variables
+set $workspace_terminals      1:Terminals
+set $workspace_notes          2:Notes
+set $workspace_browser        3:Browser
+set $workspace_communications 4:Communications
+set $workspace_learning       5:Learning
+set $workspace_email          6:Email
+set $workspace_reading        7:Reading
+set $workspace_file_browser   8:File Browser
+set $workspace_remote         9:Remote
+set $workspace_top            10:Top
+
+for_window [app_id="Alacritty"] {
+  move container to workspace $workspace_terminals
+  workspace $workspace_terminals
+}
+
+for_window [app_id="Notes"] {
+  move container to workspace $workspace_notes
+    workspace $workspace_notes
+}
+
+for_window [class="Firefox-esr"] {
+  move container to workspace $workspace_browser
+  workspace $workspace_browser
+}
+
+for_window [app_id="Mail"] {
+  move container to workspace $workspace_email
+  workspace $workspace_email
+}
+
+for_window [app_id="News Reader"] {
+  move container to workspace $workspace_reading
+  workspace $workspace_reading
+}
+
+for_window [app_id="thunar"] {
+  move container to workspace $workspace_file_browser
+  workspace $workspace_file_browser
+}
+
+for_window [app_id="Remote"] {
+  move container to workspace $workspace_remote
+  workspace $workspace_remote
+}
+
+for_window [app_id="Top"] {
+  move container to workspace $workspace_top
+    workspace $workspace_top
+}
+
+# Floating windows
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [window_role="About"] floating enable
+for_window [title="File Operation Progress"] floating enable, border pixel 1, sticky enable, resize set width 40 ppt height 30 ppt
+
+# vim: set ft=swayconfig:
