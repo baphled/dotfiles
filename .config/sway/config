@@ -32,6 +32,9 @@ set $menu wofi --show run
 
 exec mako
 
+# Start the authentication agent
+exec "/usr/lib/i386-linux-gnu/ukui-polkit/polkit-ukui-authentication-agent-1"
+
 include /etc/sway/config-vars.d/*
 
 ### Output configuration
@@ -270,3 +273,4 @@ gaps 			            bottom	4
 gaps 			            left  	4
 gaps 			            right	  4
 gaps 			            inner 	5
+
