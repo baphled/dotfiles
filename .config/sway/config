@@ -47,12 +47,9 @@ output * bg `ls -1 ~/.config/wallpaper/* | sort -R | head -1` fit
 # Example configuration:
 #
 exec swayidle -w \
-    timeout 5 'swaylock -f' \
-    timeout 5 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    timeout 10 'if pgrep swaylock; then swaymsg "output * dpms off"; fi' \
-    resume 'if pgrep swaylock; then swaymsg "output * dpms on"; fi' \
-    before-sleep 'swaylock -f'
+	timeout 300 'swaylock -f -c 000000' \
+	timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -f -c 000000'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -85,6 +82,9 @@ input type:keyboard {
 #
 # Basics:
 #
+    # Disable swayidle
+    bindsym $mod+escape exec killall -s SIGUSR1 swayidle && killall -s SIGUSR1 swayidle
+
     # Main applications we use
     bindsym $mod+Return exec $term
     bindsym $mod+Shift+v exec $neovim
