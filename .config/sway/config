@@ -38,7 +38,6 @@ include /etc/sway/config-vars.d/*
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg `ls -1 ~/.config/wallpaper/* | sort -R | head -1` fit
-
 #
 # Example configuration:
 #
@@ -258,10 +257,6 @@ bindsym $mod+Shift+0 move container to workspace 10:Top
 bar {
    swaybar_command waybar
 }
-
-output DP-2 mode 1920x1080 pos 1859,681
-output DVI-D-1 mode 1920x1080 pos 897,1761
-output HDMI-A-1 mode 1920x1080 pos 2817,1761
 
 font pango:AnonymicePro Nerd Font 12
 
