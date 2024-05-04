@@ -1,9 +1,23 @@
 {
   "position": "top",
   "margin-top": 8,
-  "modules-left": ["sway/workspaces"],
-  "modules-center": ["tray"],
-  "modules-right": ["network", "idle_inhibitor", "bluetooth", "custom/keyboard-layout", "pulseaudio#mic", "pulseaudio", "backlight", "battery", "clock"],
+  "modules-left": [
+    "sway/workspaces"
+  ],
+  "modules-center": [
+    "custom/keyboard-layout",
+    "tray",
+    "idle_inhibitor",
+    "bluetooth"
+  ],
+  "modules-right": [
+    "network",
+    "pulseaudio#mic",
+    "pulseaudio",
+    "backlight",
+    "battery",
+    "clock"
+  ],
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
@@ -18,13 +32,16 @@
       "7:Reading": "",
       "8:File Browser": "",
       "9:Remote": "",
-      "10:Top": "",
+      "10:Top": ""
     }
   },
   "backlight": {
     "device": "intel_backlight",
     "format": "{percent}% {icon}",
-    "format-icons": ["", ""]
+    "format-icons": [
+      "",
+      ""
+    ]
   },
   "idle_inhibitor": {
     "format": "{icon}",
@@ -38,7 +55,7 @@
     "show-passive-items": true
   },
   "clock": {
-    "format": "<span foreground='#b4befe'> </span>{:%a %d %H:%M}",
+    "format": "{:%a %d %H:%M}<span foreground='#b4befe'> </span>",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
   "custom/keyboard-layout": {
@@ -51,17 +68,18 @@
     "tooltip": false,
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     "on-scroll-up": "swaymsg input type:keyboard xkb_switch_layout next",
-    "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev",
+    "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev"
   },
   "bluetooth": {
     "format-connected": "",
     "format-disconnected": "",
     "on-click": "blueman-manager",
-    "tooltip-format": "{status}",
+    "tooltip-format": "{status}"
   },
   "battery": {
     "states": {
-      "warning": 30, "critical": 15
+      "warning": 30,
+      "critical": 15
     },
     "format": "<span size='13000' foreground='#a6e3a1'>{icon}</span> {capacity}%",
     "format-warning": "<span size='13000' foreground='#a6e3a1'>{icon}</span> {capacity}%",
@@ -70,7 +88,13 @@
     "format-plugged": "<span size='13000' foreground='#a6e3a1'> </span> {capacity}%",
     "format-alt": "<span size='13000' foreground='#a6e3a1'>{icon}</span> {time}",
     "format-full": "<span size='13000' foreground='#a6e3a1'> </span> {capacity}%",
-    "format-icons": ["", "", "", "", ""],
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
     "tooltip-format": "{time}"
   },
   "network": {
@@ -100,8 +124,10 @@
       "phone": "",
       "portable": "",
       "car": "",
-      "default": ["", ""]
+      "default": [
+        "",
+        ""
+      ]
     }
   }
 }
-
