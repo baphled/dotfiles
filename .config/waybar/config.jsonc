@@ -21,7 +21,7 @@
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
-    "format": "{icon}  {name}",
+    "format": "{icon} ",
     "format-icons": {
       "1:Terminals": "",
       "2:Notes": "",
