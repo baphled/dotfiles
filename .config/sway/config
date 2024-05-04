@@ -38,6 +38,7 @@ include /etc/sway/config-vars.d/*
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg `ls -1 ~/.config/wallpaper/* | sort -R | head -1` fit
+
 #
 # Example configuration:
 #
