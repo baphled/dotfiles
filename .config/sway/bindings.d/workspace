@@ -1,0 +1,29 @@
+
+#
+# Workspaces:
+#
+# Switch to workspace
+bindsym $mod+1 workspace 1:Terminals
+bindsym $mod+2 workspace 2:Notes
+bindsym $mod+3 workspace 3:Browser
+bindsym $mod+4 workspace 4:Communications
+bindsym $mod+5 workspace 5:Learning
+bindsym $mod+6 workspace 6:Email
+bindsym $mod+7 workspace 7:Reading
+bindsym $mod+8 workspace 8:File Browser
+bindsym $mod+9 workspace 9:Remote
+bindsym $mod+0 workspace 10:Top
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1:Terminals
+bindsym $mod+Shift+2 move container to workspace 2:Notes
+bindsym $mod+Shift+3 move container to workspace 3:Browser
+bindsym $mod+Shift+4 move container to workspace 4:Communications
+bindsym $mod+Shift+5 move container to workspace 5:Learning
+bindsym $mod+Shift+6 move container to workspace 6:Email
+bindsym $mod+Shift+7 move container to workspace 7:Reading
+bindsym $mod+Shift+8 move container to workspace 8:File Browser
+bindsym $mod+Shift+9 move container to workspace 9:Remote
+bindsym $mod+Shift+0 move container to workspace 10:Top
+
+# vim: set filetype=swayconfig:
