@@ -33,7 +33,7 @@ set $menu wofi --show run
 exec mako
 
 # Start the authentication agent
-exec "/usr/lib/i386-linux-gnu/ukui-polkit/polkit-ukui-authentication-agent-1"
+exec "`dpkg -L ukui-polkit | grep -E 'agent-1$'`"
 
 include /etc/sway/config-vars.d/*
 
