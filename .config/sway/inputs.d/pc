@@ -1,0 +1,11 @@
+input "Apple Inc. Magic Trackpad 2" {
+  dwt enabled
+  tap enabled
+  natural_scroll enabled
+  middle_emulation enabled
+  accel_profile flat
+  tap_button_map lrm
+  pointer_accel 1 # set mouse sensitivity
+}
+
+# vim: set filetype=swayconfig:

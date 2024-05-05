@@ -1,9 +1,3 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
-
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -37,10 +31,8 @@ exec "`dpkg -L ukui-polkit | grep -E 'agent-1$'`"
 
 include /etc/sway/config-vars.d/*
 
-### Output configuration
-#
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg `ls -1 ~/.config/wallpaper/* | sort -R | head -1` fit
+### Wallpapper selection
+output * bg `ls -1 ~/.config/wallpaper/*  | sort -R | head -1` fit
 
 ### Idle configuration
 #
@@ -55,198 +47,6 @@ exec swayidle -w \
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 
-### Input configuration
-#
-# Example configuration:
-#
-input "Apple Inc. Magic Trackpad 2" {
-    dwt enabled
-    tap enabled
-    natural_scroll enabled
-    middle_emulation enabled
-    accel_profile flat
-    tap_button_map lrm
-    pointer_accel 1 # set mouse sensitivity
-}
-
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
-
-input type:keyboard {
-  xkb_options ctrl:nocaps
-  # xkb_layout "gb"
-}
-
-### Key bindings
-#
-# Basics:
-#
-    # Disable swayidle
-    bindsym $mod+escape exec killall -s SIGUSR1 swayidle && killall -s SIGUSR1 swayidle
-
-    # Main applications we use
-    bindsym $mod+Return exec $term
-    bindsym $mod+Shift+v exec $neovim
-    bindsym $mod+Shift+b exec firefox
-    bindsym $mod+Shift+t exec $btop
-    bindsym $mod+Shift+m exec $neomutt
-    bindsym $mod+Shift+n exec $news_reader
-
-    # Kill focused window
-    bindsym $mod+Shift+q kill
-
-    # Start your launcher
-    bindsym $mod+d exec $menu
-
-    # Drag floating windows by holding down $mod and left mouse button.
-    # Resize them with right mouse button + $mod.
-    # Despite the name, also works for non-floating windows.
-    # Change normal to inverse to use left mouse button for resizing and right
-    # mouse button for dragging.
-    floating_modifier $mod normal
-
-    # Reload the configuration file
-    bindsym $mod+Shift+c reload
-
-    # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
-
-    # lock sesion
-    bindsym $mod+Super_L exec swaylock
-    bindsym $mod+Super_R exec swaylock
-
-    # Control audio
-    #
-    # Requires pulseaudio-utils
-    bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-
-    bindsym --locked XF86AudioMute exec 'pactl set-sink-mute $audio_sink toggle'
-    bindsym --locked XF86AudioRaiseVolume exec '$audio_unmute ; pactl set-sink-volume $audio_sink +2%'
-    bindsym --locked XF86AudioLowerVolume exec '$audio_unmute ; pactl set-sink-volume $audio_sink -2%'
-    bindsym --locked XF86AudioMicMute exec 'pactl set-source-mute $audio_source toggle'
-
-    # Display Controls
-    bindsym --locked XF86MonBrightnessUp exec 'brightnessctl set +5%'
-    bindsym --locked XF86MonBrightnessDown exec 'brightnessctl set 5%-'
-#
-# Moving around:
-#
-    # Move your focus around
-    bindsym $mod+$left focus left
-    bindsym $mod+$down focus down
-    bindsym $mod+$up focus up
-    bindsym $mod+$right focus right
-    # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
-
-    # Move the focused window with the same, but add Shift
-    bindsym $mod+Shift+$left move left
-    bindsym $mod+Shift+$down move down
-    bindsym $mod+Shift+$up move up
-    bindsym $mod+Shift+$right move right
-    # Ditto, with arrow keys
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
-
-#
-# Layout stuff:
-#
-    # You can "split" the current object of your focus with
-    # $mod+b or $mod+v, for horizontal and vertical splits
-    # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
-
-    # Switch the current container between different layout styles
-    bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
-
-    # Make the current focus fullscreen
-    bindsym $mod+f fullscreen
-
-    # Toggle the current focus between tiling and floating mode
-    bindsym $mod+Shift+space floating toggle
-
-    # Toggle floating mode for the currently focused window
-    bindsym $mod+Shift+s sticky toggle
-
-    # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
-
-    # Move focus to the parent container
-    bindsym $mod+a focus parent
-#
-# Scratchpad:
-#
-    # Sway has a "scratchpad", which is a bag of holding for windows.
-    # You can send windows there and get them back later.
-
-    # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+minus move scratchpad
-
-    # Show the next scratchpad window or hide the focused scratchpad window.
-    # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+minus scratchpad show
-#
-# Resizing containers:
-#
-mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
-
-    # Return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+r mode "resize"
-
-#
-# Workspaces:
-#
-# Switch to workspace
-bindsym $mod+1 workspace 1:Terminals
-bindsym $mod+2 workspace 2:Notes
-bindsym $mod+3 workspace 3:Browser
-bindsym $mod+4 workspace 4:Communications
-bindsym $mod+5 workspace 5:Learning
-bindsym $mod+6 workspace 6:Email
-bindsym $mod+7 workspace 7:Reading
-bindsym $mod+8 workspace 8:File Browser
-bindsym $mod+9 workspace 9:Remote
-bindsym $mod+0 workspace 10:Top
-
-# Move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1:Terminals
-bindsym $mod+Shift+2 move container to workspace 2:Notes
-bindsym $mod+Shift+3 move container to workspace 3:Browser
-bindsym $mod+Shift+4 move container to workspace 4:Communications
-bindsym $mod+Shift+5 move container to workspace 5:Learning
-bindsym $mod+Shift+6 move container to workspace 6:Email
-bindsym $mod+Shift+7 move container to workspace 7:Reading
-bindsym $mod+Shift+8 move container to workspace 8:File Browser
-bindsym $mod+Shift+9 move container to workspace 9:Remote
-bindsym $mod+Shift+0 move container to workspace 10:Top
 #
 # Status Bar:
 #
@@ -255,16 +55,7 @@ bar {
    swaybar_command waybar
 }
 
-font pango:AnonymicePro Nerd Font 12
-
+include ~/.config/sway/inputs.d/*
+include ~/.config/sway/bindings.d/*
 include ~/.config/sway/config.d/*
 include ~/.config/sway/autostart.d/*
-
-default_border 		    pixel 	4
-
-gaps 			            top	    4
-gaps 			            bottom	4
-gaps 			            left  	4
-gaps 			            right	  4
-gaps 			            inner 	5
-
