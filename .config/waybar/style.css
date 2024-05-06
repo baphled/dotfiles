@@ -37,6 +37,14 @@ window#waybar {
   color: #74c7ec;
 }
 
+#taskbar button {
+  padding-left: 10px;
+  padding-right: 10px;
+  min-width: 0;
+  transition: color 0.4s ease;
+  color: #89b4fa;
+}
+
 #taskbar button.active {
   transition: color 0.4s ease;
 }
@@ -54,7 +62,6 @@ window#waybar {
 }
 
 #taskbar button.fullscreen {
-  background: #74c7ec;
 }
 
 #clock,
@@ -74,6 +81,7 @@ window#waybar {
 }
 
 #custom-media,
+#tray,
 #idle_inhibitor {
   padding: 2px 10px;
   background: rgba(51, 46, 65, 0.5);
@@ -81,7 +89,6 @@ window#waybar {
   margin-bottom: 5px;
 }
 
-#tray,
 #network,
 #bluetooth {
   padding-left: 15px;
