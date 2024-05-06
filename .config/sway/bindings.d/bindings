@@ -56,4 +56,7 @@
     bindsym --locked XF86MonBrightnessUp exec 'brightnessctl set +5%'
     bindsym --locked XF86MonBrightnessDown exec 'brightnessctl set 5%-'
 
+    # 1password
+    bindsym Control+Shift+Space exec /usr/bin/1password --quick-access
+
 # vim: set filetype=swayconfig:
