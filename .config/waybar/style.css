@@ -37,8 +37,30 @@ window#waybar {
   color: #74c7ec;
 }
 
+#taskbar button.active {
+  transition: color 0.4s ease;
+}
+
+#taskbar button.active.focused {
+  background: #89b4fa;
+}
+
+#taskbar button.minimized {
+  background: #f38ba8;
+}
+
+#taskbar button.maximized {
+  background: #f38ba8;
+}
+
+#taskbar button.fullscreen {
+  background: #74c7ec;
+}
+
 #clock,
 #battery,
+#custom-scratchpad-indicator,
+#taskbar,
 #pulseaudio,
 #backlight,
 #custom-media,
@@ -61,8 +83,7 @@ window#waybar {
 
 #tray,
 #network,
-#bluetooth,
-#custom-scratchpad-indicator {
+#bluetooth {
   padding-left: 15px;
   padding-right: 2px;
   background: rgba(51, 46, 65, 0.5);
