@@ -55,6 +55,9 @@ bar {
    swaybar_command waybar
 }
 
+include ~/.config/sway/variables
+include ~/.config/sway/displays
+
 include ~/.config/sway/inputs.d/*
 include ~/.config/sway/bindings.d/*
 include ~/.config/sway/config.d/*

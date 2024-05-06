@@ -8,4 +8,8 @@ input "Apple Inc. Magic Trackpad 2" {
   pointer_accel 1 # set mouse sensitivity
 }
 
+input "7504:24926:ZMK_Project_Adv360_Pro_Keyboard" {
+  xkb_options ctrl:nocaps
+}
+
 # vim: set filetype=swayconfig:

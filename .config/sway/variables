@@ -1,0 +1,20 @@
+# Outputs
+set $output_top DP-2
+set $output_right HDMI-A-1
+set $output_left DV-D0
+
+set $laptop ePD-1
+
+# Variables
+set $workspace_terminals      1:Terminals
+set $workspace_notes          2:Notes
+set $workspace_browser        3:Browser
+set $workspace_communications 4:Communications
+set $workspace_learning       5:Learning
+set $workspace_email          6:Email
+set $workspace_reading        7:Reading
+set $workspace_file_browser   8:File Browser
+set $workspace_remote         9:Remote
+set $workspace_top            10:Top
+
+# vim: set filetype=swayconfig:
