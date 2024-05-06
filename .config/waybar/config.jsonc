@@ -7,6 +7,7 @@
   "modules-center": [
     "bluetooth",
     "tray",
+    "wlr/taskbar",
     "custom/scratchpad-indicator",
     "custom/media",
     "pulseaudio#mic",
@@ -23,7 +24,7 @@
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": false,
-    "format": "{icon}  {name}",
+    "format": "{icon} ",
     "format-icons": {
       "1:Terminals": "",
       "2:Notes": "",
@@ -77,6 +78,21 @@
       ""
     ]
   },
+  "wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 14,
+    "icon-theme": "Numix-Circle",
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "app_ids-mapping": {
+      "firefoxdeveloperedition": "firefox-developer-edition"
+    },
+    "rewrite": {
+      "Firefox Web Browser": "Firefox",
+      "Foot Server": "Terminal"
+    }
+  },
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
@@ -89,7 +105,7 @@
     "show-passive-items": true
   },
   "clock": {
-    "format": "{:%a %d %H:%M}<span foreground='#b4befe'> </span>",
+    "format": "{:%a %d %H:%M}<span foreground='#b4befe'>  </span>",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
   "custom/keyboard-layout": {
@@ -138,32 +154,7 @@
     "format-disconnected": "<span size='13000' foreground='#f5e0dc'> </span>Disconnected",
     "tooltip-format-wifi": "Signal Strenght: {signalStrength}%",
     "format-disabled": "Disconnected",
-    "on-click": "nmtui"
-  },
-  "mpd": {
-    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
-    "format-disconnected": "Disconnected ",
-    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-    "interval": 10,
-    "consume-icons": {
-      "on": " " // Icon shows only when "consume" is on
-    },
-    "random-icons": {
-      "off": "<span color=\"#f53c3c\"></span> ", // Icon grayed out when "random" is off
-      "on": " "
-    },
-    "repeat-icons": {
-      "on": " "
-    },
-    "single-icons": {
-      "on": "1 "
-    },
-    "state-icons": {
-      "paused": "",
-      "playing": ""
-    },
-    "tooltip-format": "MPD (connected)",
-    "tooltip-format-disconnected": "MPD (disconnected)"
+    "on-click": "sudo nmtui-connect"
   },
   "pulseaudio#mic": {
     "format": "{format_source}",
