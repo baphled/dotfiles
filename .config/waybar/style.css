@@ -1,7 +1,7 @@
 * {
   border-radius: 0;
   font-family: "AnonymicePro Nerd Font", "Noto Sans", sans-serif;
-  font-size: 1.08em;
+  font-size: 1.05em;
   min-height: 0;
 }
 
@@ -41,6 +41,8 @@ window#waybar {
 #battery,
 #pulseaudio,
 #backlight,
+#custom-media,
+#custom-keyboard-layout,
 #workspaces,
 #mpd {
   padding: 2px 10px;
@@ -49,17 +51,18 @@ window#waybar {
   margin-bottom: 5px;
 }
 
-#idle_inhibitor,
-#custom-keyboard-layout,
-#bluetooth {
+#custom-media,
+#idle_inhibitor {
   padding: 2px 10px;
   background: rgba(51, 46, 65, 0.5);
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
-#custom-keyboard-layout,
-#network {
+#tray,
+#network,
+#bluetooth,
+#custom-scratchpad-indicator {
   padding-left: 15px;
   padding-right: 2px;
   background: rgba(51, 46, 65, 0.5);
@@ -68,7 +71,7 @@ window#waybar {
   margin-bottom: 5px;
 }
 
-#bluetooth,
+#custom-keyboard-layout,
 #clock {
   padding-right: 15px;
   margin-right: 10px;
