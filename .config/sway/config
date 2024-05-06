@@ -22,7 +22,7 @@ set $remote      $term_no_shell --class "Remote" -e zsh --login
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu wofi --show run
+set $menu wofi
 
 exec mako
 
