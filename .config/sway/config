@@ -25,6 +25,7 @@ set $remote      $term_no_shell --class "Remote" -e zsh --login
 set $menu wofi
 
 exec mako
+exec nm-applet  // Network Manager Applet
 
 # Start the authentication agent
 exec "`dpkg -L ukui-polkit | grep -E 'agent-1$'`"
