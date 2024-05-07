@@ -1,0 +1,4 @@
+bindgesture swipe:left workspace prev
+bindgesture swipe:right workspace next
+
+# vim: set ft=swayconfig:
