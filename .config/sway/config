@@ -7,17 +7,17 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term_no_shell ~/bin/alacritty
+
 # Your preferred terminal emulator
-set $term $term_no_shell -e zsh --login
+set $term ~/.local/kitty.app/bin/kitty
 
 # Aliases for your preferred applications
-set $neovim      $term_no_shell --class "Neovim" -e zsh --login -c nvim
-set $btop        $term_no_shell --class "Top" -e zsh --login  -c btop
-set $news_reader $term_no_shell --class "News Reader" -e zsh --login -c newsboat
-set $notes       $term_no_shell --class "Notes" -e zsh --login  -c nvim
-set $neomutt     $term_no_shell --class "Mail" -e zsh --login  -c neomutt
-set $remote      $term_no_shell --class "Remote" -e zsh --login
+set $neovim      $term --class "Neovim" zsh -c "nvim"
+set $btop        $term --class "Top" zsh -c "btop"
+set $news_reader $term --class "News Reader" zsh -c "newsboat"
+set $notes       $term --class "Notes" zsh  -c "nvim" -d ~/Documents/development_notes
+set $neomutt     $term --class "Mail" zsh  -c "neomutt"
+set $remote      $term --class "Remote" zsh
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened

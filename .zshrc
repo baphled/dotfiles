@@ -110,7 +110,7 @@ source $HOME/.zsh/zsh-syntax-highting.zsh
 if [ -n "$TMUX" ]; then
   # NO-OP
 else
-  /usr/bin/neofetch
+  ~/bin/fastfetch_autoscale
   echo ""
   echo ""
 fi
