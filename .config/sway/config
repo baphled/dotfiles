@@ -9,7 +9,7 @@ set $up k
 set $right l
 
 # Your preferred terminal emulator
-set $term kitty
+set $term ~/.local/bin/kitty
 
 # Aliases for your preferred applications
 set $neovim      $term --class "Neovim" zsh -c "nvim"
