@@ -1,15 +1,5 @@
 # Assign applications to their designated workspaces
 
-for_window [app_id="Alacritty"] {
-  move container to workspace $workspace_terminals
-  workspace $workspace_terminals
-}
-
-for_window [app_id="kitty"] {
-  move container to workspace $workspace_terminals
-  workspace $workspace_terminals
-}
-
 for_window [app_id="Notes"] {
   move container to workspace $workspace_notes
     workspace $workspace_notes
@@ -30,7 +20,7 @@ for_window [app_id="Mail"] {
   workspace $workspace_email
 }
 
-for_window [app_id="News Reader"] {
+for_window [app_id="News"] {
   move container to workspace $workspace_reading
   workspace $workspace_reading
 }

@@ -1,5 +1,5 @@
 exec swaymsg "\
-       exec $term; \
+       workspace $workspace_terminals; exec $term; \
        exec $notes; \
        exec firefox; \
        exec $neomutt; \
