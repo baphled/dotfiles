@@ -21,24 +21,12 @@ fi
 
 # Work out whether we're in TMUX, kitty or something else
 
-# If we are then we should use jp2a, otherwise we should use the default
 if [ -n "$TMUX" ]; then
-  fastfetch --chafa "$IMAGE" \
-    --chafa-dither-mode 5 \
-    --chafa-canvas-mode 2 \
-    --chafa-color-space 1 \
-    --logo-width "$FASTFETCH_IMG_WIDTH" \
-    --logo-height "$FASTFETCH_IMG_HEIGHT"
-
-  echo ''
-  echo ''
+  # NO-OP
 elif [ -z "$KITTEN_PID" ]; then
   # We're in kitty
   # Use the default
-  fastfetch --kitty "$IMAGE" --logo-width "$FASTFETCH_IMG_WIDTH" --logo-height "$FASTFETCH_IMG_HEIGHT"
-
-  echo ''
-  echo ''
+  neofetch
 else
   # We're in a normal terminal
   fastfetch --chafa "$IMAGE" \

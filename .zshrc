@@ -98,9 +98,6 @@ export PATH="$PATH:/snap/bin"
 ## Add flutter bin to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
-## Add kitty bin to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH":"$HOME/.local/kitty.app/bin"
-
 if [ -f ~/.fzf.zsh ]; then
   source ~/.fzf.zsh
 fi
