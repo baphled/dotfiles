@@ -20,10 +20,12 @@ if [ "$FASTFETCH_IMG_WIDTH" -ge 425 ]; then
 fi
 
 # Work out whether we're in TMUX, kitty or something else
+GPU=$(lspci -vnnn | perl -lne 'print if /^\d+\:.+(\[\S+\:\S+\])/' | grep VGA | grep NVIDIA)
 
-if [ -n "$TMUX" ]; then
-  # NO-OP
-elif [ -z "$KITTEN_PID" ]; then
+if [[ -z "$GPU" ]]; then
+  # We're in a terminal
+  neowofetch
+elif [[ -z "$KITTEN_PID" ]]; then
   # We're in kitty
   # Use the default
   fastfetch --kitty "$IMAGE" \
@@ -38,7 +40,4 @@ else
     --chafa-color-space 1 \
     --logo-width "$FASTFETCH_IMG_WIDTH" \
     --logo-height "$FASTFETCH_IMG_HEIGHT"
-
-  echo ''
-  echo ''
 fi
