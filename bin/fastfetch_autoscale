@@ -26,7 +26,10 @@ if [ -n "$TMUX" ]; then
 elif [ -z "$KITTEN_PID" ]; then
   # We're in kitty
   # Use the default
-  neofetch
+  fastfetch --kitty "$IMAGE" \
+    --logo-width "$FASTFETCH_IMG_WIDTH" \
+    --logo-height "$FASTFETCH_IMG_HEIGHT"
+
 else
   # We're in a normal terminal
   fastfetch --chafa "$IMAGE" \
