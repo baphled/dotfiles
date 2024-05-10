@@ -7,7 +7,6 @@
   "modules-center": [
     "bluetooth",
     "tray",
-    "wlr/taskbar",
     "custom/scratchpad-indicator",
     "custom/media",
     "pulseaudio#mic",
