@@ -38,6 +38,8 @@ export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 alias tmux="tmux -u2"
 alias vino="vim -u NONE -N"
+alias cat="batcat"
+alias ls="exa"
 
 export EDITOR=nvim
 
