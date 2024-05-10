@@ -40,6 +40,8 @@ alias tmux="tmux -u2"
 alias vino="vim -u NONE -N"
 alias cat="batcat"
 alias ls="exa"
+alias ll="exa -l"
+alias cd="z"
 
 export EDITOR=nvim
 
@@ -50,6 +52,8 @@ else
 fi
 
 eval `dircolors ~/colors/dircolors-solarized/dircolors.ansi-dark`
+
+eval "$(zoxide init zsh)"
 
 # We want vi-mode
 set -o vi
