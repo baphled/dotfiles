@@ -1,12 +1,12 @@
-set $super Mod1
-bindsym $super+F4 kill
+set $Alt Mod4
+bindsym $Alt+F4 kill
 
 # Screenshot a monitor
 bindsym --release Print exec grim -o "$(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')" && \
     notify-send "Screenshot" "Monitor screenshot saved"
 
 # Screenshot a window
-bindsym --release Ctrl+$mod+Print exec geometry=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp) && \
+bindsym --release $mod+Ctrl+Print exec geometry=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp) && \
   grim -g "${geometry}" && \
   notify-send "Screenshot" "Window screenshot saved"
 
