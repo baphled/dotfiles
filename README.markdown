@@ -4,7 +4,7 @@ Comprises of my current console setup and commonly used tools
 
 For the most part, I've been using the same configuration setup for over a
 decade. Since moving back to Linux, I've updated my knowledge of productivity
-tools within the ecosystem. As a bonus,
+tools within the ecosystem.
 
 In addition to all of this we've replaced vim with `neovim`. This is one of the
 biggest changes to our [dotfiles](https://github.com/baphled/dotfiles), as it
@@ -45,11 +45,11 @@ of resources touching on them already.
 
 ### RVM
 
-### btm
+### btop
 
-![Screenshot_20230903_174243](https://github.com/baphled/dotfiles/assets/37376/ef13970f-0bfb-4caa-b68f-5cdd62f747f7)
+![btop](https://github.com/baphled/dotfiles/assets/37376/9041565a-e5a2-44cd-815c-ed105c321f7f)
 
-`htop` has served us well but `btm` is it's natural successor. Not only is it
+`htop` has served us well but `btop` is it's natural successor. Not only is it
 more aesthetically pleasing but it provides us with a wealth of information
 relating to the state of the machine we're working on.
 
@@ -61,7 +61,7 @@ https://clementtsang.github.io/bottom/nightly/usage/general-usage/
 
 ### Neovim
 
-![Screenshot 2023-08-03 18:54:37](https://github.com/baphled/dotfiles/assets/37376/10eed5f4-f8a9-4842-8b7f-ae4141d926b4)
+![neovim](https://github.com/baphled/dotfiles/assets/37376/3d111efb-7440-4dcf-8977-ad739a797a5a)
 
 We've been using `vim` for decades now, and using anything else seemed like a
 complete was of time. That is until we recently spent time exploring `neovim`.
@@ -82,13 +82,15 @@ visually stimulating to work within.
 
 ### fzf
 
-![Screenshot_20230903_234925](https://github.com/baphled/dotfiles/assets/37376/c007ac17-1bd0-4681-855c-410a53b6c9fe)
+![fzf](https://github.com/baphled/dotfiles/assets/37376/44727029-1f1a-4659-a453-5fc2da98506f)
 
 We've also adopted `fzf` for fuzzy finding and integrated it into both `zsh`,
 `tmux` and `neovim`. This way we're able to quickly find things without our system
 in a uniform way.
 
 ### exa
+
+![exa](https://github.com/baphled/dotfiles/assets/37376/635eee61-72fa-4848-be28-2b43c5c76e62)
 
 We use this as a replacement for `ls`. Mostly, this is used for previews within
 `fzf` but we also use it to display colourised information for files within our
@@ -104,7 +106,7 @@ finder results as quickly as possible, and this is were `ripgrep` truly shines.
 
 ### fastfetch
 
-![Screenshot_20230903_174548](https://github.com/baphled/dotfiles/assets/37376/48e3cfd2-7468-47e3-bd88-cc75d2f5090a)
+![fastfetch](https://github.com/baphled/dotfiles/assets/37376/ce6b936c-ff9d-4c73-84ab-c1b7425c0649)
 
 I've always want to enhance how my terminal looks. For this we've introduced
 `fastfetch` to display information about the machine we're working on. We've
