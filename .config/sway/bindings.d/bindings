@@ -37,7 +37,7 @@
       'swaymsg exit'
 
     # lock sesion
-    bindsym --release $mod+Shift+Alt exec swaylock
+    bindsym $mod+Alt+l exec swaylock
 
     # Control audio
     #
