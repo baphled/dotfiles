@@ -27,23 +27,31 @@ DISABLE_AUTO_TITLE="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git vi-mode bundler history-substring-search themes fzf fzf-tab)
 
-source $ZSH/oh-my-zsh.sh
-source $HOME/.agile_ruby_workflow.zsh
-
 # Customize to your needs...
 PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bin:/usr/local/rvm/bin:$PATH
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
-alias tmux="tmux -u2"
-alias vino="vim -u NONE -N"
-alias cat="batcat"
-alias ls="exa"
-alias ll="exa -l"
-alias cd="z"
-
 export EDITOR=nvim
+
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
+
+export PATH="$HOME/bin/:$PATH:$HOME/.rvm/bin" # Make sure local bin files around found before system ones
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+# Add python to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.local/bin"
+
+## Add snap bin to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:/snap/bin"
+
+## Add flutter bin to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+export NVM_DIR=~/.nvm
 
 if [ -n "$TMUX" ]; then
   export TERM=tmux-256color
@@ -61,6 +69,18 @@ set -o vi
 # Ignore all duplicate history entries
 setopt hist_ignore_all_dups
 
+source $ZSH/oh-my-zsh.sh
+
+if [ -f ~/.fzf.zsh ]; then
+  source ~/.fzf.zsh
+fi
+
+source ~/.nvm/nvm.sh
+
+source $HOME/.zsh/zsh-syntax-highting.zsh
+source $HOME/.config/aliasrc
+
+
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 
 # Display the vi-mode your currently in
@@ -74,44 +94,11 @@ zle -N zle-keymap-select
 
 # renaming multiple files at once
 autoload -U zmv
-alias mmv='noglob zmv -W'
 
 PROMPT+=`$([ -n "$TMUX"  ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")`
 
-export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
-
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
-
-# Load RVM if it is installed,
-#  first try to load  user install
-#  then try to load root install, if user install is not there.
-if [ -s "$HOME/.rvm/scripts/rvm" ] ; then
-elif [ -s "/usr/local/rvm/scripts/rvm" ] ; then
-fi
-
-export PATH="$HOME/bin/:$PATH:$HOME/.rvm/bin" # Make sure local bin files around found before system ones
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-# Add python to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.local/bin"
-
-## Add snap bin to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:/snap/bin"
-
-## Add flutter bin to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH":"$HOME/.pub-cache/bin"
-
-if [ -f ~/.fzf.zsh ]; then
-  source ~/.fzf.zsh
-fi
-
-export NVM_DIR=~/.nvm
-source ~/.nvm/nvm.sh
-
-source $HOME/.zsh/zsh-syntax-highting.zsh
 
 if [ -n "$TMUX" ]; then
   # NO-OP
