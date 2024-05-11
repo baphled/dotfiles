@@ -19,4 +19,4 @@ windows:
   - ZMK:
       root: ~/Projects/zmk-config-advance-360/
       panes:
-        - btop
+        - nvim
