@@ -45,6 +45,32 @@ of resources touching on them already.
 
 ### RVM
 
+### Sesh
+
+[Sesh](https://github.com/joshmedeski/sesh)
+
+We've introduced this tool to help us manage our tmux sessions. We've been using
+`tmux` for a long time now, and we've always found it a bit of a pain to manage
+sessions. We've been using tmuxinator for a while now, but we've found that it
+can lead to having a large number of sessions open at once. This is where `sesh`
+comes in. It allows us to manage our sessions in a more efficient way. So we
+want to explore this tool further and see if it can help us to manage our
+sessions in a more efficient way.
+
+### Zoxide
+
+[Zoxide](https://github.com/ajeetdsouza/zoxide)
+
+We've tried to use autojump in the past, but we've found that it's not as
+efficient as we'd like it to be. We've heard good things about `zoxide` and we
+want to give it a try. Zoxide is a faster way to navigate your filesystem. It
+remembers the directories you use most frequently and allows you to jump to
+them quickly in a more efficient way. We're hoping that this will help us to
+navigate our filesystem in a more efficient way.
+
+We've also integrated it with sesh, tmux and fzf to make it easier to navigate
+our filesystem.
+
 ### btop
 
 ![btop](https://github.com/baphled/dotfiles/assets/37376/9041565a-e5a2-44cd-815c-ed105c321f7f)
