@@ -9,4 +9,6 @@ alias cd="z"
 
 alias mmv='noglob zmv -W'
 
+alias fp='tmux-sessionizer'
+
 # vim: set filetype=sh
