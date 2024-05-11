@@ -51,6 +51,8 @@ export PATH="$PATH:/snap/bin"
 ## Add flutter bin to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
+export PATH="$PATH":"$HOME/go/bin"
+
 export NVM_DIR=~/.nvm
 
 if [ -n "$TMUX" ]; then
