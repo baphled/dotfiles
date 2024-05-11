@@ -1,0 +1,12 @@
+alias tmux="tmux -u2"
+
+alias cat="batcat"
+
+alias ls="exa"
+alias ll="exa -l"
+
+alias cd="z"
+
+alias mmv='noglob zmv -W'
+
+# vim: set filetype=sh
