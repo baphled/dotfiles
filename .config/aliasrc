@@ -9,6 +9,6 @@ alias cd="z"
 
 alias mmv='noglob zmv -W'
 
-alias fp='tmux-sessionizer'
+alias fp='sesh connect $(sesh list | fzf)'
 
 # vim: set filetype=sh
