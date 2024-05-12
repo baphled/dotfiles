@@ -58,7 +58,7 @@ export NVM_DIR=~/.nvm
 if [ -n "$TMUX" ]; then
   export TERM=tmux-256color
 else
-  export TERM=xterm-256color
+  export TERM=xterm-kitty
 fi
 
 eval `dircolors ~/colors/dircolors-solarized/dircolors.ansi-dark`
