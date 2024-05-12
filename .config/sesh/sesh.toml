@@ -8,6 +8,10 @@ path = "~/Projects"
 startup_command = "nvim -c ':Telescope find_files'"
 
 [[session]]
+name = "Home 🏠"
+path = "~/"
+
+[[session]]
 name = "n-vyro 🌐"
 path = "~/Work/@n-vyro"
 
@@ -17,11 +21,16 @@ path = "~/.config/tmux"
 startup_command = "nvim tmux.conf"
 
 [[session]]
-name = "Dotfiles 🏠"
-path = "~/"
+name = "nvim config 🏠"
+path = "~/.config/nvim/"
 startup_command = "nvim"
 
 [[session]]
 name = "Documents 📚"
 path = "~/Documents"
 startup_command = "nvim -c ':Telescope find_files'"
+
+[[session]]
+name = "Pictures 📸"
+path = "~/Pictures"
+startup_command = "ranger"
