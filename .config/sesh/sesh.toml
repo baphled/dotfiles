@@ -10,6 +10,7 @@ startup_command = "nvim -c ':Telescope find_files'"
 [[session]]
 name = "Home 🏠"
 path = "~/"
+startup_command = "nvim -c ':Telescope find_files'"
 
 [[session]]
 name = "n-vyro 🌐"
@@ -23,7 +24,7 @@ startup_command = "nvim tmux.conf"
 [[session]]
 name = "nvim config 🏠"
 path = "~/.config/nvim/"
-startup_command = "nvim"
+startup_command = "nvim lua/plugins.lua"
 
 [[session]]
 name = "Documents 📚"
