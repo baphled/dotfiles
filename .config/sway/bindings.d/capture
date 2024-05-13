@@ -14,4 +14,8 @@ bindsym $mod+Ctrl+Print exec geometry=$(swaymsg -t get_tree | jq -r '.. | select
 bindsym $mod+Shift+Print exec grim -g "$(slurp)" && \
   notify-send "Screenshot" "Selection screenshot saved"
 
+# Screenshot whole session
+bindsym --release $mod+Ctrl+Shift+Print exec grim && \
+  notify-send "Screenshot" "Session screenshot saved"
+
 # vim: set ft=swayconf+ig:
