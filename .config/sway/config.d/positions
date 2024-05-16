@@ -5,6 +5,11 @@ for_window [app_id="Notes"] {
     workspace $workspace_notes
 }
 
+for_window [class="obsidian"] {
+  move container to workspace $workspace_notes
+    workspace $workspace_notes
+}
+
 for_window [class="Firefox-esr"] {
   move container to workspace $workspace_browser
   workspace $workspace_browser

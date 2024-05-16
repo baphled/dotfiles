@@ -1,4 +1,6 @@
 bindgesture swipe:left workspace prev
 bindgesture swipe:right workspace next
+bindgesture swipe:up move scratchpad
+bindgesture swipe:down scratchpad show
 
 # vim: set ft=swayconfig:

@@ -13,4 +13,10 @@ input "1:1:AT_Translated_Set_2_keyboard" {
   xkb_layout "gb"
 }
 
+set $laptop <eDP-1>
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
+
+exec_always ~/.config/sway/scripts/clamshell.sh
+
 # vim: set filetype=swayconfig:
