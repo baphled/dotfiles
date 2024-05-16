@@ -7,7 +7,6 @@
 
     # Main applications we use
     bindsym $mod+Return exec $term
-    bindsym $mod+Shift+v exec $neovim
     bindsym $mod+Shift+b exec firefox
     bindsym $mod+Shift+o exec obsidian
     bindsym $mod+Shift+t exec $btop
@@ -18,7 +17,7 @@
     bindsym $mod+f1 exec ~/.config/sway/scripts/lockman.sh
 
     # Menu
-    bindsym $mod+Shift+d exec wofi
+    bindsym $mod+Shift+d exec $menu
 
     # Switch to the last recently used window
     bindsym Alt+Tab exec swayr switch-to-urgent-or-lru-window
@@ -32,11 +31,14 @@
     # Open this file in a floating window
     bindsym $mod+Shift+i exec $term -T sway_config -e micro ~/.config/sway/config.d/default
 
+    # Open notification centre
+    bindsym $mod+n exec swaync-client -t -sw
+
     # Kill focused window
     bindsym $mod+Shift+q kill
 
     # Start your launcher
-    bindsym $mod+d exec $menu
+    bindsym $mod+d exec $launcher
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
