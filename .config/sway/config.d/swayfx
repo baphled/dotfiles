@@ -6,14 +6,14 @@ corner_radius 10
 
 # Window background blur
 blur enable
-blur_xray off
+blur_xray on
 blur_passes 2
 blur_radius 2
 
 shadows enable
 shadows_on_csd off
 shadow_blur_radius 8
-shadow_color #0000007F
+shadow_color #007f849c
 
 # Waybar blur
 layer_effects "waybar" blur enable; shadows enable; corner_radius 20

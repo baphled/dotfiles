@@ -19,6 +19,7 @@
     "idle_inhibitor",
     "backlight",
     "battery",
+    "custom/swaync",
     "clock",
     "custom/power"
   ],
@@ -50,6 +51,12 @@
       "9:Remote",
       "10:Top"
     ],
+  },
+  "custom/swaync": {
+    "format": "",
+    "on-click": "sleep 0.1; swaync-client -t -sw",
+    "on-click-middle": "swaync-client -C",
+    "on-double-click": "swaync-client -d"
   },
   "custom/power": {
     "format": "⏻",
@@ -190,10 +197,10 @@
   },
   "network": {
     "format": " Disabled",
-    "format-wifi": " {bandwidthDownBits:>}  {bandwidthUpBits:>}  ",
-    "tooltip-format-wifi": "{essid}",
-    "format-ethernet": " {bandwidthDownBits:>}  {bandwidthUpBits:>}  ",
-    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+    "format-wifi": "  {essid}",
+    "tooltip-format-wifi": "  {bandwidthDownBits:>}  {bandwidthUpBits:>}  ",
+    "tooltip-format-ethernet": "  {bandwidthDownBits:>}  {bandwidthUpBits:>}  ",
+    "format-ethernet": "{ifname}: {ipaddr}/{cidr}",
     "format-disconnected": " Disconnected",
     "on-click": "kitty -T waybar_nmtui -e nmtui",
     "interval": 2,

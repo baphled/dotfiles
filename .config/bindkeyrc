@@ -1,0 +1,8 @@
+# Bindings.
+bindkey -e
+bindkey '^n' history-search-forward
+bindkey '^p' history-search-backward
+
+bindkey '^k' autosuggest-accept
+
+# vim: set filetype=sh

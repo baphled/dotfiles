@@ -68,9 +68,6 @@ eval "$(zoxide init zsh)"
 # We want vi-mode
 set -o vi
 
-# Ignore all duplicate history entries
-setopt hist_ignore_all_dups
-
 source $ZSH/oh-my-zsh.sh
 
 if [ -f ~/.fzf.zsh ]; then
@@ -81,7 +78,6 @@ source ~/.nvm/nvm.sh
 
 source $HOME/.zsh/zsh-syntax-highting.zsh
 source $HOME/.config/aliasrc
-
 
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 
@@ -99,13 +95,102 @@ autoload -U zmv
 
 PROMPT+=`$([ -n "$TMUX"  ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")`
 
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+## Path section
+# Set $PATH if ~/.local/bin exist
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH=$HOME/.local/bin:$PATH
+fi
+
+eval "$(starship init zsh)"
+function set_win_title(){
+    echo -ne "\033]0; $USER@$HOST:${PWD/$HOME/~} \007"
+}
+precmd_functions+=(set_win_title)
+
+
+## Plugins section: Enable fish style features
+# Use syntax highlighting
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Use autosuggestion
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Use history substring search
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+# Use fzf
+source /usr/share/fzf/key-bindings.zsh
+
+# Arch Linux command-not-found support, you must have package pkgfile installed
+# https://wiki.archlinux.org/index.php/Pkgfile#.22Command_not_found.22_hook
+[[ -e /usr/share/doc/pkgfile/command-not-found.zsh ]] && source /usr/share/doc/pkgfile/command-not-found.zsh
+
+# Advanced command-not-found hook
+[[ -e /usr/share/doc/find-the-command/ftc.zsh ]] && source /usr/share/doc/find-the-command/ftc.zsh
+
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=1000000000
+SAVEHIST=$HISTSIZE
+
+HISTDUP=erase
+
+## Options section
+setopt correct                                                  # Auto correct mistakes
+setopt extendedglob                                             # Extended globbing. Allows using regular expressions with *
+setopt nocaseglob                                               # Case insensitive globbing
+setopt rcexpandparam                                            # Array expension with parameters
+setopt nocheckjobs                                              # Don't warn about running processes when exiting
+setopt numericglobsort                                          # Sort filenames numerically when it makes sense
+setopt nobeep                                                   # No beep
+setopt appendhistory                                            # Immediately append history instead of overwriting
+setopt histignorealldups                                        # If a new command is a duplicate, remove the older one
+setopt autocd                                                   # if only directory path is entered, cd there.
+setopt auto_pushd                                               # pushd when cd is used
+setopt pushd_ignore_dups                                        # Do not store duplicates in the directory stack
+setopt pushdminus                                               # pushd with the argument '-' goes to the previous directory
+setopt append_history                                           # Append history instead of overwriting
+setopt share_history                                            # Share history between all sessions
+setopt hist_ignore_space                                        # Ignore commands that start with a space
+setopt hist_ignore_all_dups                                     # Delete old recorded duplicates
+setopt hist_save_no_dups                                        # Do not save duplicates in history
+setopt hist_ignore_dups                                         # Do not save duplicates in history
+setopt hist_find_no_dups                                        # Do not display duplicates when searching history
+
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
+zstyle ':completion:*' rehash true                              # automatically find new executables in path
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"         # Colored completion (different colors for dirs/files/etc)
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' menu no
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+zstyle ':completion:*:descriptions' format '%U%F{cyan}%d%f%u'
+
+# Speed up completions
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.cache/zcache
+
+# automatically load bash completion functions
+autoload -U +X bashcompinit && bashcompinit
+
+# Load Mcfly
+export MCFLY_FUZZY=true
+export MCFLY_RESULTS=20
+export MCFLY_INTERFACE_VIEW=BOTTOM
+export MCFLY_RESULTS_SORT=LAST_RUN
+eval "$(mcfly init zsh)"
+
+# Bindings.
+bindkey -v
+bindkey '^n' history-search-forward
+bindkey '^p' history-search-backward
+
+bindkey '^k' autosuggest-accept
 
 if [ -n "$TMUX" ]; then
   # NO-OP
 else
   ~/bin/fastfetch_autoscale
-  echo ""
-  echo ""
 fi
