@@ -15,6 +15,8 @@ exec python3 ~/.config/sway/scripts/swayfader.py
 # Autotiling
 exec autotiling
 
+exec 1password
+
 # nm-applet
 exec nm-applet --indicator
 
