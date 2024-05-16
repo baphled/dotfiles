@@ -9,9 +9,28 @@
     bindsym $mod+Return exec $term
     bindsym $mod+Shift+v exec $neovim
     bindsym $mod+Shift+b exec firefox
+    bindsym $mod+Shift+o exec obsidian
     bindsym $mod+Shift+t exec $btop
     bindsym $mod+Shift+m exec $neomutt
     bindsym $mod+Shift+n exec $news_reader
+
+    ## Lock Screen
+    bindsym $mod+f1 exec ~/.config/sway/scripts/lockman.sh
+
+    # Menu
+    bindsym $mod+Shift+d exec wofi
+
+    # Switch to the last recently used window
+    bindsym Alt+Tab exec swayr switch-to-urgent-or-lru-window
+
+    # Activities
+    bindsym $mod+Tab exec swayr switch-window
+
+    # Activities and workspaces
+    bindsym $mod+Shift+Tab exec swayr switch-workspace-or-window
+
+    # Open this file in a floating window
+    bindsym $mod+Shift+i exec $term -T sway_config -e micro ~/.config/sway/config.d/default
 
     # Kill focused window
     bindsym $mod+Shift+q kill

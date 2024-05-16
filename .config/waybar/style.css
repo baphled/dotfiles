@@ -13,9 +13,8 @@ window#waybar {
 
 #workspaces {
   background: rgba(51, 46, 65, 0.5);
-  margin-left: 10px;
   margin-top: 10px;
-  border-radius: 15px;
+  border-radius: 0px 15px 15px 0px;
 }
 
 #workspaces button {
@@ -65,6 +64,8 @@ window#waybar {
 }
 
 #clock,
+#custom-power,
+#custom-updates,
 #battery,
 #custom-scratchpad-indicator,
 #taskbar,
@@ -90,6 +91,7 @@ window#waybar {
 }
 
 #network,
+#custom-launcher,
 #bluetooth {
   padding-left: 15px;
   padding-right: 2px;
@@ -99,8 +101,13 @@ window#waybar {
   margin-bottom: 5px;
 }
 
+#custom-launcher {
+  padding-left: 15px;
+  margin-left: 10px;
+}
+
 #custom-keyboard-layout,
-#clock {
+#custom-power {
   padding-right: 15px;
   margin-right: 10px;
   border-radius: 0px 15px 15px 0px;

@@ -8,7 +8,4 @@ output DP-2 mode 1920x1080 pos 1859,681
 output DVI-D-1 mode 1920x1080 pos 897,1761
 output HDMI-A-1 mode 1920x1080 pos 2817,1761
 
-bindswitch --reload --locked lid:on output $laptop disable
-bindswitch --reload --locked lid:off output $laptop enable
-
 # vim: set ft=swayconfig:

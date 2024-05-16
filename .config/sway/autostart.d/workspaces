@@ -1,6 +1,7 @@
 exec swaymsg "\
        workspace $workspace_terminals; exec $term; \
        exec $notes; \
+       exec obsidian; \
        exec firefox; \
        exec $neomutt; \
        exec $news_reader; \

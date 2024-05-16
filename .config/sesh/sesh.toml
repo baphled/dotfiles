@@ -10,7 +10,7 @@ startup_command = "nvim -c ':Telescope find_files'"
 [[session]]
 name = "Home 🏠"
 path = "~/"
-startup_command = "nvim -c ':Telescope find_files'"
+startup_command = "nvim . -c ':Telescope find_files'"
 
 [[session]]
 name = "n-vyro 🌐"
