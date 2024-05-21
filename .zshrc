@@ -76,6 +76,8 @@ fi
 
 source ~/.nvm/nvm.sh
 
+[ -s "$HOME/.rvm/scripts/rvm" ] && source "$HOME/.rvm/scripts/rvm" ]]
+
 source $HOME/.zsh/zsh-syntax-highting.zsh
 source $HOME/.config/aliasrc
 

@@ -13,9 +13,6 @@
     bindsym $mod+Shift+m exec $neomutt
     bindsym $mod+Shift+n exec $news_reader
 
-    ## Lock Screen
-    bindsym $mod+f1 exec ~/.config/sway/scripts/lockman.sh
-
     # Menu
     bindsym $mod+Shift+d exec $menu
 
@@ -58,7 +55,7 @@
       'swaymsg exit'
 
     # lock sesion
-    bindsym $mod+Alt+l exec swaylock
+    bindsym $mod+Alt+l exec ~/.config/sway/scripts/lockman.sh
 
     # Control audio
     #
