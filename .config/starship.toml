@@ -1,4 +1,7 @@
 ## FIRST LINE/ROW: Info & Status
+
+palette = "catppuccin_mocha"
+
 # First param ─┌
 [username]
 format = " [╭─$user]($style)@"
@@ -18,7 +21,7 @@ trim_at = "-"
 [directory]
 # Catppuccin 'lavender'
 style = "bold lavender"
-truncate_to_repo = true
+truncate_to_repo = false
 truncation_symbol = "repo: "
 truncation_length = 4
 
@@ -52,10 +55,11 @@ crust = "#11111b"
 
 # Fourth param
 [sudo]
-disabled = false
+disabled = true
 
 # Before all the version info (python, nodejs, php, etc.)
 [git_status]
+disabled = true
 ahead = "⇡${count}"
 behind = "⇣${count}"
 deleted = "x"
@@ -131,6 +135,7 @@ symbol = " "
 symbol = " "
 
 [git_branch]
+disabled = true
 symbol = " "
 
 [golang]
