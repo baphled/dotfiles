@@ -13,9 +13,6 @@
 [submodule "colors/xfce-terminal"]
 	path = colors/xfce-terminal
 	url = git@github.com:solarized/xfce4-terminal-colors-solarized.git
-[submodule "oh-my-zsh"]
-	path = oh-my-zsh
-	url = https://github.com/ohmyzsh/ohmyzsh.git
 [submodule ".config/nvim"]
 	path = .config/nvim
 	url = git@github.com:baphled/dotnvim.git
