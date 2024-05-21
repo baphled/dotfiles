@@ -1,87 +1,36 @@
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
-ZSH_CUSTOM=~/.themes
+zinit ice lucid
+zi snippet OMZ::plugins/git/git.plugin.zsh
+zi snippet OMZ::plugins/vi-mode/vi-mode.plugin.zsh
+zi snippet OMZ::plugins/bundler/bundler.plugin.zsh
+zi snippet OMZ::plugins/nvm/nvm.plugin.zsh
+zi snippet OMZ::plugins/history-substring-search/history-substring-search.zsh
+zi snippet OMZ::plugins/fzf/fzf.plugin.zsh
+zi snippet OMZ::plugins/zoxide/zoxide.plugin.zsh
+zi snippet OMZ::lib/history.zsh
+zinit light Aloxaf/fzf-tab
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="boodah"
-# Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
+zi load zsh-users/zsh-autosuggestions
+zi load zsh-users/zsh-syntax-highlighting
 
-# Comment this out to disable weekly auto-update checks
-DISABLE_AUTO_UPDATE="false"
+zinit ice as"command" from"gh-r" \
+  atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+  atpull"%atclone" src"init.zsh"
 
-# Uncomment following line if you want to disable colors in ls
-# DISABLE_LS_COLORS="true"
-
-# Uncomment following line if you want to disable autosetting terminal title.
-DISABLE_AUTO_TITLE="true"
-
-# Uncomment following line if you want disable red dots displayed while waiting for completion
-# DISABLE_COMPLETION_WAITING_DOTS="true"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git vi-mode bundler history-substring-search themes fzf fzf-tab)
+zinit light starship/starship
 
 # Customize to your needs...
-PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games:/opt/bin:/opt/local/bin:~/bin:/usr/local/rvm/bin:$PATH
-
-export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
-
 export EDITOR=nvim
-
-export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
-
-export PATH="$HOME/bin/:$PATH:$HOME/.rvm/bin" # Make sure local bin files around found before system ones
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-# Add python to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.local/bin"
-
-## Add snap bin to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:/snap/bin"
-
-## Add flutter bin to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH":"$HOME/.pub-cache/bin"
-
-export PATH="$PATH":"$HOME/go/bin"
-
 export NVM_DIR=~/.nvm
 
-if [ -n "$TMUX" ]; then
-  export TERM=tmux-256color
-else
-  export TERM=xterm-kitty
-fi
-
-eval `dircolors ~/colors/dircolors-solarized/dircolors.ansi-dark`
-
-eval "$(zoxide init zsh)"
+[[ -n "$TMUX" ]] && export TERM=tmux-256color || export TERM=xterm-kitty
 
 # We want vi-mode
 set -o vi
-
-source $ZSH/oh-my-zsh.sh
-
-if [ -f ~/.fzf.zsh ]; then
-  source ~/.fzf.zsh
-fi
-
-source ~/.nvm/nvm.sh
-
-[ -s "$HOME/.rvm/scripts/rvm" ] && source "$HOME/.rvm/scripts/rvm" ]]
-
-source $HOME/.zsh/zsh-syntax-highting.zsh
-source $HOME/.config/aliasrc
-
-[[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 
 # Display the vi-mode your currently in
 function zle-line-init zle-keymap-select {
@@ -95,33 +44,12 @@ zle -N zle-keymap-select
 # renaming multiple files at once
 autoload -U zmv
 
-PROMPT+=`$([ -n "$TMUX"  ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")`
-
 ## Path section
-# Set $PATH if ~/.local/bin exist
-if [ -d "$HOME/.local/bin" ]; then
-    export PATH=$HOME/.local/bin:$PATH
-fi
-
-eval "$(starship init zsh)"
-function set_win_title(){
-    echo -ne "\033]0; $USER@$HOST:${PWD/$HOME/~} \007"
-}
-precmd_functions+=(set_win_title)
-
-
-## Plugins section: Enable fish style features
-# Use syntax highlighting
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# Use autosuggestion
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Use history substring search
-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-
-# Use fzf
-source /usr/share/fzf/key-bindings.zsh
+[[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
+[[ -s "$HOME/.config/aliasrc" ]] && source "$HOME/.config/aliasrc"
+[[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+[[ -d "$HOME/go/bin" ]] && export PATH="$PATH:$HOME/go/bin"
+export PATH=/bin:~/bin:$PATH
 
 # Arch Linux command-not-found support, you must have package pkgfile installed
 # https://wiki.archlinux.org/index.php/Pkgfile#.22Command_not_found.22_hook
@@ -188,7 +116,6 @@ eval "$(mcfly init zsh)"
 bindkey -v
 bindkey '^n' history-search-forward
 bindkey '^p' history-search-backward
-
 bindkey '^k' autosuggest-accept
 
 if [ -n "$TMUX" ]; then

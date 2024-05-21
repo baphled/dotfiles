@@ -7,10 +7,9 @@ decade. Since moving back to Linux, I've updated my knowledge of productivity
 tools within the ecosystem.
 
 In addition to all of this we've replaced vim with `neovim`. This is one of the
-biggest changes to our [dotfiles](https://github.com/baphled/dotfiles), as it
-meant rebuilding our text editor from the group up. Even though this is the
-case, we've managed to greatly improve our editor to the extent that it is a
-large improvement from what we had previously.
+biggest changes to our [dotfiles](https://github.com/baphled/dotfiles), as it meant rebuilding our text editor from the
+group up. Even though this is the case, we've managed to greatly improve our
+editor to the extent that it is a large improvement from what we had previously.
 
 Although we are still huge fans of `tmux`, we have also added configuration
 settings for kitty. As time progress we may well replace `tmux` with kitty but this
@@ -44,6 +43,9 @@ of resources touching on them already.
 ### Tmux
 
 ### RVM
+
+### zinit
+### mcfly
 
 ### Sesh
 
@@ -129,10 +131,9 @@ a bit quicker, which is important when we're working with directories that have
 a large amount of contents. It's also important to be able to generate fuzzy
 finder results as quickly as possible, and this is were `ripgrep` truly shines.
 
+### neofetch
 
-### fastfetch
-
-![fastfetch](https://github.com/baphled/dotfiles/assets/37376/ce6b936c-ff9d-4c73-84ab-c1b7425c0649)
+![neofetch](https://github.com/baphled/dotfiles/assets/37376/ce6b936c-ff9d-4c73-84ab-c1b7425c0649)
 
 I've always want to enhance how my terminal looks. For this we've introduced
 `fastfetch` to display information about the machine we're working on. We've
