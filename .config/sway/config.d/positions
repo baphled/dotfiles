@@ -20,6 +20,16 @@ for_window [app_id="firefox"] {
   workspace $workspace_browser
 }
 
+for_window [class="discord"] {
+  move container to workspace $workspace_communications
+  workspace $workspace_communications
+}
+
+for_window [class="slack"] {
+  move container to workspace $workspace_communications
+  workspace $workspace_communications
+}
+
 for_window [app_id="Mail"] {
   move container to workspace $workspace_email
   workspace $workspace_email
