@@ -45,6 +45,7 @@ export EDITOR=nvim
 export NVM_DIR=~/.nvm
 
 [[ -n "$TMUX" ]] && export TERM=tmux-256color || export TERM=xterm-kitty
+export COLORTERM=truecolor
 
 # Display the vi-mode your currently in
 function zle-line-init zle-keymap-select {
