@@ -5,7 +5,6 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 zinit ice lucid
 zi snippet OMZ::plugins/git/git.plugin.zsh
-zi snippet OMZ::plugins/vi-mode/vi-mode.plugin.zsh
 zi snippet OMZ::plugins/bundler/bundler.plugin.zsh
 zi snippet OMZ::plugins/nvm/nvm.plugin.zsh
 zi snippet OMZ::plugins/history-substring-search/history-substring-search.zsh
@@ -15,7 +14,6 @@ zi snippet OMZ::lib/history.zsh
 zinit light Aloxaf/fzf-tab
 
 zi load zsh-users/zsh-autosuggestions
-zi load zsh-users/zsh-syntax-highlighting
 
 zinit ice as"command" from"gh-r" \
   atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
@@ -28,9 +26,6 @@ export EDITOR=nvim
 export NVM_DIR=~/.nvm
 
 [[ -n "$TMUX" ]] && export TERM=tmux-256color || export TERM=xterm-kitty
-
-# We want vi-mode
-set -o vi
 
 # Display the vi-mode your currently in
 function zle-line-init zle-keymap-select {
@@ -46,10 +41,15 @@ autoload -U zmv
 
 ## Path section
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
+[[ -d "$HOME/.rvm/bin" ]] && export PATH="$HOME/.rvm/bin:$PATH"
 [[ -s "$HOME/.config/aliasrc" ]] && source "$HOME/.config/aliasrc"
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator  ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 [[ -d "$HOME/go/bin" ]] && export PATH="$PATH:$HOME/go/bin"
 export PATH=/bin:~/bin:$PATH
+
+[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"  # This loads nvm
+[[ -s "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"  # This loads fzf
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # Arch Linux command-not-found support, you must have package pkgfile installed
 # https://wiki.archlinux.org/index.php/Pkgfile#.22Command_not_found.22_hook
@@ -105,12 +105,8 @@ zstyle ':completion:*' cache-path ~/.cache/zcache
 # automatically load bash completion functions
 autoload -U +X bashcompinit && bashcompinit
 
-# Load Mcfly
-export MCFLY_FUZZY=true
-export MCFLY_RESULTS=20
-export MCFLY_INTERFACE_VIEW=BOTTOM
-export MCFLY_RESULTS_SORT=LAST_RUN
-eval "$(mcfly init zsh)"
+zi cdreplay -q
+zi cdlist -q &>/dev/null
 
 # Bindings.
 bindkey -v
