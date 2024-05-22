@@ -25,7 +25,7 @@ for_window [class="discord"] {
   workspace $workspace_communications
 }
 
-for_window [class="slack"] {
+for_window [class="Slack"] {
   move container to workspace $workspace_communications
   workspace $workspace_communications
 }
