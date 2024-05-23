@@ -27,11 +27,17 @@ zi snippet OMZ::lib/history.zsh
 zinit ice wait"0" lucid
 zinit light Aloxaf/fzf-tab
 
+zinit ice wait"0" lucid
+zinit light Freed-Wu/fzf-tab-source
+
 zinit ice wait'0a' lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
 
 zinit ice wait'0b' lucid blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
+
+zinit ice wait"0" lucid
+zinit light junegunn/fzf-git.sh
 
 zinit ice wait"0" lucid
 zinit ice as"command" from"gh-r" \
@@ -68,7 +74,6 @@ autoload -U zmv
 export PATH=/bin:~/bin:$PATH
 
 [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"  # This loads nvm
-[[ -s "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"  # This loads fzf
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # Arch Linux command-not-found support, you must have package pkgfile installed
@@ -127,6 +132,15 @@ autoload -U +X bashcompinit && bashcompinit
 
 zi cdreplay -q
 zi cdlist -q &>/dev/null
+
+# Load fzf
+#
+# The completion scripts are only loaded in interactive shells
+#
+# We need to load it here, after our plug-ins are loaded, so that our custom
+# LS_COLORS are used.
+#
+[[ -s "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"  # This loads fzf
 
 # Bindings.
 bindkey -v
