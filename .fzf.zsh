@@ -5,33 +5,43 @@
 # CTRL-/ to toggle small preview window to see the full command
 # CTRL-Y to copy the command into clipboard using pbcopy
 export FZF_CTRL_R_OPTS="
-  --preview 'echo {}' --preview-window up:3:hidden:wrap
-  --bind 'ctrl-/:toggle-preview'
+  --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8
+  --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc
+  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
-  --color=bg+:#{{palette.surface0.hex}},bg:#{{palette.base.hex}},spinner:#{{palette.rosewater.hex}},hl:#{{palette.red.hex}}
-  --color=fg:#{{palette.text.hex}},header:#{{palette.red.hex}},info:#{{palette.mauve.hex}},pointer:#{{palette.rosewater.hex}}
-  --color=marker:#{{palette.rosewater.hex}},fg+:#{{palette.text.hex}},prompt:#{{palette.mauve.hex}},hl+:#{{palette.red.hex}}
   --header 'Press CTRL-Y to copy command into clipboard'"
 
+export FZF_DEFAULT_OPTS='
+  --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8
+  --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc
+  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8
+  --border="rounded" --border-label="" --preview-window="border-rounded" --prompt="> "
+  --marker=">" --pointer="◆" --separator="─" --scrollbar="│"'
+
+export FZF_CTRL_T_OPTS="
+  --preview 'fzf-preview.sh {}' --preview-window up,60%,border-bottom,+{2}+3/3,~3
+  --bind 'ctrl-/:toggle-preview'"
+
+
 # Print tree structure in the preview window
-export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_ALT_C_OPTS="--preview 'exa -long --all'"
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 
-export FZF_CTRL_R_OPTS="--reverse"
-export FZF_COMPLETION_DIR_COMMANDS="cd pushd rmdir tree"
+export FZF_COMPLETION_DIR_COMMANDS="cd pushd rmdir exa cat"
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-d 50% -- --height 50%"
 
-zstyle ':fzf-tab:complete:_zlua:*' query-string input
-zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
-zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
-zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-zstyle ':fzf-tab:complete:cd:*' popup-pad 180 50
-zstyle ":fzf-tab:*" fzf-flags --color=bg+:23
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-zstyle ':fzf-tab:*' switch-group ',' '.'
-zstyle ":completion:*:git-checkout:*" sort false
-zstyle ':completion:*' file-sort modification
-zstyle ':completion:*:exa' sort true
-zstyle ':completion:files' sort true
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+# NOTE: don't use escape sequences here, fzf-tab will ignore them
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'fzf-preview.sh {}' # remember to use single quote here!!!
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zstyle ':fzf-tab:*' popup-min-size 80 30
