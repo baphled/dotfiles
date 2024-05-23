@@ -142,6 +142,8 @@ zi cdlist -q &>/dev/null
 #
 [[ -s "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"  # This loads fzf
 
+eval "$(zoxide init zsh)"
+
 # Bindings.
 bindkey -v
 bindkey '^n' history-search-forward
