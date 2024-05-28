@@ -2,13 +2,11 @@ exec swaymsg "\
        workspace $workspace_terminals; exec $term; \
        exec discord; \
        exec slack; \
-       exec $notes; \
        exec obsidian; \
        exec firefox; \
        exec $neomutt; \
        exec $news_reader; \
        exec thunar; \
-       exec $remote; \
        exec $btop; \
 "
 
