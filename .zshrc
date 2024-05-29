@@ -48,7 +48,7 @@ zinit light starship/starship
 
 # Customize to your needs...
 export EDITOR=nvim
-export NVM_DIR=~/.nvm
+export NVM_DIR=~/.config/nvm
 
 [[ -n "$TMUX" ]] && export TERM=tmux-256color || export TERM=xterm-kitty
 export COLORTERM=truecolor
@@ -74,6 +74,7 @@ autoload -U zmv
 export PATH=/bin:~/bin:$PATH
 
 [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"  # This loads nvm
+[[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # Arch Linux command-not-found support, you must have package pkgfile installed
