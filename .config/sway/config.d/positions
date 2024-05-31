@@ -1,5 +1,10 @@
 # Assign applications to their designated workspaces
 
+for_window [app_id="kitty"] {
+  move container to workspace $workspace_terminals
+    workspace $workspace_terminals
+}
+
 for_window [app_id="Notes"] {
   move container to workspace $workspace_notes
     workspace $workspace_notes
