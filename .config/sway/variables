@@ -1,7 +1,7 @@
 # Outputs
 set $output_top DP-2
 set $output_right HDMI-A-1
-set $output_left DV-D0
+set $output_left DP-3
 
 set $laptop ePD-1
 
