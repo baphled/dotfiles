@@ -3,7 +3,7 @@ exec swaymsg "\
        exec discord; \
        exec slack; \
        exec obsidian; \
-       exec firefox; \
+       exec chromium; \
        exec $neomutt; \
        exec $news_reader; \
        exec thunar; \

@@ -15,6 +15,11 @@ for_window [class="obsidian"] {
     workspace $workspace_notes
 }
 
+for_window [class="Chromium"] {
+  move container to workspace $workspace_browser
+  workspace $workspace_browser
+}
+
 for_window [class="Firefox-esr"] {
   move container to workspace $workspace_browser
   workspace $workspace_browser
