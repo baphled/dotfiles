@@ -63,3 +63,7 @@ startup_command = "nvim"
 name = "Dev notes 📝"
 path = "~/vaults/baphled/2. Areas/Development"
 startup_command = "nvim"
+
+[[session]]
+name = "Remote Session"
+path = "~/"
