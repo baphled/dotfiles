@@ -22,22 +22,8 @@ fi
 # Work out whether we're in TMUX, kitty or something else
 GPU=$(lspci -vnnn | perl -lne 'print if /^\d+\:.+(\[\S+\:\S+\])/' | grep VGA | grep NVIDIA)
 
-if [[ -z "$GPU" ]]; then
-  # We're in a terminal
-  neowofetch
-elif [[ -z "$KITTEN_PID" ]]; then
-  # We're in kitty
-  # Use the default
-  fastfetch --kitty "$IMAGE" \
-    --logo-width "$FASTFETCH_IMG_WIDTH" \
-    --logo-height "$FASTFETCH_IMG_HEIGHT"
-
-else
-  # We're in a normal terminal
-  fastfetch --chafa "$IMAGE" \
-    --chafa-dither-mode 5 \
-    --chafa-canvas-mode 2 \
-    --chafa-color-space 1 \
-    --logo-width "$FASTFETCH_IMG_WIDTH" \
-    --logo-height "$FASTFETCH_IMG_HEIGHT"
-fi
+# We're in kitty
+# Use the default
+fastfetch --kitty "$IMAGE" \
+  --logo-width "$FASTFETCH_IMG_WIDTH" \
+  --logo-height "$FASTFETCH_IMG_HEIGHT"
