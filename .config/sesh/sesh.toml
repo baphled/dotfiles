@@ -27,7 +27,7 @@ startup_command = "nvim tmux.conf"
 [[session]]
 name = "nvim config 🏠"
 path = "~/.config/nvim/"
-startup_command = "nvim lua/plugins.lua"
+startup_command = "nvim lua/baphled/plugins.lua"
 
 [[session]]
 name = "Documents 📚"
