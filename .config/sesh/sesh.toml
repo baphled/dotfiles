@@ -18,6 +18,8 @@ startup_command = "nvim . -c ':Telescope find_files'"
 [[session]]
 name = "n-vyro 🌐"
 path = "~/Work/@n-vyro"
+startup_command = "tmuxinator start n-vyro"
+
 
 [[session]]
 name = "tmux config"
