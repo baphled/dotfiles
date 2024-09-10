@@ -48,4 +48,5 @@ for_window [title="sway_config"] floating enable, resize set width 80 ppt height
 # Inhibit idle
 for_window [app_id="librewolf"] inhibit_idle fullscreen
 for_window [app_id="Chromium"] inhibit_idle fullscreen
+for_window [app_id="firefox"] inhibit_idle fullscreen
 for_window [title="Picture-in-Picture"] inhibit_idle
