@@ -7,7 +7,7 @@
 
     # Main applications we use
     bindsym $mod+Return exec $term
-    bindsym $mod+Shift+b exec chromium
+    bindsym $mod+Shift+b exec firefox
     bindsym $mod+Shift+o exec obsidian
     bindsym $mod+Shift+t exec $btop
     bindsym $mod+Shift+m exec $neomutt
