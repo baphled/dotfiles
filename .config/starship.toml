@@ -135,7 +135,6 @@ symbol = " "
 symbol = " "
 
 [git_branch]
-disabled = true
 symbol = " "
 
 [golang]
