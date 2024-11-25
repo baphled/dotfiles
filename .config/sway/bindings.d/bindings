@@ -29,7 +29,7 @@
     bindsym $mod+Shift+i exec $term -T sway_config -e micro ~/.config/sway/config.d/default
 
     # Open notification centre
-    bindsym $mod+n exec swaync-client -t -sw
+    bindsym $mod+Ctrl+n exec swaync-client -t -sw
 
     # Kill focused window
     bindsym $mod+Shift+q kill
