@@ -157,3 +157,5 @@ if [ -n "$TMUX" ]; then
 else
   ~/bin/fastfetch_autoscale
 fi
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
