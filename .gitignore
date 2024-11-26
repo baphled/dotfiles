@@ -313,3 +313,10 @@ vaults
 .virtualenvs
 Work
 .calcurse
+.config/FreeCAD/
+.config/batsignal
+.config/nvm/
+.config/op/
+.config/pacseek/
+.config/pavucontrol.ini
+.obsidian/
