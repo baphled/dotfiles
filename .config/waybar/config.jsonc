@@ -166,7 +166,7 @@
   "bluetooth": {
     "format-connected": " ",
     "format-disconnected": " ",
-    "on-click": "blueman-manager",
+    "on-click": "blueberry",
     "tooltip-format": "{status}"
   },
   "battery": {
