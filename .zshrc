@@ -48,6 +48,7 @@ zinit light starship/starship
 
 # Customize to your needs...
 export EDITOR=nvim
+export VISUAL=nvim
 export NVM_DIR=~/.config/nvm
 
 [[ -n "$TMUX" ]] && export TERM=tmux-256color || export TERM=xterm-kitty
