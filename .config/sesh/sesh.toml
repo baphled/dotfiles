@@ -8,18 +8,14 @@ path = "~/Work"
 [[session]]
 name = "Projects 🚀"
 path = "~/Projects"
-startup_command = "nvim -c ':Telescope find_files'"
 
 [[session]]
 name = "Home 🏠"
 path = "/home/baphled"
-startup_command = "nvim . -c ':Telescope find_files'"
 
 [[session]]
 name = "n-vyro 🌐"
 path = "~/Work/@n-vyro"
-startup_command = "tmuxinator start n-vyro"
-
 
 [[session]]
 name = "tmux config"
@@ -34,7 +30,6 @@ startup_command = "nvim lua/baphled/plugins.lua"
 [[session]]
 name = "Documents 📚"
 path = "~/Documents"
-startup_command = "nvim"
 
 [[session]]
 name = "Pictures 📸"
@@ -44,27 +39,22 @@ startup_command = "ranger"
 [[session]]
 name = "Recipes 🍲"
 path = "~/vaults/baphled/3. Resources/Recipes"
-startup_command = "nvim . -c ':Oil'"
 
 [[session]]
 name = "baphled Vaults 🗄️"
 path = "~/vaults/baphled"
-startup_command = "nvim"
 
 [[session]]
 name = "n-vyro.io Vaults 🗄️"
 path = "~/vaults/n-vyro.io"
-startup_command = "nvim"
 
 [[session]]
 name = "Zettelkasten 📝"
 path = "~/vaults/baphled/Zettelkasten"
-startup_command = "nvim"
 
 [[session]]
 name = "Dev notes 📝"
 path = "~/vaults/baphled/2. Areas/Development"
-startup_command = "nvim"
 
 [[session]]
 name = "Remote Session"
