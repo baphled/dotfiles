@@ -320,3 +320,5 @@ Work
 .config/pacseek/
 .config/pavucontrol.ini
 .obsidian/
+node_modules
+.config/gh
