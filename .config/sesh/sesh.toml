@@ -38,11 +38,15 @@ startup_command = "ranger"
 
 [[session]]
 name = "Recipes 🍲"
-path = "~/vaults/baphled/3. Resources/Recipes"
+path = "~/vaults/Colledge/3. Resources/Recipes"
 
 [[session]]
 name = "baphled Vaults 🗄️"
 path = "~/vaults/baphled"
+
+[[session]]
+name = "Colledge Vaults 🗄️"
+path = "~/vaults/Colledge"
 
 [[session]]
 name = "n-vyro.io Vaults 🗄️"
