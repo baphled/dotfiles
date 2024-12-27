@@ -1,0 +1,8 @@
+theme = catppuccin-mocha
+font-family = "AnonymicePro Nerd Font"
+font-size = 14
+shell-integration = detect
+background-opacity = 0.96
+window-theme = system
+window-decoration = false
+adw-toolbar-style = flat

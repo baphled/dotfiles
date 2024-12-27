@@ -1,11 +1,16 @@
 # Assign applications to their designated workspaces
 
-for_window [app_id="kitty"] {
+for_window [app_id="com.mitchellh.ghostty"] {
   move container to workspace $workspace_terminals
     workspace $workspace_terminals
 }
 
-for_window [app_id="Notes"] {
+for_window [app_id="com.baphled.neovim"] {
+  move container to workspace $workspace_terminals
+    workspace $workspace_terminals
+}
+
+for_window [app_id="com.baphled.notes"] {
   move container to workspace $workspace_notes
     workspace $workspace_notes
 }
@@ -40,12 +45,12 @@ for_window [class="Slack"] {
   workspace $workspace_communications
 }
 
-for_window [app_id="Mail"] {
+for_window [app_id="com.baphled.email"] {
   move container to workspace $workspace_email
   workspace $workspace_email
 }
 
-for_window [app_id="News"] {
+for_window [app_id="com.baphled.newsboat"] {
   move container to workspace $workspace_reading
   workspace $workspace_reading
 }
@@ -55,12 +60,12 @@ for_window [app_id="thunar"] {
   workspace $workspace_file_browser
 }
 
-for_window [app_id="Remote"] {
+for_window [app_id="com.baphled.remote"] {
   move container to workspace $workspace_remote
   workspace $workspace_remote
 }
 
-for_window [app_id="Top"] {
+for_window [app_id="com.baphled.btop"] {
   move container to workspace $workspace_top
     workspace $workspace_top
 }
