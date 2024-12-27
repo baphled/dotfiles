@@ -9,15 +9,15 @@ set $up k
 set $right l
 
 # Your preferred terminal emulator
-set $term kitty
+set $term ghostty -e zsh --login
 
 # Aliases for your preferred applications
-set $neovim      $term --class "Neovim" zsh -c "nvim"
-set $btop        $term --class "Top" zsh -c "btop"
-set $news_reader $term --class "News" zsh -c "newsboat"
-set $notes       $term --class "Notes" zsh  -c "nvim" -d ~/Documents/vaults
-set $neomutt     $term --class "Mail" zsh  -c "neomutt"
-set $remote      $term --class "Remote" zsh
+set $neovim      ghostty --class="com.baphled.neovim" -e zsh --login -c "nvim"
+set $btop        ghostty --class="com.baphled.btop" -e zsh --login -c "btop"
+set $news_reader ghostty --class="com.baphled.newsboat" -e zsh --login -c "newsboat"
+set $notes       ghostty --class="com.baphled.notes" -e zsh --login -c "nvim" -d ~/Documents/vaults
+set $neomutt     ghostty --class="com.baphled.email" -e zsh --login -c "neomutt"
+set $remote      ghostty --class="com.baphled.remote" -e zsh --login
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened

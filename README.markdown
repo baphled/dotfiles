@@ -11,11 +11,14 @@ biggest changes to our [dotfiles](https://github.com/baphled/dotfiles), as it me
 group up. Even though this is the case, we've managed to greatly improve our
 editor to the extent that it is a large improvement from what we had previously.
 
-Although we are still huge fans of `tmux`, we have also added configuration
-settings for kitty. As time progress we may well replace `tmux` with kitty but this
-is something that needs to be reviewed over time. There are some benefits to
-using kitty over `tmux`, but we still find `tmux` more comfortable to use so we feel
-it's premature to make the jump yet.
+Now that [ghostty](https://ghostty.org/) has been released, we've dumped kitty in favour of it. This
+means that we've had to make some changes to our configuration files to
+accommodate this. We've also made some changes to our `zsh` configuration to
+make it more efficient and to make it easier to use.
+
+We didn't like how opionated `kitty` was and it caused us a number of issues
+when we were trying to use it. We've found that `ghostty` is a lot more
+flexible and it's a lot easier to use.
 
 The final change is swapping out `solarized` for `catppuccin`. This has been
 replaced with vim, KDE and `zsh`. We have left `solarized` as an option but as it
@@ -45,7 +48,6 @@ of resources touching on them already.
 ### RVM
 
 ### zinit
-### mcfly
 
 ### Sesh
 
@@ -141,8 +143,14 @@ further enhanced this by providing a script that picks a random image and
 renders it dependant on the terminal/emulator we're using. This keeps our
 terminal as consistent as possible whilst providing our own look and feel to it.
 
-What's included
-===============
+## Development
+
+```sh
+git clone git://github.com/baphled/dotfiles.git
+npm install
+```
+
+## What's included
 
 * Custom aliases to help me to get into projects
 * Colourised git output
