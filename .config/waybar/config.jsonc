@@ -4,6 +4,7 @@
   "modules-left": [
     "custom/launcher",
     "sway/workspaces",
+    "hyprland/workspaces"
   ],
   "modules-center": [
     "bluetooth",
@@ -12,7 +13,8 @@
     "custom/scratchpad-indicator",
     "custom/media",
     "pulseaudio",
-    "custom/keyboard-layout"
+    "custom/keyboard-layout",
+    "hyprland/language",
   ],
   "modules-right": [
     "network",
@@ -23,6 +25,35 @@
     "clock",
     "custom/power"
   ],
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": false,
+    "format": "{icon} ",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "󰒱",
+      "5": "",
+      "6": "",
+      "7": "",
+      "8": "",
+      "9": "",
+      "10": ""
+    },
+    "persistent-workspaces": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+  },
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": false,
@@ -72,8 +103,8 @@
     },
     "exec-if": "which waybar-module-pacman-updates",
     "exec": "waybar-module-pacman-updates",
-    "on-click": "ghostty --title='waybar_garuda'-update -e bash -c 'garuda-update && (read -p \"Update complete. Press Enter to exit.\" && exit 0) || (read -p \"Update failed. Press Enter to exit.\" && exit 1)'",
-    "on-click-right": "ghostty --title='waybar_pacseek' -e pacseek"
+    "on-click": "ghostty --class='com.waybar.garuda' -e zsh -c 'garuda-update && (read -p \"Update complete. Press Enter to exit.\" && exit 0) || (read -p \"Update failed. Press Enter to exit.\" && exit 1)'",
+    "on-click-right": "ghostty --class='com.waybar.pacseek' -e pacseek"
   },
   "custom/media": {
     "format": "{icon} {}",
@@ -132,7 +163,7 @@
   },
   "clock": {
     "format": "  {:%OI:%M %p}",
-    "on-click": "ghostty --title='waybar_calcurse' -e calcurse",
+    "on-click": "ghostty --class='com.waybar.calcurse' --title='waybar_calcurse' -e zsh --login -c calcurse",
     // Uncomment to enable right-click calcurse-caldav sync (you need to set it up in calcurse config)
     //"on-click-right": "notify-send \"Running calcurse-caldav...\" \"$(calcurse-caldav)\"",
     "tooltip-format": " {:%A %m/%d}\n\n<tt><small>{calendar}</small></tt>",
@@ -162,6 +193,13 @@
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     "on-scroll-up": "swaymsg input type:keyboard xkb_switch_layout next",
     "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev"
+  },
+  "hyprland/language": {
+    "format": "{} \udb80\udf0c",
+    "format-en": "US",
+    "format-gb": "GB",
+    "keyboard-name": "at-translated-set-2-keyboard",
+    "on-click": "hyprctl switchxkblayout at-translated-set-2-keyboard next"
   },
   "bluetooth": {
     "format-connected": " ",
@@ -196,19 +234,19 @@
     "tooltip": false,
   },
   "network": {
-    "format": " Disabled",
+    "format": "  Disabled",
     "format-wifi": "  {essid}",
     "tooltip-format-wifi": "  {bandwidthDownBits:>}  {bandwidthUpBits:>}  ",
     "tooltip-format-ethernet": "  {bandwidthDownBits:>}  {bandwidthUpBits:>}  ",
     "format-ethernet": "{ifname}: {ipaddr}/{cidr}",
-    "format-disconnected": " Disconnected",
-    "on-click": "ghostty --title='waybar_nmtui' -e nmtui",
+    "format-disconnected": "  Disconnected",
+    "on-click": "ghostty --class='com.waybar.nmtui' --title='waybar_nmtui' -e nmtui",
     "interval": 2,
   },
   "pulseaudio": {
     "scroll-step": 5,
-    "format": "{icon}{volume: >3}%",
-    "format-bluetooth": "{icon}{volume: >3}%",
+    "format": "{icon} {volume: >3}%",
+    "format-bluetooth": "{icon} {volume: >3}%",
     "format-muted": " muted",
     "format-icons": {
       "headphones": "",
@@ -222,7 +260,7 @@
         ""
       ]
     },
-    "on-click": "ghostty --title='waybar_alsamixer' -e alsamixer -M",
+    "on-click": "ghostty --class='com.waybar.alsamixer' --title='waybar_alsamixer' -e alsamixer -M",
     "on-click-right": "pavucontrol"
   },
 }
