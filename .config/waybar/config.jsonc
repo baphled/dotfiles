@@ -196,8 +196,6 @@
   },
   "hyprland/language": {
     "format": "{} \udb80\udf0c",
-    "format-en": "US",
-    "format-gb": "GB",
     "keyboard-name": "at-translated-set-2-keyboard",
     "on-click": "hyprctl switchxkblayout at-translated-set-2-keyboard next"
   },
