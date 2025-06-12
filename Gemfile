@@ -1,5 +1,5 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'tmuxinator'
-gem 'pry'
 gem 'git-scribe'
+gem 'pry'
+gem 'tmuxinator'
