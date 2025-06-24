@@ -6,3 +6,5 @@ export CUCUMBER_COLORS=comment=cyan
 . "$HOME/.cargo/env"
 
 export XDG_CONFIG_HOME="$HOME/.config"
+
+export GHOSTTY_RESOURCES_DIR="$HOME/.ghostty"
