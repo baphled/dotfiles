@@ -10,4 +10,9 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export GHOSTTY_RESOURCES_DIR="$HOME/.ghostty"
 export BROWSER="firefox.desktop"
 
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
 export DICPATH="$HOME/.config/hunspell:${DICPATH:-}"
