@@ -8,3 +8,5 @@ export CUCUMBER_COLORS=comment=cyan
 export XDG_CONFIG_HOME="$HOME/.config"
 
 export GHOSTTY_RESOURCES_DIR="$HOME/.ghostty"
+
+export DICPATH="$HOME/.config/hunspell:${DICPATH:-}"
