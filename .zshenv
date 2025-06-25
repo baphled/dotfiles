@@ -9,3 +9,5 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 export GHOSTTY_RESOURCES_DIR="$HOME/.ghostty"
 export BROWSER="firefox.desktop"
+
+export DICPATH="$HOME/.config/hunspell:${DICPATH:-}"
