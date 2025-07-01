@@ -34,7 +34,7 @@ export FZF_CTRL_T_OPTS="
 # Print tree structure in the preview window
 export FZF_ALT_C_OPTS="
   --walker-skip .git,node_modules,target
-  --preview 'exa --all --tree --color=always {}'"
+  --preview 'eza --all --tree --color=always {}'"
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 
@@ -65,6 +65,8 @@ zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept --tmux
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 # switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
+
+zstyle ':fzf-tab:complete:whereis:*' fzf-preview 'man $word | bat -plman --color=always'
 
 # give a preview of commandline arguments when completing `kill`
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
