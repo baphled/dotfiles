@@ -6,18 +6,13 @@
 # CTRL-Y to copy the command into clipboard using pbcopy
 export FZF_CTRL_R_OPTS="
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --height 80%
+  --tmux 80%
   --header 'Press CTRL-Y to copy command into clipboard'"
 
 export FZF_DEFAULT_OPTS='
-  --color=spinner:#F5E0DC,hl:#F38BA8
-  --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC
-  --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8
-  --color=selected-bg:#45475A
-  --color=border:#313244,label:#CDD6F4
   --style full
-  --height 70%
-  --tmux
-  --bind "ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up"
+  --height 80%
   --border="rounded"
   --border-label=""
   --preview-window="border-rounded"
@@ -27,14 +22,25 @@ export FZF_DEFAULT_OPTS='
   --separator="─"
   --scrollbar="│"'
 
+source "$HOME/.config/fzf/catppuccin-mocha.sh"
+
 export FZF_CTRL_T_OPTS="
   --preview 'fzf-preview.sh {}'
+  --height 80%
+  --tmux 80%
   --bind 'ctrl-/:toggle-preview'"
 
 # Print tree structure in the preview window
 export FZF_ALT_C_OPTS="
   --walker-skip .git,node_modules,target
+  --height 80%
+  --tmux 80%
   --preview 'eza --all --tree --color=always {}'"
+
+zvm_after_init_command+=(
+  "bindkey '^p' history-search-backward"
+  "bindkey '^n' history-search-forward"
+)
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 
@@ -45,6 +51,7 @@ zstyle ':completion:*:descriptions' format
 zstyle ':fzf-tab:*' popup-min-size 100 100
 zstyle ':fzf-tab:*' show-group full
 zstyle ':fzf-tab:*' popup-pad 30 0
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
