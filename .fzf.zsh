@@ -12,7 +12,6 @@ export FZF_CTRL_R_OPTS="
 
 export FZF_DEFAULT_OPTS='
   --style full
-  --height 80%
   --border="rounded"
   --border-label=""
   --preview-window="border-rounded"
@@ -66,7 +65,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1a --color=always $realpath'
 
 # custom fzf flags
 # NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
-zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept --tmux
+zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept --height 70% --tmux
 # To make fzf-tab follow FZF_DEFAULT_OPTS.
 # NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
