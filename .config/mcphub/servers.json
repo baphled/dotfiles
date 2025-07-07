@@ -1,0 +1,92 @@
+{
+  "mcpServers": {
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/baphled"
+      ]
+    },
+    "obsidian": {
+      "args": [
+        "-y",
+        "obsidian-mcp",
+        "/home/baphled/vaults/Colledge",
+        "/home/baphled/vaults/baphled",
+        "/home/baphled/vaults/n-vyro.io",
+        "/home/baphled/vaults/FullSpektrum®",
+        "/home/baphled/vaults/Boodah Consulting"
+      ],
+      "command": "npx",
+      "autoApprove": [
+
+      ]
+    },
+    "firecrawl": {
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      },
+      "custom_instructions": {
+        "disabled": false
+      },
+      "disabled": false,
+      "command": "npx",
+      "args": [
+        "-y",
+        "firecrawl-mcp"
+      ]
+    },
+    "sequentialthinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    }
+  },
+  "nativeMCPServers": {
+    "mcphub": {
+      "disabled": false,
+      "autoApprove": [
+
+      ]
+    },
+    "deep_research": {
+      "disabled": true
+    },
+    "neovim": {
+      "disabled_tools": [
+        "execute_lua",
+        "execute_command",
+        "read_file",
+        "delete_item",
+        "move_item",
+        "find_files",
+        "list_directory",
+        "write_file",
+        "replace_in_file"
+      ],
+      "disabled": false,
+      "custom_instructions": {
+        "disabled": false
+      },
+      "autoApprove": [
+
+      ]
+    }
+  }
+}
