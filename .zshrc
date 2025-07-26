@@ -159,3 +159,7 @@ else
 fi
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+# qlty
+export QLTY_INSTALL="$HOME/.qlty"
+export PATH="$QLTY_INSTALL/bin:$PATH"
