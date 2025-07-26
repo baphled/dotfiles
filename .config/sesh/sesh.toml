@@ -1,65 +1,117 @@
-[default_session]
-startup_command = "nvim"
-
-[[session]]
-name = "Work 💼"
-path = "~/Work"
-
-[[session]]
-name = "Projects 🚀"
-path = "~/Projects"
-
 [[session]]
 name = "Home 🏠"
-path = "/home/baphled"
+path = "~/"
+windows = [
+  "Config ⚙️",
+  "nvim config 📝",
+  "tmux config",
+  "Documents 📚",
+  "Pictures 📸"
+  ]
+startup_command = "tmux rename-window 'Home 🏠' && clear"
 
-[[session]]
-name = "n-vyro 🌐"
-path = "~/Work/@n-vyro"
+[[window]]
+name = "Config ⚙️"
+path = "~/.config"
 
-[[session]]
+[[window]]
+name = "nvim config 📝"
+path = "~/.config/nvim/"
+startup_command = "nvim"
+
+[[window]]
 name = "tmux config"
 path = "~/tmuxfiles/"
-startup_command = "nvim tmux.conf"
+startup_command = "nvim"
 
-[[session]]
-name = "nvim config 🏠"
-path = "~/.config/nvim/"
-startup_command = "nvim lua/baphled/plugins.lua"
-
-[[session]]
+[[window]]
 name = "Documents 📚"
 path = "~/Documents"
 
-[[session]]
+[[window]]
 name = "Pictures 📸"
 path = "~/Pictures"
 startup_command = "ranger"
 
-[[session]]
-name = "Recipes 🍲"
-path = "~/vaults/Colledge/3. Resources/Recipes"
+# Work
 
 [[session]]
-name = "baphled Vaults 🗄️"
-path = "~/vaults/baphled"
+name = "Work 💼"
+path = "~/Work"
+startup_command = "tmux rename-window 'Work 💼' && clear"
 
 [[session]]
-name = "Colledge Vaults 🗄️"
-path = "~/vaults/Colledge"
+name = "Projects 🚀"
+path = "~/Projects"
+startup_command = "tmux rename-window 'Projects 🚀' && clear"
 
 [[session]]
-name = "n-vyro.io Vaults 🗄️"
-path = "~/vaults/n-vyro.io"
-
-[[session]]
-name = "Zettelkasten 📝"
-path = "~/vaults/baphled/Zettelkasten"
-
-[[session]]
-name = "Dev notes 📝"
-path = "~/vaults/baphled/2. Areas/Development"
-
-[[session]]
-name = "Remote Session"
+name = "Remote Session 🌐"
 path = "~/"
+windows = ["Remote Work", "Remote Projects"]
+startup_command = "tmux rename-window 'Remote Session 🌐'"
+
+# Note Taking
+
+[[session]]
+name = "Note Taking 📝"
+path = "~/vaults/baphled"
+windows = ["Colledge Vault", "n-vyro.io Vault"]
+startup_command = "tmux rename-window 'baphled Vault' && clear && nvim"
+
+[[window]]
+name = "Colledge Vault"
+path = "~/vaults/Colledge"
+startup_command = "nvim"
+
+[[window]]
+name = "n-vyro.io Vault"
+path = "~/vaults/n-vyro.io"
+startup_command = "nvim"
+
+# n-vyro.io
+
+[[session]]
+name = "n-vyro 🌐"
+path = "~/Work/@n-vyro/static"
+windows = ["build", "core-ruby", "hub", "api", "lib", "bootstrap-ui", "core-components", "esp-ui", "hub-ui"]
+startup_command = "tmux rename-window static && clear"
+
+[[window]]
+name = "build"
+path = "~/Work/@n-vyro/build"
+startup_command = "rvm use `cat build/.ruby-version`"
+
+[[window]]
+name = "core-ruby"
+path = "~/Work/@n-vyro/core-ruby"
+
+[[window]]
+name = "hub"
+path = "~/Work/@n-vyro/hub"
+startup_command = "rvm use `cat hub/.ruby-version`"
+
+[[window]]
+name = "api"
+path = "~/Work/@n-vyro/api"
+startup_command = "rvm use `cat api/.ruby-version`"
+
+[[window]]
+name = "lib"
+path = "~/Work/@n-vyro/lib"
+
+[[window]]
+name = "bootstrap-ui"
+path = "~/Work/@n-vyro/bootstrap-ui"
+
+[[window]]
+name = "core-components"
+path = "~/Work/@n-vyro/core-components"
+
+[[window]]
+name = "esp-ui"
+path = "~/Work/@n-vyro/esp-ui"
+
+[[window]]
+name = "hub-ui"
+path = "~/Work/@n-vyro/hub-ui"
