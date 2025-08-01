@@ -16,6 +16,6 @@ eval "$(pyenv init -)"
 
 export DICPATH="$HOME/.config/hunspell:${DICPATH:-}"
 
- op  inject --in-file "${HOME}/secrets.zsh" | while read -r line; do
+op  inject --in-file "${HOME}/secrets.zsh" | while read -r line; do
   eval "$line"
 done
