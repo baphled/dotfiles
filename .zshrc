@@ -54,15 +54,6 @@ export NVM_DIR=~/.config/nvm
 [[ -n "$TMUX" ]] && export TERM=tmux-256color || export TERM=xterm-kitty
 export COLORTERM=truecolor
 
-# Display the vi-mode your currently in
-function zle-line-init zle-keymap-select {
-    RPS1="${${KEYMAP/vicmd/[NORMAL]}/(main|viins)/[INSERT]}"
-    RPS2=$RPS1
-    zle reset-prompt
-}
-zle -N zle-line-init
-zle -N zle-keymap-select
-
 # renaming multiple files at once
 autoload -U zmv
 
