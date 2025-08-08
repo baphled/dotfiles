@@ -3,7 +3,6 @@
   "margin-top": 8,
   "modules-left": [
     "custom/launcher",
-    "sway/workspaces",
     "hyprland/workspaces"
   ],
   "modules-center": [
@@ -54,35 +53,6 @@
       "10"
     ],
   },
-  "sway/workspaces": {
-    "disable-scroll": true,
-    "all-outputs": false,
-    "format": "{icon} ",
-    "format-icons": {
-      "1:Terminals": "",
-      "2:Notes": "",
-      "3:Browser": "",
-      "4:Communications": "󰒱",
-      "5:Learning": "",
-      "6:Email": "",
-      "7:Reading": "",
-      "8:File Browser": "",
-      "9:Remote": "",
-      "10:Top": ""
-    },
-    "persistent-workspaces": [
-      "1:Terminals",
-      "2:Notes",
-      "3:Browser",
-      "4:Communications",
-      "5:Learning",
-      "6:Email",
-      "7:Reading",
-      "8:File Browser",
-      "9:Remote",
-      "10:Top"
-    ],
-  },
   "custom/swaync": {
     "format": "",
     "on-click": "sleep 0.1; swaync-client -t -sw",
@@ -90,7 +60,7 @@
     "on-double-click": "swaync-client -d"
   },
   "custom/power": {
-    "format": "⏻",
+    "format": "⏻ ",
     "on-click": "nwgbar",
     "tooltip": false,
   },
@@ -181,18 +151,6 @@
       "on-scroll-up": "shift_up",
       "on-scroll-down": "shift_down"
     },
-  },
-  "custom/keyboard-layout": {
-    "exec": "swaymsg -t get_inputs | grep -m1 'xkb_active_layout_name' | cut -d '\"' -f4 | cut -d ' ' -f1",
-    // Interval set only as a fallback, as the value is updated by signal
-    "interval": 10,
-    "format": "<span size='13000' foreground='#cdd6f4'> </span> {}", // Icon: keyboard
-    // Signal sent by Sway key binding (~/.config/sway/key-bindings)
-    "signal": 1, // SIGHUP
-    "tooltip": false,
-    "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
-    "on-scroll-up": "swaymsg input type:keyboard xkb_switch_layout next",
-    "on-scroll-down": "swaymsg input type:keyboard xkb_switch_layout prev"
   },
   "hyprland/language": {
     "format": "{} \udb80\udf0c",
