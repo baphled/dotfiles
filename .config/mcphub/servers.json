@@ -1,25 +1,39 @@
 {
   "mcpServers": {
-    "memory": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ]
-    },
     "fetch": {
-      "command": "uvx",
       "args": [
         "mcp-server-fetch"
-      ]
+      ],
+      "command": "uvx"
     },
     "filesystem": {
-      "command": "npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
         "/home/baphled"
-      ]
+      ],
+      "command": "npx"
+    },
+    "firecrawl": {
+      "args": [
+        "-y",
+        "firecrawl-mcp"
+      ],
+      "command": "npx",
+      "custom_instructions": {
+        "disabled": false
+      },
+      "disabled": false,
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    },
+    "memory": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "command": "npx"
     },
     "obsidian": {
       "args": [
@@ -31,44 +45,32 @@
         "/home/baphled/vaults/FullSpektrum®",
         "/home/baphled/vaults/Boodah Consulting"
       ],
+      "autoApprove": [],
       "command": "npx",
-      "autoApprove": [
-
-      ]
+      "disabled": false
     },
-    "firecrawl": {
-      "env": {
-        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
-      },
+    "sequentialthinking": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "command": "npx"
+    }
+  },
+  "nativeMCPServers": {
+    "deep_research": {
+      "disabled": true
+    },
+    "mcphub": {
+      "autoApprove": [],
+      "disabled": false
+    },
+    "neovim": {
+      "autoApprove": [],
       "custom_instructions": {
         "disabled": false
       },
       "disabled": false,
-      "command": "npx",
-      "args": [
-        "-y",
-        "firecrawl-mcp"
-      ]
-    },
-    "sequentialthinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    }
-  },
-  "nativeMCPServers": {
-    "mcphub": {
-      "disabled": false,
-      "autoApprove": [
-
-      ]
-    },
-    "deep_research": {
-      "disabled": true
-    },
-    "neovim": {
       "disabled_tools": [
         "execute_lua",
         "execute_command",
@@ -79,13 +81,6 @@
         "list_directory",
         "write_file",
         "replace_in_file"
-      ],
-      "disabled": false,
-      "custom_instructions": {
-        "disabled": false
-      },
-      "autoApprove": [
-
       ]
     }
   }
