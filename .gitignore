@@ -345,3 +345,4 @@ node_modules
 .rbql_table_index
 .var/
 Mail/
+secrets.zsh
