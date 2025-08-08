@@ -12,7 +12,7 @@ border-radius=15
 default-timeout=10000
 group-by=summary
 
-format=<span font="AnonymicePro Nerd Font weight=325 Italic" size="12288">%s</span>\n<span font="OperatorMonoSSm Nerd Font weight=325" size="12288">%b</span>
+format=<span font="DejaVuSansMono Nerd Font weight=325 Italic" size="12288">%s</span>\n<span font="OperatorMonoSSm Nerd Font weight=325" size="12288">%b</span>
 
 # Colors
 
@@ -25,7 +25,7 @@ progress-color=over #313244
 border-color=#fab387
 
 [grouped]
-format=<span font="AnonymicePro Nerd Font weight=325 Italic" size="12288">%s</span>\n<span font="OperatorMonoSSm Nerd Font weight=325" size="12288">%b</span>
+format=<span font="DejaVuSansMono Nerd Font weight=325 Italic" size="12288">%s</span>\n<span font="OperatorMonoSSm Nerd Font weight=325" size="12288">%b</span>
 
 [mode=do-not-disturb]
 invisible=1
