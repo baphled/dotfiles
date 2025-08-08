@@ -115,3 +115,8 @@ path = "~/Work/@n-vyro/esp-ui"
 [[window]]
 name = "hub-ui"
 path = "~/Work/@n-vyro/hub-ui"
+
+
+[[window]]
+name = "static-lib"
+path = "~/Work/@n-vyro/static-lib"
