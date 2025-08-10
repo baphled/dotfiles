@@ -332,7 +332,6 @@ node_modules
 .config/environment.d/
 .config/eog/
 .config/falkon/
-.config/fastfetch/config.jsonc
 .config/mpv/
 .config/obs-studio/
 .config/plex.tv/
