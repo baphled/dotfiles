@@ -10,7 +10,7 @@ IMAGE=$(find "$WALLPAPER_DIR" -regextype posix-extended -regex ".*\.($IMAGE_FORM
 
 
 FASTFETCH_IMG_WIDTH=$(echo $(expr $(echo $(tput cols) / 2)))
-FASTFETCH_IMG_HEIGHT=$(echo $(expr $(echo $FASTFETCH_IMG_WIDTH / 2)))
+FASTFETCH_IMG_HEIGHT=$(echo $(expr $(echo $(tput lines) / 2)))
 
 # if the width is more or equal to 425, then we should reduce by a quarter
 #
@@ -26,4 +26,5 @@ GPU=$(lspci -vnnn | perl -lne 'print if /^\d+\:.+(\[\S+\:\S+\])/' | grep VGA | g
 # Use the default
 fastfetch --kitty "$IMAGE" \
   --logo-width "$FASTFETCH_IMG_WIDTH" \
-  --logo-height "$FASTFETCH_IMG_HEIGHT"
+  --logo-height "$FASTFETCH_IMG_HEIGHT" \
+  --config "$XDG_CONFIG_HOME/fastfetch/config.jsonc"
