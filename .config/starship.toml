@@ -12,7 +12,7 @@ $git_status\
 [](fg:yellow bg:green)\
 $c\
 $cpp\
-$exlir\
+$elixir\
 $erlang\
 $rust\
 $ruby\
@@ -26,6 +26,7 @@ $python\
 [](fg:green bg:sapphire)\
 $conda\
 [](fg:sapphire bg:lavender)\
+${env_var.op}\
 $time\
 [ ](fg:lavender)\
 $cmd_duration\
@@ -39,7 +40,7 @@ disabled = false
 style = "bg:red fg:crust"
 
 [hostname]
-fformat = "[$hostname]($style) in "
+format = "[$hostname]($style) in "
 ssh_only = false
 style = "bold dimmed red"
 trim_at = "-"
@@ -194,6 +195,12 @@ style = "bg:lavender"
 disabled = false
 show_notifications = true
 min_time_to_notify = 45000
+
+[env_var.op]
+variable = "OP_1P_ICON"
+default  = "🔒"
+format   = '[[ $env_value ](fg:crust bg:lavender)]($style)'
+style    = "bg:lavender"
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
