@@ -1,20 +1,15 @@
 #!/usr/bin/env bash
-#
-# The purpose of this script is to demonstrate how to preview a file or an
-# image in the preview window of fzf.
-#
-# Dependencies:
-# - https://github.com/sharkdp/bat
-# - https://github.com/hpjansson/chafa
-# - https://iterm2.com/utilities/imgcat
+# fzf-preview.sh - Preview helper for fzf-tab
 
 if [[ $# -ne 1 ]]; then
-  >&2 echo "usage: $0 FILENAME[:LINENO][:IGNORED]"
+  echo "Usage: $0 FILENAME[:LINENO]" >&2
   exit 1
 fi
 
+# Expand ~ to $HOME
 file=${1/#\~\//$HOME/}
 
+# Parse "file:line" syntax (if any)
 center=0
 if [[ ! -r $file ]]; then
   if [[ $file =~ ^(.+):([0-9]+)\ *$ ]] && [[ -r ${BASH_REMATCH[1]} ]]; then
@@ -26,61 +21,62 @@ if [[ ! -r $file ]]; then
   fi
 fi
 
+# Determine MIME type
 type=$(file --brief --dereference --mime -- "$file")
 
-if [[ ! $type =~ image/ ]]; then
-  if [[ $type =~ =binary ]]; then
-    file "$1"
-    exit
-  fi
-
-  # Sometimes bat is installed as batcat.
-  if command -v batcat > /dev/null; then
-    batname="batcat"
-  elif command -v bat > /dev/null; then
-    batname="bat"
+# **Directory preview** – use eza if available, else ls (include hidden files)
+if [[ -d "$file" ]]; then
+  if command -v eza >/dev/null 2>&1; then
+    eza -1a --group-directories-first --icons=auto --color=always -- "$file"
   else
-    cat "$1"
-    exit
+    ls -la --color=always -- "$file"
   fi
-
-  ${batname} --style="${BAT_STYLE:-numbers}" --color=always --pager=never --highlight-line="${center:-0}" -- "$file"
-  exit
+  exit 0
 fi
 
+# **Non-image file preview**
+if [[ ! $type =~ image/ ]]; then
+  # If binary, just show file type info
+  if [[ $type =~ =binary ]]; then
+    file "$file"
+    exit 0
+  fi
+  # Use bat (or batcat) for text preview if available, else fallback to cat
+  if command -v batcat &>/dev/null; then
+    pager="batcat"
+  elif command -v bat &>/dev/null; then
+    pager="bat"
+  else
+    cat "$file"
+    exit 0
+  fi
+  # Show file with line numbers, highlighting, and jump to line if 'center' is set
+  ${pager} --style="${BAT_STYLE:-numbers}" --color=always --pager=never --highlight-line="${center:-0}" -- "$file"
+  exit 0
+fi
+
+# **Image preview** (determine terminal support and use appropriate tool)
 dim=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}
-if [[ $dim = x ]]; then
+if [[ $dim = "x" ]]; then
+  # Fallback: get terminal size if FZF vars not set
   dim=$(stty size < /dev/tty | awk '{print $2 "x" $1}')
-elif ! [[ $KITTY_WINDOW_ID ]] && (( FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $1}') )); then
-  # Avoid scrolling issue when the Sixel image touches the bottom of the screen
-  # * https://github.com/junegunn/fzf/issues/2544
+elif [[ -z $KITTY_WINDOW_ID ]] && (( FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $1}') )); then
+  # Adjust height if preview occupies full terminal height (non-Kitty)
   dim=${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES - 1))
 fi
 
-# 1. Use icat (from Kitty) if kitten is installed
-if [[ $KITTY_WINDOW_ID ]] || [[ $GHOSTTY_RESOURCES_DIR ]] && command -v kitten > /dev/null; then
-  # 1. 'memory' is the fastest option but if you want the image to be scrollable,
-  #    you have to use 'stream'.
-  #
-  # 2. The last line of the output is the ANSI reset code without newline.
-  #    This confuses fzf and makes it render scroll offset indicator.
-  #    So we remove the last line and append the reset code to its previous line.
-  kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" "$file" | sed '$d' | sed $'$s/$/\e[m/'
-
-# 2. Use chafa with Sixel output
-elif command -v chafa > /dev/null; then
+# 1) Kitty (or Ghostty) image preview
+if [[ -n $KITTY_WINDOW_ID || -n $GHOSTTY_RESOURCES_DIR ]] && command -v kitten &>/dev/null; then
+  kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" "$file" \
+    | sed '$d' | sed $'$s/$/\e[m/'  # ensure proper reset at end
+# 2) Chafa (sixel graphics preview)
+elif command -v chafa &>/dev/null; then
   chafa -s "$dim" "$file"
-  # Add a new line character so that fzf can display multiple images in the preview window
   echo
-
-# 3. If chafa is not found but imgcat is available, use it on iTerm2
-elif command -v imgcat > /dev/null; then
-  # NOTE: We should use https://iterm2.com/utilities/it2check to check if the
-  # user is running iTerm2. But for the sake of simplicity, we just assume
-  # that's the case here.
+# 3) iTerm2 imgcat
+elif command -v imgcat &>/dev/null; then
   imgcat -W "${dim%%x*}" -H "${dim##*x}" "$file"
-
-# 4. Cannot find any suitable method to preview the image
+# 4) Fallback for images – just show file info
 else
   file "$file"
 fi
