@@ -1,0 +1,51 @@
+#!/usr/bin/env zsh
+# fzf-tab-launcher: run fzf exactly as fzf-tab calls it, but inside a centered
+# 75% x 75% tmux popup when inside tmux. Outside tmux, behave like plain fzf.
+# We DO NOT add/override any fzf flags; we only change where it runs.
+
+set -euo pipefail
+
+[[ -r "$HOME/.config/fzf/catppuccin-mocha.sh" ]] && source "$HOME/.config/fzf/catppuccin-mocha.sh"
+
+# Capture completion items from stdin (fzf-tab pipes them in).
+# We must read them before we can exec tmux/fzf.
+tmpdir="${TMPDIR:-/tmp}"
+infile="$(mktemp -t fzftab.in.XXXXXX)"
+outfile="$(mktemp -t fzftab.out.XXXXXX)"
+cleanup() { rm -f -- "$infile" "$outfile" 2>/dev/null || true; }
+trap cleanup EXIT
+
+cat - >| "$infile"
+
+# If we're not in tmux, just run fzf normally with the captured stdin.
+if [[ -z "${TMUX:-}" ]]; then
+  exec fzf "$@" < "$infile"
+fi
+
+# In tmux: open a centered 75% popup and run fzf inside it.
+# We pass INFILE/OUTFILE via env so quoting stays simple and $@ is preserved.
+tmux display-popup \
+  -w 75% -h 75% -x C -y C \
+  -E /usr/bin/env INFILE="$infile" OUTFILE="$outfile" zsh -c '
+    # Run fzf with the exact args fzf-tab supplied.
+    # Read candidates from $INFILE and write the selected line(s) to $OUTFILE.
+    exec fzf "$@" \
+      --border=rounded \
+      --border-label=" 󰮯 FZF " \
+      --preview-window=border-rounded \
+      --bind=ctrl-u:preview-page-up,ctrl-d:preview-page-down \
+      --prompt "⚡ " \
+      --marker="◉" \
+      --pointer="" \
+      --separator="━" \
+      --scrollbar="┃" \
+    --height=100% \
+    --min-height=100 \
+    < "$INFILE" > "$OUTFILE"
+  ' -- "$@"
+
+# When the popup closes, print fzf’s selection back to fzf-tab.
+# (Empty output means user aborted, which is fine.)
+if [[ -s "$outfile" ]]; then
+  cat -- "$outfile"
+fi
