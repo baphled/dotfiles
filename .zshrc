@@ -9,6 +9,8 @@ zi snippet OMZ::plugins/git/git.plugin.zsh
 zinit ice wait"0" lucid
 zi snippet OMZ::plugins/bundler/bundler.plugin.zsh
 
+# (optional) only auto-load in dirs with an .nvmrc:
+zstyle ':omz:plugins:nvm' autoload yes
 zinit ice wait"0" lucid
 zi snippet OMZ::plugins/nvm/nvm.plugin.zsh
 
@@ -43,7 +45,6 @@ zinit ice wait"0" lucid
 zinit ice as"command" from"gh-r" \
   atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
   atpull"%atclone" src"init.zsh"
-
 zinit light starship/starship
 
 # Customize to your needs...
@@ -57,6 +58,56 @@ export COLORTERM=truecolor
 # renaming multiple files at once
 autoload -U zmv
 
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=1000000000
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+
+## Options
+setopt correct_all
+setopt extendedglob
+setopt nocaseglob
+setopt rcexpandparam
+setopt nocheckjobs
+setopt numericglobsort
+setopt nobeep
+setopt appendhistory
+setopt histignorealldups
+setopt autocd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt pushdminus
+setopt share_history
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+autoload -Uz compinit
+compinit
+
+# automatically load bash completion functions
+autoload -U +X bashcompinit && bashcompinit
+
+zi cdreplay -q
+zi cdlist -q &>/dev/null
+
+eval "$(zoxide init zsh)"
+
+# Bindings.
+bindkey -v
+bindkey '^n' history-search-forward
+bindkey '^p' history-search-backward
+bindkey '^k' autosuggest-accept
+
+if [ -n "$TMUX" ]; then
+  : # NO-OP
+else
+  ~/bin/fastfetch_autoscale
+fi
+
 ## Path section
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 [[ -d "$HOME/.rvm/bin" ]] && export PATH="$HOME/.rvm/bin:$PATH"
@@ -66,105 +117,13 @@ autoload -U zmv
 [[ -d "$HOME/.rvm/bin" ]] && export PATH="$PATH:$HOME/.rvm/bin"
 export PATH=/bin:~/bin:$PATH
 
-[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"  # This loads nvm
-[[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"
-
-# Arch Linux command-not-found support, you must have package pkgfile installed
-# https://wiki.archlinux.org/index.php/Pkgfile#.22Command_not_found.22_hook
+# Arch Linux command-not-found support
 [[ -e /usr/share/doc/pkgfile/command-not-found.zsh ]] && source /usr/share/doc/pkgfile/command-not-found.zsh
-
 # Advanced command-not-found hook
 [[ -e /usr/share/doc/find-the-command/ftc.zsh ]] && source /usr/share/doc/find-the-command/ftc.zsh
 
-# History
-HISTFILE=~/.zsh_history
-HISTSIZE=1000000000
-SAVEHIST=$HISTSIZE
-
-HISTDUP=erase
-
-## Options section
-setopt correct_all                                              # Auto correct mistakes
-setopt extendedglob                                             # Extended globbing. Allows using regular expressions with *
-setopt nocaseglob                                               # Case insensitive globbing
-setopt rcexpandparam                                            # Array expension with parameters
-setopt nocheckjobs                                              # Don't warn about running processes when exiting
-setopt numericglobsort                                          # Sort filenames numerically when it makes sense
-setopt nobeep                                                   # No beep
-setopt appendhistory                                            # Immediately append history instead of overwriting
-setopt histignorealldups                                        # If a new command is a duplicate, remove the older one
-setopt autocd                                                   # if only directory path is entered, cd there.
-setopt auto_pushd                                               # pushd when cd is used
-setopt pushd_ignore_dups                                        # Do not store duplicates in the directory stack
-setopt pushdminus                                               # pushd with the argument '-' goes to the previous directory
-setopt append_history                                           # Append history instead of overwriting
-setopt share_history                                            # Share history between all sessions
-setopt hist_ignore_space                                        # Ignore commands that start with a space
-setopt hist_ignore_all_dups                                     # Delete old recorded duplicates
-setopt hist_save_no_dups                                        # Do not save duplicates in history
-setopt hist_ignore_dups                                         # Do not save duplicates in history
-setopt hist_find_no_dups                                        # Do not display duplicates when searching history
-
-autoload -Uz compinit
-compinit
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
-zstyle ':completion:*' rehash true                              # automatically find new executables in path
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"         # Colored completion (different colors for dirs/files/etc)
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
-zstyle ':completion:*' menu no
-zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
-zstyle ':completion:*:descriptions' format '%U%F{cyan}%d%f%u'
-
-# Speed up completions
-zstyle ':completion:*' accept-exact '*(N)'
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.cache/zcache
-
-# automatically load bash completion functions
-autoload -U +X bashcompinit && bashcompinit
-
-zi cdreplay -q
-zi cdlist -q &>/dev/null
-
-# Load fzf
-#
-# The completion scripts are only loaded in interactive shells
-#
-# We need to load it here, after our plug-ins are loaded, so that our custom
-# LS_COLORS are used.
-#
-[[ -s "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"  # This loads fzf
-
-eval "$(zoxide init zsh)"
-
-function sesh-sessions() {
-  {
-    exec </dev/tty
-    exec <&1
-    local session
-    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
-    zle reset-prompt > /dev/null 2>&1 || true
-    [[ -z "$session" ]] && return
-    sesh connect $session
-  }
-}
-
-zle     -N             sesh-sessions
-bindkey -M emacs '\es' sesh-sessions
-bindkey -M vicmd '\es' sesh-sessions
-bindkey -M viins '\es' sesh-sessions
-# Bindings.
-bindkey -v
-bindkey '^n' history-search-forward
-bindkey '^p' history-search-backward
-bindkey '^k' autosuggest-accept
-
-if [ -n "$TMUX" ]; then
-  # NO-OP
-else
-  ~/bin/fastfetch_autoscale
-fi
-
+[[ -s "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"
+[[ -s "$HOME/.config/zsh/op-init.zsh" ]] && source "$HOME/.config/zsh/op-init.zsh"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 # qlty
