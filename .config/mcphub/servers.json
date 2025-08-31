@@ -72,14 +72,7 @@
       },
       "disabled": false,
       "disabled_tools": [
-        "execute_lua",
-        "execute_command",
-        "read_file",
         "delete_item",
-        "move_item",
-        "find_files",
-        "list_directory",
-        "write_file",
         "replace_in_file"
       ]
     }
