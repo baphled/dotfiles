@@ -3,30 +3,17 @@
 
 function sesh-sessions() {
   {
-    # Make sure fzf can talk to the TTY when called from a widget
-    exec </dev/tty >/dev/tty
-
+    exec </dev/tty
+    exec <&1
     local session
-    # Build fzf args once so we can add --tmux only when inside tmux
-    local -a fzf_args
-    fzf_args=(
-      --height 75%
-      --reverse
-      --border
-      --border-label ' sesh '
-      --prompt '⚡  '
-    )
-    [[ -n "$TMUX" ]] && fzf_args+=(--tmux 75%)
-
-    session=$(sesh list -t -c | fzf "${fzf_args[@]}")
+    session=$(sesh list -t -c | fzf --height 75% --tmux --reverse --border-label ' sesh ' --border --prompt '⚡  ')
     zle reset-prompt > /dev/null 2>&1 || true
     [[ -z "$session" ]] && return
-    sesh connect "$session"
+    sesh connect $session
   }
 }
-
-# Keybindings (emacs + vi)
-zle -N sesh-sessions
+zle     -N             sesh-sessions
 bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
+
