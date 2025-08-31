@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
-# fzf-preview.sh - Preview helper for fzf-tab
+#
+# Preview helper for fzf / fzf-tab
+# - Shows text with bat/cat
+# - Images with kitty/chafa/imgcat
+# - DIRECTORIES with eza/ls (this is the crucial fix)
 
 if [[ $# -ne 1 ]]; then
-  echo "Usage: $0 FILENAME[:LINENO]" >&2
+  >&2 echo "usage: $0 FILENAME[:LINENO][:IGNORED]"
   exit 1
 fi
 
-# Expand ~ to $HOME
 file=${1/#\~\//$HOME/}
 
-# Parse "file:line" syntax (if any)
 center=0
 if [[ ! -r $file ]]; then
   if [[ $file =~ ^(.+):([0-9]+)\ *$ ]] && [[ -r ${BASH_REMATCH[1]} ]]; then
@@ -21,62 +23,63 @@ if [[ ! -r $file ]]; then
   fi
 fi
 
-# Determine MIME type
+# Use file --mime to classify
 type=$(file --brief --dereference --mime -- "$file")
 
-# **Directory preview** – use eza if available, else ls (include hidden files)
-if [[ -d "$file" ]]; then
+# ---------- NEW: handle directories nicely ----------
+if [[ -d "$file" ]] || [[ $type =~ ^inode/directory ]]; then
   if command -v eza >/dev/null 2>&1; then
-    eza -1a --group-directories-first --icons=auto --color=always -- "$file"
+    # keep it readable; don’t explode the preview
+    eza -1a --group-directories-first --color=always --icons=auto -- "$file"
   else
     ls -la --color=always -- "$file"
   fi
+  echo
   exit 0
 fi
+# ---------------------------------------------------
 
-# **Non-image file preview**
 if [[ ! $type =~ image/ ]]; then
-  # If binary, just show file type info
   if [[ $type =~ =binary ]]; then
-    file "$file"
+    file "$1"
     exit 0
   fi
-  # Use bat (or batcat) for text preview if available, else fallback to cat
-  if command -v batcat &>/dev/null; then
-    pager="batcat"
-  elif command -v bat &>/dev/null; then
-    pager="bat"
+
+  # Sometimes bat is installed as batcat.
+  if command -v batcat > /dev/null; then
+    batname="batcat"
+  elif command -v bat > /dev/null; then
+    batname="bat"
   else
-    cat "$file"
+    cat "$1"
     exit 0
   fi
-  # Show file with line numbers, highlighting, and jump to line if 'center' is set
-  ${pager} --style="${BAT_STYLE:-numbers}" --color=always --pager=never --highlight-line="${center:-0}" -- "$file"
+
+  ${batname} --style="${BAT_STYLE:-numbers}" --color=always --pager=never --highlight-line="${center:-0}" -- "$file"
   exit 0
 fi
 
-# **Image preview** (determine terminal support and use appropriate tool)
 dim=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}
-if [[ $dim = "x" ]]; then
-  # Fallback: get terminal size if FZF vars not set
+if [[ $dim = x ]]; then
   dim=$(stty size < /dev/tty | awk '{print $2 "x" $1}')
-elif [[ -z $KITTY_WINDOW_ID ]] && (( FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $1}') )); then
-  # Adjust height if preview occupies full terminal height (non-Kitty)
+elif ! [[ $KITTY_WINDOW_ID ]] && (( FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $1}') )); then
   dim=${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES - 1))
 fi
 
-# 1) Kitty (or Ghostty) image preview
-if [[ -n $KITTY_WINDOW_ID || -n $GHOSTTY_RESOURCES_DIR ]] && command -v kitten &>/dev/null; then
-  kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" "$file" \
-    | sed '$d' | sed $'$s/$/\e[m/'  # ensure proper reset at end
-# 2) Chafa (sixel graphics preview)
-elif command -v chafa &>/dev/null; then
+# 1) Kitty/Ghostty
+if [[ $KITTY_WINDOW_ID ]] || [[ $GHOSTTY_RESOURCES_DIR ]] && command -v kitten > /dev/null; then
+  kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" "$file" | sed '$d' | sed $'$s/$/\e[m/'
+
+# 2) chafa (Sixel)
+elif command -v chafa > /dev/null; then
   chafa -s "$dim" "$file"
   echo
+
 # 3) iTerm2 imgcat
-elif command -v imgcat &>/dev/null; then
+elif command -v imgcat > /dev/null; then
   imgcat -W "${dim%%x*}" -H "${dim##*x}" "$file"
-# 4) Fallback for images – just show file info
+
+# 4) Fallback
 else
   file "$file"
 fi
