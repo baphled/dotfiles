@@ -105,9 +105,20 @@ The project employs multiple testing tools to ensure code quality at different l
     return a + b;
   }
 
+  module.exports = { sum };
+  ```
+
+  ```javascript
   // sum.test.js - Jest unit test for the sum function
-  test('adds numbers correctly', () => {
-    expect(sum(1, 2)).toBe(3);
+  const Calc = require('./sum');
+
+  describe('Calc', () => {
+      describe('sum', () => {
+        it('adds 1 + 2 to equal 3', () => {
+           expect(Calc.sum(1, 2)).toBe(3);
+        });
+      });
+    });
   });
   ```
 
