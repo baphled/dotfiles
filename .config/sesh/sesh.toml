@@ -20,7 +20,7 @@ path = "~/.config/nvim/"
 startup_command = "nvim"
 
 [[window]]
-name = "tmux config"
+name = "tmux config ⚙️"
 path = "~/tmuxfiles/"
 startup_command = "nvim"
 
@@ -56,16 +56,16 @@ startup_command = "tmux rename-window 'Remote Session 🌐'"
 [[session]]
 name = "Note Taking 📝"
 path = "~/vaults/baphled"
-windows = ["Colledge Vault", "n-vyro.io Vault", "Boodah", "Book Of YoNix"]
+windows = ["Colledge 📝", "n-vyro.io 📝", "Boodah 📝", "Book Of YoNix 📝", "Boodah Cooks 📝"]
 startup_command = "tmux rename-window 'baphled Vault' && clear && nvim"
 
 [[window]]
-name = "Colledge  📝"
+name = "Colledge 📝"
 path = "~/vaults/Colledge"
 startup_command = "nvim"
 
 [[window]]
-name = "Boodah  📝"
+name = "Boodah 📝"
 path = "~/vaults/Boodah"
 startup_command = "nvim"
 
@@ -77,6 +77,11 @@ startup_command = "nvim"
 [[window]]
 name = "Book Of YoNix 📝"
 path = "~/vaults/Book Of YoNix"
+startup_command = "nvim"
+
+[[window]]
+name = "Boodah Cooks 📝"
+path = "~/vaults/Boodah Cooks"
 startup_command = "nvim"
 
 # n-vyro.io
