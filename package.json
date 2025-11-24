@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
     "@commitlint/cli": "^19.6.1",
     "husky": "^9.1.7"
   },
