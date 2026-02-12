@@ -1,0 +1,34 @@
+---
+name: code-generation
+description: Use go:generate effectively - mockgen, stringer, templates, reducing boilerplate
+---
+
+# Skill: code-generation
+
+## What I do
+
+I provide expertise in Use go:generate effectively - mockgen. This skill covers core concepts, patterns, and best practices.
+
+## When to use me
+
+- When working with code generation
+
+## Core principles
+
+1. Principle one
+2. Principle two  
+3. Principle three
+
+## Patterns & examples
+
+Include concrete examples relevant to this skill.
+
+## Anti-patterns to avoid
+
+- ❌ Common mistake one
+- ❌ Common mistake two
+
+## Related skills
+
+- `skill-a` - Pairs with this skill
+- `skill-b` - Alternative approach

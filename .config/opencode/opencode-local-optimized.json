@@ -1,0 +1,93 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "memory": {
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "type": "local"
+    },
+    "vault-rag": {
+      "command": [
+        "/home/baphled/.local/bin/mcp-vault-server"
+      ],
+      "type": "local"
+    }
+  },
+  "plugin": [
+    "opencode-anthropic-auth@0.0.13"
+  ],
+  "provider": {
+    "ollama": {
+      "api": "http://localhost:11434/v1",
+      "models": {
+        "granite4-tools": {
+          "attachment": false,
+          "cost": {
+            "cache_read": 0,
+            "cache_write": 0,
+            "input": 0,
+            "output": 0
+          },
+          "family": "granite",
+          "id": "granite4-tools",
+          "limit": {
+            "context": 32768,
+            "output": 4096
+          },
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "Granite 3B - Speed (Primary)",
+          "reasoning": true,
+          "release_date": "2024-10-21",
+          "status": "beta",
+          "temperature": true,
+          "tool_call": true
+        },
+        "qwen2.5:7b-instruct": {
+          "attachment": false,
+          "cost": {
+            "cache_read": 0,
+            "cache_write": 0,
+            "input": 0,
+            "output": 0
+          },
+          "family": "qwen",
+          "id": "qwen2.5:7b-instruct",
+          "limit": {
+            "context": 32768,
+            "output": 4096
+          },
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "Qwen 7B - More Reliable",
+          "reasoning": true,
+          "release_date": "2024-10-21",
+          "status": "stable",
+          "temperature": true,
+          "tool_call": true
+        }
+      },
+      "name": "Ollama Local (Optimized)",
+      "npm": "@ai-sdk/openai",
+      "options": {
+        "apiKey": "ollama",
+        "baseURL": "http://localhost:11434/v1"
+      }
+    }
+  }
+}
