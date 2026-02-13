@@ -136,12 +136,39 @@ function statusEmoji(status: string): string {
  */
 const failoverState: Map<string, { originalProvider: string; originalModel: string }> = new Map()
 
+// --- Toast notification helper ---
+
+type ToastVariant = 'info' | 'success' | 'warning' | 'error'
+
+/**
+ * Create a notification function bound to the plugin client.
+ * Uses OpenCode's TUI toast API (same as oh-my-opencode).
+ * Falls back silently if the toast API is unavailable.
+ */
+function createNotifier(client: ReturnType<Parameters<Plugin>[0]['client'] extends infer C ? () => C : never>) {
+  return async (message: string, variant: ToastVariant = 'info', duration = 5000) => {
+    try {
+      await (client as any).tui.showToast({
+        body: {
+          title: 'Provider Failover',
+          message,
+          variant,
+          duration,
+        },
+      })
+    } catch {
+      // Toast API unavailable — swallow silently
+    }
+  }
+}
+
 // --- Plugin ---
 
 export const ProviderFailoverPlugin: Plugin = async (_input) => {
   const healthManager = new HealthManager()
+  const notify = createNotifier(_input.client)
 
-  console.log(`${LOG_PREFIX} Plugin loaded. Health state initialised.`)
+  await notify('Plugin loaded. Health state initialised.', 'info', 3000)
 
   return {
     /**
@@ -158,12 +185,12 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
         if (state.status === 'rate_limited' || state.status === 'down') {
           // Don't disable ollama — it's our last resort
           if (providerName === 'ollama') {
-            console.log(`${LOG_PREFIX} [config] ${providerName} is ${state.status} but kept as T0 fallback`)
+            await notify(`${providerName} is ${state.status} but kept as T0 fallback`, 'warning')
             continue
           }
 
           if (!disabledProviders.includes(providerName)) {
-            console.log(`${LOG_PREFIX} [config] ${providerName} is ${state.status} — noted for failover routing`)
+            await notify(`${providerName} is ${state.status} — noted for failover routing`, 'warning')
           }
         }
       }
@@ -184,13 +211,13 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
     'chat.params': async (input, output) => {
       // Guard: provider may not be available in all contexts
       if (!input.provider?.info?.id) {
-        console.log(`${LOG_PREFIX} (i) No provider info available`)
+        await notify('No provider info available — skipping failover check', 'info', 3000)
         return
       }
 
       // Guard: model may not be available in all contexts
       if (!input.model?.id) {
-        console.log(`${LOG_PREFIX} (i) No model info available`)
+        await notify('No model info available — skipping failover check', 'info', 3000)
         return
       }
 
@@ -211,8 +238,9 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
         return
       }
 
-      console.log(
-        `${LOG_PREFIX} [chat.params] Provider ${providerName} is ${providerState.status} for tier ${tier}. Searching fallback chain...`
+      await notify(
+        `${providerName} is ${providerState.status} for tier ${tier} — searching fallback chain…`,
+        'warning'
       )
 
       // Get healthy alternatives from the fallback chain
@@ -224,8 +252,9 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       )
 
       if (alternatives.length === 0) {
-        console.log(
-          `${LOG_PREFIX} [chat.params] No healthy alternatives for tier ${tier}. Allowing original provider as last resort.`
+        await notify(
+          `No healthy alternatives for tier ${tier} — using original provider as last resort`,
+          'warning'
         )
         return
       }
@@ -233,8 +262,10 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       const selected = alternatives[0]
       const selectedMeta = getProviderMetadata(selected.provider)
 
-      console.log(
-        `${LOG_PREFIX} [chat.params] Swapping ${providerName}/${currentModelID} → ${selected.provider}/${selected.model} (${selectedMeta.costModel})`
+      await notify(
+        `Swapping ${providerName}/${currentModelID} → ${selected.provider}/${selected.model} (${selectedMeta.costModel})`,
+        'warning',
+        8000
       )
 
       // Store failover state for the headers hook
@@ -313,16 +344,20 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
             // Rate limited — mark provider and set retry-after
             const retryAfter = parseRetryAfter(apiData.responseHeaders?.['retry-after'])
 
-            console.log(
-              `${LOG_PREFIX} [event] Rate limit detected (429) for ${providerHint}. Retry after ${retryAfter}s`
+            await notify(
+              `Rate limit (429) detected for ${providerHint} — retry after ${retryAfter}s`,
+              'error',
+              8000
             )
 
             healthManager.markRateLimited(providerHint, retryAfter)
             await healthManager.flush()
           } else if (statusCode >= 500) {
             // Server error — record failure
-            console.log(
-              `${LOG_PREFIX} [event] Server error (${statusCode}) for ${providerHint}: ${apiData.message || 'unknown'}`
+            await notify(
+              `Server error (${statusCode}) for ${providerHint}: ${apiData.message || 'unknown'}`,
+              'error',
+              8000
             )
 
             healthManager.recordFailure(providerHint, {
@@ -332,8 +367,10 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
             await healthManager.flush()
           } else if (statusCode === 403 || statusCode === 401) {
             // Auth error — record failure (may indicate expired token)
-            console.log(
-              `${LOG_PREFIX} [event] Auth error (${statusCode}) for ${providerHint}: ${apiData.message || 'unknown'}`
+            await notify(
+              `Auth error (${statusCode}) for ${providerHint}: ${apiData.message || 'unknown'}`,
+              'error',
+              8000
             )
 
             healthManager.recordFailure(providerHint, {
@@ -353,8 +390,10 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
         }
 
         if (props.status.type === 'retry') {
-          console.log(
-            `${LOG_PREFIX} [event] Session retry detected: attempt ${props.status.attempt}, message: ${props.status.message || 'none'}`
+          await notify(
+            `Session retry: attempt ${props.status.attempt} — ${props.status.message || 'retrying'}`,
+            'info',
+            5000
           )
           // Retry events indicate the runtime is handling retries internally.
           // We note it for observability but don't double-count as a failure

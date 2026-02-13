@@ -268,6 +268,37 @@ jq '.providers.copilot.status' ~/.cache/opencode/provider-health.json
 
 ---
 
+## VHS Ecosystem (ON-DEMAND)
+
+VHS demo generation is **ON-DEMAND** and optional. It is never mandatory for task completion, nor should any task be refused due to the absence of a VHS demo.
+
+### Directory Structure
+- `demos/vhs/`: Root directory for all VHS infrastructure.
+- `demos/vhs/features/`: Feature-specific terminal recordings.
+- `demos/vhs/scripts/`: Automation and regression test scripts.
+
+### Tape Categories
+1.  **Auto-generated**: Created via `vhs-director` agent or automation scripts (e.g., golden tests).
+2.  **Hand-crafted**: Manually authored tapes for specific showcase or documentation purposes.
+
+### Makefile Targets
+- `make vhs-feature FEATURE=name`: Generate all tapes for a specific feature.
+- `make vhs-features-all`: Generate all feature tapes in the repository.
+- `make vhs-golden-compare`: Run visual regression tests against golden baselines.
+- `make vhs-golden-update`: Update golden baselines with current output.
+
+### VHS Commands
+Use the `/vhs` command to interact with the ecosystem:
+- `/vhs demo <feature>`: Record a new demo for the specified feature.
+- `/vhs check`: Verify VHS installation and configuration.
+- `/vhs test`: Run visual regression tests.
+
+### VHS Specialized Support
+- **VHS Skill**: Managed at `~/.config/opencode/skills/vhs/`.
+- **VHS Agent**: The `vhs-director` agent at `~/.config/opencode/agents/vhs-director.md` orchestrates demo generation.
+
+---
+
 ## Three Pillars (MANDATORY)
 
 1. **Always-Active Discipline** - pre-action, memory-keeper, search first
