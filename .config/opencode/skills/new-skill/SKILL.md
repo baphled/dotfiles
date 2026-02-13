@@ -1,6 +1,7 @@
 ---
 name: new-skill
 description: Create new skills, commands, or agents with full integration into all workflows and documentation
+category: Workflow Orchestration
 ---
 
 # Skill: new-skill
