@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""
+Generic vault sync tool for Qdrant + LlamaIndex
+Usage: sync-vault <vault-name>
+       sync-vault --list
+       sync-vault --all
+"""
+import os
+import sys
+import json
+import argparse
+from pathlib import Path
+
+# Set LD_LIBRARY_PATH for CUDA libraries
+os.environ['LD_LIBRARY_PATH'] = f"/opt/cuda/lib64:{os.environ.get('LD_LIBRARY_PATH', '')}"
+
+CONFIG_PATH = Path.home() / ".config/vault-rag/config.json"
+
+def load_config():
+    """Load vault configuration"""
+    if not CONFIG_PATH.exists():
+        print(f"Error: Config not found at {CONFIG_PATH}")
+        print("Create it with vault paths first.")
+        sys.exit(1)
+    
+    with open(CONFIG_PATH) as f:
+        return json.load(f)
+
+def sync_vault(vault_name: str, config: dict):
+    """Sync a specific vault to Qdrant"""
+    try:
+        import qdrant_client
+        from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext, Settings
+        from llama_index.core.node_parser import SentenceSplitter
+        from llama_index.vector_stores.qdrant import QdrantVectorStore
+        from llama_index.embeddings.fastembed import FastEmbedEmbedding
+        import onnxruntime as ort
+    except ImportError as e:
+        print(f"Error: Missing dependency - {e}")
+        print("Install with: pipx inject llama-index llama-index-vector-stores-qdrant fastembed onnxruntime-gpu")
+        sys.exit(1)
+
+    vaults = config.get("vaults", {})
+    
+    if vault_name not in vaults:
+        print(f"Error: Unknown vault '{vault_name}'")
+        print(f"Available: {', '.join(vaults.keys())}")
+        sys.exit(1)
+    
+    vault_config = vaults[vault_name]
+    vault_path = Path(vault_config["path"])
+    
+    if not vault_path.exists():
+        print(f"Error: Vault path not found: {vault_path}")
+        sys.exit(1)
+    
+    # Qdrant settings
+    qdrant_cfg = config.get("qdrant", {})
+    host = qdrant_cfg.get("host", "localhost")
+    port = qdrant_cfg.get("port", 6333)
+    collection_name = f"vault_{vault_name}"
+    
+    # Embedding settings
+    embed_cfg = config.get("embedding", {})
+    model_name = embed_cfg.get("model", "BAAI/bge-small-en-v1.5")
+    enable_hybrid = embed_cfg.get("enable_hybrid", False)
+    batch_size = embed_cfg.get("batch_size", 32)
+    chunk_size = embed_cfg.get("chunk_size", 512)
+    chunk_overlap = embed_cfg.get("chunk_overlap", 50)
+    
+    # Check if GPU is available via ONNX Runtime
+    use_gpu = embed_cfg.get("use_gpu", True) and 'CUDAExecutionProvider' in ort.get_available_providers()
+    
+    # Sync settings
+    sync_cfg = config.get("sync", {})
+    max_workers = sync_cfg.get("max_workers", 2)
+    
+    print(f"🔄 Syncing vault: {vault_name}")
+    print(f"   Path: {vault_path}")
+    print(f"   Qdrant: {host}:{port}")
+    print(f"   Collection: {collection_name}")
+    print(f"   Model: {model_name}")
+    print(f"   Hybrid: {enable_hybrid}")
+    print(f"   GPU: {'✓' if use_gpu else '✗'}")
+    print(f"   Batch size: {batch_size}")
+    print(f"   Chunk size: {chunk_size}")
+    print(f"   Workers: {max_workers}")
+    print()
+    
+    # Connect to Qdrant
+    client = qdrant_client.QdrantClient(host=host, port=port)
+    
+    # Setup vector store
+    vector_store = QdrantVectorStore(
+        client=client,
+        collection_name=collection_name,
+        enable_hybrid=enable_hybrid,
+        batch_size=batch_size
+    )
+    
+    # Configure embedding model with GPU if available
+    embed_kwargs = {
+        "model_name": model_name,
+        "max_length": chunk_size
+    }
+    if use_gpu:
+        embed_kwargs["device"] = "cuda"
+    
+    embed_model = FastEmbedEmbedding(**embed_kwargs)
+    
+    # Configure text splitter for chunking
+    text_splitter = SentenceSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap
+    )
+    
+    # Configure global settings for batch processing
+    Settings.embed_model = embed_model
+    Settings.node_parser = text_splitter
+    Settings.num_workers = max_workers
+    
+    # Load documents
+    documents = SimpleDirectoryReader(
+        input_dir=str(vault_path),
+        required_exts=[".md", ".markdown"],
+        recursive=True,
+        num_files_limit=None
+    ).load_data()
+    
+    print(f"📄 Found {len(documents)} documents")
+    
+    if len(documents) == 0:
+        print("⚠️  No markdown files found")
+        return
+    
+    # Build index with batching
+    storage_context = StorageContext.from_defaults(vector_store=vector_store)
+    
+    print(f"🚀 Processing in batches of {batch_size}...")
+    index = VectorStoreIndex.from_documents(
+        documents,
+        storage_context=storage_context,
+        show_progress=True,
+        use_async=False  # Disable async to reduce memory overhead
+    )
+    
+    print(f"\n✅ Successfully synced {len(documents)} documents to '{collection_name}'")
+
+def list_vaults(config: dict):
+    """List configured vaults"""
+    print("Configured vaults:")
+    print("-" * 50)
+    for name, cfg in config.get("vaults", {}).items():
+        path = cfg.get("path", "N/A")
+        desc = cfg.get("description", "")
+        exists = "✓" if Path(path).exists() else "✗"
+        print(f"  {exists} {name:15} - {desc}")
+        print(f"    Path: {path}")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Sync Obsidian vaults to Qdrant vector database"
+    )
+    parser.add_argument(
+        "vault",
+        nargs="?",
+        help="Vault name to sync (or use --all/--list)"
+    )
+    parser.add_argument(
+        "--list", "-l",
+        action="store_true",
+        help="List configured vaults"
+    )
+    parser.add_argument(
+        "--all", "-a",
+        action="store_true",
+        help="Sync all configured vaults"
+    )
+    
+    args = parser.parse_args()
+    config = load_config()
+    
+    if args.list:
+        list_vaults(config)
+    elif args.all:
+        for vault_name in config.get("vaults", {}).keys():
+            print(f"\n{'='*60}")
+            sync_vault(vault_name, config)
+    elif args.vault:
+        sync_vault(args.vault, config)
+    else:
+        parser.print_help()
+        print("\n\nHint: Use --list to see available vaults")
+
+if __name__ == "__main__":
+    main()

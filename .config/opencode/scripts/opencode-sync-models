@@ -1,0 +1,411 @@
+#!/usr/bin/env bash
+#
+# opencode-sync-models - Synchronise opencode models with Obsidian vault
+#
+# Fetches the current list of models from `opencode models` command,
+# compares against documented models in Obsidian vault, and generates
+# a machine-readable diff for agents to consume.
+#
+# Usage:
+#   opencode-sync-models [OPTIONS]
+#
+# Options:
+#   --diff-only     Show differences without updating docs (default)
+#   --apply         Apply updates to Obsidian vault (requires confirmation)
+#   --force         Apply updates without confirmation
+#   --json          Output machine-readable JSON diff
+#   --notify        Send desktop notification on completion
+#
+# Exit codes:
+#   0 - Success, no changes needed
+#   1 - Error occurred
+#   2 - Changes detected (diff-only mode)
+#   3 - Changes applied successfully
+
+set -euo pipefail
+
+# ============================================================================
+# Configuration
+# ============================================================================
+
+readonly CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/opencode"
+readonly MODELS_CACHE_FILE="$CACHE_DIR/models-list.json"
+readonly DIFF_FILE="$CACHE_DIR/models-diff.json"
+readonly VAULT_PATH="$HOME/vaults/baphled/3. Resources/Tech/AI-Models"
+readonly MODELS_DOC="$VAULT_PATH/OpenCode-Models.md"
+readonly CHANGELOG_DOC="$VAULT_PATH/OpenCode-Models-Changelog.md"
+
+# ANSI Colours
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly NC='\033[0m' # No Colour
+
+# ============================================================================
+# Logging Functions
+# ============================================================================
+
+log_info() {
+  echo -e "${BLUE}[INFO]${NC} $*" >&2
+}
+
+log_warn() {
+  echo -e "${YELLOW}[WARN]${NC} $*" >&2
+}
+
+log_error() {
+  echo -e "${RED}[ERROR]${NC} $*" >&2
+}
+
+log_success() {
+  echo -e "${GREEN}[OK]${NC} $*" >&2
+}
+
+# ============================================================================
+# Argument Parsing
+# ============================================================================
+
+DIFF_ONLY=false
+APPLY=false
+FORCE=false
+JSON_OUTPUT=false
+NOTIFY=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --diff-only)
+      DIFF_ONLY=true
+      shift
+      ;;
+    --apply)
+      APPLY=true
+      shift
+      ;;
+    --force)
+      FORCE=true
+      APPLY=true
+      shift
+      ;;
+    --json)
+      JSON_OUTPUT=true
+      shift
+      ;;
+    --notify)
+      NOTIFY=true
+      shift
+      ;;
+    *)
+      log_error "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+done
+
+# ============================================================================
+# Utility Functions
+# ============================================================================
+
+# Validate model name format
+validate_model_name() {
+  local name="$1"
+  # Simple validation: provider/model format
+  if [[ ! "$name" =~ ^[a-zA-Z0-9][a-zA-Z0-9._/-]*$ ]]; then
+    return 1
+  fi
+  if [[ "$name" == *".."* ]]; then
+    return 1
+  fi
+  return 0
+}
+
+# Parse model output into JSON structure
+parse_model_output() {
+  # Convert newline-delimited models to JSON array, preserving provider/model pairs
+  jq -R -s 'split("\n") | 
+    map(select(length > 0) | select(test("^[a-zA-Z0-9]"))) | 
+    sort | 
+    . as $models |
+    {
+      timestamp: (now | todate),
+      total_count: ($models | length),
+      models: $models,
+      providers: (
+        $models |
+        map(split("/")[0]) |
+        unique |
+        map(. as $provider | {
+          provider: $provider,
+          count: ($models | map(select(startswith($provider + "/"))) | length),
+          models: ($models | map(select(startswith($provider + "/"))))
+        })
+      )
+    }'
+}
+
+# Load cached models
+load_cached_models() {
+  if [[ -f "$MODELS_CACHE_FILE" ]]; then
+    cat "$MODELS_CACHE_FILE"
+  else
+    echo '{"timestamp": null, "total_count": 0, "models": [], "providers": []}'
+  fi
+}
+
+# Generate diff between two model states
+generate_diff() {
+  local current="$1"
+  local cached="$2"
+  
+  # Create temporary files to avoid argument length limits
+  local temp_current temp_cached
+  temp_current=$(mktemp)
+  temp_cached=$(mktemp)
+  trap "rm -f $temp_current $temp_cached" RETURN
+  
+  echo "$current" > "$temp_current"
+  echo "$cached" > "$temp_cached"
+  
+  jq -s '
+    .[0] as $current |
+    .[1] as $cached |
+    
+    # Get model lists
+    ($current.models | sort) as $current_models |
+    ($cached.models // [] | sort) as $cached_models |
+    
+    # Compute additions and removals
+    ($current_models - $cached_models) as $added |
+    ($cached_models - $current_models) as $removed |
+    
+    {
+      timestamp: (now | todate),
+      has_changes: (($added | length) > 0 or ($removed | length) > 0),
+      summary: {
+        added_models: $added,
+        removed_models: $removed,
+        total_additions: ($added | length),
+        total_removals: ($removed | length)
+      },
+      details: {
+        current_count: ($current.total_count),
+        previous_count: ($cached.total_count // 0)
+      }
+    }
+  ' "$temp_current" "$temp_cached"
+}
+
+# Generate Obsidian markdown documentation
+generate_markdown() {
+  local models_json="$1"
+  local timestamp
+  timestamp=$(date +"%Y-%m-%dT%H:%M")
+  
+  cat <<'MARKDOWN'
+---
+id: opencode-models
+aliases:
+  - OpenCode Models
+tags:
+  - system/opencode
+  - type/reference
+  - topic/ai-models
+  - auto-generated
+created: 2026-02-12
+modified: MODIFYDATE
+---
+
+# OpenCode Models Reference
+
+**Auto-generated from `opencode models` CLI output.**
+
+> [!warning] Auto-Generated Document
+> This document is automatically synchronised with the opencode CLI.
+> Manual edits will be overwritten on next sync.
+> Last sync: SYNCDATE
+
+## Summary
+
+MARKDOWN
+  
+  echo "- **Total Models**: $(echo "$models_json" | jq -r '.total_count')"
+  echo "- **Providers**: $(echo "$models_json" | jq -r '.providers | length')"
+  echo "- **Last Updated**: $timestamp"
+  echo ""
+  echo "## Models by Provider"
+  echo ""
+  
+  # Generate provider sections with proper formatting
+  echo "$models_json" | jq -r '.providers[] | 
+    "### \(.provider) (" + (.count | tostring) + " models)\n\n" +
+    (.models | sort | map("- `\(.)`") | join("\n")) + "\n"
+  '
+  
+  cat <<'MARKDOWN'
+
+---
+
+## Related Documentation
+
+- [[Model Selection Guide]] - Decision framework for model choice
+- [[Architecture Overview]] - How models fit into OpenCode
+- [[Commands Reference]] - Available development commands
+
+## Sync Information
+
+| Property | Value |
+|----------|-------|
+| Script | `opencode-sync-models` |
+| Cache | `~/.cache/opencode/models.json` |
+| Command | `/sync-models` |
+| Last Verified | SYNCDATE |
+
+MARKDOWN
+}
+
+# Send desktop notification
+send_notification() {
+  local title="$1"
+  local message="$2"
+  
+  if command -v notify-send &>/dev/null; then
+    notify-send "$title" "$message"
+  elif command -v osascript &>/dev/null; then
+    osascript -e "display notification \"$message\" with title \"$title\""
+  fi
+}
+
+# ============================================================================
+# Main Execution
+# ============================================================================
+
+main() {
+  log_info "Starting OpenCode models sync..."
+  
+  # Ensure cache directory exists
+  mkdir -p "$CACHE_DIR"
+  
+  # Fetch current models
+  log_info "Fetching models from opencode CLI..."
+  
+  if ! command -v opencode &>/dev/null; then
+    log_error "opencode CLI not found in PATH"
+    exit 1
+  fi
+  
+  local current_output
+  if ! current_output=$(opencode models 2>/dev/null); then
+    log_error "Failed to fetch models from opencode"
+    exit 1
+  fi
+  
+  if [[ -z "$current_output" ]]; then
+    log_error "opencode models returned empty output"
+    exit 1
+  fi
+  
+  # Parse current models
+  local current_models
+  current_models=$(parse_model_output <<< "$current_output")
+  
+  # Load cached models
+  local cached_models
+  cached_models=$(load_cached_models)
+  
+  # Generate diff
+  log_info "Comparing with cached state..."
+  local diff
+  diff=$(generate_diff "$current_models" "$cached_models")
+  
+  # Save diff (always for agent consumption)
+  echo "$diff" > "$DIFF_FILE"
+  
+  # Check if changes detected
+  local has_changes
+  has_changes=$(echo "$diff" | jq -r '.has_changes')
+  
+  # Output JSON if requested
+  if [[ "$JSON_OUTPUT" == "true" ]]; then
+    echo "$diff"
+    [[ "$has_changes" == "true" ]] && exit 2 || exit 0
+  fi
+  
+  # Report results
+  if [[ "$has_changes" == "false" ]]; then
+    log_success "No changes detected. Models are in sync."
+    [[ "$NOTIFY" == "true" ]] && send_notification "OpenCode Sync" "✅ Models are in sync"
+    exit 0
+  fi
+  
+   # Show summary of changes
+   log_warn "Changes detected!"
+   local added removed
+   added=$(echo "$diff" | jq -r '.summary.total_additions')
+   removed=$(echo "$diff" | jq -r '.summary.total_removals')
+   
+   echo "  Added models: $added" >&2
+   echo "  Removed models: $removed" >&2
+   
+   if [[ "$added" -gt 0 ]]; then
+     echo "" >&2
+     echo "  New models:" >&2
+     echo "$diff" | jq -r '.summary.added_models[]' | sed 's/^/    + /' >&2
+   fi
+   
+   if [[ "$removed" -gt 0 ]]; then
+     echo "" >&2
+     echo "  Removed models:" >&2
+     echo "$diff" | jq -r '.summary.removed_models[]' | sed 's/^/    - /' >&2
+   fi
+   
+   # If diff-only mode, exit
+   if [[ "$DIFF_ONLY" == "true" ]]; then
+     log_info "Diff-only mode. No updates applied."
+     log_info "Run 'opencode-sync-models --apply' to update documentation."
+     exit 2
+   fi
+   
+   # Require confirmation unless force mode
+   if [[ "$FORCE" != "true" ]]; then
+     echo "" >&2
+     read -p "Apply changes to Obsidian vault? [y/N] " -n 1 -r >&2
+     echo >&2
+     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+       log_info "Cancelled by user."
+       exit 2
+     fi
+   fi
+  
+  # Create vault directory if needed
+  mkdir -p "$VAULT_PATH"
+  
+  # Generate and save documentation
+  log_info "Generating documentation..."
+  
+  local markdown
+  markdown=$(generate_markdown "$current_models")
+  
+  # Replace placeholders
+  local now
+  now=$(date +"%Y-%m-%d %H:%M:%S")
+  markdown="${markdown//MODIFYDATE/$now}"
+  markdown="${markdown//SYNCDATE/$now}"
+  
+  echo "$markdown" > "$MODELS_DOC"
+  log_success "Updated $MODELS_DOC"
+  
+   # Update cache
+   echo "$current_models" > "$MODELS_CACHE_FILE"
+   log_success "Cache updated ($MODELS_CACHE_FILE)"
+  
+  # Send notification if requested
+  if [[ "$NOTIFY" == "true" ]]; then
+    send_notification "OpenCode Sync" "✅ Updated: +$added models, -$removed models"
+  fi
+  
+  log_success "Sync complete!"
+  exit 3
+}
+
+# Run main function
+main "$@"

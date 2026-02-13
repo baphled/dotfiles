@@ -1,0 +1,217 @@
+#!/usr/bin/env python3
+"""
+MCP Server for Obsidian Vault RAG
+Provides tools for querying and syncing vaults via Qdrant
+"""
+import json
+import sys
+import subprocess
+from pathlib import Path
+
+CONFIG_PATH = Path.home() / ".config/vault-rag/config.json"
+
+def send_message(msg: dict):
+    """Send JSON-RPC message"""
+    print(json.dumps(msg), flush=True)
+
+def handle_initialize(id: int):
+    """Handle initialize request"""
+    send_message({
+        "jsonrpc": "2.0",
+        "id": id,
+        "result": {
+            "protocolVersion": "2024-11-05",
+            "capabilities": {},
+            "serverInfo": {
+                "name": "vault-rag",
+                "version": "1.0.0"
+            }
+        }
+    })
+
+def handle_tools_list(id: int):
+    """Handle tools/list request"""
+    send_message({
+        "jsonrpc": "2.0",
+        "id": id,
+        "result": {
+            "tools": [
+                {
+                    "name": "query_vault",
+                    "description": "Query an Obsidian vault knowledge base for information",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "vault": {
+                                "type": "string",
+                                "description": "Vault name",
+                                "enum": ["baphled"]
+                            },
+                            "question": {
+                                "type": "string",
+                                "description": "Question to ask"
+                            },
+                            "top_k": {
+                                "type": "integer",
+                                "description": "Number of results",
+                                "default": 5
+                            }
+                        },
+                        "required": ["vault", "question"]
+                    }
+                },
+                {
+                    "name": "sync_vault", 
+                    "description": "Sync vault markdown files to Qdrant vector database",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "vault": {
+                                "type": "string",
+                                "description": "Vault name to sync"
+                            }
+                        },
+                        "required": ["vault"]
+                    }
+                },
+                {
+                    "name": "list_vaults",
+                    "description": "List all configured vaults with their paths",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                }
+            ]
+        }
+    })
+
+def handle_tool_call(id: int, params: dict):
+    """Handle tools/call request"""
+    name = params.get("name", "")
+    arguments = params.get("arguments", {})
+    
+    try:
+        if name == "query_vault":
+            vault = arguments.get("vault", "")
+            question = arguments.get("question", "")
+            top_k = arguments.get("top_k", 5)
+            
+            # Run query-vault command
+            result = subprocess.run(
+                ["query-vault", vault, question, "--top-k", str(top_k)],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            
+            output = result.stdout if result.returncode == 0 else result.stderr
+            
+            send_message({
+                "jsonrpc": "2.0",
+                "id": id,
+                "result": {
+                    "content": [{"type": "text", "text": output}],
+                    "isError": result.returncode != 0
+                }
+            })
+            
+        elif name == "sync_vault":
+            vault = arguments.get("vault", "")
+            
+            result = subprocess.run(
+                ["sync-vault", vault],
+                capture_output=True,
+                text=True,
+                timeout=300
+            )
+            
+            output = result.stdout if result.returncode == 0 else result.stderr
+            
+            send_message({
+                "jsonrpc": "2.0",
+                "id": id,
+                "result": {
+                    "content": [{"type": "text", "text": output}],
+                    "isError": result.returncode != 0
+                }
+            })
+            
+        elif name == "list_vaults":
+            if CONFIG_PATH.exists():
+                with open(CONFIG_PATH) as f:
+                    config = json.load(f)
+                
+                vaults = config.get("vaults", {})
+                lines = ["Configured vaults:", "-" * 40]
+                for name, cfg in vaults.items():
+                    desc = cfg.get("description", "")
+                    lines.append(f"• {name}: {desc}")
+                
+                output = "\n".join(lines)
+            else:
+                output = f"Config not found at {CONFIG_PATH}"
+            
+            send_message({
+                "jsonrpc": "2.0",
+                "id": id,
+                "result": {
+                    "content": [{"type": "text", "text": output}],
+                    "isError": False
+                }
+            })
+        else:
+            send_message({
+                "jsonrpc": "2.0",
+                "id": id,
+                "error": {"code": -32601, "message": f"Unknown tool: {name}"}
+            })
+            
+    except Exception as e:
+        send_message({
+            "jsonrpc": "2.0",
+            "id": id,
+            "result": {
+                "content": [{"type": "text", "text": f"Error: {str(e)}"}],
+                "isError": True
+            }
+        })
+
+def main():
+    """Main MCP server loop"""
+    for line in sys.stdin:
+        line = line.strip()
+        if not line:
+            continue
+        
+        try:
+            msg = json.loads(line)
+            method = msg.get("method", "")
+            msg_id = msg.get("id")
+            params = msg.get("params", {})
+            
+            if method == "initialize":
+                handle_initialize(msg_id)
+            elif method == "tools/list":
+                handle_tools_list(msg_id)
+            elif method == "tools/call":
+                handle_tool_call(msg_id, params)
+            elif method == "notifications/initialized":
+                pass  # No response needed
+            else:
+                send_message({
+                    "jsonrpc": "2.0",
+                    "id": msg_id,
+                    "error": {"code": -32601, "message": f"Method not found: {method}"}
+                })
+        except json.JSONDecodeError:
+            pass
+        except Exception as e:
+            send_message({
+                "jsonrpc": "2.0",
+                "id": None,
+                "error": {"code": -32603, "message": str(e)}
+            })
+
+if __name__ == "__main__":
+    main()
