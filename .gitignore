@@ -338,6 +338,8 @@ node_modules
 .config/qt5ct/
 .config/smplayer/
 .config/wallpaper
+.config/opencode/.sisyphus
+.config/.sisyphus
 .luarocks/
 .nix-defexpr/
 .nix-profile
