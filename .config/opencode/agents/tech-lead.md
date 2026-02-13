@@ -8,7 +8,14 @@ tools:
 permission:
   skill:
     "*": "allow"
+default_skills:
+  - pre-action
+  - critical-thinking
+  - justify-decision
 ---
+
+> **MANDATORY**: Before starting any task, load these skills first:
+> `mcp_skill` for each: pre-action, critical-thinking, justify-decision
 
 # Tech Lead Agent
 

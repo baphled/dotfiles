@@ -8,7 +8,13 @@ tools:
 permission:
   skill:
     "*": "allow"
+default_skills:
+  - pre-action
+  - note-taking
 ---
+
+> **MANDATORY**: Before starting any task, load these skills first:
+> `mcp_skill` for each: pre-action, note-taking
 
 # Linux Expert Agent
 

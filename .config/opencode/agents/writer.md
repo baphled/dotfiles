@@ -8,7 +8,14 @@ tools:
 permission:
   skill:
     "*": "allow"
+default_skills:
+  - british-english
+  - note-taking
+  - token-efficiency
 ---
+
+> **MANDATORY**: Before starting any task, load these skills first:
+> `mcp_skill` for each: british-english, note-taking, token-efficiency
 
 # Writer Agent
 

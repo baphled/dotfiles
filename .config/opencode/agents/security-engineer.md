@@ -8,7 +8,14 @@ tools:
 permission:
   skill:
     "*": "allow"
+default_skills:
+  - pre-action
+  - critical-thinking
+  - epistemic-rigor
 ---
+
+> **MANDATORY**: Before starting any task, load these skills first:
+> `mcp_skill` for each: pre-action, critical-thinking, epistemic-rigor
 
 # Security Engineer Agent
 

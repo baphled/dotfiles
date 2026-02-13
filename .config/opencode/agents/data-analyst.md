@@ -8,7 +8,14 @@ tools:
 permission:
   skill:
     "*": "allow"
+default_skills:
+  - epistemic-rigor
+  - question-resolver
+  - note-taking
 ---
+
+> **MANDATORY**: Before starting any task, load these skills first:
+> `mcp_skill` for each: epistemic-rigor, question-resolver, note-taking
 
 # Data Analyst Agent
 

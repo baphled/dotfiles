@@ -8,7 +8,13 @@ tools:
 permission:
   skill:
     "*": "allow"
+default_skills:
+  - pre-action
+  - epistemic-rigor
 ---
+
+> **MANDATORY**: Before starting any task, load these skills first:
+> `mcp_skill` for each: pre-action, epistemic-rigor
 
 # DevOps Agent
 

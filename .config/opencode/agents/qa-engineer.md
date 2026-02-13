@@ -8,7 +8,14 @@ tools:
 permission:
   skill:
     "*": "allow"
+default_skills:
+  - pre-action
+  - bdd-workflow
+  - critical-thinking
 ---
+
+> **MANDATORY**: Before starting any task, load these skills first:
+> `mcp_skill` for each: pre-action, bdd-workflow, critical-thinking
 
 # QA Engineer Agent
 

@@ -8,7 +8,15 @@ tools:
 permission:
   skill:
     "*": "allow"
+default_skills:
+  - pre-action
+  - memory-keeper
+  - clean-code
+  - bdd-workflow
 ---
+
+> **MANDATORY**: Before starting any task, load these skills first:
+> `mcp_skill` for each: pre-action, memory-keeper, clean-code, bdd-workflow
 
 # Senior Engineer Agent
 
