@@ -184,11 +184,13 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
     'chat.params': async (input, output) => {
       // Guard: provider may not be available in all contexts
       if (!input.provider?.info?.id) {
+        console.log(`${LOG_PREFIX} (i) No provider info available`)
         return
       }
 
       // Guard: model may not be available in all contexts
       if (!input.model?.id) {
+        console.log(`${LOG_PREFIX} (i) No model info available`)
         return
       }
 
