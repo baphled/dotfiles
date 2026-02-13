@@ -97,12 +97,16 @@ simulate_import() {
     import_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     local tmplock="${TEST_WORK_DIR}/lock.json"
 
+    local skill_path="skills/${skill_name}"
+    local local_name="vendor-${owner}-${skill_name}"
     jq --arg key "${lock_key}" \
        --arg repo "${owner}/mock-repo" \
+       --arg skill_path "${skill_path}" \
        --arg commit "${commit_hash}" \
        --arg date "${import_date}" \
        --arg name "${original_name}" \
-       '.skills[$key] = {"repo": $repo, "commit": $commit, "imported_at": $date, "original_name": $name, "status": "active"}' \
+       --arg local_name "${local_name}" \
+       '.skills[$key] = {"repo": $repo, "skill_path": $skill_path, "commit": $commit, "imported_at": $date, "original_name": $name, "local_name": $local_name, "status": "ACTIVE"}' \
        "${MOCK_LOCK_FILE}" > "${tmplock}" && mv "${tmplock}" "${MOCK_LOCK_FILE}"
 }
 
@@ -162,12 +166,14 @@ simulate_remove() {
 
     # Verify all required fields are present
     [[ $(echo "${entry}" | jq -r '.repo') == "testowner/mock-repo" ]]
+    [[ $(echo "${entry}" | jq -r '.skill_path') == "skills/lockfile-skill" ]]
     [[ $(echo "${entry}" | jq -r '.commit') != "null" ]]
     [[ $(echo "${entry}" | jq -r '.commit' | wc -c) -ge 40 ]]  # SHA is 40+ chars
     [[ $(echo "${entry}" | jq -r '.imported_at') != "null" ]]
     [[ $(echo "${entry}" | jq -r '.imported_at') =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T ]]
     [[ $(echo "${entry}" | jq -r '.original_name') == "lockfile-skill" ]]
-    [[ $(echo "${entry}" | jq -r '.status') == "active" ]]
+    [[ $(echo "${entry}" | jq -r '.local_name') == "vendor-testowner-lockfile-skill" ]]
+    [[ $(echo "${entry}" | jq -r '.status') == "ACTIVE" ]]
 }
 
 @test "import: strips allowed-tools from frontmatter" {
@@ -388,4 +394,732 @@ HEREDOC
     # Check that required fields are missing (matches Makefile validation)
     ! grep -q "^name:" "${skill_md}"
     ! grep -q "^description:" "${skill_md}"
+}
+
+# =============================================================================
+# Version Tracking Tests (7 tests)
+# =============================================================================
+
+# Helper: simulate an import with enhanced lockfile schema
+simulate_import_v2() {
+    local repo_dir="$1"
+    local skill_name="$2"
+    local owner="${3:-testowner}"
+    local commit_override="${4:-}"
+
+    local dest_dir="${MOCK_VENDOR_DIR}/${owner}/${skill_name}"
+    local skill_md="${repo_dir}/skills/${skill_name}/SKILL.md"
+    local commit_hash
+    if [[ -n "${commit_override}" ]]; then
+        commit_hash="${commit_override}"
+    else
+        commit_hash=$(git -C "${repo_dir}" rev-parse HEAD)
+    fi
+
+    mkdir -p "${dest_dir}"
+    cp "${skill_md}" "${dest_dir}/SKILL.md"
+
+    sed -i '/^allowed-tools:/d' "${dest_dir}/SKILL.md"
+    sed -i '/^allowed_tools:/d' "${dest_dir}/SKILL.md"
+
+    local original_name
+    original_name=$(sed -n '/^---$/,/^---$/p' "${dest_dir}/SKILL.md" | grep "^name:" | head -1 | sed 's/^name:[[:space:]]*//;s/[[:space:]]*$//')
+
+    local lock_key="vendor/${owner}/${skill_name}"
+    local import_date
+    import_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    local skill_path="skills/${skill_name}"
+    local local_name="vendor-${owner}-${skill_name}"
+    local tmplock="${TEST_WORK_DIR}/lock.json"
+
+    jq --arg key "${lock_key}" \
+       --arg repo "${owner}/mock-repo" \
+       --arg skill_path "${skill_path}" \
+       --arg commit "${commit_hash}" \
+       --arg date "${import_date}" \
+       --arg name "${original_name}" \
+       --arg local_name "${local_name}" \
+       '.skills[$key] = {"repo": $repo, "skill_path": $skill_path, "commit": $commit, "imported_at": $date, "original_name": $name, "local_name": $local_name, "status": "ACTIVE"}' \
+       "${MOCK_LOCK_FILE}" > "${tmplock}" && mv "${tmplock}" "${MOCK_LOCK_FILE}"
+}
+
+# Helper: simulate the outdated check logic (no network - uses mock data)
+simulate_outdated_check() {
+    local lock_file="$1"
+    local mock_remote_commits="$2"  # "key1=commit1,key2=commit2" format
+
+    # Parse mock remote commits into associative array
+    declare -A remote_commits
+    IFS=',' read -ra pairs <<< "${mock_remote_commits}"
+    for pair in "${pairs[@]}"; do
+        local k="${pair%%=*}"
+        local v="${pair#*=}"
+        remote_commits["${k}"]="${v}"
+    done
+
+    local output=""
+    output+=$(printf "%-40s %-14s %-14s %s\n" "SKILL" "LOCAL" "REMOTE" "STATUS")
+    output+=$'\n'
+
+    while IFS='|' read -r key repo local_commit skill_path; do
+        local local_short="${local_commit:0:12}"
+        local remote_commit="${remote_commits[${key}]:-}"
+
+        if [[ -z "${remote_commit}" ]]; then
+            output+=$(printf "%-40s %-14s %-14s %s\n" "${key}" "${local_short}" "(error)" "fetch failed")
+        elif [[ "${local_commit}" == "${remote_commit}" ]]; then
+            local remote_short="${remote_commit:0:12}"
+            output+=$(printf "%-40s %-14s %-14s %s\n" "${key}" "${local_short}" "${remote_short}" "up-to-date")
+        else
+            local remote_short="${remote_commit:0:12}"
+            output+=$(printf "%-40s %-14s %-14s %s\n" "${key}" "${local_short}" "${remote_short}" "outdated")
+        fi
+        output+=$'\n'
+    done < <(jq -r '.skills | to_entries[] | select(.value.status == "ACTIVE") | "\(.key)|\(.value.repo)|\(.value.commit)|\(.value.skill_path // "")"' "${lock_file}")
+
+    echo "${output}"
+}
+
+# Helper: simulate the update logic (no network - uses local mock repos)
+simulate_update() {
+    local skill_key="$1"    # e.g. vendor/testowner/my-skill
+    local new_repo_dir="$2" # path to mock repo with new version
+    local lock_file="${MOCK_LOCK_FILE}"
+
+    local entry
+    entry=$(jq --arg key "${skill_key}" '.skills[$key] // empty' "${lock_file}")
+    if [[ -z "${entry}" ]]; then
+        echo "ERROR: Skill '${skill_key}' not found in lockfile" >&2
+        return 1
+    fi
+
+    local local_commit
+    local_commit=$(echo "${entry}" | jq -r '.commit')
+    local skill_path
+    skill_path=$(echo "${entry}" | jq -r '.skill_path // empty')
+    local skill_name
+    skill_name=$(echo "${skill_key}" | awk -F'/' '{print $NF}')
+    local owner
+    owner=$(echo "${skill_key}" | awk -F'/' '{print $(NF-1)}')
+    local dest_dir="${MOCK_SKILLS_DIR}/${skill_key}"
+
+    local new_commit
+    new_commit=$(git -C "${new_repo_dir}" rev-parse HEAD)
+
+    if [[ "${local_commit}" == "${new_commit}" ]]; then
+        echo "UPTODATE"
+        return 0
+    fi
+
+    # Find new SKILL.md
+    local new_skill_md=""
+    if [[ -n "${skill_path}" ]] && [[ -f "${new_repo_dir}/${skill_path}/SKILL.md" ]]; then
+        new_skill_md="${new_repo_dir}/${skill_path}/SKILL.md"
+    else
+        for candidate in \
+            "${new_repo_dir}/skills/${skill_name}/SKILL.md" \
+            "${new_repo_dir}/${skill_name}/SKILL.md" \
+            "${new_repo_dir}/SKILL.md"; \
+        do
+            if [[ -f "${candidate}" ]]; then
+                new_skill_md="${candidate}"
+                break
+            fi
+        done
+    fi
+
+    if [[ -z "${new_skill_md}" ]]; then
+        echo "ERROR: SKILL.md not found in new version" >&2
+        return 1
+    fi
+
+    # Generate diff
+    local current_skill_md="${dest_dir}/SKILL.md"
+    local diff_output=""
+    if [[ -f "${current_skill_md}" ]]; then
+        diff_output=$(diff -u "${current_skill_md}" "${new_skill_md}" \
+            --label "local (${local_commit:0:12})" \
+            --label "remote (${new_commit:0:12})" 2>&1 || true)
+    fi
+
+    # Apply update
+    mkdir -p "${dest_dir}"
+    cp "${new_skill_md}" "${dest_dir}/SKILL.md"
+    sed -i '/^allowed-tools:/d' "${dest_dir}/SKILL.md"
+    sed -i '/^allowed_tools:/d' "${dest_dir}/SKILL.md"
+
+    # Update lockfile
+    local update_date
+    update_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    local new_skill_path="${new_skill_md#${new_repo_dir}/}"
+    new_skill_path="${new_skill_path%/SKILL.md}"
+    local local_name="vendor-${owner}-${skill_name}"
+    local tmplock="${TEST_WORK_DIR}/lock.json"
+
+    jq --arg key "${skill_key}" \
+       --arg commit "${new_commit}" \
+       --arg date "${update_date}" \
+       --arg skill_path "${new_skill_path}" \
+       --arg local_name "${local_name}" \
+       '.skills[$key].commit = $commit | .skills[$key].updated_at = $date | .skills[$key].skill_path = $skill_path | .skills[$key].local_name = $local_name' \
+       "${lock_file}" > "${tmplock}" && mv "${tmplock}" "${lock_file}"
+
+    echo "${diff_output}"
+}
+
+@test "version: lockfile includes skill_path and local_name" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "versioned-skill"
+
+    simulate_import_v2 "${mock_repo}" "versioned-skill" "testowner"
+
+    local lock_key="vendor/testowner/versioned-skill"
+    local entry
+    entry=$(jq --arg key "${lock_key}" '.skills[$key]' "${MOCK_LOCK_FILE}")
+
+    # Verify enhanced schema fields
+    [[ $(echo "${entry}" | jq -r '.skill_path') == "skills/versioned-skill" ]]
+    [[ $(echo "${entry}" | jq -r '.local_name') == "vendor-testowner-versioned-skill" ]]
+    [[ $(echo "${entry}" | jq -r '.original_name') == "versioned-skill" ]]
+    [[ $(echo "${entry}" | jq -r '.repo') == "testowner/mock-repo" ]]
+    [[ $(echo "${entry}" | jq -r '.status') == "ACTIVE" ]]
+}
+
+@test "version: outdated check shows up-to-date for matching commits" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "check-skill"
+
+    simulate_import_v2 "${mock_repo}" "check-skill" "testowner"
+
+    local commit_hash
+    commit_hash=$(git -C "${mock_repo}" rev-parse HEAD)
+
+    # Simulate outdated check with same commit (up-to-date)
+    run simulate_outdated_check "${MOCK_LOCK_FILE}" "vendor/testowner/check-skill=${commit_hash}"
+
+    [[ "$status" -eq 0 ]]
+    [[ "$output" =~ "up-to-date" ]]
+    [[ ! "$output" =~ "outdated" ]]
+}
+
+@test "version: outdated check detects different commits" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "stale-skill"
+
+    simulate_import_v2 "${mock_repo}" "stale-skill" "testowner"
+
+    # Simulate outdated check with different commit
+    local fake_remote_commit="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    run simulate_outdated_check "${MOCK_LOCK_FILE}" "vendor/testowner/stale-skill=${fake_remote_commit}"
+
+    [[ "$status" -eq 0 ]]
+    [[ "$output" =~ "outdated" ]]
+}
+
+@test "version: outdated check handles fetch failure gracefully" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "unreachable-skill"
+
+    simulate_import_v2 "${mock_repo}" "unreachable-skill" "testowner"
+
+    # Simulate outdated check with no remote commit (fetch failure)
+    run simulate_outdated_check "${MOCK_LOCK_FILE}" ""
+
+    [[ "$status" -eq 0 ]]
+    [[ "$output" =~ "fetch failed" ]] || [[ "$output" =~ "(error)" ]]
+}
+
+@test "version: update applies new SKILL.md and updates lockfile" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "updatable-skill"
+
+    # Import v1
+    simulate_import_v2 "${mock_repo}" "updatable-skill" "testowner"
+
+    local old_commit
+    old_commit=$(git -C "${mock_repo}" rev-parse HEAD)
+
+    # Create v2 in the same mock repo (new commit)
+    cat > "${mock_repo}/skills/updatable-skill/SKILL.md" <<EOF
+---
+name: updatable-skill
+description: Updated version of the skill with new content
+---
+
+# Skill: updatable-skill
+
+## What I do
+
+Updated test skill content — version 2.
+EOF
+    git -C "${mock_repo}" add -A
+    git -C "${mock_repo}" commit --quiet -m "Update skill" --author="Test <test@test.com>"
+
+    local new_commit
+    new_commit=$(git -C "${mock_repo}" rev-parse HEAD)
+
+    # Verify commits differ
+    [[ "${old_commit}" != "${new_commit}" ]]
+
+    # Run update
+    run simulate_update "vendor/testowner/updatable-skill" "${mock_repo}"
+
+    [[ "$status" -eq 0 ]]
+
+    # Verify SKILL.md was updated
+    local skill_file="${MOCK_VENDOR_DIR}/testowner/updatable-skill/SKILL.md"
+    grep -q "version 2" "${skill_file}"
+
+    # Verify lockfile commit was updated
+    local updated_commit
+    updated_commit=$(jq -r --arg key "vendor/testowner/updatable-skill" '.skills[$key].commit' "${MOCK_LOCK_FILE}")
+    [[ "${updated_commit}" == "${new_commit}" ]]
+
+    # Verify updated_at field exists
+    local updated_at
+    updated_at=$(jq -r --arg key "vendor/testowner/updatable-skill" '.skills[$key].updated_at' "${MOCK_LOCK_FILE}")
+    [[ "${updated_at}" != "null" ]]
+    [[ "${updated_at}" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T ]]
+}
+
+@test "version: update shows diff output" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "diff-skill"
+
+    simulate_import_v2 "${mock_repo}" "diff-skill" "testowner"
+
+    # Create v2
+    cat > "${mock_repo}/skills/diff-skill/SKILL.md" <<EOF
+---
+name: diff-skill
+description: A skill with changed content for diff testing
+---
+
+# Skill: diff-skill
+
+## What I do
+
+Completely new content that differs from original.
+EOF
+    git -C "${mock_repo}" add -A
+    git -C "${mock_repo}" commit --quiet -m "Change skill content" --author="Test <test@test.com>"
+
+    run simulate_update "vendor/testowner/diff-skill" "${mock_repo}"
+
+    [[ "$status" -eq 0 ]]
+    # diff -u output contains --- and +++ headers and diff markers
+    [[ "$output" =~ "---" ]] || [[ "$output" =~ "+++" ]] || [[ "$output" =~ "@@" ]]
+}
+
+@test "version: update of already-up-to-date skill returns early" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "current-skill"
+
+    simulate_import_v2 "${mock_repo}" "current-skill" "testowner"
+
+    # Run update with same repo (no new commits)
+    run simulate_update "vendor/testowner/current-skill" "${mock_repo}"
+
+    [[ "$status" -eq 0 ]]
+    [[ "$output" =~ "UPTODATE" ]]
+}
+
+@test "version: skill-outdated missing args shows usage" {
+    run make -f "${MAKEFILE_DIR}/Makefile" skill-update 2>&1
+
+    [[ "$status" -ne 0 ]]
+    [[ "$output" =~ "Usage" ]]
+}
+
+@test "version: skill-outdated with empty lockfile exits cleanly" {
+    # Overrides to use our mock lockfile
+    run make -f "${MAKEFILE_DIR}/Makefile" skill-outdated LOCK_FILE="${MOCK_LOCK_FILE}" 2>&1
+
+    [[ "$status" -eq 0 ]]
+}
+
+# =============================================================================
+# Staging Helpers
+# =============================================================================
+
+# Helper: simulate staging a skill (places in .staging/ with STAGED status)
+simulate_stage() {
+    local repo_dir="$1"
+    local skill_name="$2"
+    local owner="${3:-testowner}"
+
+    local staging_dir="${MOCK_SKILLS_DIR}/.staging"
+    local dest_dir="${staging_dir}/${owner}/${skill_name}"
+    local skill_md="${repo_dir}/skills/${skill_name}/SKILL.md"
+    local commit_hash
+    commit_hash=$(git -C "${repo_dir}" rev-parse HEAD)
+
+    mkdir -p "${dest_dir}"
+    cp "${skill_md}" "${dest_dir}/SKILL.md"
+
+    sed -i '/^allowed-tools:/d' "${dest_dir}/SKILL.md"
+    sed -i '/^allowed_tools:/d' "${dest_dir}/SKILL.md"
+
+    local original_name
+    original_name=$(sed -n '/^---$/,/^---$/p' "${dest_dir}/SKILL.md" | grep "^name:" | head -1 | sed 's/^name:[[:space:]]*//;s/[[:space:]]*$//')
+
+    local lock_key="vendor/${owner}/${skill_name}"
+    local import_date
+    import_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    local skill_path="skills/${skill_name}"
+    local local_name="vendor-${owner}-${skill_name}"
+    local tmplock="${TEST_WORK_DIR}/lock.json"
+
+    jq --arg key "${lock_key}" \
+       --arg repo "${owner}/mock-repo" \
+       --arg skill_path "${skill_path}" \
+       --arg commit "${commit_hash}" \
+       --arg date "${import_date}" \
+       --arg name "${original_name}" \
+       --arg local_name "${local_name}" \
+       '.skills[$key] = {"repo": $repo, "skill_path": $skill_path, "commit": $commit, "imported_at": $date, "original_name": $name, "local_name": $local_name, "status": "STAGED"}' \
+       "${MOCK_LOCK_FILE}" > "${tmplock}" && mv "${tmplock}" "${MOCK_LOCK_FILE}"
+}
+
+# Helper: simulate promoting a staged skill (moves .staging/ → vendor/, STAGED → ACTIVE)
+simulate_promote() {
+    local skill_key="$1"  # e.g. vendor/testowner/my-skill
+    local lock_file="${MOCK_LOCK_FILE}"
+
+    local owner
+    owner=$(echo "${skill_key}" | sed 's|^vendor/||' | cut -d'/' -f1)
+    local skill_name
+    skill_name=$(echo "${skill_key}" | sed 's|^vendor/||' | cut -d'/' -f2)
+    local staging_src="${MOCK_SKILLS_DIR}/.staging/${owner}/${skill_name}"
+    local vendor_dest="${MOCK_VENDOR_DIR}/${owner}/${skill_name}"
+
+    if [[ ! -d "${staging_src}" ]]; then
+        echo "ERROR: Staged skill not found: ${staging_src}" >&2
+        return 1
+    fi
+
+    local lock_status
+    lock_status=$(jq -r --arg key "${skill_key}" '.skills[$key].status // "UNKNOWN"' "${lock_file}")
+    if [[ "${lock_status}" != "STAGED" ]]; then
+        echo "ERROR: Skill '${skill_key}' is not in STAGED status (current: ${lock_status})" >&2
+        return 1
+    fi
+
+    # Run collision check if script exists
+    if [[ -x "${COLLISION_SCRIPT}" ]]; then
+        local original_name
+        original_name=$(jq -r --arg key "${skill_key}" '.skills[$key].original_name // ""' "${lock_file}")
+        if [[ -n "${original_name}" ]]; then
+            if ! "${COLLISION_SCRIPT}" "${staging_src}" "${original_name}" 2>&1; then
+                echo "ERROR: Collision detected during promotion" >&2
+                return 1
+            fi
+        fi
+    fi
+
+    # Move from staging to vendor
+    mkdir -p "$(dirname "${vendor_dest}")"
+    mv "${staging_src}" "${vendor_dest}"
+
+    # Clean up empty owner directory in staging
+    local owner_dir="${MOCK_SKILLS_DIR}/.staging/${owner}"
+    if [[ -d "${owner_dir}" ]] && [[ -z "$(ls -A "${owner_dir}" 2>/dev/null)" ]]; then
+        rmdir "${owner_dir}" 2>/dev/null || true
+    fi
+
+    # Update lockfile status
+    local tmplock="${TEST_WORK_DIR}/lock.json"
+    jq --arg key "${skill_key}" \
+       '.skills[$key].status = "ACTIVE"' \
+       "${lock_file}" > "${tmplock}" && mv "${tmplock}" "${lock_file}"
+}
+
+# Helper: list staged skills from lockfile
+simulate_list_staged() {
+    local lock_file="${MOCK_LOCK_FILE}"
+    jq -r '.skills | to_entries[] | select(.value.status == "STAGED") | "\(.key)|\(.value.repo)|\(.value.imported_at)|\(.value.status)"' "${lock_file}"
+}
+
+# =============================================================================
+# Staging Tests (5 tests)
+# =============================================================================
+
+@test "staging: places skill in .staging/ directory" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "staged-skill"
+
+    simulate_stage "${mock_repo}" "staged-skill" "testowner"
+
+    # Verify skill is in .staging/, NOT in vendor/
+    [[ -d "${MOCK_SKILLS_DIR}/.staging/testowner/staged-skill" ]]
+    [[ -f "${MOCK_SKILLS_DIR}/.staging/testowner/staged-skill/SKILL.md" ]]
+    [[ ! -d "${MOCK_VENDOR_DIR}/testowner/staged-skill" ]]
+
+    # Verify lockfile entry has STAGED status
+    local status
+    status=$(jq -r '.skills["vendor/testowner/staged-skill"].status' "${MOCK_LOCK_FILE}")
+    [[ "${status}" == "STAGED" ]]
+}
+
+@test "staging: promoting moves from .staging/ to vendor/" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "promote-skill"
+
+    # Stage first
+    simulate_stage "${mock_repo}" "promote-skill" "testowner"
+    [[ -d "${MOCK_SKILLS_DIR}/.staging/testowner/promote-skill" ]]
+    [[ ! -d "${MOCK_VENDOR_DIR}/testowner/promote-skill" ]]
+
+    # Promote
+    simulate_promote "vendor/testowner/promote-skill"
+
+    # Verify moved to vendor/
+    [[ ! -d "${MOCK_SKILLS_DIR}/.staging/testowner/promote-skill" ]]
+    [[ -d "${MOCK_VENDOR_DIR}/testowner/promote-skill" ]]
+    [[ -f "${MOCK_VENDOR_DIR}/testowner/promote-skill/SKILL.md" ]]
+
+    # Verify lockfile status changed to ACTIVE
+    local status
+    status=$(jq -r '.skills["vendor/testowner/promote-skill"].status' "${MOCK_LOCK_FILE}")
+    [[ "${status}" == "ACTIVE" ]]
+}
+
+@test "staging: promoting runs collision check" {
+    export HOME="${TEST_WORK_DIR}"
+    local skills_base="${TEST_WORK_DIR}/.config/opencode/skills"
+
+    # Create an existing local skill with name "collider"
+    create_skill_md "${skills_base}/local-collider" "collider"
+
+    # Manually stage a skill with the same name "collider" (collision target)
+    local staging_dir="${MOCK_SKILLS_DIR}/.staging/testowner/collider-skill"
+    mkdir -p "${staging_dir}"
+    create_skill_md "${staging_dir}" "collider"
+
+    local tmplock="${TEST_WORK_DIR}/lock.json"
+    jq '.skills["vendor/testowner/collider-skill"] = {"repo": "testowner/mock-repo", "skill_path": "skills/collider-skill", "commit": "abc123def456abc123def456abc123def456abc1", "imported_at": "2026-01-01T00:00:00Z", "original_name": "collider", "local_name": "vendor-testowner-collider-skill", "status": "STAGED"}' \
+        "${MOCK_LOCK_FILE}" > "${tmplock}" && mv "${tmplock}" "${MOCK_LOCK_FILE}"
+
+    # Promote should fail due to collision
+    run simulate_promote "vendor/testowner/collider-skill"
+
+    [[ "$status" -ne 0 ]]
+    [[ "$output" =~ "COLLISION" ]] || [[ "$output" =~ "collision" ]] || [[ "$output" =~ "already exists" ]] || [[ "$output" =~ "Collision" ]]
+}
+
+@test "staging: listing staged skills shows correct output" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "list-skill-a"
+
+    local mock_repo2="${TEST_WORK_DIR}/mock-repo2"
+    create_mock_repo "${mock_repo2}" "list-skill-b"
+
+    # Stage two skills
+    simulate_stage "${mock_repo}" "list-skill-a" "ownerA"
+    simulate_stage "${mock_repo2}" "list-skill-b" "ownerB"
+
+    # Also import one active skill (should NOT appear in staged list)
+    local mock_repo3="${TEST_WORK_DIR}/mock-repo3"
+    create_mock_repo "${mock_repo3}" "active-skill"
+    simulate_import "${mock_repo3}" "active-skill" "ownerC"
+
+    # List staged
+    run simulate_list_staged
+
+    [[ "$status" -eq 0 ]]
+    [[ "$output" =~ "vendor/ownerA/list-skill-a" ]]
+    [[ "$output" =~ "vendor/ownerB/list-skill-b" ]]
+    [[ "$output" =~ "STAGED" ]]
+    # Active skill should not appear
+    [[ ! "$output" =~ "active-skill" ]]
+}
+
+@test "staging: skill-import default routes through staging" {
+    # Verify Makefile default (no DIRECT=1) mentions staging
+    run make -f "${MAKEFILE_DIR}/Makefile" skill-import REPO=fake/repo SKILL=fake-skill 2>&1
+
+    # It will fail (no network) but should mention staging routing
+    # The Makefile routes to skill-stage when DIRECT is not set
+    [[ "$output" =~ "staging" ]] || [[ "$output" =~ "Stage" ]] || [[ "$output" =~ "stage" ]] || [[ "$output" =~ "Routing" ]]
+}
+
+# =============================================================================
+# Version Tracking Tests (4 additional tests)
+# =============================================================================
+
+@test "version: lockfile schema includes all required fields" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "schema-check-skill"
+
+    simulate_import_v2 "${mock_repo}" "schema-check-skill" "testowner"
+
+    local lock_key="vendor/testowner/schema-check-skill"
+    local entry
+    entry=$(jq --arg key "${lock_key}" '.skills[$key]' "${MOCK_LOCK_FILE}")
+
+    # Verify ALL required fields from enhanced schema exist and are non-null
+    local required_fields=("repo" "skill_path" "commit" "imported_at" "original_name" "local_name" "status")
+    for field in "${required_fields[@]}"; do
+        local value
+        value=$(echo "${entry}" | jq -r ".${field}")
+        [[ "${value}" != "null" ]]
+        [[ -n "${value}" ]]
+    done
+
+    # Verify field value formats
+    [[ $(echo "${entry}" | jq -r '.skill_path') == "skills/schema-check-skill" ]]
+    [[ $(echo "${entry}" | jq -r '.local_name') == "vendor-testowner-schema-check-skill" ]]
+    [[ $(echo "${entry}" | jq -r '.status') == "ACTIVE" ]]
+}
+
+@test "version: skill-outdated handles no network gracefully" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "no-net-skill"
+
+    simulate_import_v2 "${mock_repo}" "no-net-skill" "testowner"
+
+    # Simulate outdated check with empty remote data (no network)
+    run simulate_outdated_check "${MOCK_LOCK_FILE}" ""
+
+    # Should not crash — exits cleanly with error indication
+    [[ "$status" -eq 0 ]]
+    [[ "$output" =~ "fetch failed" ]] || [[ "$output" =~ "(error)" ]]
+}
+
+@test "version: skill-update shows diff between versions" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "diff-check-skill"
+
+    simulate_import_v2 "${mock_repo}" "diff-check-skill" "testowner"
+
+    # Create v2 with different content
+    cat > "${mock_repo}/skills/diff-check-skill/SKILL.md" <<EOF
+---
+name: diff-check-skill
+description: Updated description with new content
+---
+
+# Skill: diff-check-skill
+
+## What I do
+
+Completely rewritten content for version 2.
+
+## New section
+
+This section did not exist before.
+EOF
+    git -C "${mock_repo}" add -A
+    git -C "${mock_repo}" commit --quiet -m "Update to v2" --author="Test <test@test.com>"
+
+    run simulate_update "vendor/testowner/diff-check-skill" "${mock_repo}"
+
+    [[ "$status" -eq 0 ]]
+    # diff -u output markers
+    [[ "$output" =~ "---" ]] || [[ "$output" =~ "+++" ]] || [[ "$output" =~ "@@" ]]
+    # Should contain some changed content indicator
+    [[ "$output" =~ "version 2" ]] || [[ "$output" =~ "rewritten" ]] || [[ "$output" =~ "New section" ]]
+}
+
+@test "version: skill-remove also cleans lockfile entry" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "remove-tracked-skill"
+
+    simulate_import_v2 "${mock_repo}" "remove-tracked-skill" "testowner"
+
+    # Verify lockfile has entry with all enhanced fields
+    local entry_before
+    entry_before=$(jq --arg key "vendor/testowner/remove-tracked-skill" '.skills[$key]' "${MOCK_LOCK_FILE}")
+    [[ "${entry_before}" != "null" ]]
+    [[ $(echo "${entry_before}" | jq -r '.skill_path') == "skills/remove-tracked-skill" ]]
+    [[ $(echo "${entry_before}" | jq -r '.local_name') == "vendor-testowner-remove-tracked-skill" ]]
+    [[ $(echo "${entry_before}" | jq -r '.status') == "ACTIVE" ]]
+
+    # Remove the skill
+    simulate_remove "vendor/testowner/remove-tracked-skill"
+
+    # Verify lockfile entry is completely gone
+    local entry_after
+    entry_after=$(jq --arg key "vendor/testowner/remove-tracked-skill" '.skills[$key]' "${MOCK_LOCK_FILE}")
+    [[ "${entry_after}" == "null" ]]
+
+    # Verify directory is gone
+    [[ ! -d "${MOCK_VENDOR_DIR}/testowner/remove-tracked-skill" ]]
+}
+
+# =============================================================================
+# Integration Tests (2 tests)
+# =============================================================================
+
+@test "integration: stage→promote→list workflow works end-to-end" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "e2e-skill"
+
+    # Step 1: Stage the skill
+    simulate_stage "${mock_repo}" "e2e-skill" "e2eowner"
+
+    # Verify staged state
+    [[ -d "${MOCK_SKILLS_DIR}/.staging/e2eowner/e2e-skill" ]]
+    [[ ! -d "${MOCK_VENDOR_DIR}/e2eowner/e2e-skill" ]]
+    local status_staged
+    status_staged=$(jq -r '.skills["vendor/e2eowner/e2e-skill"].status' "${MOCK_LOCK_FILE}")
+    [[ "${status_staged}" == "STAGED" ]]
+
+    # Step 2: List staged — should appear
+    run simulate_list_staged
+    [[ "$output" =~ "vendor/e2eowner/e2e-skill" ]]
+    [[ "$output" =~ "STAGED" ]]
+
+    # Step 3: Promote
+    simulate_promote "vendor/e2eowner/e2e-skill"
+
+    # Verify promoted state
+    [[ ! -d "${MOCK_SKILLS_DIR}/.staging/e2eowner/e2e-skill" ]]
+    [[ -d "${MOCK_VENDOR_DIR}/e2eowner/e2e-skill" ]]
+    [[ -f "${MOCK_VENDOR_DIR}/e2eowner/e2e-skill/SKILL.md" ]]
+    local status_active
+    status_active=$(jq -r '.skills["vendor/e2eowner/e2e-skill"].status' "${MOCK_LOCK_FILE}")
+    [[ "${status_active}" == "ACTIVE" ]]
+
+    # Step 4: List staged — should NOT appear anymore
+    run simulate_list_staged
+    [[ ! "$output" =~ "e2e-skill" ]]
+
+    # Verify all lockfile fields preserved through transition
+    local entry
+    entry=$(jq '.skills["vendor/e2eowner/e2e-skill"]' "${MOCK_LOCK_FILE}")
+    [[ $(echo "${entry}" | jq -r '.repo') == "e2eowner/mock-repo" ]]
+    [[ $(echo "${entry}" | jq -r '.skill_path') == "skills/e2e-skill" ]]
+    [[ $(echo "${entry}" | jq -r '.local_name') == "vendor-e2eowner-e2e-skill" ]]
+    [[ $(echo "${entry}" | jq -r '.commit') != "null" ]]
+}
+
+@test "integration: remove also cleans empty staging directories" {
+    local mock_repo="${TEST_WORK_DIR}/mock-repo"
+    create_mock_repo "${mock_repo}" "cleanup-skill"
+
+    # Stage a skill (creates .staging/cleanowner/cleanup-skill/)
+    simulate_stage "${mock_repo}" "cleanup-skill" "cleanowner"
+
+    # Verify staging directory structure exists
+    [[ -d "${MOCK_SKILLS_DIR}/.staging/cleanowner/cleanup-skill" ]]
+    [[ -d "${MOCK_SKILLS_DIR}/.staging/cleanowner" ]]
+
+    # Promote it first (moves to vendor/)
+    simulate_promote "vendor/cleanowner/cleanup-skill"
+
+    # Verify staging owner dir was cleaned up during promote
+    [[ ! -d "${MOCK_SKILLS_DIR}/.staging/cleanowner" ]]
+
+    # Now remove the active skill from vendor/
+    simulate_remove "vendor/cleanowner/cleanup-skill"
+
+    # Verify vendor directory and owner dir cleaned up
+    [[ ! -d "${MOCK_VENDOR_DIR}/cleanowner/cleanup-skill" ]]
+    [[ ! -d "${MOCK_VENDOR_DIR}/cleanowner" ]]
+
+    # Verify lockfile cleaned
+    local entry
+    entry=$(jq '.skills["vendor/cleanowner/cleanup-skill"]' "${MOCK_LOCK_FILE}")
+    [[ "${entry}" == "null" ]]
 }
