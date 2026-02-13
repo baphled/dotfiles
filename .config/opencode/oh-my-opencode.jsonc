@@ -1,0 +1,71 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "disabled_mcps": [
+    "websearch"
+  ],
+  "git_master": {
+    "commit_footer": false,
+    "include_co_authored_by": false
+  },
+  "sisyphus_agent": {
+    "disabled": false,
+    "default_builder_enabled": false,
+    "planner_enabled": true,
+    "replace_plan": true
+  },
+  "ralph_loop": {
+    "enabled": true,
+    "default_max_iterations": 25
+  },
+  "comment_checker": {
+    "custom_prompt": "VIOLATION: Inline comments detected. This project strictly forbids inline comments. Only docblock-style documentation (JSDoc, GoDoc, PHPDoc, Python docstrings) is permitted on functions, methods, classes, and exported types. Remove ALL inline comments immediately and replace with proper docblocks where the comment documents a public API. Trivial or obvious comments must be deleted entirely.\n\nDetected comments:\n{{comments}}"
+  },
+  "notification": {
+    "force_enable": true
+  },
+  "claude_code": {
+    "mcp": true,
+    "commands": true,
+    "skills": true,
+    "agents": true,
+    "hooks": true,
+    "plugins": true,
+    "plugins_override": {
+      "ralph-loop": false
+    }
+  },
+  "agents": {
+    "sisyphus": {
+      "prompt_append": "MANDATORY DISCIPLINE (from AGENTS.md):\n1. PRE-ACTION: Before significant actions, stop and think. Clarify intent, evaluate >=2 approaches, choose consciously.\n2. MEMORY-KEEPER: Always search the memory MCP before investigating. Capture discoveries, context, and rationale.\n3. PARALLEL EXECUTION: Fan out independent tasks in a single message with multiple Task calls.\n4. Use the memory MCP (create_entities, search_nodes) to store and retrieve knowledge.\n5. Use the vault-rag MCP to query Obsidian knowledge base before duplicating research.\n6. British English in all documentation and communication.\n\nCOMMIT WORKFLOW (HYBRID - git_master planning + make ai-commit execution):\n- Use git_master for commit PLANNING (atomic splitting, style detection, dependency ordering)\n- For NEW COMMITS: Write each commit message to /tmp/commit.txt, then run: make ai-commit FILE=/tmp/commit.txt\n- For FIXUP COMMITS: Use git commit --fixup=<hash> directly (fixups get squashed, no attribution needed)\n- BEFORE first commit: Run make check-compliance\n- NEVER use raw 'git commit -m' for new commits - always use make ai-commit\n- The make ai-commit script auto-detects AI_AGENT from $OPENCODE env and requires AI_MODEL",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "deny"
+      }
+    }
+  },
+  "experimental": {
+    "dynamic_context_pruning": {
+      "enabled": true,
+      "notification": "minimal",
+      "turn_protection": {
+        "enabled": true,
+        "turns": 3
+      },
+      "strategies": {
+        "deduplication": {
+          "enabled": true
+        },
+        "supersede_writes": {
+          "enabled": true,
+          "aggressive": false
+        },
+        "purge_errors": {
+          "enabled": true,
+          "turns": 5
+        }
+      }
+    }
+  }
+}

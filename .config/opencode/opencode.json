@@ -1,6 +1,42 @@
 {
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "memory": {
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "type": "local"
+    },
+    "vault-rag": {
+      "command": [
+        "/home/baphled/.local/bin/mcp-vault-server"
+      ],
+      "type": "local"
+    }
+  },
   "plugin": [
-    "opencode-anthropic-auth@0.0.13"
+    "opencode-anthropic-auth@0.0.13",
+    "oh-my-opencode"
   ],
-  "$schema": "https://opencode.ai/config.json"
+  "provider": {
+    "ollama": {
+      "models": {
+        "glm-4.7:cloud": {
+          "_launch": true,
+          "name": "GLM 4.7 Cloud"
+        },
+        "kimi-k2.5:cloud": {
+          "_launch": true,
+          "name": "Kimi K2.5 Cloud"
+        }
+      },
+      "name": "Ollama (local)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      }
+    }
+  }
 }
