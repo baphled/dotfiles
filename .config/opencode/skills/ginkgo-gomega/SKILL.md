@@ -1,6 +1,7 @@
 ---
 name: ginkgo-gomega
 description: Ginkgo v2 BDD testing framework and Gomega assertions (Go)
+category: Testing BDD
 ---
 
 # Skill: ginkgo-gomega
