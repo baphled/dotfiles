@@ -116,3 +116,4 @@ It("handles nested tables", func() {
 - `ginkgo-gomega` - Expressive assertions for proof tests
 - `critical-thinking` - Rigorous analysis of claims
 - `debug-test` - When proof tests reveal unexpected behaviour
+- `evaluate-change-request` - Evidence-based evaluation of change requests

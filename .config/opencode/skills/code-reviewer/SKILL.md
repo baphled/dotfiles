@@ -109,3 +109,4 @@ Maybe `transformEventsToTimeline`?
 - `security` - Security-specific review depth
 - `pre-merge` - Final validation before merging
 - `respond-to-review` - Handling review feedback received
+- `evaluate-change-request` - Evaluating change requests from reviews

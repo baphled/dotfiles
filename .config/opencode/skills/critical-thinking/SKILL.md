@@ -31,3 +31,4 @@ I enforce rigorous thinking: challenge claims with evidence, spot weak reasoning
 - With `epistemic-rigor`: validate knowledge state before deciding  
 - With `assumption-tracker`: identify and test hidden assumptions
 - With `prove-correctness`: convert assumptions into verified facts
+- With `evaluate-change-request`: Evaluation engine for change requests

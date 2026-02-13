@@ -34,3 +34,4 @@ Show another way to approach problems in checklist-discipline.
 
 - `clean-code` – Applies across all domains
 - `critical-thinking` – For evaluating when to use this skill
+- `evaluate-change-request` - Tracks change request completion
