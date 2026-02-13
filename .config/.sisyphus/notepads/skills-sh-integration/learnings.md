@@ -1,3 +1,60 @@
+## Task 10: Skill Discovery — Proactive skills.sh Suggestion Skill
+
+### Key Design Decisions
+
+1. **Frontmatter uses `category: meta` and `compatibility: agent`** — The task spec required specific frontmatter fields. The original draft used `category: Agent Guidance` which didn't match. Meta category is appropriate since this skill governs agent behaviour rather than domain knowledge.
+
+2. **Staging-first installation flow** — When a user agrees to install a discovered skill, the skill instructs agents to use `make skill-stage` → `make skill-staged` → `make skill-promote` rather than direct import. This leverages the Task 6 staging workflow and keeps collision detection in the loop.
+
+3. **70% confidence threshold** — Rather than a binary "suggest or don't", the skill defines a confidence threshold. This prevents low-quality suggestions that erode user trust.
+
+4. **Opt-out mechanism** — Added guardrail 7: "If user declines or says 'don't suggest skills', honour that for the rest of the session." This wasn't in the original draft but the task spec required it.
+
+5. **Senior-engineer agent already had the reference** — Line 43 of `senior-engineer.md` already included `skill-discovery` in always-active skills from a previous task. No modification needed.
+
+### 10-Touchpoint Integration Status
+
+| # | Touchpoint | Status | Notes |
+|---|-----------|--------|-------|
+| 1 | SKILL.md placement | ✅ | `~/.config/opencode/skills/skill-discovery/SKILL.md` |
+| 2 | Memory graph | 📋 | Entity: `skill-discovery`, type: `Skill`, relations to `core-auto-detect`, `tool-usage-discipline`, `new-skill` |
+| 3 | Skills Inventory | 📋 | Add to Meta category, increment total count |
+| 4 | Skills Dashboard | 📋 | Add to Meta/Session Knowledge group |
+| 5 | Obsidian KB | 📋 | Template at `Skills/Meta/Skill Discovery.md` |
+| 6 | Agent loading | ✅ | Already in `senior-engineer.md` always-active |
+| 7 | Command references | 📋 | Link from `import-skill` command |
+| 8 | Related skills | ✅ | Back-references to `core-auto-detect`, `tool-usage-discipline`, `new-skill` |
+| 9 | Workflow placement | 📋 | Meta/discovery workflow |
+| 10 | Relationship Mapping | 📋 | Add to skill relationship graph |
+
+### Gotchas
+
+- **Existing SKILL.md**: The file already existed from a previous session but with wrong frontmatter (`category: Agent Guidance` instead of `category: meta`). Always verify frontmatter matches spec before assuming done.
+- **Agent reference pre-existed**: The `senior-engineer.md` already had `skill-discovery` in always-active skills — no edit needed. Check before modifying.
+
+---
+
+## Task 9: 10-Touchpoint Integration - Automated + AI-Assisted Flow
+
+### Key Patterns
+
+1. **Bash-based integration reporting** — The `skill-integrate.sh` script generates a markdown report with actionable checklists (`[✅]` vs `[📋]`). This provides a clear definition of "Done" without risky automatic file modifications.
+2. **Regex-based keyword matching** — For agent/command suggestions, simple regex matching (`grep -E`) works but requires filtering short words (`awk 'length($0) > 4'`) to avoid noise.
+3. **Makefile orchestration** — Integrating the report into `make skill-integrate` keeps the workflow unified.
+4. **Template generation** — The script outputs copy-pasteable JSON for tools (memory-keeper) and markdown for docs (Obsidian), bridging the gap between automation and human review.
+
+### Touchpoint Coverage
+
+- **Automated**: Verification of file placement, inventory counts, memory graph JSON generation.
+- **AI-Assisted**: KB doc templates, agent/command/workflow suggestions.
+
+### Gotchas
+
+- **Stop-word filtering**: Without filtering short words, keyword matching matches everything (e.g., "for", "and", "skill").
+- **Path construction**: String replacement (`${CAT// /-}`) is needed for directory names with spaces.
+
+---
+
 ## Task 8: BATS Tests for Staging and Version Tracking
 
 ### Key Patterns
