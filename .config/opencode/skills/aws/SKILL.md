@@ -1,6 +1,7 @@
 ---
 name: aws
 description: AWS cloud services including EC2, ECS, S3, Lambda, RDS for scalable cloud-native applications
+category: DevOps Operations
 ---
 
 # Skill: aws

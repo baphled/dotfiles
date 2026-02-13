@@ -1,6 +1,7 @@
 ---
 name: nix
 description: Nix package manager for reproducible builds, flakes, nix-shell development environments, and declarative package management
+category: DevOps Operations
 ---
 
 # Skill: nix

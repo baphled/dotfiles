@@ -1,6 +1,7 @@
 ---
 name: cpp
 description: C++ for embedded systems, Arduino, ESP8266/ESP32, PlatformIO, and modern C++ idioms
+category: Languages
 ---
 
 # Skill: cpp

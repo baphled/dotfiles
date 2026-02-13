@@ -1,6 +1,7 @@
 ---
 name: heroku
 description: Heroku PaaS for rapid prototyping and deployment with managed infrastructure and add-ons
+category: DevOps Operations
 ---
 
 # Skill: heroku
