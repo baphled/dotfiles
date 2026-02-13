@@ -13,9 +13,12 @@
  */
 
 import type { Plugin } from '@opencode-ai/plugin'
+import { tool } from '@opencode-ai/plugin'
+import { z } from 'zod'
 import { HealthManager } from './lib/provider-health'
 import { getFallbackChain, getProviderMetadata } from './lib/fallback-config'
 import type { ProviderEntry } from './lib/fallback-config'
+import { existsSync, unlinkSync } from 'fs'
 
 // --- Constants ---
 
@@ -103,6 +106,26 @@ function parseRetryAfter(value: string | undefined): number {
   }
 
   return DEFAULT_RETRY_AFTER_SECONDS
+}
+
+/**
+ * Return emoji for provider status
+ */
+function statusEmoji(status: string): string {
+  switch (status) {
+    case 'healthy':
+      return '✅'
+    case 'degraded':
+      return '⚠️'
+    case 'rate_limited':
+      return '🚫'
+    case 'down':
+      return '❌'
+    case 'unknown':
+      return '⚪'
+    default:
+      return '❓'
+  }
 }
 
 // --- Failover state (per-session, in-memory) ---
@@ -326,6 +349,145 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
           // since the session.error event already captured the root cause.
         }
       }
+    },
+
+    /**
+     * tool hook: Register the provider-health custom tool
+     * Displays provider health state in markdown table format.
+     * Supports filters: --provider, --tier, --reset
+     */
+    tool: {
+      'provider-health': tool({
+        description: 'Display provider health status and failover chain information',
+        args: {
+          provider: z.string().optional().describe('Show health for specific provider (copilot, anthropic, ollama)'),
+          tier: z.string().optional().describe('Show fallback chain for specific tier (T0, T1, T2, T3)'),
+          reset: z.boolean().optional().describe('Clear health state file and reset to defaults'),
+        },
+        execute: async (args) => {
+          // Handle reset
+          if (args.reset) {
+            const cacheDir = `${process.env.HOME}/.cache/opencode`
+            const healthFile = `${cacheDir}/provider-health.json`
+
+            if (existsSync(healthFile)) {
+              try {
+                unlinkSync(healthFile)
+                return '✅ Health state reset successfully. All providers returned to unknown status.'
+              } catch (err) {
+                return `❌ Failed to reset health state: ${err instanceof Error ? err.message : String(err)}`
+              }
+            }
+
+            return '✅ Health state already clean (no file to reset).'
+          }
+
+          // Get current health data
+          const data = healthManager.getAllHealthData()
+
+          // Handle provider-specific filter
+          if (args.provider) {
+            const providerName = args.provider.toLowerCase()
+            const state = healthManager.getProviderState(providerName)
+
+            if (!state || state.status === 'unknown') {
+              return `No health data for provider: ${providerName}`
+            }
+
+            const meta = getProviderMetadata(providerName)
+            const rateLimitInfo = state.rateLimitUntil
+              ? `Rate limited until ${state.rateLimitUntil}`
+              : 'Not rate limited'
+
+            return `## Provider Health: ${providerName}
+
+| Metric | Value |
+|--------|-------|
+| Status | ${state.status} |
+| Success Rate | ${(state.successRate * 100).toFixed(1)}% |
+| P95 Latency | ${state.latencyP95}ms |
+| Requests | ${state.requestCount} |
+| Failures | ${state.failureCount} |
+| Cost Model | ${meta.costModel} |
+| Rate Limit Type | ${meta.rateLimit.type} |
+| Rate Limit Status | ${rateLimitInfo} |
+| Last Checked | ${state.lastChecked} |
+${state.lastError ? `| Last Error | ${state.lastError.status} - ${state.lastError.message} |` : ''}
+`
+          }
+
+          // Handle tier-specific filter
+          if (args.tier) {
+            const tierName = args.tier.toUpperCase()
+            const chain = getFallbackChain(tierName)
+
+            if (chain.length === 0) {
+              return `Unknown tier: ${tierName}`
+            }
+
+            let output = `## Fallback Chain: ${tierName}\n\n| Order | Provider | Model | Status | Success Rate |\n|-------|----------|-------|--------|---------------|\n`
+
+            for (let i = 0; i < chain.length; i++) {
+              const entry = chain[i]
+              const state = healthManager.getProviderState(entry.provider)
+              const status = state.status === 'unknown' ? '⚪ unknown' : `${statusEmoji(state.status)} ${state.status}`
+              const successRate = `${(state.successRate * 100).toFixed(1)}%`
+
+              output += `| ${i + 1} | ${entry.provider} | ${entry.model} | ${status} | ${successRate} |\n`
+            }
+
+            return output
+          }
+
+          // Full health summary (all providers)
+          const providers = Object.keys(data.providers)
+
+          if (providers.length === 0) {
+            return `## Provider Health Summary
+
+No health data collected yet. Providers will appear here after first use.
+
+### Available Providers
+- **copilot** (T1/T2)
+- **anthropic** (T1/T2/T3)
+- **ollama** (T0/T1/T2)
+`
+          }
+
+          let output = `## Provider Health Summary
+
+Last Updated: ${data.lastUpdated}
+
+| Provider | Status | Success Rate | P95 Latency | Requests | Cost Model |
+|----------|--------|--------------|-------------|----------|------------|
+`
+
+          for (const providerName of ['copilot', 'anthropic', 'ollama']) {
+            const state = data.providers[providerName] || healthManager.getProviderState(providerName)
+            const meta = getProviderMetadata(providerName)
+            const status = state.status === 'unknown' ? '⚪ unknown' : `${statusEmoji(state.status)} ${state.status}`
+            const successRate = `${(state.successRate * 100).toFixed(1)}%`
+            const latency = state.latencyP95 > 0 ? `${state.latencyP95}ms` : '—'
+
+            output += `| ${providerName} | ${status} | ${successRate} | ${latency} | ${state.requestCount} | ${meta.costModel} |\n`
+          }
+
+          output += `\n### Tier Fallback Chains\n\n`
+
+          for (const tier of ['T1', 'T2', 'T3']) {
+            const chain = getFallbackChain(tier)
+            const providers = chain.map((e) => `${e.provider}/${e.model}`).join(' → ')
+            output += `- **${tier}**: ${providers}\n`
+          }
+
+          output += `\n### Usage\n\n`
+          output += `- \`provider-health --provider=copilot\` — Show copilot-specific health\n`
+          output += `- \`provider-health --tier=T1\` — Show T1 fallback chain with health status\n`
+          output += `- \`provider-health --reset\` — Clear health state and start fresh\n`
+
+          return output
+        },
+      }),
     },
   }
 }
