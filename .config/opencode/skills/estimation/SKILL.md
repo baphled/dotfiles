@@ -1,6 +1,7 @@
 ---
 name: estimation
 description: Estimate work effectively - break down tasks, account for uncertainty, evaluate complexity
+category: Workflow Orchestration
 ---
 
 # Skill: estimation

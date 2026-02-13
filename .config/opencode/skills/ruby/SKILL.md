@@ -1,6 +1,7 @@
 ---
 name: ruby
 description: Ruby development, RubyGems, Rails, clean code practices, and idiomatic Ruby
+category: Languages
 ---
 
 # Skill: ruby

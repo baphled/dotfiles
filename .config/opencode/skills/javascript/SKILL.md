@@ -1,6 +1,7 @@
 ---
 name: javascript
 description: JavaScript/TypeScript, Vue.js, Node.js, async patterns, and modern ES6+ practices
+category: Languages
 ---
 
 # Skill: javascript
