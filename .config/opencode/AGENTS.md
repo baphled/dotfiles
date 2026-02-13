@@ -149,6 +149,35 @@ For each change request, you MUST provide:
 2. **Anthropic for T3** — Opus not available on Copilot Pro (needs Pro+)
 3. **Overflow** — If Copilot 300 requests exhausted, fall back to Anthropic direct
 4. **Cross-provider fallback** — If one provider is down, try same-tier model from other
+5. **Automatic failover on rate limit** — If primary provider returns 429 or 503, immediately switch to next healthy provider in same tier
+6. **Tier degradation** — If all providers in current tier are unhealthy, degrade to next lower tier (T3→T2→T1→T0)
+7. **Ollama local fallback** — Ollama serves as T0 last-resort fallback, always available when other providers are exhausted
+
+### Provider Failover
+
+When a provider becomes rate-limited or unhealthy, the system automatically switches to the next available provider in the fallback chain for that tier. This ensures uninterrupted service without manual intervention.
+
+#### Fallback Chains by Tier
+
+| Tier | Primary | Secondary | Tertiary | Quaternary | Fallback |
+|------|---------|-----------|----------|-----------|----------|
+| **T1** | Copilot GPT-4o-mini | Anthropic Haiku | Ollama local | — | T0 |
+| **T2** | Copilot GPT-4o | Anthropic Sonnet | Copilot Claude Sonnet | Ollama local | T0 |
+| **T3** | Anthropic Opus | Copilot o3-mini | Degrade to T2 | — | T0 |
+| **T0** | Ollama granite4-tools | Ollama qwen2.5:7b | — | — | None |
+
+#### Health State Tracking
+
+The system maintains health state for each provider with the following metrics:
+
+- **Status**: `healthy`, `degraded`, `rate_limited`, or `down`
+- **Success Rate**: Rolling window of last 50 requests
+- **Latency P95**: 95th percentile latency in milliseconds
+- **Last Error**: Timestamp, message, and HTTP status code
+- **Rate Limit Expiry**: ISO timestamp when rate limit expires (null if not limited)
+- **Circuit Breaker**: 3 failures in 5 minutes → `degraded`; 5 failures → `down`
+
+Health state persists to `~/.cache/opencode/provider-health.json` and survives session restarts.
 
 ### Delegation Examples
 
@@ -180,6 +209,42 @@ task(category="deep", model="copilot/gpt-4o", run_in_background=false)          
 - **NOT available:** Claude Opus (Pro+), o1 (Pro+)
 - **Monthly limit:** 300 premium requests — track usage
 - **When exhausted:** Fall back to Anthropic direct API
+
+### Provider Health Monitoring
+
+Monitor and manage provider health using the `provider-health` tool:
+
+**Check full health summary:**
+```
+provider-health
+```
+
+**Check specific provider:**
+```
+provider-health --provider=copilot
+```
+
+**Check fallback chain for tier:**
+```
+provider-health --tier=T1
+```
+
+**Reset health state:**
+```
+provider-health --reset
+```
+
+**Health state file location:** `~/.cache/opencode/provider-health.json`
+
+The health state file contains per-provider metrics (status, success rate, latency, last error, rate limit expiry) and is automatically updated as requests are made. Use `jq` to query the file directly:
+
+```bash
+# View all provider statuses
+jq '.providers | keys[] as $p | {provider: $p, status: .[$p].status}' ~/.cache/opencode/provider-health.json
+
+# Check if a provider is rate-limited
+jq '.providers.copilot.status' ~/.cache/opencode/provider-health.json
+```
 
 ### Red Flags
 
