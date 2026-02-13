@@ -1,6 +1,7 @@
 ---
 name: research
 description: Systematic research and investigation for understanding codebases and technologies
+category: Session Knowledge
 ---
 
 # Skill: research

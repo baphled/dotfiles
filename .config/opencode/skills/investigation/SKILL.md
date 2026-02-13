@@ -1,6 +1,7 @@
 ---
 name: investigation
 description: Systematic codebase investigation producing structured Obsidian documentation with DataviewJS auto-indexing
+category: Workflow Orchestration
 ---
 
 # Skill: investigation
