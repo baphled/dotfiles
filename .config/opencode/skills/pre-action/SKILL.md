@@ -1,6 +1,7 @@
 ---
 name: pre-action
 description: Mandatory decision framework - clarify goal, evaluate options, choose consciously before acting
+category: Core Universal
 ---
 
 # Skill: pre-action
