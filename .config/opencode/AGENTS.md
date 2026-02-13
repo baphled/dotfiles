@@ -1,243 +1,205 @@
 # OpenCode Agent System - Mandatory Requirements
 
-**Non-negotiable requirements for correctness, speed, consistency.**
-
----
-
-## Always-Active Skills (MANDATORY)
-
-Load with EVERY session:
-1. **`pre-action`** - Stop, clarify, evaluate options, choose consciously
-2. **`memory-keeper`** - Read before write, capture discoveries
-3. **`token-cost-estimation`** - Estimate costs before starting work
-
-**NON-NEGOTIABLE.**
-
----
-
-## Pre-Action (MANDATORY)
-
-Before significant actions:
-1. Stop and think
-2. Clarify intent (goal, constraints, success)
-3. Evaluate ≥2 approaches
-4. Choose consciously
-5. Verify understanding
-
-Applies to: Major code changes, deployments, irreversible actions, architecture, unclear requirements.
-
----
-
-## Memory-Keeper (MANDATORY)
-
-### Principles
-1. Capture context + why (not just what)
-2. Make searchable
-3. Verify accuracy
-4. Link discoveries
-5. **Search memory BEFORE investigating**
-
-### Triggers
-
-**Discovery:**
-```
-DISCOVERED: [what]
-CONTEXT: [where/how]
-IMPLICATION: [why matters]
-→ Store as memory entity
-```
-
-**Change:**
-```
-CHANGED: [what]
-FROM → TO: [behavior]
-REASON: [why]
-IMPACT: [affects]
-→ Store + update related entities
-```
-
----
-
-## Token Cost Estimation (MANDATORY)
-
-### Triggers
-Invoke at session start:
-```
-SESSION START:
-  Goal: [objective]
-  Complexity: [tier]
-  Duration: [estimate]
-  → Generate cost breakdown
-```
-
-### Breakdown Format
-```
-| Phase | Tokens | Notes |
-|-------|--------|-------|
-| Investigation | X | |
-| Implementation | Y | |
-| Verification | Z | |
-| Total | X+Y+Z | |
-```
-
-### Optimisation Workflow
-1. Estimate upfront (token-cost-estimation)
-2. Apply efficiency techniques (token-efficiency)
-3. Parallelise where possible (parallel-execution)
-4. Manage scope to budget (scope-management)
-5. Track and compare (memory-keeper)
-
-### Integration Skills
-- `estimation` - Complexity evaluation
-- `time-management` - Duration factors
-- `task-tracker` - Progress + complexity
-- `scope-management` - Resource identification
-- `token-efficiency` - Reduction techniques
-- `parallel-execution` - Efficiency metrics
-
----
-
-## Orchestration (MANDATORY)
-
-### Execution
-1. User → /command
-2. Select agent
-3. Load always-active skills
-4. Evaluate context
-5. Load contextual skills (language/task/domain)
-6. Execute
-7. Store in memory
-
-### Progressive Disclosure
-- Load ONLY what's needed
-- Skills ≤5KB, vault for details
-- Never load all skills
-
----
-
-## Memory & Knowledge (MANDATORY)
-
-### MCP Services
-1. **memory** - Session/project state, search before investigating
-2. **vault-rag** - Obsidian knowledge, query before duplicating
-
-### Discipline
-- Use skills for domain knowledge
-- Use MCP over manual lookups
-- Never duplicate knowledge
-- Search then investigate
-- Store all discoveries
-
----
-
-## Parallel Execution (MANDATORY)
-
-### When to Parallel
-**Independent tasks** (no output dependencies, no shared state, order irrelevant):
-- Read multiple files
-- Run tests in different packages
-- Search directories
-- Multiple checks (lint/test/arch)
-
-**Dependent tasks** (MUST sequence):
-- Write → Read
-- Branch → Commit
-- Build → Test
-- Investigate → Fix → Verify
-
-### Patterns
-
-**1. Fan-Out Investigation**
-```
-ONE question → MANY agents → COMBINE
-```
-
-**2. Parallel Verification**
-```
-ONE change → MANY checks → GATHER
-```
-
-**3. Scatter-Gather Research**
-```
-ONE bug → MANY investigations → IDENTIFY root cause
-```
-
-### Execution Rule
-**MUST use single message with multiple Task calls:**
-
-```
-✗ Sequential: Task 1 → wait → Task 2 → wait
-✓ Parallel: Single message with Task 1, Task 2, Task 3, Task 4
-```
-
----
-
-## Task Completion (MANDATORY)
-
-### Definition of Done
-See `task-completer` skill for full checklist.
-
-**Core requirements:**
-- Code compiles, tests pass, coverage ≥95%
-- No linter warnings, no TODOs
-- Code in correct layer, architecture passes
-- Happy/error/edge cases tested
-- Exports documented
-- No debug code, Boy Scout Rule applied
-- Changes committed
-- `make check-compliance` passes
-
-### Skip Reasons (MANDATORY)
-When skipping checklist items:
-```
-[SKIP] Item
-    SKIPPING: [what]
-    REASON: [why]
-    IMPACT: [consequences]
-```
-**NEVER silently skip.**
-
-### Task Tracking (MANDATORY)
-- Update checklist IMMEDIATELY after each step
-- Mark complete as you finish (NO batching)
-- ONE task in_progress at a time
-- Complete before starting new
-
----
-
-## Agent Definition (MANDATORY)
-
-```yaml
----
-description: [role]
-mode: subagent
-tools: {write: bool, edit: bool, bash: bool}
-permission:
-  skill: {"*": "allow"}
----
-```
-
----
-
 ## Commit Rules (MANDATORY - NO EXCEPTIONS)
 
-**CRITICAL:** All commits MUST follow these rules:
+**CRITICAL:** All commits MUST follow the hybrid git_master workflow:
 
-1. **NEVER use `git commit` directly**
-2. **ALWAYS use `/commit` command with MANDATORY AI attribution**
-3. **ALWAYS verify AI_AGENT and AI_MODEL environment variables are correct**
-4. **Format (NO EXCEPTIONS):**
-   ```bash
-   AI_AGENT="Opencode" AI_MODEL="Claude Opus 4.5" \
-     make ai-commit FILE=/tmp/commit.txt
-   ```
+### Hybrid Workflow: git_master Planning + make ai-commit Execution
+
+1. **Use git_master skill for PLANNING:**
+   - Atomic commit splitting (3+ files → 2+ commits minimum)
+   - Style detection from git log history
+   - Dependency ordering (utilities → models → services → endpoints)
+   - Test pairing (implementation + test in same commit)
+
+2. **For NEW COMMITS:**
+   - Write commit message to `/tmp/commit.txt`
+   - Run: `make ai-commit FILE=/tmp/commit.txt`
+   - This adds `AI-Generated-By: Opencode (Model)` and `Reviewed-By: <name>` trailers
+   - NEVER use raw `git commit -m` for new commits
+
+3. **For FIXUP COMMITS:**
+   - Use `git commit --fixup=<hash>` directly
+   - Fixups get squashed via `git rebase -i --autosquash`, no attribution needed
+
+4. **BEFORE first commit in session:**
+   - Run `make check-compliance`
+   - Ensure tests pass and coverage ≥ 95%
 
 **Why this is MANDATORY:**
-- Ensures proper attribution of AI-generated code
+- Ensures proper attribution of AI-generated code (via make ai-commit)
 - Maintains audit trail of which AI assisted
 - Required for legal and transparency compliance
+- Leverages git_master's superior atomic splitting and style detection
 
-**If you use `git commit` directly, you have violated a critical rule.**
+**If you use raw `git commit -m` for new commits, you have violated a critical rule.**
+
+---
+
+## Change Request Verification (MANDATORY)
+
+When addressing change requests, comments, or review feedback:
+
+### Verification Workflow
+1. **Identify** - Locate each specific request/comment
+2. **Understand** - What exactly is being asked? (not assumptions)
+3. **Verify** - Read the actual code to confirm change was made
+4. **Document** - Show evidence that change was applied
+5. **Report** - Summarize all addressed requests with line references
+
+### Evidence Requirements
+For each change request, you MUST provide:
+- **File location** - `file_path:line_number` format
+- **Before state** - What was there originally
+- **After state** - What is there now
+- **Verification** - Proof the change exists in current code
+- **Status** - ADDRESSED, FALSE POSITIVE, or REJECTED (with reason)
+
+### Handling Different Request Types
+
+**Real Issues** (actual code/docs that need changes):
+- Make the change
+- Verify in code (use Read tool)
+- Document with exact line references
+- Mark as ADDRESSED
+
+**False Positives** (requests for non-existent files/code):
+- Verify file/code doesn't exist
+- Document why it's not applicable
+- Mark as FALSE POSITIVE
+- Include reason (e.g., "File not in this branch")
+
+**Rejected Requests** (working as intended):
+- Verify the code works correctly
+- Explain why change is NOT needed
+- Document the verification
+- Mark as REJECTED + reason
+- Example: "Tests work correctly - verifies behavior is intentional"
+
+### Format for Reporting
+```
+## Change Request Summary
+
+### Real Issues Fixed (N of total)
+
+**1. [Request Description]**
+- File: `path/to/file.go:123`
+- Change: [what was modified]
+- Evidence: [verification from Read tool]
+- Status: ADDRESSED
+
+### False Positives (N of total)
+
+**1. [Request Description]**
+- Reason: [why not applicable]
+- Status: FALSE POSITIVE
+
+### Rejected Requests (N of total)
+
+**1. [Request Description]**
+- Why: [explanation]
+- Status: REJECTED
+```
+
+### Skills Integration
+- Use **Read tool** to verify changes in actual code
+- Use **memory-keeper** to document verification process
+- Use **pre-action** framework when uncertain about a request
+
+---
+
+## Model Routing (MANDATORY)
+
+**All task delegations MUST consider model routing.** Match task complexity to model tier, then select provider.
+
+### Providers
+
+| Provider | Auth | Billing | Preferred For |
+|----------|------|---------|---------------|
+| **GitHub Copilot** (preferred) | `/connect` device flow | Subscription ($10/mo Pro, 300 requests) | All Tier 1 + Tier 2 work |
+| **Anthropic** (fallback) | API key | Per-token | Tier 3 (Opus), overflow, batch |
+
+### Three-Tier System
+
+| Tier | When | Anthropic Model | Copilot Model |
+|------|------|-----------------|---------------|
+| **T1 (Lightweight)** | Trivial, quick, exploration, parallel search | `anthropic/claude-haiku-4-5` | `copilot/gpt-4o-mini` |
+| **T2 (Balanced)** | Implementation, debugging, testing, writing — **DEFAULT** | `anthropic/claude-sonnet-4-5` | `copilot/gpt-4o` |
+| **T3 (Premium)** | Architecture, ultrabrain, artistry, novel problems | `anthropic/claude-opus-4-5` | `copilot/o3-mini` |
+
+### Category → Tier Mapping
+
+| Category | Tier | Default Provider |
+|----------|------|-----------------|
+| trivial, quick, unspecified-low | T1 | Copilot |
+| deep, visual-engineering, writing, unspecified-high | T2 | Copilot |
+| ultrabrain, artistry | T3 | Anthropic (Opus) |
+
+### Agent Type → Tier
+
+| Agent | Tier | Reasoning |
+|-------|------|-----------|
+| explore, librarian | T1 | Search/gather — cheap and fast |
+| build, general | T2 | Execution — needs balanced capability |
+| oracle | T3 | Complex reasoning — needs premium |
+
+### Provider Selection Rules
+
+1. **Default: Copilot** — Use for all T1 and T2 work (subscription absorbs cost)
+2. **Anthropic for T3** — Opus not available on Copilot Pro (needs Pro+)
+3. **Overflow** — If Copilot 300 requests exhausted, fall back to Anthropic direct
+4. **Cross-provider fallback** — If one provider is down, try same-tier model from other
+
+### Delegation Examples
+
+```typescript
+// Tier 1 — exploration (Copilot preferred)
+task(subagent_type="explore", model="copilot/gpt-4o-mini", run_in_background=true)
+task(subagent_type="librarian", model="copilot/gpt-4o-mini", run_in_background=true)
+
+// Tier 2 — implementation (Copilot preferred)
+task(category="deep", model="copilot/gpt-4o", load_skills=["clean-code"])
+task(category="visual-engineering", model="copilot/claude-sonnet-4-5", load_skills=["frontend-ui-ux"])
+
+// Tier 3 — complex reasoning (Anthropic for Opus)
+task(category="ultrabrain", model="anthropic/claude-opus-4-5", load_skills=["architecture"])
+
+// Tier 3 — reasoning via Copilot (o3-mini available on Pro)
+task(category="artistry", model="copilot/o3-mini", load_skills=["design-patterns"])
+
+// Parallel pattern: 3×T1 + 1×T2
+task(subagent_type="explore", model="copilot/gpt-4o-mini", run_in_background=true)  // T1
+task(subagent_type="explore", model="copilot/gpt-4o-mini", run_in_background=true)  // T1
+task(subagent_type="librarian", model="copilot/gpt-4o-mini", run_in_background=true) // T1
+task(category="deep", model="copilot/gpt-4o", run_in_background=false)               // T2
+```
+
+### Copilot Pro Constraints
+
+- **Available:** GPT-4o-mini (T1), GPT-4o (T2), Claude Sonnet (T2), o3-mini (T3)
+- **NOT available:** Claude Opus (Pro+), o1 (Pro+)
+- **Monthly limit:** 300 premium requests — track usage
+- **When exhausted:** Fall back to Anthropic direct API
+
+### Red Flags
+
+- ❌ Using T1 (Haiku/GPT-4o-mini) for code generation or architecture
+- ❌ Using T3 (Opus) for trivial tasks or finding references
+- ❌ Using T2 (Sonnet) for simple typos or parallel exploration
+- ❌ Using Copilot for Opus-class work (not available on Pro)
+
+### Escalation
+
+- **T1 → T2:** Task fails, insufficient reasoning, hallucinations
+- **T2 → T3:** Problem too abstract, multiple contradictory solutions, stuck after debugging
+- **Cross-provider:** Try equivalent model from other provider if one struggles
+
+### Reference Documents
+
+- Model Routing Strategy — Full strategic framework
+- Model Routing Implementation — Implementation roadmap with checkboxes
+- Model Selection Guide — Capability comparison
+- All in Obsidian vault: `3. Resources/Tech/OpenCode/`
 
 ---
 
