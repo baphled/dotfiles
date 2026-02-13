@@ -340,6 +340,8 @@ node_modules
 .config/wallpaper
 .config/opencode/.sisyphus
 .config/.sisyphus
+.sisyphus
+.qdrant-initialized
 .luarocks/
 .nix-defexpr/
 .nix-profile
@@ -347,3 +349,70 @@ node_modules
 .var/
 Mail/
 secrets.zsh
+
+# ── Claude Code runtime (credentials, transcripts, cache) ────
+/.claude/
+/.claude.json
+/.claude.json.backup
+
+# ── OpenCode backups and ephemeral ────────────────────────────
+.config/opencode/oh-my-opencode.jsonc.bak*
+opencode-message-backup-*/
+
+# ── Qdrant and vault runtime data ─────────────────────────────
+.config/qdrant/
+.config/vault-rag/
+.config/smithery/
+
+# ── Non-opencode application configs ─────────────────────────
+.config/ags/
+.config/cmus/
+.config/expressvpn/
+.config/galculator/
+.config/git/
+.config/gtk-3.0/bookmarks
+.config/hypr/scripts/
+.config/net.mkiol/
+.config/nwg-look/
+.config/QtProject/
+.config/waybar/config.jsonc.bak
+
+# ── Runtime/tool directories ─────────────────────────────────
+.asdf/
+.asdfrc
+.bun/
+/.kariya/
+.lmstudio-home-pointer
+.nix-channels
+
+# ── Binaries and symlinks (non-portable) ─────────────────────
+.local/bin/claude
+.local/bin/llamaindex-cli
+.local/bin/poetry
+.local/bin/unimatrix
+.local/bin/hide_unhide_window
+.local/bin/opsudo
+.local/bin/mcp-vault-server
+.local/bin/query-vault
+.local/bin/sync-vault
+.local/bin/opencode-sync-models
+.local/bin/llm-diagnostic
+.local/lib/
+
+# ── Fonts ─────────────────────────────────────────────────────
+.fonts/OpenSauceOne-*.ttf
+
+# ── Misc parent dir files ────────────────────────────────────
+bin/Immersed-x86_64.AppImage
+bin/ff
+bin/fix-pyenv-lock.sh
+bin/import-settings
+bin/lessfilter
+bun.lock
+gpg-pub.asc
+gpg-sc.asc
+hyprland.diff
+litellm.yaml
+llamafile/
+models/
+setup-pyenv-virtualenv.sh
