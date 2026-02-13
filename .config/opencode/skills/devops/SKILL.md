@@ -1,6 +1,7 @@
 ---
 name: devops
 description: CI/CD, infrastructure as code, containerisation, and operational excellence
+category: DevOps Operations
 ---
 
 # Skill: devops
