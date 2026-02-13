@@ -1,6 +1,7 @@
 ---
 name: task-tracker
 description: Track progress through structured task lists with complexity scoring and token tracking
+category: Workflow Orchestration
 ---
 
 # Skill: task-tracker

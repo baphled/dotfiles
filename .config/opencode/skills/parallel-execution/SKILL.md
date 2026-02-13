@@ -1,6 +1,7 @@
 ---
 name: parallel-execution
 description: Maximise efficiency by running independent tasks in parallel - reduce token overhead
+category: Session Knowledge
 ---
 
 # Skill: parallel-execution

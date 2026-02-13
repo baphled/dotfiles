@@ -1,6 +1,7 @@
 ---
 name: time-management
 description: Manage time effectively - timeboxing, focus, duration estimation, productivity breaks
+category: Session Knowledge
 ---
 
 # Skill: time-management
