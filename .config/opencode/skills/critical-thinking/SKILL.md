@@ -1,6 +1,7 @@
 ---
 name: critical-thinking
 description: Apply rigorous analysis - challenge claims, test assumptions, spot weak reasoning, demand evidence
+category: Thinking Analysis
 ---
 
 # Skill: critical-thinking
