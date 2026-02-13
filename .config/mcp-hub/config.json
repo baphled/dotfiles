@@ -1,0 +1,9 @@
+{
+  "servers": [
+    {
+      "name": "vault-rag",
+      "command": "/home/baphled/.local/bin/mcp-vault-server",
+      "transport": "stdio"
+    }
+  ]
+}
