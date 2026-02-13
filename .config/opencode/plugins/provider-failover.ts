@@ -182,6 +182,18 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
      * the desired model/provider override to the runtime.
      */
     'chat.params': async (input, output) => {
+      // Guard: provider may not be available in all contexts
+      if (!input.provider?.info?.id) {
+        console.log(`${LOG_PREFIX} [chat.params] No provider info available — skipping failover check`)
+        return
+      }
+
+      // Guard: model may not be available in all contexts
+      if (!input.model?.id) {
+        console.log(`${LOG_PREFIX} [chat.params] No model info available — skipping failover check`)
+        return
+      }
+
       const currentProviderID = input.provider.info.id
       const currentModelID = input.model.id
       const providerName = extractProviderName(currentProviderID)
