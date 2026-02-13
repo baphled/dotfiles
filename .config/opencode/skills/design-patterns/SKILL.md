@@ -1,6 +1,7 @@
 ---
 name: design-patterns
 description: Recognise and apply design patterns appropriately
+category: Code Quality
 ---
 
 # Skill: design-patterns
