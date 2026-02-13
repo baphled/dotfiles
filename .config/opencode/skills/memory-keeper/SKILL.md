@@ -1,6 +1,7 @@
 ---
 name: memory-keeper
 description: Capture discoveries, fixes, solutions, and patterns into a searchable knowledge graph for future reference
+category: Core Universal
 ---
 
 # Skill: memory-keeper
