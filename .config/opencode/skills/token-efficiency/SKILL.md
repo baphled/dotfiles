@@ -1,6 +1,7 @@
 ---
 name: token-efficiency
 description: Maximise AI interaction value per token - techniques, patterns, integration with cost estimation
+category: Session Knowledge
 ---
 
 # Skill: token-efficiency

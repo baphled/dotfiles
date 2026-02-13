@@ -1,6 +1,7 @@
 ---
 name: scope-management
 description: Manage scope effectively - identify resources, prevent creep, optimise for token budget
+category: Workflow Orchestration
 ---
 
 # Skill: scope-management
