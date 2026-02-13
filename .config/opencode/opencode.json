@@ -17,22 +17,19 @@
     }
   },
   "plugin": [
-    "opencode-anthropic-auth@0.0.13"
+    "opencode-anthropic-auth@0.0.13",
+    "oh-my-opencode"
   ],
   "provider": {
     "ollama": {
       "models": {
-        "glm-4.7-flash": {
-          "_launch": true,
-          "name": "glm-4.7-flash"
-        },
         "glm-4.7:cloud": {
           "_launch": true,
-          "name": "glm-4.7:cloud"
+          "name": "GLM 4.7 Cloud"
         },
-        "granite4:1b": {
+        "kimi-k2.5:cloud": {
           "_launch": true,
-          "name": "granite4:1b"
+          "name": "Kimi K2.5 Cloud"
         }
       },
       "name": "Ollama (local)",

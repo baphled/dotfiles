@@ -16,24 +16,35 @@ Prepare and create properly attributed commit.
 
 ## Skills Loaded
 
-- `ai-commit`
-- `code-reviewer`
+- `git-master` (oh-my-opencode) - Atomic commit planning, style detection, dependency ordering
+- `ai-commit` - Execution with AI attribution
+- `code-reviewer` - Pre-commit review
 
-## Process
+## Hybrid Workflow
 
+**git_master (oh-my-opencode) handles PLANNING, make ai-commit handles EXECUTION.**
+
+### Phase 1: Planning (git_master)
 1. Review changes: `git status` and `git diff --cached`
-2. Pre-commit checks: `make check-compliance`
-3. Generate commit message (save to `/tmp/commit.txt`)
-4. **VERIFY environment variables are correct:**
-   - `AI_AGENT="Opencode"`
-   - `AI_MODEL="Claude Opus 4.5"` (or current model)
-5. **Create commit with MANDATORY AI attribution:**
-   ```bash
-   AI_AGENT="Opencode" AI_MODEL="Claude Opus 4.5" \
-     make ai-commit FILE=/tmp/commit.txt
-   ```
-   **NEVER run:** `git commit` (this bypasses attribution)
-6. Verify attribution in commit: `git log -1`
+2. git_master analyses:
+   - Detects commit style from last 30 commits (semantic, plain, short)
+   - Detects language (British English, Korean, etc.)
+   - Splits into atomic commits (3+ files → 2+ commits min)
+   - Orders by dependency (utilities → models → services → endpoints)
+   - Pairs tests with implementation
+
+### Phase 2: Pre-Commit Checks
+3. Run compliance: `make check-compliance`
+4. Verify test coverage ≥ 95% for modified packages
+
+### Phase 3: Execution
+5. For each planned commit:
+   - **NEW COMMIT**: Write message to `/tmp/commit.txt` → `make ai-commit FILE=/tmp/commit.txt`
+   - **FIXUP COMMIT**: Use `git commit --fixup=<hash>` directly
+
+6. Verify attribution in commits: `git log --oneline`
+
+**CRITICAL**: NEVER use `git commit -m` for new commits - always use make ai-commit
 
 ## Commit Types
 
