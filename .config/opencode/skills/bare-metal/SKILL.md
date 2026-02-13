@@ -1,6 +1,7 @@
 ---
 name: bare-metal
 description: Physical server provisioning, colocation, and dedicated hardware for performance-critical workloads
+category: DevOps Operations
 ---
 
 # Skill: bare-metal

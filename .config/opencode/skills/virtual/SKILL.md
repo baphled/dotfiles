@@ -1,6 +1,7 @@
 ---
 name: virtual
 description: Virtualisation and VPS hosting including DigitalOcean, Linode, Hetzner, Vultr for self-managed infrastructure
+category: DevOps Operations
 ---
 
 # Skill: virtual
