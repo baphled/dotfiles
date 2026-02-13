@@ -1,6 +1,7 @@
 ---
 name: epistemic-rigor
 description: Know what you know, what you don't know, and the difference between belief and knowledge
+category: Thinking Analysis
 ---
 
 # Skill: epistemic-rigor
