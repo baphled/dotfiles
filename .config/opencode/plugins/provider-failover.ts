@@ -12,17 +12,14 @@
  *  - event: captures session.error events for rate limit / failure detection
  */
 
-import type { Plugin } from '@opencode-ai/plugin'
+import type { Plugin, PluginInput } from '@opencode-ai/plugin'
 import { tool } from '@opencode-ai/plugin'
 import { z } from 'zod'
 import { HealthManager } from './lib/provider-health'
 import { getFallbackChain, getProviderMetadata } from './lib/fallback-config'
-import type { ProviderEntry } from './lib/fallback-config'
 import { existsSync, unlinkSync } from 'fs'
 
 // --- Constants ---
-
-const LOG_PREFIX = '[provider-failover]'
 
 /**
  * Default Retry-After duration (seconds) when header is missing from 429 response
@@ -145,20 +142,18 @@ type ToastVariant = 'info' | 'success' | 'warning' | 'error'
  * Uses OpenCode's TUI toast API (same as oh-my-opencode).
  * Falls back silently if the toast API is unavailable.
  */
-function createNotifier(client: ReturnType<Parameters<Plugin>[0]['client'] extends infer C ? () => C : never>) {
-  return async (message: string, variant: ToastVariant = 'info', duration = 5000) => {
-    try {
-      await (client as any).tui.showToast({
-        body: {
-          title: 'Provider Failover',
-          message,
-          variant,
-          duration,
-        },
-      })
-    } catch {
-      // Toast API unavailable — swallow silently
-    }
+function createNotifier(client: PluginInput['client']) {
+  return (message: string, variant: ToastVariant = 'info', duration = 5000): void => {
+    client.tui.showToast({
+      body: {
+        title: 'Provider Failover',
+        message,
+        variant,
+        duration,
+      },
+    }).catch(() => {
+      // Toast API unavailable or TUI not ready — swallow silently
+    })
   }
 }
 
