@@ -159,12 +159,12 @@ When a provider becomes rate-limited or unhealthy, the system automatically swit
 
 #### Fallback Chains by Tier
 
-| Tier | Primary | Secondary | Tertiary | Quaternary | Fallback |
-|------|---------|-----------|----------|-----------|----------|
-| **T1** | Copilot GPT-4o-mini | Anthropic Haiku | Ollama local | — | T0 |
-| **T2** | Copilot GPT-4o | Anthropic Sonnet | Copilot Claude Sonnet | Ollama local | T0 |
-| **T3** | Anthropic Opus | Copilot o3-mini | Degrade to T2 | — | T0 |
-| **T0** | Ollama granite4-tools | Ollama qwen2.5:7b | — | — | None |
+| Tier | Primary | Secondary | Tertiary | Fallback |
+|------|---------|-----------|----------|----------|
+| **T1** | Copilot GPT-4o-mini | Anthropic Haiku | Ollama granite4-tools | T0 |
+| **T2** | Copilot GPT-4o | Anthropic Sonnet | Ollama qwen2.5:7b | T0 |
+| **T3** | Anthropic Opus | Copilot o3-mini | Degrade to T2 | T0 |
+| **T0** | Ollama granite4-tools | Ollama qwen2.5:7b | — | None |
 
 #### Health State Tracking
 

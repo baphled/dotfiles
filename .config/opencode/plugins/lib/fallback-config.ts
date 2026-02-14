@@ -95,11 +95,6 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
         tier: 'T2',
       },
       {
-        provider: 'copilot',
-        model: 'claude-sonnet-4-5',
-        tier: 'T2',
-      },
-      {
         provider: 'ollama',
         model: 'qwen2.5:7b-instruct',
         tier: 'T0',

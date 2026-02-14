@@ -424,10 +424,10 @@ describe('HealthManager', () => {
       expect(healthy[2].provider).toBe('ollama')
     })
 
-    test('T2 chain has 4 entries', () => {
+    test('T2 chain has 3 entries', () => {
       const hm = new HealthManager()
       const healthy = hm.getHealthyProviders('T2')
-      expect(healthy.length).toBe(4)
+      expect(healthy.length).toBe(3)
     })
 
     test('T3 chain degrades to T2 when all T3 providers down', () => {
