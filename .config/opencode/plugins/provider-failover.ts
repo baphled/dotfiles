@@ -402,6 +402,18 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
             })
             await healthManager.flush()
           }
+        } else {
+          // Debug: log non-API errors to understand what's happening
+          const errorName = props.error?.name || 'unknown'
+          const errorData = props.error?.data
+          const statusCode = errorData?.statusCode || 0
+          const providerHint = extractProviderFromError(errorData || {})
+          
+          notify(
+            `Error: ${errorName} (${statusCode}) from ${providerHint}`,
+            'info',
+            3000
+          )
         }
       }
 
@@ -601,6 +613,15 @@ function extractProviderFromError(apiData: {
     headers['x-github-request-id'] !== undefined
   ) {
     return 'copilot'
+  }
+
+  // Check for Ollama Cloud patterns (before local ollama)
+  if (
+    message.includes('ollama.com') ||
+    body.includes('ollama.com') ||
+    headers['x-ollama-request-id'] !== undefined
+  ) {
+    return 'ollama-cloud'
   }
 
   // Check for Ollama-specific patterns
