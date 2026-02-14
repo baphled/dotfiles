@@ -59,16 +59,17 @@ export interface TierConfig {
 export function getFallbackChain(tier: string): ProviderEntry[] {
   const chains: Record<string, ProviderEntry[]> = {
     T0: [
-      // Local Ollama - use without tools/MCP (unreliable)
+      // Local Ollama - lightweight models without tools/MCP
+      // Use phi4 or llama3.2:1b for fast, reliable responses
       {
         provider: 'ollama',
-        model: 'granite4-tools',
+        model: 'llama3.2:1b',
         tier: 'T0',
         supportsTools: false,
       },
       {
         provider: 'ollama',
-        model: 'qwen2.5:7b-instruct',
+        model: 'phi4',
         tier: 'T0',
         supportsTools: false,
       },
@@ -84,15 +85,15 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
         model: 'claude-haiku-4-5',
         tier: 'T1',
       },
-      // Ollama Cloud - for when cloud is needed but local unavailable
+      // Ollama Cloud - lightweight models
       {
         provider: 'ollama-cloud',
-        model: 'gemma3',
+        model: 'llama3.2:1b',
         tier: 'T1',
       },
       {
         provider: 'ollama',
-        model: 'granite4-tools',
+        model: 'phi4',
         tier: 'T0',
         supportsTools: false,
       },
@@ -108,15 +109,15 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
         model: 'claude-sonnet-4-5',
         tier: 'T2',
       },
-      // Ollama Cloud - for when cloud is needed but local unavailable
+      // Ollama Cloud - lightweight fallback
       {
         provider: 'ollama-cloud',
-        model: 'llama3.3',
+        model: 'llama3.2:3b',
         tier: 'T2',
       },
       {
         provider: 'ollama',
-        model: 'qwen2.5:7b-instruct',
+        model: 'llama3.2:1b',
         tier: 'T0',
         supportsTools: false,
       },
@@ -132,10 +133,10 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
         model: 'o3-mini',
         tier: 'T3',
       },
-      // Ollama Cloud as T3 fallback
+      // Ollama Cloud as T3 fallback (lightweight)
       {
         provider: 'ollama-cloud',
-        model: 'llama3.3',
+        model: 'llama3.2:3b',
         tier: 'T3',
       },
       // Degrade to T2 chain on T3 exhaustion (marker entry)

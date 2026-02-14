@@ -161,10 +161,12 @@ When a provider becomes rate-limited or unhealthy, the system automatically swit
 
 | Tier | Primary | Secondary | Tertiary | Fallback |
 |------|---------|-----------|----------|----------|
-| **T1** | Copilot GPT-4o-mini | Anthropic Haiku | Ollama granite4-tools | T0 |
-| **T2** | Copilot GPT-4o | Anthropic Sonnet | Ollama qwen2.5:7b | T0 |
-| **T3** | Anthropic Opus | Copilot o3-mini | Degrade to T2 | T0 |
-| **T0** | Ollama granite4-tools | Ollama qwen2.5:7b | — | None |
+| **T1** | Copilot GPT-4o-mini | Anthropic Haiku | Ollama Cloud llama3.2:1b | T0 |
+| **T2** | Copilot GPT-4o | Anthropic Sonnet | Ollama Cloud llama3.2:3b | T0 |
+| **T3** | Anthropic Opus | Copilot o3-mini | Ollama Cloud llama3.2:3b | T0 |
+| **T0** | Ollama llama3.2:1b | Ollama phi4 | — | None |
+
+**Note:** Local Ollama models (T0) are lightweight and fast but do NOT support tools/MCP. Use cloud providers when tools are required.
 
 #### Health State Tracking
 

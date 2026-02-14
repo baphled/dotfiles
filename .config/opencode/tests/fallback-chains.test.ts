@@ -14,9 +14,9 @@ describe('Fallback Chains', () => {
       const chain = getFallbackChain('T0')
       expect(chain.length).toBe(2)
       expect(chain[0].provider).toBe('ollama')
-      expect(chain[0].model).toBe('granite4-tools')
+      expect(chain[0].model).toBe('llama3.2:1b')
       expect(chain[1].provider).toBe('ollama')
-      expect(chain[1].model).toBe('qwen2.5:7b-instruct')
+      expect(chain[1].model).toBe('phi4')
     })
 
     test('should have no fallback after T0', () => {
