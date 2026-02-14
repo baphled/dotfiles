@@ -241,15 +241,29 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       // Get healthy alternatives from the fallback chain
       const healthyProviders = healthManager.getHealthyProviders(tier)
 
+      if (healthyProviders.length === 0) {
+        // No healthy providers at all — all are rate_limited or down
+        await notify(
+          `No healthy providers available for tier ${tier} — all providers are unhealthy`,
+          'error',
+          8000
+        )
+        return
+      }
+
       // Filter out the current unhealthy provider
       const alternatives = healthyProviders.filter(
         (entry) => entry.provider !== providerName
       )
 
       if (alternatives.length === 0) {
+        // Current provider is the only healthy one, but it's unhealthy
+        // This shouldn't happen in normal operation (contradiction)
+        // but if it does, use the current provider as last resort
         await notify(
-          `No healthy alternatives for tier ${tier} — using original provider as last resort`,
-          'warning'
+          `Current provider ${providerName} is unhealthy but is the only available option for tier ${tier}`,
+          'warning',
+          8000
         )
         return
       }
