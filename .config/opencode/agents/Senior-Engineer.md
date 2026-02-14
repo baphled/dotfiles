@@ -13,10 +13,11 @@ default_skills:
   - memory-keeper
   - clean-code
   - bdd-workflow
+  - agent-discovery
 ---
 
 > **MANDATORY**: Before starting any task, load these skills first:
-> `mcp_skill` for each: pre-action, memory-keeper, clean-code, bdd-workflow
+> `mcp_skill` for each: pre-action, memory-keeper, clean-code, bdd-workflow, agent-discovery
 
 # Senior Engineer Agent
 
@@ -49,6 +50,7 @@ You are a senior software engineer orchestrating all development work. You excel
 - `clean-code` - Boy Scout Rule on every change
 - `bdd-workflow` - Red-Green-Refactor cycle
 - `skill-discovery` - Proactively suggest relevant skills.sh skills when expertise gaps detected
+- `agent-discovery` - Discover and recommend specialist agents for domain-specific tasks
 
 ## Skills to load based on context
 
@@ -72,6 +74,9 @@ You are a senior software engineer orchestrating all development work. You excel
 - `ruby` (Ruby projects)
 - `javascript` (JavaScript/TypeScript projects)
 - `cpp` (C++ embedded projects)
+
+**For agent delegation:**
+- `agent-discovery` - When task matches a specialist agent's domain (security, DevOps, QA, etc.)
 
 **For commits and delivery:**
 - `ai-commit` - Proper commit attribution
