@@ -182,7 +182,7 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       const disabledProviders = config.disabled_providers || []
 
       // Check each known provider's health
-      for (const providerName of ['copilot', 'anthropic', 'ollama', 'ollama-cloud']) {
+      for (const providerName of ['copilot', 'anthropic', 'ollama', 'ollama-cloud', 'kimi', 'glm']) {
         const state = healthManager.getProviderState(providerName)
 
         if (state.status === 'rate_limited' || state.status === 'down') {
@@ -558,7 +558,7 @@ Last Updated: ${data.lastUpdated}
 |----------|--------|--------------|-------------|----------|------------|
 `
 
-          for (const providerName of ['copilot', 'anthropic', 'ollama', 'ollama-cloud']) {
+          for (const providerName of ['copilot', 'anthropic', 'ollama', 'ollama-cloud', 'kimi', 'glm']) {
             const state = data.providers[providerName] || healthManager.getProviderState(providerName)
             const meta = getProviderMetadata(providerName)
             const status = state.status === 'unknown' ? '⚪ unknown' : `${statusEmoji(state.status)} ${state.status}`
@@ -641,6 +641,25 @@ function extractProviderFromError(apiData: {
     body.includes('ollama')
   ) {
     return 'ollama'
+  }
+
+  // Check for Kimi/Zen patterns
+  if (
+    message.includes('kimi') ||
+    body.includes('kimi') ||
+    message.includes('moonshot') ||
+    body.includes('moonshot')
+  ) {
+    return 'kimi'
+  }
+
+  // Check for GLM patterns
+  if (
+    message.includes('glm') ||
+    body.includes('glm') ||
+    message.includes('zhipu')
+  ) {
+    return 'glm'
   }
 
   // Default: if we can't determine, assume the most common cloud provider
