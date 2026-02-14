@@ -210,6 +210,17 @@ task(category="deep", model="copilot/gpt-4o", run_in_background=false)          
 - **Monthly limit:** 300 premium requests — track usage
 - **When exhausted:** Fall back to Anthropic direct API
 
+### Toast Notifications
+
+The provider-failover plugin displays toast notifications for important events:
+
+- **Info toasts** (3s): Plugin loaded, missing provider/model info (guard conditions), session retries
+- **Warning toasts** (5s): Unhealthy providers, fallback chain searches, no alternatives available
+- **Warning toasts** (8s): Provider swap notifications — longer duration to read swap details
+- **Error toasts** (8s): Rate limits (429), server errors (5xx), authentication errors (401/403)
+
+Notifications use OpenCode's TUI toast API and are fire-and-forget to prevent blocking plugin initialization.
+
 ### Provider Health Monitoring
 
 Monitor and manage provider health using the `provider-health` tool:
