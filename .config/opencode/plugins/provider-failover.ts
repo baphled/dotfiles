@@ -133,6 +133,12 @@ function statusEmoji(status: string): string {
  */
 const failoverState: Map<string, { originalProvider: string; originalModel: string }> = new Map()
 
+/**
+ * Tracks the last model used per provider for error reporting.
+ * Used to include model info in rate limit notifications.
+ */
+const lastModelByProvider: Map<string, string> = new Map()
+
 // --- Toast notification helper ---
 
 type ToastVariant = 'info' | 'success' | 'warning' | 'error'
@@ -220,6 +226,9 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       const currentModelID = input.model.id
       const providerName = extractProviderName(currentProviderID)
       const tier = resolveModelTier(currentModelID)
+
+      // Track the last model used per provider for error reporting
+      lastModelByProvider.set(providerName, currentModelID)
 
       // Clear any previous failover state for this session
       failoverState.delete(input.sessionID)
@@ -352,9 +361,10 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
           if (statusCode === 429) {
             // Rate limited — mark provider and set retry-after
             const retryAfter = parseRetryAfter(apiData.responseHeaders?.['retry-after'])
+            const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
 
             await notify(
-              `Rate limit (429) detected for ${providerHint} — retry after ${retryAfter}s`,
+              `Rate limit (429) for ${providerHint}/${modelUsed} — retry after ${retryAfter}s`,
               'error',
               8000
             )
@@ -363,8 +373,9 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
             await healthManager.flush()
           } else if (statusCode >= 500) {
             // Server error — record failure
+            const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
             await notify(
-              `Server error (${statusCode}) for ${providerHint}: ${apiData.message || 'unknown'}`,
+              `Server error (${statusCode}) for ${providerHint}/${modelUsed}: ${apiData.message || 'unknown'}`,
               'error',
               8000
             )
@@ -376,8 +387,9 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
             await healthManager.flush()
           } else if (statusCode === 403 || statusCode === 401) {
             // Auth error — record failure (may indicate expired token)
+            const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
             await notify(
-              `Auth error (${statusCode}) for ${providerHint}: ${apiData.message || 'unknown'}`,
+              `Auth error (${statusCode}) for ${providerHint}/${modelUsed}: ${apiData.message || 'unknown'}`,
               'error',
               8000
             )
