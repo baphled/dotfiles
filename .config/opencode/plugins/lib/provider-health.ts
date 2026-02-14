@@ -170,7 +170,9 @@ export class HealthManager {
         continue
       }
 
-      const state = this.getProviderState(entry.provider)
+      // Use compound key (provider/model) to check health, not just provider
+      const healthKey = `${entry.provider}/${entry.model}`
+      const state = this.getProviderState(healthKey)
 
       // Stale data → treat as unknown → include (benefit of the doubt)
       if (isStale(state)) {

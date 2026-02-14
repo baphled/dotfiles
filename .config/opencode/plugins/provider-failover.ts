@@ -1,15 +1,21 @@
 /**
  * Provider Failover Routing Plugin
  *
- * Automatically routes LLM requests to healthy providers based on tier,
- * health state, and rate limit status. Captures error events to update
- * provider health and swaps to fallback providers on unhealthy detection.
+ * Monitors provider health and warns users when their selected model is
+ * rate-limited or down. Cannot automatically swap models (OpenCode plugin API
+ * limitation) but provides actionable notifications suggesting alternatives.
  *
  * Hooks:
- *  - config: reads health state on startup, disables unhealthy providers
- *  - chat.params: checks provider health before each LLM call, swaps if unhealthy
- *  - chat.headers: injects X-Failover-Original-Provider header on swap
- *  - event: captures session.error events for rate limit / failure detection
+ *  - config: reads health state on startup, reports unhealthy providers
+ *  - chat.params: pre-flight health check — warns if model is rate limited,
+ *    suggests healthy alternative from the tier's fallback chain
+ *  - event: captures session.error (non-retryable) and session.status (retry)
+ *    events to update provider health state
+ *
+ * Architecture note: OpenCode swallows 429 errors internally (retries in
+ * processor.ts). Rate limits are detected via session.status retry events,
+ * NOT session.error. The chat.params hook cannot change the model — input.model
+ * is read-only and output only supports temperature/topP/topK/options.
  */
 
 import type { Plugin, PluginInput } from '@opencode-ai/plugin'
@@ -32,22 +38,31 @@ const DEFAULT_RETRY_AFTER_SECONDS = 60
  */
 const MODEL_TIER_MAP: Record<string, string> = {
   // T1 (Lightweight)
-  'gpt-4o-mini': 'T1',
-  'claude-haiku-4-5': 'T1',
-  'granite4-tools': 'T1',
-
+  'gpt-5-nano': 'T1',
+  'minimax-m2.5-free': 'T1',
+  'gpt-5-mini': 'T1',
+  'claude-haiku-4.5': 'T1',
+  'gemini-3-flash-preview': 'T1',
   // T2 (Balanced)
-  'gpt-4o': 'T2',
-  'claude-sonnet-4-5': 'T2',
-  'qwen2.5:7b-instruct': 'T2',
-
+  'big-pickle': 'T2',
+  'kimi-k2.5-free': 'T2',
+  'gpt-5': 'T2',
+  'gpt-4.1': 'T2',
+  'claude-sonnet-4': 'T2',
+  'claude-sonnet-4.5': 'T2',
+  'grok-code-fast-1': 'T2',
+  'gemini-3-pro-preview': 'T2',
+  'gemini-2.5-pro': 'T2',
   // T3 (Premium)
-  'claude-opus-4-5': 'T3',
-  'o3-mini': 'T3',
-
-  // T0 (Last Resort) models are already mapped above in T1/T2
-  // granite4-tools → T1, qwen2.5:7b-instruct → T2
-  // When used as T0 fallback, the fallback-config chain handles routing
+  'claude-opus-4.5': 'T3',
+  'claude-opus-4.6': 'T3',
+  'claude-opus-41': 'T3',
+  'gpt-5.1': 'T3',
+  'gpt-5.2': 'T3',
+  'gpt-5.1-codex': 'T3',
+  'gpt-5.1-codex-mini': 'T3',
+  'gpt-5.1-codex-max': 'T3',
+  'gpt-5.2-codex': 'T3',
 }
 
 /**
@@ -76,14 +91,38 @@ function resolveModelTier(modelId: string): string {
  * Provider IDs may be in format "copilot", "anthropic", "ollama", etc.
  */
 function extractProviderName(providerID: string): string {
-  // Normalise common provider ID variations
   const lower = providerID.toLowerCase()
-  if (lower.includes('copilot') || lower.includes('github')) return 'copilot'
+  if (lower === 'opencode' || lower.includes('opencode')) return 'opencode'
+  if (lower === 'github-copilot' || lower.includes('copilot') || lower.includes('github')) return 'github-copilot'
   if (lower.includes('anthropic') || lower.includes('claude')) return 'anthropic'
-  // Check ollama-cloud before ollama since it's more specific
   if (lower.includes('ollama-cloud') || lower.includes('ollama.com')) return 'ollama-cloud'
   if (lower.includes('ollama') || lower.includes('localhost') || lower.includes('local')) return 'ollama'
   return lower
+}
+
+/**
+ * Infer provider name from model ID when provider.info.id is unavailable.
+ * This handles cases like Kimi (OpenCode Zen) where provider.info.id is missing
+ * but model.id is available.
+ */
+function inferProviderFromModel(modelID: string | undefined): string | null {
+  if (!modelID) return null
+  const lower = modelID.toLowerCase()
+  // OpenCode Zen models
+  if (lower.includes('kimi') || lower.includes('moonshot')) return 'opencode'
+  if (lower.includes('big-pickle')) return 'opencode'
+  if (lower.includes('minimax')) return 'opencode'
+  if (lower === 'gpt-5-nano') return 'opencode'
+  // GitHub Copilot models
+  if (lower.includes('gpt-5') || lower.includes('gpt-4') || lower.includes('codex')) return 'github-copilot'
+  if (lower.includes('claude')) return 'github-copilot'
+  if (lower.includes('gemini')) return 'github-copilot'
+  if (lower.includes('grok')) return 'github-copilot'
+  // Direct Anthropic
+  if (lower.includes('anthropic')) return 'anthropic'
+  // Ollama
+  if (lower.includes('llama') || lower.includes('phi')) return 'ollama'
+  return null
 }
 
 /**
@@ -127,19 +166,34 @@ function statusEmoji(status: string): string {
   }
 }
 
-// --- Failover state (per-session, in-memory) ---
-
-/**
- * Tracks the last failover swap per session to inject the correct header
- * in chat.headers (which fires after chat.params).
- */
-const failoverState: Map<string, { originalProvider: string; originalModel: string }> = new Map()
+// --- Session tracking state (in-memory) ---
 
 /**
  * Tracks the last model used per provider for error reporting.
  * Used to include model info in rate limit notifications.
  */
 const lastModelByProvider: Map<string, string> = new Map()
+
+/**
+ * Tracks the last provider+model used per session for session.status
+ * event correlation. When a retry event fires, we look up which
+ * provider+model the session was using to mark it rate limited.
+ */
+const lastModelBySession: Map<string, { provider: string; model: string }> = new Map()
+
+// --- Debug Logger ---
+const FAILOVER_LOG_FILE = '/home/baphled/.config/opencode/failover.log'
+
+function debugLog(message: string): void {
+  const timestamp = new Date().toISOString()
+  const entry = `[${timestamp}] ${message}\n`
+  try {
+    const fs = require('fs')
+    fs.appendFileSync(FAILOVER_LOG_FILE, entry)
+  } catch {
+    // Silently ignore logging failures
+  }
+}
 
 // --- Toast notification helper ---
 
@@ -182,7 +236,7 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       const disabledProviders = config.disabled_providers || []
 
       // Check each known provider's health
-      for (const providerName of ['copilot', 'anthropic', 'ollama', 'ollama-cloud', 'kimi', 'glm']) {
+      for (const providerName of ['opencode', 'github-copilot', 'anthropic', 'ollama', 'ollama-cloud']) {
         const state = healthManager.getProviderState(providerName)
 
         if (state.status === 'rate_limited' || state.status === 'down') {
@@ -203,132 +257,86 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
     },
 
     /**
-     * chat.params hook: Check provider health before each LLM call.
-     * If the selected provider is unhealthy, swap to the next healthy
-     * provider in the same tier's fallback chain.
+     * chat.params hook: Pre-flight health check before each LLM call.
      *
-     * NOTE: We cannot change `input.model` or `input.provider` directly
-     * as they are read-only input. We use `output.options` to signal
-     * the desired model/provider override to the runtime.
+     * If the selected provider+model is rate limited or down, shows a
+     * warning notification suggesting the best healthy alternative.
+     *
+     * NOTE: Cannot change the model — input.model is read-only and
+     * output only supports temperature/topP/topK/options. We can only
+     * warn the user to manually switch.
      */
-    'chat.params': async (input, output) => {
-      // Debug: log what provider info is available
-      notify(
-        `provider=${input.provider ? 'yes' : 'no'}, ` +
-        `info=${input.provider?.info ? 'yes' : 'no'}, ` +
-        `id=${input.provider?.info?.id || 'MISSING'}, ` +
-        `model=${input.model?.id || 'MISSING'}`,
-        'info',
-        5000
-      )
-
-      // Guard: provider may not be available in all contexts
-      if (!input.provider?.info?.id) {
-        notify('No provider info - skipping failover', 'warning', 3000)
-        return
-      }
-
-      // Guard: model may not be available in all contexts
+    'chat.params': async (input, _output) => {
+      // Guard: model is required for tier resolution
       if (!input.model?.id) {
         notify('No model info - skipping failover', 'warning', 3000)
         return
       }
 
-      const currentProviderID = input.provider.info.id
+      // Get provider ID — runtime shape has provider.id directly,
+      // but TypeScript types declare provider.info.id. Try both paths.
+      let currentProviderID = (input.provider as any)?.id ?? input.provider?.info?.id
+
+      if (!currentProviderID) {
+        const inferredProvider = inferProviderFromModel(input.model.id)
+        if (inferredProvider) {
+          currentProviderID = inferredProvider
+        } else {
+          currentProviderID = input.model.id.split('/')[0] || input.model.id
+        }
+      }
+
       const currentModelID = input.model.id
       const providerName = extractProviderName(currentProviderID)
       const tier = resolveModelTier(currentModelID)
+      const healthKey = `${providerName}/${currentModelID}`
 
-      // Track the last model used per provider for error reporting
+      // Track the last model used per provider and per session
       lastModelByProvider.set(providerName, currentModelID)
+      lastModelBySession.set(input.sessionID, { provider: providerName, model: currentModelID })
 
-      // Clear any previous failover state for this session
-      failoverState.delete(input.sessionID)
-
-      // Check if current provider is healthy
-      const providerState = healthManager.getProviderState(providerName)
+      // Check if current provider+model is healthy
+      const providerState = healthManager.getProviderState(healthKey)
+      debugLog(`HEALTH CHECK: ${healthKey} -> status=${providerState.status}, rateLimitUntil=${providerState.rateLimitUntil || 'none'}`)
       const isHealthy = providerState.status !== 'rate_limited' && providerState.status !== 'down'
 
       if (isHealthy) {
-        // Provider is healthy — no swap needed
+        // Provider is healthy — no action needed
+        debugLog(`HEALTH CHECK: ${healthKey} is healthy, no action needed`)
         return
       }
 
-      await notify(
-        `${providerName} is ${providerState.status} for tier ${tier} — searching fallback chain…`,
-        'warning'
-      )
+      // Model is unhealthy — find alternative and warn user
+      debugLog(`HEALTH CHECK: ${healthKey} is ${providerState.status}, searching fallbacks for warning...`)
+
+      // Build expiry info for notification
+      let expiryInfo = ''
+      if (providerState.rateLimitUntil) {
+        const expiry = new Date(providerState.rateLimitUntil)
+        expiryInfo = ` until ${expiry.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`
+      }
 
       // Get healthy alternatives from the fallback chain
       const healthyProviders = healthManager.getHealthyProviders(tier)
-
-      if (healthyProviders.length === 0) {
-        // No healthy providers at all — all are rate_limited or down
-        await notify(
-          `No healthy providers available for tier ${tier} — all providers are unhealthy`,
-          'error',
-          8000
-        )
-        return
-      }
-
-      // Filter out the current unhealthy provider
       const alternatives = healthyProviders.filter(
-        (entry) => entry.provider !== providerName
+        (entry) => `${entry.provider}/${entry.model}` !== healthKey
       )
 
-      if (alternatives.length === 0) {
-        // Current provider is the only healthy one, but it's unhealthy
-        // This shouldn't happen in normal operation (contradiction)
-        // but if it does, use the current provider as last resort
+      debugLog(`FALLBACK: tier=${tier}, alternatives=${alternatives.length}, providers=${alternatives.map(p => `${p.provider}/${p.model}`).join(', ')}`)
+
+      if (alternatives.length > 0) {
+        const best = alternatives[0]
         await notify(
-          `Current provider ${providerName} is unhealthy but is the only available option for tier ${tier}`,
+          `⚠️ ${healthKey} is rate limited${expiryInfo}. Switch to ${best.provider}/${best.model} for immediate response.`,
           'warning',
           8000
         )
-        return
-      }
-
-      const selected = alternatives[0]
-      const selectedMeta = getProviderMetadata(selected.provider)
-
-      await notify(
-        `Swapping ${providerName}/${currentModelID} → ${selected.provider}/${selected.model} (${selectedMeta.costModel})`,
-        'warning',
-        8000
-      )
-
-      // Store failover state for the headers hook
-      failoverState.set(input.sessionID, {
-        originalProvider: providerName,
-        originalModel: currentModelID,
-      })
-
-      // Signal the swap via output options
-      // The runtime reads these to override the provider/model selection
-      output.options = {
-        ...output.options,
-        'x-failover-provider': selected.provider,
-        'x-failover-model': selected.model,
-        'x-failover-tier': selected.tier,
-        'x-failover-reason': providerState.status,
-      }
-    },
-
-    /**
-     * chat.headers hook: Inject X-Failover-Original-Provider header
-     * when a provider swap has occurred in chat.params.
-     */
-    'chat.headers': async (input, output) => {
-      const swap = failoverState.get(input.sessionID)
-
-      if (swap) {
-        output.headers['X-Failover-Original-Provider'] = swap.originalProvider
-        output.headers['X-Failover-Original-Model'] = swap.originalModel
-        output.headers['X-Failover-Timestamp'] = new Date().toISOString()
-
-        // Clean up — one-shot per request
-        failoverState.delete(input.sessionID)
+      } else {
+        await notify(
+          `⚠️ ${healthKey} is rate limited${expiryInfo}. No healthy alternatives available for tier ${tier}.`,
+          'error',
+          8000
+        )
       }
     },
 
@@ -341,6 +349,9 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
      *  - session.error with other errors → recordFailure
      */
     event: async ({ event }) => {
+      // Log ALL events to understand what we receive
+      debugLog(`EVENT: type=${event.type} props=${JSON.stringify(event.properties).substring(0, 500)}`)
+
       // Handle session.error events
       if (event.type === 'session.error') {
         const props = event.properties as {
@@ -370,47 +381,51 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
           // from the error pattern or use the most recent request context
           const providerHint = extractProviderFromError(apiData)
 
-          if (statusCode === 429) {
-            // Rate limited — mark provider and set retry-after
-            const retryAfter = parseRetryAfter(apiData.responseHeaders?.['retry-after'])
-            const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
+           if (statusCode === 429) {
+             // Rate limited — mark provider and set retry-after
+             const retryAfter = parseRetryAfter(apiData.responseHeaders?.['retry-after'])
+             const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
+             const healthKey = `${providerHint}/${modelUsed}`
 
-            await notify(
-              `Rate limit (429) for ${providerHint}/${modelUsed} — retry after ${retryAfter}s`,
-              'error',
-              8000
-            )
+             await notify(
+               `Rate limit (429) for ${providerHint}/${modelUsed} — retry after ${retryAfter}s`,
+               'error',
+               8000
+             )
+             debugLog(`RATE LIMIT: ${healthKey} marked rate_limited for ${retryAfter}s`)
 
-            healthManager.markRateLimited(providerHint, retryAfter)
-            await healthManager.flush()
-          } else if (statusCode >= 500) {
-            // Server error — record failure
-            const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
-            await notify(
-              `Server error (${statusCode}) for ${providerHint}/${modelUsed}: ${apiData.message || 'unknown'}`,
-              'error',
-              8000
-            )
+             healthManager.markRateLimited(healthKey, retryAfter)
+             await healthManager.flush()
+           } else if (statusCode >= 500) {
+             // Server error — record failure
+             const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
+             const healthKey = `${providerHint}/${modelUsed}`
+             await notify(
+               `Server error (${statusCode}) for ${providerHint}/${modelUsed}: ${apiData.message || 'unknown'}`,
+               'error',
+               8000
+             )
 
-            healthManager.recordFailure(providerHint, {
-              status: statusCode,
-              message: apiData.message || `HTTP ${statusCode}`,
-            })
-            await healthManager.flush()
-          } else if (statusCode === 403 || statusCode === 401) {
-            // Auth error — record failure (may indicate expired token)
-            const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
-            await notify(
-              `Auth error (${statusCode}) for ${providerHint}/${modelUsed}: ${apiData.message || 'unknown'}`,
-              'error',
-              8000
-            )
+             healthManager.recordFailure(healthKey, {
+               status: statusCode,
+               message: apiData.message || `HTTP ${statusCode}`,
+             })
+             await healthManager.flush()
+           } else if (statusCode === 403 || statusCode === 401) {
+             // Auth error — record failure (may indicate expired token)
+             const modelUsed = lastModelByProvider.get(providerHint) || 'unknown'
+             const healthKey = `${providerHint}/${modelUsed}`
+             await notify(
+               `Auth error (${statusCode}) for ${providerHint}/${modelUsed}: ${apiData.message || 'unknown'}`,
+               'error',
+               8000
+             )
 
-            healthManager.recordFailure(providerHint, {
-              status: statusCode,
-              message: apiData.message || `HTTP ${statusCode}`,
-            })
-            await healthManager.flush()
+             healthManager.recordFailure(healthKey, {
+               status: statusCode,
+               message: apiData.message || `HTTP ${statusCode}`,
+             })
+             await healthManager.flush()
           }
         } else {
           // Debug: log non-API errors to understand what's happening
@@ -428,6 +443,10 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       }
 
       // Handle session.status with retry information
+      // CRITICAL: This is the PRIMARY rate limit detection path.
+      // OpenCode swallows 429s internally (retries in processor.ts).
+      // session.error NEVER fires for rate limits — only session.status
+      // with type="retry" and message containing rate limit keywords.
       if (event.type === 'session.status') {
         const props = event.properties as {
           sessionID: string
@@ -435,14 +454,55 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
         }
 
         if (props.status.type === 'retry') {
-          await notify(
-            `Session retry: attempt ${props.status.attempt} — ${props.status.message || 'retrying'}`,
-            'info',
-            5000
-          )
-          // Retry events indicate the runtime is handling retries internally.
-          // We note it for observability but don't double-count as a failure
-          // since the session.error event already captured the root cause.
+          const message = (props.status.message || '').toLowerCase()
+          const isRateLimit = message.includes('rate limit') ||
+            message.includes('too many requests') ||
+            message.includes('429')
+
+          if (isRateLimit) {
+            // Look up which provider+model this session was using
+            const sessionInfo = lastModelBySession.get(props.sessionID)
+            const providerName = sessionInfo?.provider || 'unknown'
+            const modelName = sessionInfo?.model || 'unknown'
+            const healthKey = `${providerName}/${modelName}`
+
+            // Calculate retry-after from the next timestamp
+            let retryAfterSeconds = DEFAULT_RETRY_AFTER_SECONDS
+            if (props.status.next) {
+              retryAfterSeconds = Math.max(1, Math.ceil((props.status.next - Date.now()) / 1000))
+            }
+
+            debugLog(`RATE LIMIT DETECTED via session.status: ${healthKey}, retryAfter=${retryAfterSeconds}s, attempt=${props.status.attempt}`)
+
+            // Mark the provider+model as rate limited
+            healthManager.markRateLimited(healthKey, retryAfterSeconds)
+            await healthManager.flush()
+
+            // Find alternatives to suggest
+            const tier = resolveModelTier(modelName)
+            const healthyProviders = healthManager.getHealthyProviders(tier)
+            const alternatives = healthyProviders.filter(
+              (entry) => `${entry.provider}/${entry.model}` !== healthKey
+            )
+
+            const altText = alternatives.length > 0
+              ? ` Switch to ${alternatives[0].provider}/${alternatives[0].model}`
+              : ' No healthy alternatives available'
+
+            await notify(
+              `🚫 ${providerName}/${modelName} rate limited (attempt ${props.status.attempt}).${altText}`,
+              'error',
+              8000
+            )
+          } else {
+            // Non-rate-limit retry (e.g., overloaded, network error)
+            debugLog(`RETRY (non-rate-limit): session=${props.sessionID}, attempt=${props.status.attempt}, message=${props.status.message}`)
+            await notify(
+              `Session retry: attempt ${props.status.attempt} — ${props.status.message || 'retrying'}`,
+              'info',
+              5000
+            )
+          }
         }
       }
     },
@@ -544,9 +604,10 @@ ${state.lastError ? `| Last Error | ${state.lastError.status} - ${state.lastErro
 No health data collected yet. Providers will appear here after first use.
 
 ### Available Providers
-- **copilot** (T1/T2)
-- **anthropic** (T1/T2/T3)
-- **ollama** (T0/T1/T2)
+- **opencode** (T1/T2 — OpenCode Zen free models)
+- **github-copilot** (T1/T2/T3 — subscription)
+- **anthropic** (T2/T3 — per-token)
+- **ollama** (T0 — local fallback)
 `
           }
 
@@ -558,7 +619,7 @@ Last Updated: ${data.lastUpdated}
 |----------|--------|--------------|-------------|----------|------------|
 `
 
-          for (const providerName of ['copilot', 'anthropic', 'ollama', 'ollama-cloud', 'kimi', 'glm']) {
+          for (const providerName of ['opencode', 'github-copilot', 'anthropic', 'ollama', 'ollama-cloud']) {
             const state = data.providers[providerName] || healthManager.getProviderState(providerName)
             const meta = getProviderMetadata(providerName)
             const status = state.status === 'unknown' ? '⚪ unknown' : `${statusEmoji(state.status)} ${state.status}`
@@ -577,7 +638,7 @@ Last Updated: ${data.lastUpdated}
           }
 
           output += `\n### Usage\n\n`
-          output += `- \`provider-health --provider=copilot\` — Show copilot-specific health\n`
+          output += `- \`provider-health --provider=github-copilot\` — Show GitHub Copilot health\n`
           output += `- \`provider-health --tier=T1\` — Show T1 fallback chain with health status\n`
           output += `- \`provider-health --reset\` — Clear health state and start fresh\n`
 
@@ -605,6 +666,16 @@ function extractProviderFromError(apiData: {
   const body = (apiData.responseBody || '').toLowerCase()
   const headers = apiData.responseHeaders || {}
 
+  // Check for OpenCode Zen patterns
+  if (
+    message.includes('opencode') ||
+    message.includes('kimi') || message.includes('moonshot') ||
+    message.includes('big-pickle') || message.includes('minimax') ||
+    body.includes('opencode')
+  ) {
+    return 'opencode'
+  }
+
   // Check for Anthropic-specific patterns
   if (
     message.includes('anthropic') ||
@@ -622,7 +693,7 @@ function extractProviderFromError(apiData: {
     body.includes('copilot') ||
     headers['x-github-request-id'] !== undefined
   ) {
-    return 'copilot'
+    return 'github-copilot'
   }
 
   // Check for Ollama Cloud patterns (before local ollama)
@@ -641,25 +712,6 @@ function extractProviderFromError(apiData: {
     body.includes('ollama')
   ) {
     return 'ollama'
-  }
-
-  // Check for Kimi/Zen patterns
-  if (
-    message.includes('kimi') ||
-    body.includes('kimi') ||
-    message.includes('moonshot') ||
-    body.includes('moonshot')
-  ) {
-    return 'kimi'
-  }
-
-  // Check for GLM patterns
-  if (
-    message.includes('glm') ||
-    body.includes('glm') ||
-    message.includes('zhipu')
-  ) {
-    return 'glm'
   }
 
   // Default: if we can't determine, assume the most common cloud provider
