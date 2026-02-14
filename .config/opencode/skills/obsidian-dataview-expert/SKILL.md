@@ -5,32 +5,139 @@ category: Session Knowledge
 ---
 
 # Skill: obsidian-dataview-expert
+
 ## What I do
 
-I provide expertise in dataview plugin expertise for dynamic queries and dashboards. This skill covers core concepts, patterns, and best practices for dataview plugin expertise for dynamic queries and dashboards.
+I provide definitive expertise in writing Dataview queries (DQL) and JavaScript-based views (DataviewJS) within Obsidian. I enable agents to transform static knowledge bases into dynamic, self-organising databases by treating the vault as a queryable data source.
+
 ## When to use me
 
-- When working with obsidian-dataview-expert
-- When you need expertise in dataview plugin expertise for dynamic queries and dashboards
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When creating or updating Obsidian Knowledge Base (KB) pages.
+- When dynamic indexing of notes, skills, agents, or tasks is required.
+- When building dashboards that must reflect the current state of the vault.
+- When replacing static markdown tables with dynamic data views.
+- **CRITICAL RULE**: Use me for ANY KB index page. NEVER use static markdown tables or manual lists in Obsidian KB pages. ALWAYS use DataviewJS queries that dynamically pull from vault metadata.
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
-## Patterns & examples
+1. **Metadata-First Architecture**: Treat frontmatter and tags as query fuel. No metadata means no visibility.
+2. **Defensive Programming**: ALWAYS wrap DataviewJS in `try/catch` blocks with user-friendly error messages to prevent dashboard crashes.
+3. **Progressive Complexity**: Use DQL for simple lists/tables; escalate to DataviewJS for complex logic, multi-step filtering, or custom CSS-styled rendering.
+4. **Path-Based Scoping**: Narrow query scope using folder paths (e.g., `startsWith("3. Resources/KB")`) to ensure performance and accuracy.
+5. **British English**: All labels, headers, and documentation within queries must use British English spelling.
 
-### Common Pattern in obsidian-dataview-expert
-Describe a typical approach with benefits and tradeoffs.
+## DQL vs DataviewJS
 
-### Alternative Pattern
-Show another way to approach problems in obsidian-dataview-expert.
+| Feature | DQL (Dataview Query Language) | DataviewJS |
+|:---|:---|:---|
+| **Complexity** | Simple filtering, sorting, and display. | Full JavaScript power, logic, and loops. |
+| **Rendering** | Standard List, Table, Task, Calendar. | Custom HTML, CSS grids, dynamic elements. |
+| **Logic** | Basic logical operators (AND, OR, NOT). | Conditionals, complex math, external calls. |
+| **Error Handling** | Silent failure or basic error message. | Comprehensive `try/catch` blocks. |
+| **Use Case** | Quick indexes, simple task lists. | Dashboards, statistics, skill cards, grids. |
+
+## DataviewJS fundamentals
+
+### Querying and Filtering
+```javascript
+// Scoped query by path and tag
+const base = "3. Resources/Knowledge Base/AI Development System";
+const pages = dv.pages().where(p => p.file.path.startsWith(base));
+
+// Tag matching (handling both single strings and arrays)
+const skills = pages.where(p => 
+    p.file.tags.values.some(t => t.startsWith("#skill/"))
+);
+```
+
+### Rendering Components
+```javascript
+dv.header(2, "Active Skills");
+dv.paragraph("Total verified skills: " + skills.length);
+
+// Dynamic Table
+dv.table(["Skill", "Category", "Last Modified"], 
+    skills.map(p => [p.file.link, p.category, p.file.mtime])
+);
+
+// Dynamic List
+dv.list(pages.file.link);
+```
+
+## Common patterns
+
+### The Quick Stats Counter
+Used for high-level dashboard summaries.
+```javascript
+try {
+    const pages = dv.pages("#type/note");
+    const count = pages.length;
+    dv.table(["Metric", "Count"], [
+        ["Total Knowledge Assets", count]
+    ]);
+} catch (e) {
+    dv.paragraph("⚠️ Error loading stats.");
+}
+```
+
+### The CSS Grid Skill Card
+For visually engaging resource indexes (requires `dashboard` cssclass in frontmatter).
+```javascript
+const groups = skills.groupBy(p => p.category);
+const css = `<style>
+.skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.skill-card { border: 1px solid var(--background-modifier-border); border-radius: 8px; padding: 12px; background: var(--background-secondary); }
+</style>`;
+dv.el("div", css);
+
+for (const group of groups) {
+    dv.header(3, group.key);
+    const cards = group.rows.map(p => 
+        `<div class="skill-card"><div>${p.file.link}</div><div>${p.lead || ""}</div></div>`
+    ).join("");
+    dv.el("div", cards, { cls: "skill-grid" });
+}
+```
+
+### CustomJS Integration
+When logic exceeds note-local complexity.
+```javascript
+const { VaultUtils } = await cJS();
+const data = VaultUtils.getProcessedData(dv.pages("#data"));
+dv.table(["Field"], data.map(d => [d.value]));
+```
+
+## Error handling
+
+**MANDATORY TEMPLATE**: Never write naked DataviewJS. Always use this wrapper:
+```javascript
+try {
+    // 1. Gather Data
+    const data = dv.pages("#tag").where(condition);
+    // 2. Process Data
+    if (data.length === 0) {
+        dv.paragraph("No matching resources found.");
+        return;
+    }
+    // 3. Render Data
+    dv.list(data.file.link);
+} catch (e) {
+    console.error("Dataview Error:", e);
+    dv.paragraph("⚠️ Error rendering view. Check console for details.");
+}
+```
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with obsidian-dataview-expert—what goes wrong and why
-❌ When NOT to use obsidian-dataview-expert—valid reasons to choose alternatives
+- ❌ **Static Tables**: Manual markdown tables in index pages. These go out of date instantly.
+- ❌ **Naked JS**: DataviewJS without `try/catch`. This causes the entire page to break if a single note has malformed metadata.
+- ❌ **Vault-Wide Scoping**: Using `dv.pages()` without `where` or `FROM` filters. This is slow and pulls irrelevant data.
+- ❌ **Hardcoded Values**: Hardcoding dates or counts that should be derived from note metadata.
+- ❌ **American English**: Using `color` instead of `colour` or `initialize` instead of `initialise` in labels.
+
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `obsidian-frontmatter`: Source of truth for all Dataview queries.
+- `obsidian-structure`: Defines the PARA paths used for scoped queries.
+- `british-english`: Ensures consistency in all rendered dashboard text.
+- `obsidian-customjs-expert`: For offloading complex logic to shared scripts.
