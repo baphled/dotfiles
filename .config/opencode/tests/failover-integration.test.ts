@@ -273,19 +273,23 @@ describe('Failover Integration', () => {
     for (let i = 0; i < 5; i++) {
       hm.recordFailure('anthropic', { status: 500, message: 'Server error' })
       hm.recordFailure('copilot', { status: 500, message: 'Server error' })
+      hm.recordFailure('ollama-cloud', { status: 500, message: 'Server error' })
     }
 
-    // T3 chain: anthropic → copilot → T2-degradation
-    // Both anthropic and copilot are down
+    // T3 chain: anthropic → copilot → ollama-cloud → T2-degradation
+    // All three are down, so should degrade to T2
     const t3Healthy = hm.getHealthyProviders('T3')
     const t3Providers = t3Healthy.map((p) => p.provider)
 
-    // Only ollama should remain (via T2 degradation chain)
+    // Anthropic, copilot, and ollama-cloud should not be in healthy list
     expect(t3Providers).not.toContain('anthropic')
     expect(t3Providers).not.toContain('copilot')
+    expect(t3Providers).not.toContain('ollama-cloud')
+    
+    // Should contain T2 providers via degradation
     expect(t3Providers).toContain('ollama')
 
-    // Routing should swap to ollama
+    // Routing should swap to ollama (from T2 chain)
     const routing = routeRequest('anthropic', 'T3', hm)
     expect(routing.wasSwapped).toBe(true)
     expect(routing.provider).toBe('ollama')

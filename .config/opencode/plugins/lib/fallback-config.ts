@@ -12,6 +12,8 @@ export interface ProviderEntry {
   provider: string;
   model: string;
   tier: string;
+  /** Whether this provider supports tools/MCP. Local Ollama does not. */
+  supportsTools?: boolean;
 }
 
 /**
@@ -36,6 +38,8 @@ export interface ProviderMetadata {
   costModel: CostModel;
   rateLimit: RateLimitConfig;
   description: string;
+  /** Whether this provider supports tools/MCP. Local Ollama does not. */
+  supportsTools?: boolean;
 }
 
 /**
@@ -55,15 +59,18 @@ export interface TierConfig {
 export function getFallbackChain(tier: string): ProviderEntry[] {
   const chains: Record<string, ProviderEntry[]> = {
     T0: [
+      // Local Ollama - use without tools/MCP (unreliable)
       {
         provider: 'ollama',
         model: 'granite4-tools',
         tier: 'T0',
+        supportsTools: false,
       },
       {
         provider: 'ollama',
         model: 'qwen2.5:7b-instruct',
         tier: 'T0',
+        supportsTools: false,
       },
     ],
     T1: [
@@ -77,10 +84,17 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
         model: 'claude-haiku-4-5',
         tier: 'T1',
       },
+      // Ollama Cloud - for when cloud is needed but local unavailable
+      {
+        provider: 'ollama-cloud',
+        model: 'gemma3',
+        tier: 'T1',
+      },
       {
         provider: 'ollama',
         model: 'granite4-tools',
         tier: 'T0',
+        supportsTools: false,
       },
     ],
     T2: [
@@ -94,10 +108,17 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
         model: 'claude-sonnet-4-5',
         tier: 'T2',
       },
+      // Ollama Cloud - for when cloud is needed but local unavailable
+      {
+        provider: 'ollama-cloud',
+        model: 'llama3.3',
+        tier: 'T2',
+      },
       {
         provider: 'ollama',
         model: 'qwen2.5:7b-instruct',
         tier: 'T0',
+        supportsTools: false,
       },
     ],
     T3: [
@@ -109,6 +130,12 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
       {
         provider: 'copilot',
         model: 'o3-mini',
+        tier: 'T3',
+      },
+      // Ollama Cloud as T3 fallback
+      {
+        provider: 'ollama-cloud',
+        model: 'llama3.3',
         tier: 'T3',
       },
       // Degrade to T2 chain on T3 exhaustion (marker entry)
@@ -157,7 +184,19 @@ export function getProviderMetadata(provider: string): ProviderMetadata {
       rateLimit: {
         type: 'none',
       },
-      description: 'Ollama local (free, always available)',
+      description: 'Ollama local (free, always available, no tools/MCP)',
+      supportsTools: false,
+    },
+    'ollama-cloud': {
+      provider: 'ollama-cloud',
+      costModel: 'per-token',
+      rateLimit: {
+        type: 'per-minute',
+        threshold: 100, // Ollama Cloud rate limits
+        resetIntervalMs: 60 * 1000, // 1 minute
+      },
+      description: 'Ollama Cloud (cloud-hosted models via ollama.com API)',
+      supportsTools: true,
     },
   };
 

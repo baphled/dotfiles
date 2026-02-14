@@ -80,7 +80,9 @@ function extractProviderName(providerID: string): string {
   const lower = providerID.toLowerCase()
   if (lower.includes('copilot') || lower.includes('github')) return 'copilot'
   if (lower.includes('anthropic') || lower.includes('claude')) return 'anthropic'
-  if (lower.includes('ollama') || lower.includes('local')) return 'ollama'
+  // Check ollama-cloud before ollama since it's more specific
+  if (lower.includes('ollama-cloud') || lower.includes('ollama.com')) return 'ollama-cloud'
+  if (lower.includes('ollama') || lower.includes('localhost') || lower.includes('local')) return 'ollama'
   return lower
 }
 
@@ -180,7 +182,7 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       const disabledProviders = config.disabled_providers || []
 
       // Check each known provider's health
-      for (const providerName of ['copilot', 'anthropic', 'ollama']) {
+      for (const providerName of ['copilot', 'anthropic', 'ollama', 'ollama-cloud']) {
         const state = healthManager.getProviderState(providerName)
 
         if (state.status === 'rate_limited' || state.status === 'down') {
@@ -534,7 +536,7 @@ Last Updated: ${data.lastUpdated}
 |----------|--------|--------------|-------------|----------|------------|
 `
 
-          for (const providerName of ['copilot', 'anthropic', 'ollama']) {
+          for (const providerName of ['copilot', 'anthropic', 'ollama', 'ollama-cloud']) {
             const state = data.providers[providerName] || healthManager.getProviderState(providerName)
             const meta = getProviderMetadata(providerName)
             const status = state.status === 'unknown' ? '⚪ unknown' : `${statusEmoji(state.status)} ${state.status}`

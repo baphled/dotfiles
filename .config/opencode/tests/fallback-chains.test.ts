@@ -154,7 +154,7 @@ describe('Fallback Chains', () => {
 
   describe('Chain Consistency', () => {
     test('all entries should have valid provider names', () => {
-      const validProviders = ['copilot', 'anthropic', 'ollama', 'T2-degradation']
+      const validProviders = ['copilot', 'anthropic', 'ollama', 'ollama-cloud', 'T2-degradation']
       for (const tier of ['T0', 'T1', 'T2', 'T3']) {
         const chain = getFallbackChain(tier)
         chain.forEach((entry) => {

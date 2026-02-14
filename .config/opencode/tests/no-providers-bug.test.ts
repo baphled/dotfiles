@@ -92,12 +92,13 @@ describe('No Providers Bug', () => {
     expect(alternatives.length).toBeGreaterThan(0)
   })
 
-  test('should handle case where all providers are rate limited', () => {
+    test('should handle case where all providers are rate limited', () => {
     const hm = new HealthManager()
     
     // Mark all T1 providers as rate limited
     hm.markRateLimited('copilot', 60)
     hm.markRateLimited('anthropic', 60)
+    hm.markRateLimited('ollama-cloud', 60)
     hm.markRateLimited('ollama', 60)
     
     const healthy = hm.getHealthyProviders('T1')

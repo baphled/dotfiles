@@ -410,7 +410,7 @@ describe('HealthManager', () => {
 
       // All providers unknown (no data) → included
       const healthy = hm.getHealthyProviders('T1')
-      expect(healthy.length).toBe(3) // copilot, anthropic, ollama
+      expect(healthy.length).toBe(4) // copilot, anthropic, ollama-cloud, ollama
     })
 
     test('T1 chain has correct order', () => {
@@ -421,13 +421,14 @@ describe('HealthManager', () => {
       expect(healthy[0].model).toBe('gpt-4o-mini')
       expect(healthy[1].provider).toBe('anthropic')
       expect(healthy[1].model).toBe('claude-haiku-4-5')
-      expect(healthy[2].provider).toBe('ollama')
+      expect(healthy[2].provider).toBe('ollama-cloud')
+      expect(healthy[3].provider).toBe('ollama')
     })
 
-    test('T2 chain has 3 entries', () => {
+    test('T2 chain has 4 entries', () => {
       const hm = new HealthManager()
       const healthy = hm.getHealthyProviders('T2')
-      expect(healthy.length).toBe(3)
+      expect(healthy.length).toBe(4) // copilot, anthropic, ollama-cloud, ollama
     })
 
     test('T3 chain degrades to T2 when all T3 providers down', () => {
