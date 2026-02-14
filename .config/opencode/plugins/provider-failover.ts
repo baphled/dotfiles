@@ -212,15 +212,24 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
      * the desired model/provider override to the runtime.
      */
     'chat.params': async (input, output) => {
+      // Debug: log what provider info is available
+      const providerInfo = JSON.stringify({
+        provider: input.provider ? 'present' : 'undefined',
+        info: input.provider?.info ? 'present' : 'undefined',
+        infoId: input.provider?.info?.id,
+        model: input.model?.id,
+      })
+      notify(`chat.params: ${providerInfo}`, 'info', 3000)
+
       // Guard: provider may not be available in all contexts
       if (!input.provider?.info?.id) {
-        await notify('No provider info available — skipping failover check', 'info', 3000)
+        notify('No provider info available — skipping failover check', 'info', 3000)
         return
       }
 
       // Guard: model may not be available in all contexts
       if (!input.model?.id) {
-        await notify('No model info available — skipping failover check', 'info', 3000)
+        notify('No model info available — skipping failover check', 'info', 3000)
         return
       }
 
