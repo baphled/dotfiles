@@ -122,3 +122,18 @@ func NewTestDB() *TestDB {
 - `debug-test` - Diagnosing E2E test failures
 - `bdd-workflow` - Red-Green-Refactor cycle
 - `bubble-tea-testing` - TUI-specific testing patterns
+
+## View-Based Assertions (Bubble Tea + Huh Testing Contract)
+
+For TUI applications using Bubble Tea, assertions MUST use the rendered view, not database access.
+
+**Pattern**:
+- `env.GetView()` returns rendered TUI output as string
+- Use `strings.Contains(view, expectedValue)` for field checks
+- Use footer checking for counts: `fmt.Sprintf("Events: %d", n)`
+- Never access DB directly in Then steps
+
+**Why**: The view is truth in a TUI. Testing what the user sees is more valuable than testing internal state.
+
+See: KaRiya Obsidian note "Bubble Tea + Huh Testing Contract"
+

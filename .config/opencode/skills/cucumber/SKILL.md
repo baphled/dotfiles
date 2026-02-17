@@ -103,6 +103,32 @@ Scenario: Adding multiple items to cart
 - ❌ Long scenarios with 10+ steps (break into smaller focused scenarios)
 - ❌ Scenario dependencies (each scenario must be independent)
 - ❌ Incidental details (`Given a user "alice@test.com" with password "abc123"`) — use roles/personas
+- ❌ NEVER use `env.GetEvents()` or similar DB access in "Then" steps — use `env.GetView()` and check for substring/footer
+- ❌ NEVER bypass UI with direct repo calls in "When" steps — call domain functions instead
+- ❌ NEVER mix DB assertions with view assertions in same step file — migrate fully to one pattern
+
+**WRONG** (DB-based Then step):
+```go
+func thereShouldBeNEvents(ctx context.Context, n int) (context.Context, error) {
+    env := support.GetAppEnv(ctx)
+    count := len(env.GetEvents())  // ❌ DB access
+    if count != n { return ctx, fmt.Errorf("expected %d", n) }
+    return ctx, nil
+}
+```
+
+**CORRECT** (View-based Then step):
+```go
+func thereShouldBeNEvents(ctx context.Context, n int) (context.Context, error) {
+    env := support.GetAppEnv(ctx)
+    view := env.GetView()  // ✅ View access
+    expectedFooter := fmt.Sprintf("Events: %d", n)
+    if !strings.Contains(view, expectedFooter) {
+        return ctx, fmt.Errorf("expected footer not found")
+    }
+    return ctx, nil
+}
+```
 
 ## Related skills
 

@@ -124,6 +124,38 @@ func TestFetchStatusCommand(t *testing.T) {
 }
 ```
 
+## Absolute Rules (Bubble Tea Testing Contract)
+
+MUST NOT:
+- Call `Program.Run()` in tests — creates blocking event loop
+- Call `SubmitHuhForm()` in tests — deadlocks waiting for TUI interaction
+- Block waiting for TUI interaction in any form
+- Put business logic inside `Update()` methods
+
+MUST DO:
+- Extract business logic into pure functions (no Bubble Tea dependencies)
+- Test pure functions directly, not through the event loop
+- Call `Update()` manually with tea.KeyMsg for UI behavior tests
+- Keep Update() as thin adapter: route messages → call domain logic → transition state
+
+**Required Architecture**:
+- Pure Domain Layer: All business logic, validation, rules (testable in isolation)
+  - No Bubble Tea or Huh imports
+  - Deterministic and synchronous
+  - Called directly from Godog steps
+- TUI Layer: Rendering adapter only
+  - ExtractInput() methods extract structured data
+  - Update() routes messages and calls domain functions
+  - View() displays results
+
+**Enforcement Rule** (4-step process for writing tests):
+1. Identify business logic
+2. Extract it into a pure function
+3. Test the pure function with unit tests
+4. Do NOT test the runtime event loop
+
+See: KaRiya Obsidian note "Bubble Tea + Huh Testing Contract"
+
 ## Anti-patterns to avoid
 
 - ❌ Testing via terminal output only (test Update logic directly first)

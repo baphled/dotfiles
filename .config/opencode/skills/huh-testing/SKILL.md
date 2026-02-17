@@ -126,6 +126,48 @@ func TestAdminShowsExtraFields(t *testing.T) {
 }
 ```
 
+## Absolute Rules (Huh Testing Contract)
+
+MUST NOT:
+- Call `SubmitHuhForm()` in tests — TUI simulation helpers will deadlock
+- Simulate form submission helpers (env.SubmitSkill, env.SubmitFact, etc.)
+- Block on TUI event loop
+- Test Huh forms by starting the full program
+
+CAN DO (if UI behavior must be tested):
+- Simulate tea.KeyMsg manually: `m.Update(tea.KeyMsg{Type: tea.KeyTab})`
+- Do NOT start the full program loop — just test the Update() method directly
+- UI behavior tests are integration tests, not BDD tests
+
+CORRECT Godog Step Pattern:
+```go
+// Step calls domain function directly
+func iSubmitTheForm(ctx context.Context, input string) (context.Context, error) {
+    env := support.GetAppEnv(ctx)
+    result, err := ProcessForm(env.FormInput)  // ✅ Pure domain function
+    if err != nil { return ctx, err }
+    env.SendMessage(FormSubmittedMsg{Result: result})
+    return ctx, nil
+}
+```
+
+INCORRECT Pattern:
+```go
+func iSubmitTheForm(ctx context.Context) (context.Context, error) {
+    env := support.GetAppEnv(ctx)
+    env.SubmitHuhForm()  // ❌ FORBIDDEN — deadlocks
+    return ctx, nil
+}
+```
+
+**Enforcement Rule** (4-step process):
+1. Identify business logic
+2. Extract it into a pure function
+3. Test the pure function
+4. Do NOT test the runtime event loop
+
+See: KaRiya Obsidian note "Bubble Tea + Huh Testing Contract"
+
 ## Anti-patterns to avoid
 
 - ❌ Testing huh's internal rendering (test your logic, not the library)
