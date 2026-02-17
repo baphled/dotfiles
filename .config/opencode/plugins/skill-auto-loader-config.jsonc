@@ -1,0 +1,281 @@
+{
+  // Skills always injected regardless of context
+  "baseline_skills": [
+    "pre-action",
+    "memory-keeper"
+  ],
+
+  // Maximum number of auto-injected skills (excludes explicitly provided ones)
+  "max_auto_skills": 5,
+
+  // Whether to skip injection when session_id is provided (continuation)
+  "skip_on_session_continue": true,
+
+  // Category name → skills array mapping
+  // Covers all 8 task categories with appropriate skill recommendations
+  "category_mappings": {
+    "visual-engineering": [
+      "frontend-ui-ux",
+      "accessibility",
+      "clean-code"
+    ],
+    "ultrabrain": [
+      "architecture",
+      "critical-thinking",
+      "systems-thinker"
+    ],
+    "deep": [
+      "clean-code",
+      "error-handling"
+    ],
+    "quick": [
+      "clean-code"
+    ],
+    "artistry": [
+      "design-patterns",
+      "critical-thinking"
+    ],
+    "writing": [
+      "british-english",
+      "documentation-writing"
+    ],
+    "unspecified-low": [
+      "clean-code"
+    ],
+    "unspecified-high": [
+      "clean-code",
+      "error-handling"
+    ]
+  },
+
+  // Subagent type → skills array mapping
+  // Explore and librarian are fast operations requiring no skills
+  // Oracle requires advanced reasoning skills
+  // Sisyphus-junior gets skills from category, not subagent type
+  "subagent_mappings": {
+    "explore": [],
+    "librarian": [],
+    "oracle": [
+      "critical-thinking",
+      "architecture",
+      "systems-thinker"
+    ],
+    "sisyphus-junior": []
+  },
+
+  // Keyword patterns for prompt analysis
+  // Ordered by priority (highest first)
+  // Patterns are case-insensitive regex strings
+  "keyword_patterns": [
+    {
+      "pattern": "security|vulnerabilit|auth|encrypt",
+      "skills": [
+        "security",
+        "cyber-security"
+      ],
+      "priority": 9
+    },
+    {
+      "pattern": "playwright|browser|scrape|screenshot",
+      "skills": [
+        "playwright"
+      ],
+      "priority": 9
+    },
+    {
+      "pattern": "test|spec|assert|expect|describe",
+      "skills": [
+        "ginkgo-gomega",
+        "bdd-workflow"
+      ],
+      "priority": 8
+    },
+    {
+      "pattern": "golang|\\.go |go module|goroutine",
+      "skills": [
+        "golang",
+        "go-expert"
+      ],
+      "priority": 8
+    },
+    {
+      "pattern": "ruby|rails|rspec|gem",
+      "skills": [
+        "ruby",
+        "rspec-testing"
+      ],
+      "priority": 8
+    },
+    {
+      "pattern": "javascript|typescript|node|react|vue",
+      "skills": [
+        "javascript"
+      ],
+      "priority": 8
+    },
+    {
+      "pattern": "nix|flake|nixos|nix-shell",
+      "skills": [
+        "nix"
+      ],
+      "priority": 8
+    },
+    {
+      "pattern": "bubble\\.tea|bubbletea|tui|terminal ui",
+      "skills": [
+        "bubble-tea-expert"
+      ],
+      "priority": 8
+    },
+    {
+      "pattern": "refactor|clean|simplif",
+      "skills": [
+        "refactor",
+        "clean-code",
+        "design-patterns"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "database|db|repository|gorm|sql",
+      "skills": [
+        "gorm-repository",
+        "db-operations"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "api|endpoint|route|handler|rest",
+      "skills": [
+        "api-design",
+        "error-handling"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "concurren|goroutine|channel|mutex|sync",
+      "skills": [
+        "concurrency"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "obsidian|vault|zettelkasten|note",
+      "skills": [
+        "obsidian-structure",
+        "obsidian-frontmatter"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "deploy|ci|cd|pipeline|docker|container",
+      "skills": [
+        "devops",
+        "automation"
+      ],
+      "priority": 6
+    },
+    {
+      "pattern": "performance|optimis|benchmark|profil",
+      "skills": [
+        "performance",
+        "profiling"
+      ],
+      "priority": 6
+    },
+    {
+      "pattern": "document|readme|adr|runbook",
+      "skills": [
+        "documentation-writing",
+        "british-english"
+      ],
+      "priority": 5
+    },
+    {
+      "pattern": "git |commit|rebase|merge|branch",
+      "skills": [
+        "git-advanced"
+      ],
+      "priority": 6
+    },
+    {
+      "pattern": "error|panic|recover|exception",
+      "skills": [
+        "error-handling"
+      ],
+      "priority": 6
+    }
+   ],
+
+  // Agent patterns for prompt analysis
+  // Ordered by priority (highest first)
+  // Patterns are case-insensitive regex strings
+  // Senior-Engineer has lowest priority (5) — acts as catch-all
+  "agent_patterns": [
+    {
+      "pattern": "vhs|tape|demo|terminal record",
+      "agent": "VHS-Director",
+      "priority": 10
+    },
+    {
+      "pattern": "arduino|esp32|esp8266|microcontroller|firmware|embedded|rtos",
+      "agent": "Embedded-Engineer",
+      "priority": 10
+    },
+    {
+      "pattern": "nix|flake|nixos|nix-shell|home-manager",
+      "agent": "Nix-Expert",
+      "priority": 10
+    },
+    {
+      "pattern": "security|vulnerab|audit|penetrat|cve|exploit",
+      "agent": "Security-Engineer",
+      "priority": 9
+    },
+    {
+      "pattern": "architect|design review|rfc|trade.?off|system design|tech lead",
+      "agent": "Tech-Lead",
+      "priority": 9
+    },
+    {
+      "pattern": "data analy|metrics|report|statistic|dashboard|csv",
+      "agent": "Data-Analyst",
+      "priority": 8
+    },
+    {
+      "pattern": "ci.?cd|pipeline|deploy|docker|kubernetes|infrastructure",
+      "agent": "DevOps",
+      "priority": 8
+    },
+    {
+      "pattern": "document|blog|tutorial|readme|write.*doc|content",
+      "agent": "Writer",
+      "priority": 8
+    },
+    {
+      "pattern": "test strat|qa|coverage|adversar|edge case|quality assur",
+      "agent": "QA-Engineer",
+      "priority": 8
+    },
+    {
+      "pattern": "linux|systemd|kernel|sysctl|iptables|apt|pacman",
+      "agent": "Linux-Expert",
+      "priority": 8
+    },
+    {
+      "pattern": "kb|knowledge base|obsidian sync|documentation audit",
+      "agent": "Knowledge Base Curator",
+      "priority": 7
+    },
+    {
+      "pattern": "monitor|incident|uptime|alert|system ops|maintenance",
+      "agent": "SysOp",
+      "priority": 7
+    },
+    {
+      "pattern": "implement|feature|fix|bug|refactor|code|develop|build",
+      "agent": "Senior-Engineer",
+      "priority": 5
+    }
+  ]
+}
