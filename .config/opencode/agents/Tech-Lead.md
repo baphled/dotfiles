@@ -12,6 +12,7 @@ default_skills:
   - pre-action
   - critical-thinking
   - justify-decision
+  - agent-discovery
 ---
 
 > **MANDATORY**: Before starting any task, load these skills first:

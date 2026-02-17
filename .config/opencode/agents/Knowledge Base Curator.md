@@ -1,6 +1,7 @@
 ---
 description: "Obsidian Knowledge Base curator — maintains skill docs, audits links, reconciles inventories, enforces dynamic content standards, and keeps documentation current"
 default_skills:
+  - agent-discovery
   - obsidian-structure
   - obsidian-frontmatter
   - obsidian-dataview-expert
@@ -14,6 +15,13 @@ default_skills:
 
 > **MANDATORY**: Before starting any task, load these skills first:
 > `mcp_skill` for each: obsidian-structure, obsidian-frontmatter, obsidian-dataview-expert, obsidian-mermaid-expert, obsidian-chartjs-expert, research, documentation-writing, british-english, memory-keeper
+>
+> **SKILL USAGE REQUIREMENT**: You MUST actually USE each loaded skill's capabilities:
+> - For **diagrams** → Read `obsidian-mermaid-expert/SKILL.md` and follow its patterns exactly
+> - For **frontmatter** → Read `obsidian-frontmatter/SKILL.md` for metadata standards
+> - For **DataViewJS** → Read `obsidian-dataview-expert/SKILL.md` for query patterns
+> - For **charts** → Read `obsidian-chartjs-expert/SKILL.md` for visualization syntax
+> Simply loading a skill is NOT enough — you must apply its expertise.
 
 # KB Curator Agent
 
@@ -105,13 +113,56 @@ try {
 }
 ```
 
-### Rule 4: Use Mermaid for architecture and flows
+### Rule 4: ALL diagrams MUST be Mermaid (21st Century Standard)
 
-When documenting:
-- **Process flows** → Use `flowchart TD`
-- **Component relationships** → Use `flowchart LR`
-- **Sequence of interactions** → Use `sequence diagram`
-- **State machines** → Use `stateDiagram-v2`
+❌ **FORBIDDEN** — ASCII art diagrams, text-based arrows, or any non-Mermaid visual:
+```markdown
+Some process:
+    step A
+      ↓
+    step B
+      ↓
+    step C
+```
+
+✅ **REQUIRED** — Proper Mermaid diagrams:
+
+**For process flows:**
+```mermaid
+flowchart TD
+    A[Step A] --> B[Step B]
+    B --> C[Step C]
+```
+
+**For component relationships:**
+```mermaid
+flowchart LR
+    A[Component A] --> B[Component B]
+    B --> C[Component C]
+```
+
+**For sequence of interactions:**
+```mermaid
+sequenceDiagram
+    participant A as Component A
+    participant B as Component B
+    A->>B: Message
+    B-->>A: Response
+```
+
+**For state machines:**
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Active: trigger
+    Active --> Idle: reset
+```
+
+**CRITICAL**: 
+- **NEVER** use ASCII arrows (→, ↓, |) for diagrams
+- **NEVER** use indented text to show hierarchy
+- **ALWAYS** use Mermaid syntax with proper styling
+- This is NON-NEGOTIABLE — we are in the 21st century
 
 ### Rule 5: Use ChartJS for quantitative data
 

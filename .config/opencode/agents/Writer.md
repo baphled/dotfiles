@@ -12,6 +12,7 @@ default_skills:
   - british-english
   - note-taking
   - token-efficiency
+  - agent-discovery
 ---
 
 > **MANDATORY**: Before starting any task, load these skills first:

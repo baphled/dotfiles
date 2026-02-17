@@ -11,6 +11,7 @@ permission:
 default_skills:
   - pre-action
   - vhs
+  - agent-discovery
 ---
 
 > **MANDATORY**: Before starting any task, load these skills first:

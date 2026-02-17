@@ -9,6 +9,7 @@ permission:
   skill:
     "*": "allow"
 default_skills:
+  - agent-discovery
   - epistemic-rigor
   - question-resolver
   - note-taking

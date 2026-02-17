@@ -12,6 +12,7 @@ default_skills:
   - pre-action
   - bdd-workflow
   - critical-thinking
+  - agent-discovery
 ---
 
 > **MANDATORY**: Before starting any task, load these skills first:

@@ -9,6 +9,7 @@ permission:
   skill:
     "*": "allow"
 default_skills:
+  - agent-discovery
   - pre-action
   - critical-thinking
   - cpp
