@@ -5,32 +5,85 @@ category: Domain Architecture
 ---
 
 # Skill: domain-modeling
+
 ## What I do
 
-I provide expertise in domain-driven design (ddd) and domain modelling patterns. This skill covers core concepts, patterns, and best practices for domain-driven design (ddd) and domain modelling patterns.
+I provide expert guidance in Domain-Driven Design (DDD). I help create software that accurately reflects complex business domains through ubiquitous language, bounded contexts, and tactical patterns like entities, value objects, and aggregates. I focus on isolating business logic from technical infrastructure.
+
 ## When to use me
 
-- When working with domain-modeling
-- When you need expertise in domain-driven design (ddd) and domain modelling patterns
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- Designing features in complex business domains (e.g., finance, logistics).
+- Establishing clear boundaries between different sub-systems (Bounded Contexts).
+- Building a shared vocabulary (Ubiquitous Language) between dev and business.
+- Refactoring "anaemic" models where logic is scattered in service classes.
+- Managing consistency and transaction boundaries for related entities.
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Ubiquitous Language** - Use the same precise terminology in code, docs, and talk.
+2. **Bounded Contexts** - Define explicit boundaries where a particular model applies.
+3. **Rich Domain Model** - Encapsulate business logic and invariants within entities.
+4. **Aggregate Roots** - Control all access and changes through a single root entity.
+5. **Persistence Ignorance** - Domain models should not know about databases or APIs.
+
 ## Patterns & examples
 
-### Common Pattern in domain-modeling
-Describe a typical approach with benefits and tradeoffs.
+**Pattern: Aggregate Root with Invariants**
 
-### Alternative Pattern
-Show another way to approach problems in domain-modeling.
-## Anti-patterns to avoid
+```go
+type Order struct {
+    id     OrderID
+    status OrderStatus
+    items  []OrderLine
+}
 
-❌ Common mistake with domain-modeling—what goes wrong and why
-❌ When NOT to use domain-modeling—valid reasons to choose alternatives
+func (o *Order) AddItem(p Product, qty int) error {
+    if o.status != StatusDraft {
+        return ErrOrderLocked
+    }
+    o.items = append(o.items, OrderLine{p, qty})
+    o.recalculateTotal() // Maintain invariant
+    return nil
+}
+```
+
+**Pattern: Value Object (Immutable)**
+
+```go
+type Money struct {
+    amount   decimal.Decimal
+    currency string
+}
+
+func (m Money) Add(other Money) (Money, error) {
+    if m.currency != other.currency {
+        return Money{}, ErrCurrencyMismatch
+    }
+    return Money{m.amount.Add(other.amount), m.currency}, nil
+}
+```
+
+**Pattern: Repository Interface**
+
+```go
+type OrderRepository interface {
+    FindByID(ctx context.Context, id OrderID) (*Order, error)
+    Save(ctx context.Context, order *Order) error
+}
+```
+
+## Anti-patterns
+
+- ❌ **Anaemic Domain Model** - Entities are just data bags; all logic is in services.
+- ❌ **Primitive Obsession** - Using `string` for `Email` or `int` for `Money`.
+- ❌ **Breaking Encapsulation** - Modifying internal aggregate state from the outside.
+- ❌ **Leaking Infrastructure** - Passing database types or HTTP request objects into the domain.
+- ❌ **God Models** - A single `User` or `Product` model trying to serve every team's needs.
+
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `service-layer` - Orchestrates domain logic for specific use cases.
+- `architecture` - Structural patterns for layered or hexagonal systems.
+- `api-design` - Exposing domain operations via consistent interfaces.
+- `clean-code` - Essential for expressive ubiquitous language.
+

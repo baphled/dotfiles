@@ -8,76 +8,92 @@ category: DevOps Operations
 
 ## What I do
 
-I provide reproducible, declarative package management using Nix. Every build is deterministic, isolated, and pinned to exact versions. Use me for development environments, dependency management, and cross-platform builds.
+I provide reproducible, declarative package management and build systems. Every build is deterministic, isolated, and pinned to exact versions. I eliminate "works on my machine" problems by treating packages as immutable values built from pure functions.
 
 ## When to use me
 
-- Creating reproducible development environments
-- Pinning exact dependency versions across team/CI
-- Cross-platform builds (Linux, macOS, NixOS)
-- NixOS system configuration (distro-level declarative config)
-- Isolating project dependencies from system packages
+- Creating reproducible development environments across teams and CI.
+- Managing complex dependency trees with potential version conflicts.
+- Building hermetic, bit-reproducible artefacts and immutable containers.
+- Pinning exact dependencies for long-term project stability.
+- Running multiple versions of tools side-by-side without interference.
 
 ## Core principles
 
-1. **Reproducibility** - Same inputs always produce same outputs
-2. **Purity** - Builds isolated from system state, no hidden dependencies
-3. **Declarative** - Describe what you want, not how to get it
-4. **Atomic** - Operations succeed completely or rollback
-5. **Pinned dependencies** - Lock exact versions for consistency
+1. **Reproducibility** - Same inputs always produce identical outputs, regardless of machine state.
+2. **Purity** - Builds are hermetic; they cannot access the network or undeclared system state.
+3. **Declarative** - Configuration is expressed as pure functions in the Nix language.
+4. **Immutability** - Packages in `/nix/store` are never modified; upgrades create new versions.
+5. **Atomic Operations** - Installations and upgrades succeed completely or leave the system unchanged.
 
 ## Patterns & examples
 
-**Pattern: flake.nix for reproducible projects**
+**Pattern: flake.nix for Go projects (Modern)**
 
 ```nix
 {
-  description = "My Go project";
-  
+  description = "Go project flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
   };
-  
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
+        packages.default = pkgs.buildGoModule {
+          pname = "myapp";
+          version = "0.1.0";
+          src = ./.;
+          vendorHash = "sha256-abc123..."; # Pin dependencies
+        };
         devShells.default = pkgs.mkShell {
-          buildInputs = [ pkgs.go_1_21 pkgs.gopls pkgs.golangci-lint ];
+          buildInputs = with pkgs; [ go_1_21 gopls golangci-lint ];
+          shellHook = "echo 'Go development environment loaded'";
         };
       });
 }
 ```
 
-**Pattern: Enter reproducible shell**
+**Pattern: buildGoModule with testing**
 
-```bash
-# Modern flakes approach
-nix develop  # uses flake.nix devShell
-
-# Legacy shell.nix approach
-nix-shell    # uses shell.nix
+```nix
+pkgs.buildGoModule {
+  pname = "myapp";
+  version = "1.0.0";
+  src = ./.;
+  vendorHash = "sha256-abc...";
+  checkPhase = ''
+    go test -v ./...
+  '';
+  installPhase = ''
+    install -Dm755 $GOPATH/bin/myapp $out/bin/myapp
+  '';
+}
 ```
 
-**Pattern: Lock dependencies**
+**Pattern: Docker image from Nix**
 
-```bash
-nix flake lock           # generate flake.lock with exact versions
-nix flake update         # update locked versions
-nix flake update nixpkgs # update specific input
+```nix
+pkgs.dockerTools.buildImage {
+  name = "myapp";
+  tag = "latest";
+  contents = [ self.packages.${system}.default ];
+  config.Cmd = [ "/bin/myapp" ];
+}
 ```
 
-## Anti-patterns to avoid
+## Anti-patterns
 
-- ❌ `nix-env -i` (imperative, breaks reproducibility)
-- ❌ Unlocked flakes without `flake.lock` (non-deterministic)
-- ❌ Mixing imperative (`nix-env`) and declarative (flakes) approaches
-- ❌ Hardcoding paths instead of using Nix expressions
-- ❌ Not committing `flake.lock` to version control
+- ❌ **Impure Builds** - Accessing network/system state without declaring it in inputs.
+- ❌ **Imperative Usage** - Using `nix-env -i` instead of declarative `flake.nix` or `shell.nix`.
+- ❌ **Hardcoded Paths** - Using `/usr/bin/` instead of `${pkgs.package}/bin/command`.
+- ❌ **Missing Lockfiles** - Not committing `flake.lock`, leading to non-deterministic builds.
+- ❌ **Mixing Package Managers** - Using `apt` or `brew` alongside Nix for the same dependencies.
 
 ## Related skills
 
-- `dependency-management` - Version control and updates
-- `configuration-management` - Environment configuration
-- `devops` - Build and deployment pipelines
+- `infrastructure-as-code` - Declarative patterns for system state.
+- `dependency-management` - Pinning and updating software versions.
+- `docker` - Creating minimal, reproducible container images.
+- `automation` - Scripting reproducible workflows.

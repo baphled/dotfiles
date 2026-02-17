@@ -5,32 +5,90 @@ category: DevOps Operations
 ---
 
 # Skill: automation
+
 ## What I do
 
-I provide expertise in eliminate repetitive tasks, build ci/cd pipelines, and create self-maintaining systems. This skill covers core concepts, patterns, and best practices for eliminate repetitive tasks, build ci/cd pipelines, and create self-maintaining systems.
+I eliminate repetitive manual tasks through scripting, CI/CD pipelines, and self-maintaining systems. I focus on identifying automation opportunities, building reliable workflows, and creating systems that reduce toil and human error.
+
 ## When to use me
 
-- When working with automation
-- When you need expertise in eliminate repetitive tasks, build ci/cd pipelines, and create self-maintaining systems
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- Performing the same task more than twice.
+- Manual processes prone to human error or inconsistency.
+- Time-consuming repetitive operations (deployments, backups, reports).
+- Implementing code quality checks, security scans, and dependency updates.
+- Infrastructure provisioning and environment setup.
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Automate the Pain** - Prioritise tasks that cause the most friction or consume the most time.
+2. **Idempotency** - Automation must produce the same result regardless of how many times it runs.
+3. **Fail Loudly** - Failures must be obvious and actionable; silent failures are dangerous.
+4. **Reliability** - Include error handling, retries, and clear failure modes.
+5. **Documentation as Code** - Scripts and pipelines are the source of truth for processes.
+
 ## Patterns & examples
 
-### Common Pattern in automation
-Describe a typical approach with benefits and tradeoffs.
+**Pattern: Pre-commit Hook (Git)**
 
-### Alternative Pattern
-Show another way to approach problems in automation.
-## Anti-patterns to avoid
+```bash
+#!/bin/bash
+set -e
+echo "Running pre-commit checks..."
+make fmt
+make lint
+make test-unit
+gitleaks detect --no-git --verbose # Secret scanning
+echo "All checks passed!"
+```
 
-❌ Common mistake with automation—what goes wrong and why
-❌ When NOT to use automation—valid reasons to choose alternatives
+**Pattern: Automated Release (GitHub Actions)**
+
+```yaml
+name: Automated Release
+on:
+  push:
+    tags: ['v*']
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run tests
+        run: make test
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: "Release notes generated from commits"
+          files: bin/myapp-*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+**Pattern: Self-Healing Kubernetes Liveness Probe**
+
+```yaml
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  failureThreshold: 3
+restartPolicy: Always
+```
+
+## Anti-patterns
+
+- ❌ **Over-Automation** - Automating simple one-off tasks that take more time to automate than to do.
+- ❌ **Fragile Scripts** - Missing error handling (`set -e`) or failing on unexpected but valid inputs.
+- ❌ **Hidden Automation** - Scripts that run without team awareness or logging.
+- ❌ **No Rollback** - Automation that cannot be undone or reverted safely.
+- ❌ **Automation Drift** - Scripts that work locally but fail in CI/CD environments.
+
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `devops` - CI/CD and operational excellence.
+- `scripter` - Writing robust shell/Python scripts.
+- `monitoring` - Automated health checks and alerting.
+- `github-expert` - Advanced workflow automation.
+
