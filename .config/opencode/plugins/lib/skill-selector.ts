@@ -7,12 +7,6 @@
  * Tier 3: Keyword pattern matching from prompt
  */
 
-export interface AgentPattern {
-  pattern: string
-  agent: string
-  priority: number
-}
-
 export interface SkillAutoLoaderConfig {
   baseline_skills: string[]
   max_auto_skills: number
@@ -20,13 +14,6 @@ export interface SkillAutoLoaderConfig {
   category_mappings: Record<string, string[]>
   subagent_mappings: Record<string, string[]>
   keyword_patterns: Array<{ pattern: string; skills: string[]; priority: number }>
-  agent_patterns?: AgentPattern[]
-}
-
-export interface AgentRoutingResult {
-  agent: string | null
-  matched_pattern: string | null
-  priority: number
 }
 
 export interface SkillSelectionInput {
@@ -169,58 +156,5 @@ export function selectSkills(input: SkillSelectionInput, config: SkillAutoLoader
   return {
     skills: Array.from(allSkills),
     sources: finalSources
-  }
-}
-
-/**
- * Select an agent based on prompt pattern matching.
- * 
- * Matches the prompt against configured agent_patterns using regex,
- * returning the highest-priority match. Returns null values when no
- * pattern matches.
- * 
- * @param prompt - The user prompt to match against patterns
- * @param config - Skill auto-loader configuration containing agent_patterns
- * @returns The matched agent with pattern info, or nulls if no match
- */
-export function selectAgent(prompt: string, config: SkillAutoLoaderConfig): AgentRoutingResult {
-  const nullResult: AgentRoutingResult = { agent: null, matched_pattern: null, priority: 0 }
-
-  if (!config.agent_patterns || config.agent_patterns.length === 0) {
-    return nullResult
-  }
-
-  if (!prompt || prompt.trim().length === 0) {
-    return nullResult
-  }
-
-  // Collect all matches with their priorities
-  const matches: Array<{ agent: string; pattern: string; priority: number }> = []
-
-  for (const ap of config.agent_patterns) {
-    try {
-      const regex = new RegExp(ap.pattern, 'i')
-      if (regex.test(prompt)) {
-        matches.push({ agent: ap.agent, pattern: ap.pattern, priority: ap.priority })
-      }
-      regex.lastIndex = 0
-    } catch {
-      // Invalid regex pattern — skip
-      continue
-    }
-  }
-
-  if (matches.length === 0) {
-    return nullResult
-  }
-
-  // Sort by priority (highest first) and return the top match
-  matches.sort((a, b) => b.priority - a.priority)
-  const best = matches[0]
-
-  return {
-    agent: best.agent,
-    matched_pattern: best.pattern,
-    priority: best.priority
   }
 }

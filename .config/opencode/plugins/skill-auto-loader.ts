@@ -6,14 +6,15 @@
  */
 
 import type { Plugin, PluginInput } from '@opencode-ai/plugin'
-import { existsSync, readFileSync, writeFileSync } from 'fs'
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs'
 import { join } from 'path'
-import { selectSkills, selectAgent, type SkillAutoLoaderConfig, type SkillSelectionInput } from './lib/skill-selector'
+import { selectSkills, type SkillAutoLoaderConfig, type SkillSelectionInput } from './lib/skill-selector'
 import { AgentConfigCache } from './lib/agent-config-parser'
 
 const PLUGIN_DIR = `${process.env.HOME}/.config/opencode/plugins`
 const CONFIG_FILE = join(PLUGIN_DIR, 'skill-auto-loader-config.jsonc')
-const LOG_FILE = '/tmp/skill-auto-loader.log'
+const LOG_FILE = `${process.env.HOME}/.config/opencode/logs/skill-auto-loader.log`
+const LOGS_DIR = `${process.env.HOME}/.config/opencode/logs`
 
 // Default config if file missing
 const DEFAULT_CONFIG: SkillAutoLoaderConfig = {
@@ -99,6 +100,16 @@ function createNotifier(client: PluginInput['client']) {
 export const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   // Initialize config and agent cache at plugin load time
   config = loadConfig()
+  
+  // Ensure logs directory exists
+  try {
+    if (!existsSync(LOGS_DIR)) {
+      mkdirSync(LOGS_DIR, { recursive: true })
+    }
+  } catch {
+    // Ignore directory creation errors
+  }
+  
   agentCache = new AgentConfigCache()
   await agentCache.init()
 
@@ -128,24 +139,9 @@ export const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       // Get prompt for keyword analysis
       const prompt = args.prompt as string | undefined
 
-      // === Agent Routing (before skill selection) ===
-      // Only route generic/unset agents; explicit subagent_type is never overridden
-      const GENERIC_AGENTS = new Set<string | undefined>([undefined, 'sisyphus-junior'])
-      let routedAgent: string | null = null
-      let routedPattern: string | null = null
-
-      if (GENERIC_AGENTS.has(subagentType)) {
-        const routingResult = selectAgent(prompt || '', config)
-        if (routingResult.agent) {
-          routedAgent = routingResult.agent
-          routedPattern = routingResult.matched_pattern
-          subagentType = routingResult.agent
-          args.subagentType = routingResult.agent
-          notify(`🔀 Routed to ${routingResult.agent} (matched: ${routingResult.matched_pattern})`, 'info', 5000)
-        }
-      }
-
-      // Get agent default skills if subagentType provided (uses routed agent if applicable)
+      // === Skill Selection ===
+      
+      // Get agent default skills if subagentType provided
       let agentDefaultSkills: string[] | undefined
       if (subagentType) {
         const agentConfig = agentCache.getAgentConfig(subagentType)
@@ -176,8 +172,6 @@ export const SkillAutoLoaderPlugin: Plugin = async (_input) => {
         tool: input.tool,
         category,
         subagentType,
-        routedAgent,
-        routedPattern,
         injected: result.skills,
         existing: existingSkills,
         final: result.skills,

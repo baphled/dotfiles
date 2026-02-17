@@ -1,5 +1,64 @@
 # OpenCode Agent System - Core Rules
 
+## Phase 0: Automatic Task Classification (MANDATORY - RUNS BEFORE EVERYTHING)
+
+**CRITICAL: This gate executes BEFORE any tool call, file read, or code generation.**
+
+Every user message MUST be classified before acting. If classification is skipped, the session is in violation.
+
+### Classification Algorithm
+
+```
+1. PARSE request for complexity signals
+2. IF any of these are true → COMPLEX:
+   - Multiple files/modules/packages mentioned or implied
+   - "write/create/build/implement" + "app/project/feature"
+   - Tests required (explicit or implied by project conventions)
+   - Architecture/design decisions needed
+   - Multiple domains (e.g., Go + CLI + tests)
+   - Estimated >50 lines of code
+3. IF COMPLEX → DELEGATE (no user permission needed)
+4. IF SIMPLE → work directly
+```
+
+### SIMPLE (work directly)
+- Single file edit with known location
+- Typo fix, rename, small config change
+- Direct answer from existing context
+- Reading/exploring code (no changes)
+
+### COMPLEX (discovery)
+- **auto-discovery** (skills): "Add tests" → load ginkgo-gomega, tdd-workflow
+- **agent-discovery** (agents): "Write a Go app" → delegate to Senior-Engineer
+- "Create a CLI" → load bubble-tea-expert, ui-design skills
+- "Build an API" → load api-design, golang skills
+- "Refactor module X" → load refactor, clean-code skills
+- Any task touching 2+ files → delegate via agent-discovery
+
+### Delegation Execution (automatic)
+
+1. **auto-discovery**: Identify keywords → select skills from keyword_patterns
+2. **agent-discovery**: Match agent from specialist definitions (~/.config/opencode/agents/*.md)
+3. Determine tier: T1 (search), T2 (implementation), T3 (architecture)
+4. Identify parallelisable subtasks → fire concurrently
+5. EXECUTE delegation — do NOT ask user for permission
+
+```
+
+### Anti-Patterns (VIOLATIONS)
+
+❌ User says "Write a Go app" → you start writing files directly
+❌ User says "Add feature X" → you ask "Should I delegate this?"
+❌ Multi-step task → you work sequentially instead of parallelising
+❌ Complex task → you skip classification and jump to tool calls
+
+### DEFAULT BIAS: DELEGATE AUTOMATICALLY
+
+When uncertain whether a task is SIMPLE or COMPLEX, classify as COMPLEX and delegate.
+This rule overrides: personal familiarity, assumption direct work is faster, user phrasing making it sound simple.
+
+---
+
 ## Change Request Verification (MANDATORY)
 
 When addressing change requests, comments, or review feedback:
