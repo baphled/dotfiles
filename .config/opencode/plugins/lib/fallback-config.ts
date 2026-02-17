@@ -78,10 +78,10 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
       { provider: 'ollama', model: 'llama3.2:1b', tier: 'T0', supportsTools: false },
     ],
     T3: [
-      { provider: 'github-copilot', model: 'claude-sonnet-4.5', tier: 'T3' },
       { provider: 'github-copilot', model: 'claude-opus-4.6', tier: 'T3' },
       { provider: 'github-copilot', model: 'gpt-5.2', tier: 'T3' },
       { provider: 'github-copilot', model: 'gpt-5.2-codex', tier: 'T3' },
+      { provider: 'anthropic', model: 'claude-opus-4-6', tier: 'T3' },
       { provider: 'opencode', model: 'big-pickle', tier: 'T2' },
       { provider: 'opencode', model: 'kimi-k2.5-free', tier: 'T2' },
     ],
