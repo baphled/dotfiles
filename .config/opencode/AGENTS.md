@@ -13,8 +13,8 @@
    - Test pairing (implementation + test in same commit)
 
 2. **For NEW COMMITS:**
-   - Write commit message to `/tmp/commit.txt`
-   - Run: `make ai-commit FILE=/tmp/commit.txt`
+   - Write commit message to `tmp/commit.txt`
+   - Run: `make ai-commit FILE=tmp/commit.txt`
    - This adds `AI-Generated-By: Opencode (Model)` and `Reviewed-By: <name>` trailers
    - NEVER use raw `git commit -m` for new commits
 
@@ -114,26 +114,27 @@ For each change request, you MUST provide:
 
 ### Providers
 
-| Provider | Auth | Billing | Preferred For |
-|----------|------|---------|---------------|
-| **GitHub Copilot** (preferred) | `/connect` device flow | Subscription ($10/mo Pro, 300 requests) | All Tier 1 + Tier 2 work |
-| **Anthropic** (fallback) | API key | Per-token | Tier 3 (Opus), overflow, batch |
+| Provider                     | Auth                   | Billing                                 | Preferred For                  |
+| ---------------------------- | ---------------------- | --------------------------------------- | ------------------------------ |
+| **OpenCode Zen** (preferred) | Built-in               | Free                                    | All Tier 1 + Tier 2 work       |
+| **GitHub Copilot**           | `/connect` device flow | Subscription ($10/mo Pro, 300 requests) | Tier 2 + Tier 3                |
+| **Anthropic** (fallback)     | API key                | Per-token                               | Tier 3 (Opus), overflow, batch |
 
 ### Three-Tier System
 
-| Tier | When | Anthropic Model | Copilot Model |
-|------|------|-----------------|---------------|
-| **T1 (Lightweight)** | Trivial, quick, exploration, parallel search | `anthropic/claude-haiku-4-5` | `copilot/gpt-4o-mini` |
-| **T2 (Balanced)** | Implementation, debugging, testing, writing — **DEFAULT** | `anthropic/claude-sonnet-4-5` | `copilot/gpt-4o` |
-| **T3 (Premium)** | Architecture, ultrabrain, artistry, novel problems | `anthropic/claude-opus-4-5` | `copilot/o3-mini` |
+| Tier                 | When                                                      | Anthropic Model              | Copilot Model             | OpenCode Zen                                        |
+| -------------------- | --------------------------------------------------------- | ---------------------------- | ------------------------- | --------------------------------------------------- |
+| **T1 (Lightweight)** | Trivial, quick, exploration, parallel search              | `anthropic/claude-haiku-4-5` | `copilot/gpt-5-mini`      | `opencode/gpt-5-nano`, `opencode/minimax-m2.5-free` |
+| **T2 (Balanced)**    | Implementation, debugging, testing, writing — **DEFAULT** | `anthropic/claude-sonnet-4`  | `copilot/gpt-5`           | `opencode/big-pickle`, `opencode/kimi-k2.5-free`    |
+| **T3 (Premium)**     | Architecture, ultrabrain, artistry, novel problems        | `anthropic/claude-opus-4-6`  | `copilot/claude-opus-4.6` | —                                                   |
 
 ### Category → Tier Mapping
 
-| Category | Tier | Default Provider |
-|----------|------|-----------------|
-| trivial, quick, unspecified-low | T1 | Copilot |
-| deep, visual-engineering, writing, unspecified-high | T2 | Copilot |
-| ultrabrain, artistry | T3 | Anthropic (Opus) |
+| Category                                            | Tier | Default Provider |
+| --------------------------------------------------- | ---- | ---------------- |
+| trivial, quick, unspecified-low                     | T1   | Copilot          |
+| deep, visual-engineering, writing, unspecified-high | T2   | Copilot          |
+| ultrabrain, artistry                                | T3   | Anthropic (Opus) |
 
 ### Agent Type → Tier
 
@@ -145,13 +146,14 @@ For each change request, you MUST provide:
 
 ### Provider Selection Rules
 
-1. **Default: Copilot** — Use for all T1 and T2 work (subscription absorbs cost)
-2. **Anthropic for T3** — Opus not available on Copilot Pro (needs Pro+)
-3. **Overflow** — If Copilot 300 requests exhausted, fall back to Anthropic direct
-4. **Cross-provider fallback** — If one provider is down, try same-tier model from other
-5. **Automatic failover on rate limit** — If primary provider returns 429 or 503, immediately switch to next healthy provider in same tier
-6. **Tier degradation** — If all providers in current tier are unhealthy, degrade to next lower tier (T3→T2→T1→T0)
-7. **Ollama local fallback** — Ollama serves as T0 last-resort fallback, always available when other providers are exhausted
+1. **Default: OpenCode Zen** — Use free models for T1 and T2 work first
+2. **GitHub Copilot for T2/T3** — Subscription-based, use for balanced and premium work
+3. **Anthropic for T3** — Direct API for premium Claude Opus work
+4. **Overflow** — If OpenCode Zen rate limited, fall back to Copilot; if Copilot exhausted, fall back to Anthropic
+5. **Cross-provider fallback** — If one provider is down, try same-tier model from other
+6. **Automatic failover on rate limit** — If primary provider returns 429 or 503, immediately switch to next healthy provider in same tier
+7. **Tier degradation** — If all providers in current tier are unhealthy, degrade to next lower tier (T3→T2→T1→T0)
+8. **Ollama local fallback** — Ollama serves as T0 last-resort fallback, always available when other providers are exhausted
 
 ### Provider Failover
 
@@ -159,25 +161,18 @@ When a provider becomes rate-limited or unhealthy, the system automatically swit
 
 #### Fallback Chains by Tier
 
-| Tier | Primary | Secondary | Tertiary | Fallback |
-|------|---------|-----------|----------|----------|
-| **T1** | Copilot GPT-4o-mini | Anthropic Haiku | Ollama Cloud llama3.2:1b | T0 |
-| **T2** | Copilot GPT-4o | Anthropic Sonnet | Ollama Cloud llama3.2:3b | T0 |
-| **T3** | Anthropic Opus | Copilot o3-mini | Ollama Cloud llama3.2:3b | T0 |
-| **T0** | Ollama llama3.2:1b | Ollama phi4 | — | None |
+| Tier   | Primary                 | Secondary          | Tertiary                             | Fallback |
+| ------ | ----------------------- | ------------------ | ------------------------------------ | -------- |
+| **T1** | OpenCode gpt-5-nano     | Copilot gpt-5-mini | Anthropic Haiku                      | T0       |
+| **T2** | OpenCode big-pickle     | Copilot gpt-5      | Anthropic Sonnet                     | T0       |
+| **T3** | Copilot claude-opus-4.6 | Anthropic Opus     | OpenCode big-pickle (T2 degradation) | T0       |
+| **T0** | Ollama llama3.2:1b      | Ollama phi4        | —                                    | None     |
 
 **Note:** Local Ollama models (T0) are lightweight and fast but do NOT support tools/MCP. Use cloud providers when tools are required.
 
 #### Health State Tracking
 
-The system maintains health state for each provider with the following metrics:
-
-- **Status**: `healthy`, `degraded`, `rate_limited`, or `down`
-- **Success Rate**: Rolling window of last 50 requests
-- **Latency P95**: 95th percentile latency in milliseconds
-- **Last Error**: Timestamp, message, and HTTP status code
-- **Rate Limit Expiry**: ISO timestamp when rate limit expires (null if not limited)
-- **Circuit Breaker**: 3 failures in 5 minutes → `degraded`; 5 failures → `down`
+The system tracks rate-limited providers with expiry timestamps. When a provider hits a rate limit (detected via `session.status` retry events), it is marked with an ISO expiry timestamp. Expired entries are automatically cleared.
 
 Health state persists to `~/.cache/opencode/provider-health.json` and survives session restarts.
 
@@ -185,30 +180,30 @@ Health state persists to `~/.cache/opencode/provider-health.json` and survives s
 
 ```typescript
 // Tier 1 — exploration (Copilot preferred)
-task(subagent_type="explore", model="copilot/gpt-4o-mini", run_in_background=true)
-task(subagent_type="librarian", model="copilot/gpt-4o-mini", run_in_background=true)
+task(subagent_type="explore", model="copilot/gpt-5-mini", run_in_background=true)
+task(subagent_type="librarian", model="copilot/gpt-5-mini", run_in_background=true)
 
 // Tier 2 — implementation (Copilot preferred)
-task(category="deep", model="copilot/gpt-4o", load_skills=["clean-code"])
-task(category="visual-engineering", model="copilot/claude-sonnet-4-5", load_skills=["frontend-ui-ux"])
+task(category="deep", model="copilot/gpt-5", load_skills=["clean-code"])
+task(category="visual-engineering", model="copilot/claude-sonnet-4", load_skills=["frontend-ui-ux"])
 
 // Tier 3 — complex reasoning (Anthropic for Opus)
-task(category="ultrabrain", model="anthropic/claude-opus-4-5", load_skills=["architecture"])
+task(category="ultrabrain", model="anthropic/claude-opus-4-6", load_skills=["architecture"])
 
 // Tier 3 — reasoning via Copilot (o3-mini available on Pro)
-task(category="artistry", model="copilot/o3-mini", load_skills=["design-patterns"])
+task(category="artistry", model="copilot/claude-opus-4.6", load_skills=["design-patterns"])
 
 // Parallel pattern: 3×T1 + 1×T2
-task(subagent_type="explore", model="copilot/gpt-4o-mini", run_in_background=true)  // T1
-task(subagent_type="explore", model="copilot/gpt-4o-mini", run_in_background=true)  // T1
-task(subagent_type="librarian", model="copilot/gpt-4o-mini", run_in_background=true) // T1
-task(category="deep", model="copilot/gpt-4o", run_in_background=false)               // T2
+task(subagent_type="explore", model="copilot/gpt-5-mini", run_in_background=true)  // T1
+task(subagent_type="explore", model="copilot/gpt-5-mini", run_in_background=true)  // T1
+task(subagent_type="librarian", model="copilot/gpt-5-mini", run_in_background=true) // T1
+task(category="deep", model="copilot/gpt-5", run_in_background=false)               // T2
 ```
 
 ### Copilot Pro Constraints
 
-- **Available:** GPT-4o-mini (T1), GPT-4o (T2), Claude Sonnet (T2), o3-mini (T3)
-- **NOT available:** Claude Opus (Pro+), o1 (Pro+)
+- **Available:** GPT-5-mini (T1), GPT-5 (T2), Claude Sonnet 4 (T2), Claude Opus 4.6 (T3)
+- **NOT available:** —
 - **Monthly limit:** 300 premium requests — track usage
 - **When exhausted:** Fall back to Anthropic direct API
 
@@ -249,21 +244,21 @@ provider-health --reset
 
 **Health state file location:** `~/.cache/opencode/provider-health.json`
 
-The health state file contains per-provider metrics (status, success rate, latency, last error, rate limit expiry) and is automatically updated as requests are made. Use `jq` to query the file directly:
+The health state file tracks rate-limited providers with ISO expiry timestamps. Use `jq` to query the file directly:
 
 ```bash
-# View all provider statuses
-jq '.providers | keys[] as $p | {provider: $p, status: .[$p].status}' ~/.cache/opencode/provider-health.json
+# View all rate-limited providers
+jq '.rateLimits' ~/.cache/opencode/provider-health.json
 
-# Check if a provider is rate-limited
-jq '.providers.copilot.status' ~/.cache/opencode/provider-health.json
+# Check if a specific provider/model is rate-limited
+jq '.rateLimits["opencode/kimi-k2.5-free"]' ~/.cache/opencode/provider-health.json
 ```
 
 ### Red Flags
 
-- ❌ Using T1 (Haiku/GPT-4o-mini) for code generation or architecture
-- ❌ Using T3 (Opus) for trivial tasks or finding references
-- ❌ Using T2 (Sonnet) for simple typos or parallel exploration
+- ❌ Using T1 (Haiku/GPT-5-mini) for code generation or architecture
+- ❌ Using T3 (Opus 4.6) for trivial tasks or finding references
+- ❌ Using T2 (Sonnet 4) for simple typos or parallel exploration
 - ❌ Using Copilot for Opus-class work (not available on Pro)
 
 ### Escalation
@@ -319,3 +314,20 @@ Use the `/vhs` command to interact with the ecosystem:
 3. **Progressive Disclosure** - Load only what's needed
 
 **No exceptions.**
+
+---
+
+## User Communication Preferences (MANDATORY)
+
+**Style:** Direct, plain, no sycophancy
+
+- Assume competence. Do not validate, cushion, or emotionally frame responses.
+- No excessive agreement ("That's a great question!", "I love that idea!").
+- No over-apologising.
+- No verbose intros/outros.
+- Disagree plainly when needed—no softening ("I see your point, but...").
+- Get to the point immediately.
+- Use concise formatting (bullets, code blocks) over prose.
+- If asked to do something, just do it. Do not narrate the steps unless asked.
+
+This user is AuDHD and a systems thinker. They want information efficiently delivered, not packaged with performative helpfulness.
