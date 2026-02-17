@@ -1,0 +1,32 @@
+{
+  "local": [
+    {
+      "filename": "event-logger.ts",
+      "size_bytes": 2994,
+      "preview": "import type { Plugin } from \"@opencode-ai/plugin\"\nimport { appendFileSync, writeFileSync } from \"fs\"\n\nconst LOG_FILE = \"/tmp/opencode-events.log\"\n\n// Initialise log file with header on plugin load\ncon"
+    },
+    {
+      "filename": "model-context.ts",
+      "size_bytes": 1725,
+      "preview": "import type { Plugin } from \"@opencode-ai/plugin\"\nimport { existsSync, readFileSync } from \"fs\"\n\nconst CACHE_DIR = `${process.env.HOME}/.cache/opencode`\nconst MODELS_CACHE = `${CACHE_DIR}/models.json`"
+    },
+    {
+      "filename": "provider-failover.ts",
+      "size_bytes": 20245,
+      "preview": "/**\n * Provider Failover Routing Plugin\n *\n * Automatically routes LLM requests to healthy providers based on tier,\n * health state, and rate limit status. Captures error events to update\n * provider "
+    }
+  ],
+  "external": [
+    {
+      "name": "opencode-anthropic-auth",
+      "version": "0.0.13",
+      "spec": "opencode-anthropic-auth@0.0.13"
+    },
+    {
+      "name": "oh-my-opencode",
+      "version": "unknown",
+      "spec": "oh-my-opencode"
+    }
+  ],
+  "dependencies": {}
+}
