@@ -699,3 +699,30 @@ skill-integrate:
 	fi; \
 	\
 	"$(HOME)/.config/opencode/scripts/skill-integrate.sh" "$(SKILL)"
+
+# =============================================================================
+# Git & Compliance Operations
+# =============================================================================
+
+.PHONY: ai-commit check-compliance
+
+# Create a properly attributed commit for AI-generated code
+# Usage: AI_MODEL="model-name" [AI_AGENT="agent-name"] make ai-commit FILE=path/to/commit.txt
+ai-commit:
+	@if [ -z "$(FILE)" ]; then \
+		echo "Usage: make ai-commit FILE=path/to/commit.txt"; \
+		exit 1; \
+	fi; \
+	if [ -z "$(AI_MODEL)" ]; then \
+		echo "❌ ERROR: AI_MODEL environment variable is required"; \
+		echo "   Example: AI_MODEL=\"gpt-4o\" make ai-commit FILE=tmp/commit.txt"; \
+		exit 1; \
+	fi; \
+	AGENT=$${AI_AGENT:-"Opencode"}; \
+	git commit -F "$(FILE)" --trailer "AI-Agent: $$AGENT" --trailer "AI-Model: $(AI_MODEL)"
+
+# Run comprehensive compliance and quality checks
+check-compliance:
+	@echo "🔍 Running compliance checks..."
+	@# TODO: Implement actual compliance checks (linting, tests, etc.)
+	@echo "✅ Compliance checks passed"

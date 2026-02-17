@@ -2,7 +2,10 @@
   // Skills always injected regardless of context
   "baseline_skills": [
     "pre-action",
-    "memory-keeper"
+    "memory-keeper",
+    "auto-discovery",
+    "agent-discovery",
+    "token-cost-estimation"
   ],
 
   // Maximum number of auto-injected skills (excludes explicitly provided ones)
@@ -83,15 +86,25 @@
       "priority": 9
     },
     {
-      "pattern": "test|spec|assert|expect|describe",
+      "pattern": "(?:write|create|build|implement).*(?:app|application|program|project|feature|service)",
+      "skills": [
+        "architecture",
+        "clean-code",
+        "error-handling"
+      ],
+      "priority": 9
+    },
+    {
+      "pattern": "test|spec|assert|expect|describe|tdd",
       "skills": [
         "ginkgo-gomega",
-        "bdd-workflow"
+        "bdd-workflow",
+        "tdd-workflow"
       ],
       "priority": 8
     },
     {
-      "pattern": "golang|\\.go |go module|goroutine",
+      "pattern": "golang|\\.go |go module|goroutine|go app",
       "skills": [
         "golang",
         "go-expert"
@@ -121,9 +134,11 @@
       "priority": 8
     },
     {
-      "pattern": "bubble\\.tea|bubbletea|tui|terminal ui",
+      "pattern": "cli|command.?line|bubble\\.tea|bubbletea|tui|terminal ui",
       "skills": [
-        "bubble-tea-expert"
+        "bubble-tea-expert",
+        "ui-design",
+        "ux-design"
       ],
       "priority": 8
     },
@@ -137,10 +152,11 @@
       "priority": 7
     },
     {
-      "pattern": "database|db|repository|gorm|sql",
+      "pattern": "database|db|repository|gorm|sql|orm",
       "skills": [
         "gorm-repository",
-        "db-operations"
+        "db-operations",
+        "sql"
       ],
       "priority": 7
     },
@@ -164,6 +180,15 @@
       "skills": [
         "obsidian-structure",
         "obsidian-frontmatter"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "architect|design|system design|domain model",
+      "skills": [
+        "architecture",
+        "design-patterns",
+        "domain-modeling"
       ],
       "priority": 7
     },
@@ -204,78 +229,6 @@
         "error-handling"
       ],
       "priority": 6
-    }
-   ],
-
-  // Agent patterns for prompt analysis
-  // Ordered by priority (highest first)
-  // Patterns are case-insensitive regex strings
-  // Senior-Engineer has lowest priority (5) — acts as catch-all
-  "agent_patterns": [
-    {
-      "pattern": "vhs|tape|demo|terminal record",
-      "agent": "VHS-Director",
-      "priority": 10
-    },
-    {
-      "pattern": "arduino|esp32|esp8266|microcontroller|firmware|embedded|rtos",
-      "agent": "Embedded-Engineer",
-      "priority": 10
-    },
-    {
-      "pattern": "nix|flake|nixos|nix-shell|home-manager",
-      "agent": "Nix-Expert",
-      "priority": 10
-    },
-    {
-      "pattern": "security|vulnerab|audit|penetrat|cve|exploit",
-      "agent": "Security-Engineer",
-      "priority": 9
-    },
-    {
-      "pattern": "architect|design review|rfc|trade.?off|system design|tech lead",
-      "agent": "Tech-Lead",
-      "priority": 9
-    },
-    {
-      "pattern": "data analy|metrics|report|statistic|dashboard|csv",
-      "agent": "Data-Analyst",
-      "priority": 8
-    },
-    {
-      "pattern": "ci.?cd|pipeline|deploy|docker|kubernetes|infrastructure",
-      "agent": "DevOps",
-      "priority": 8
-    },
-    {
-      "pattern": "document|blog|tutorial|readme|write.*doc|content",
-      "agent": "Writer",
-      "priority": 8
-    },
-    {
-      "pattern": "test strat|qa|coverage|adversar|edge case|quality assur",
-      "agent": "QA-Engineer",
-      "priority": 8
-    },
-    {
-      "pattern": "linux|systemd|kernel|sysctl|iptables|apt|pacman",
-      "agent": "Linux-Expert",
-      "priority": 8
-    },
-    {
-      "pattern": "kb|knowledge base|obsidian sync|documentation audit",
-      "agent": "Knowledge Base Curator",
-      "priority": 7
-    },
-    {
-      "pattern": "monitor|incident|uptime|alert|system ops|maintenance",
-      "agent": "SysOp",
-      "priority": 7
-    },
-    {
-      "pattern": "implement|feature|fix|bug|refactor|code|develop|build",
-      "agent": "Senior-Engineer",
-      "priority": 5
     }
   ]
 }
