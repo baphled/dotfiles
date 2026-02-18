@@ -1,4 +1,29 @@
-# OpenCode Agent System
+# Claude Code Agent System
+
+# 🚨 THE GOLDEN RULE: ORCHESTRATOR ALWAYS DELEGATES 🚨
+
+**The orchestrator (Sisyphus/main agent) performs ZERO implementation. No exceptions.**
+
+### MANDATORY DELEGATION PATTERN
+Every task that requires file modification or content creation MUST follow this flow:
+1. **Understand** the requirement.
+2. **Select** the appropriate `task()` category.
+3. **Delegate** implementation to a subagent via the `task()` tool.
+4. **Verify** the subagent's work.
+
+### DELEGATION EXAMPLES
+- **Typo fix:** Delegate to `quick`.
+- **New function:** Delegate to `deep`.
+- **Documentation update:** Delegate to `writing`.
+- **Refactoring:** Delegate to `ultrabrain`.
+
+### 🚫 BLOCKING VIOLATIONS (ANTI-PATTERNS)
+- ❌ **Direct File Editing:** Orchestrator using `write` or `edit` tools directly.
+- ❌ **"Quick Fix" Trap:** Doing a small change directly because "it's faster".
+- ❌ **The "Simplicity" Lie:** Deciding a task is too simple to delegate. Even a single line change gets delegated.
+- ❌ **Investigative Overreach:** Reading 5+ files to "understand" instead of delegating the exploration to a subagent.
+
+---
 
 ## Phase 0: Automatic Classification
 
@@ -7,24 +32,22 @@
 ### Algorithm
 
 ```
-1. PARSE request for complexity signals
-2. IF any are true → COMPLEX:
-   - Multiple files/modules/packages
-   - "write/create/build" + "app/project/feature"
-   - Tests required
-   - Architecture decisions needed
-   - Multiple domains
-3. IF COMPLEX → DELEGATE (no permission needed)
-4. IF SIMPLE → work directly
+1. PARSE request
+2. SELECT appropriate category:
+   - quick: Single file, typo, config
+   - writing: Documentation, prose
+   - deep: Multi-file, investigation
+   - ultrabrain: Architecture, novel problems
+3. DELEGATE via task() with skills
+4. VERIFY results
 ```
 
-### SIMPLE
-- Single file edit, typo fix, direct answer from context
-
-### COMPLEX (auto-discovery)
-- Multi-file tasks, tests, CLI, architecture, new features
-
-### DEFAULT BIAS: DELEGATE
+| Task Type | Category | Tier |
+|-----------|----------|------|
+| Typo fix, single file | quick | T1 |
+| Documentation, prose | writing | T2 |
+| Multi-file, investigation | deep | T2 |
+| Architecture, complex logic | ultrabrain | T3 |
 
 ---
 
@@ -33,7 +56,7 @@
 These skills load on EVERY task() call:
 - `pre-action` — Decision framework
 - `memory-keeper` — Capture discoveries  
-- `auto-discovery` — Automatically discover and load appropriate skills based on task context
+- `skill-discovery` — Automatically discover and load appropriate skills based on task context
 - `agent-discovery` — Automatically discover and route to appropriate specialist agents
 
 ---
@@ -80,7 +103,11 @@ When addressing review feedback:
 | deep, visual-engineering, writing, unspecified-high | T2 |
 | ultrabrain, artistry | T3 |
 
-**Failover:** If rate limited, auto-switch to next provider in tier.
+**Pre-delegation health check (MANDATORY):** Before delegating, call `provider-health(tier=X, recommend=true)` to get the best available model with sufficient capacity. Pass `estimated_requests=N` for large tasks. This avoids wasting round trips on rate-limited or nearly-exhausted providers.
+
+**Capacity tracking:** Usage is counted per provider. Providers near their limits (e.g. Copilot 270/300 monthly) are skipped for expensive tasks.
+
+**Failover:** If rate limited or insufficient capacity, auto-switch to next provider in tier.
 
 ---
 
