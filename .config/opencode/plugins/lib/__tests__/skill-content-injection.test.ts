@@ -386,6 +386,226 @@ describe('injectSkillContent — 20KB ceiling enforcement', () => {
 // injectSkillContent — null/missing cache
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// injectSkillContent — progressive injection
+// ---------------------------------------------------------------------------
+
+describe('progressive injection', () => {
+  /**
+   * Helper: build a string of exactly `bytes` bytes (ASCII so 1 byte = 1 char).
+   */
+  function makeContent(bytes: number): string {
+    return 'x'.repeat(bytes)
+  }
+
+  /**
+   * Helper: return the byte size of a single skill block as built by injection.
+   * Format: `<skill name="{name}">\n{content}\n</skill>\n\n`
+   */
+  function blockSize(name: string, content: string): number {
+    return `<skill name="${name}">\n${content}\n</skill>\n\n`.length
+  }
+
+  it('5 skills totalling 25KB → first N that fit under 20KB are injected, rest dropped', () => {
+    // Each skill is 5KB content — 5 × 5KB = 25KB total (over 20KB ceiling)
+    // With block overhead, only the first 3 should fit (≈15KB+) before ceiling
+    const skill5KB = makeContent(5 * 1024)
+    const cache = makeSkillCache({
+      'skill-a': skill5KB,
+      'skill-b': skill5KB,
+      'skill-c': skill5KB,
+      'skill-d': skill5KB,
+      'skill-e': skill5KB,
+    })
+    const sources: SkillSource[] = [
+      { skill: 'skill-a', source: 'baseline' },
+      { skill: 'skill-b', source: 'category' },
+      { skill: 'skill-c', source: 'category' },
+      { skill: 'skill-d', source: 'keyword' },
+      { skill: 'skill-e', source: 'keyword' },
+    ]
+
+    const result = injectSkillContent({
+      skills: ['skill-a', 'skill-b', 'skill-c', 'skill-d', 'skill-e'],
+      sources,
+      originalPrompt: 'My task',
+      skillCache: cache,
+    })
+
+    // Some skills should have been injected
+    expect(result.injected).toBe(true)
+    // At least one skill did NOT fit → dropped
+    expect(result.skillsDropped.length).toBeGreaterThan(0)
+    // Ceiling was exceeded (some skills were dropped)
+    expect(result.ceilingExceeded).toBe(true)
+    // Dropped skills are NOT in the prompt
+    for (const dropped of result.skillsDropped) {
+      expect(result.prompt).not.toContain(`<skill name="${dropped}">`)
+    }
+    // At least one skill IS in the prompt (progressive, not all-or-nothing)
+    const injectedSkills = ['skill-a', 'skill-b', 'skill-c', 'skill-d', 'skill-e'].filter(
+      s => !result.skillsDropped.includes(s),
+    )
+    expect(injectedSkills.length).toBeGreaterThan(0)
+    for (const injected of injectedSkills) {
+      expect(result.prompt).toContain(`<skill name="${injected}">`)
+    }
+  })
+
+  it('baseline skills always injected regardless of budget', () => {
+    // Baseline skill is small
+    const baselineContent = makeContent(1 * 1024) // 1KB
+    // Non-baseline skills are large enough that together they exceed the remaining budget
+    const largeContent = makeContent(10 * 1024) // 10KB each
+    const cache = makeSkillCache({
+      'skill-a': baselineContent,
+      'skill-b': largeContent,
+      'skill-c': largeContent,
+    })
+    const sources: SkillSource[] = [
+      { skill: 'skill-a', source: 'baseline' },
+      { skill: 'skill-b', source: 'keyword' },
+      { skill: 'skill-c', source: 'keyword' },
+    ]
+
+    const result = injectSkillContent({
+      skills: ['skill-a', 'skill-b', 'skill-c'],
+      sources,
+      originalPrompt: 'My task',
+      skillCache: cache,
+      baselineSkills: ['skill-a'],
+    })
+
+    // Baseline skill MUST be in the prompt
+    expect(result.prompt).toContain('<skill name="skill-a">')
+    // At least one non-baseline skill was dropped due to budget
+    const nonBaselineDropped = result.skillsDropped.filter(s => s !== 'skill-a')
+    expect(nonBaselineDropped.length).toBeGreaterThan(0)
+  })
+
+  it('when total non-baseline content < 20KB, all skills injected and skillsDropped is empty', () => {
+    // 3 skills × 2KB = 6KB total — well under 20KB
+    const smallContent = makeContent(2 * 1024)
+    const cache = makeSkillCache({
+      'skill-a': smallContent,
+      'skill-b': smallContent,
+      'skill-c': smallContent,
+    })
+    const sources: SkillSource[] = [
+      { skill: 'skill-a', source: 'baseline' },
+      { skill: 'skill-b', source: 'category' },
+      { skill: 'skill-c', source: 'keyword' },
+    ]
+
+    const result = injectSkillContent({
+      skills: ['skill-a', 'skill-b', 'skill-c'],
+      sources,
+      originalPrompt: 'My task',
+      skillCache: cache,
+    })
+
+    expect(result.skillsDropped).toEqual([])
+    expect(result.ceilingExceeded).toBe(false)
+    expect(result.injected).toBe(true)
+    expect(result.prompt).toContain('<skill name="skill-a">')
+    expect(result.prompt).toContain('<skill name="skill-b">')
+    expect(result.prompt).toContain('<skill name="skill-c">')
+  })
+
+  it('when even the first non-baseline skill exceeds remaining budget, only baseline is injected', () => {
+    // Baseline fills most of the budget (~19KB), then non-baseline is 2KB — doesn't fit
+    const bigBaselineContent = makeContent(19 * 1024)
+    const smallNonBaseline = makeContent(2 * 1024)
+    const cache = makeSkillCache({
+      'baseline-skill': bigBaselineContent,
+      'keyword-skill': smallNonBaseline,
+    })
+    const sources: SkillSource[] = [
+      { skill: 'baseline-skill', source: 'baseline' },
+      { skill: 'keyword-skill', source: 'keyword' },
+    ]
+
+    const result = injectSkillContent({
+      skills: ['baseline-skill', 'keyword-skill'],
+      sources,
+      originalPrompt: 'My task',
+      skillCache: cache,
+      baselineSkills: ['baseline-skill'],
+    })
+
+    // Baseline IS in prompt
+    expect(result.prompt).toContain('<skill name="baseline-skill">')
+    // Non-baseline was dropped (no room)
+    expect(result.prompt).not.toContain('<skill name="keyword-skill">')
+    // keyword-skill is in skillsDropped
+    expect(result.skillsDropped).toContain('keyword-skill')
+  })
+
+  it('injected is true as long as at least baseline content was injected (even when all non-baseline skills are dropped)', () => {
+    // Baseline is 1KB, two large non-baseline skills fill the rest
+    const baselineContent = makeContent(1 * 1024)
+    const hugeContent = makeContent(11 * 1024) // each alone exceeds what's left after baseline
+    const cache = makeSkillCache({
+      'baseline-skill': baselineContent,
+      'skill-x': hugeContent,
+      'skill-y': hugeContent,
+    })
+    const sources: SkillSource[] = [
+      { skill: 'baseline-skill', source: 'baseline' },
+      { skill: 'skill-x', source: 'keyword' },
+      { skill: 'skill-y', source: 'keyword' },
+    ]
+
+    const result = injectSkillContent({
+      skills: ['baseline-skill', 'skill-x', 'skill-y'],
+      sources,
+      originalPrompt: 'My task',
+      skillCache: cache,
+      baselineSkills: ['baseline-skill'],
+    })
+
+    // Injected is true because baseline was included
+    expect(result.injected).toBe(true)
+    // Both non-baseline skills were dropped
+    expect(result.skillsDropped).toContain('skill-x')
+    expect(result.skillsDropped).toContain('skill-y')
+  })
+
+  it('ceilingExceeded backward compat: true when any skills are dropped', () => {
+    // 5KB × 5 = 25KB total — will exceed 20KB ceiling
+    const skill5KB = makeContent(5 * 1024)
+    const cache = makeSkillCache({
+      'skill-a': skill5KB,
+      'skill-b': skill5KB,
+      'skill-c': skill5KB,
+      'skill-d': skill5KB,
+      'skill-e': skill5KB,
+    })
+    const sources: SkillSource[] = [
+      { skill: 'skill-a', source: 'baseline' },
+      { skill: 'skill-b', source: 'category' },
+      { skill: 'skill-c', source: 'category' },
+      { skill: 'skill-d', source: 'keyword' },
+      { skill: 'skill-e', source: 'keyword' },
+    ]
+
+    const result = injectSkillContent({
+      skills: ['skill-a', 'skill-b', 'skill-c', 'skill-d', 'skill-e'],
+      sources,
+      originalPrompt: 'My task',
+      skillCache: cache,
+    })
+
+    // ceilingExceeded is true whenever skillsDropped is non-empty
+    expect(result.skillsDropped.length).toBeGreaterThan(0)
+    expect(result.ceilingExceeded).toBe(true)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// injectSkillContent — null skill cache
+// ---------------------------------------------------------------------------
+
 describe('injectSkillContent — null skill cache', () => {
   it('returns injected=false when skillCache is null', () => {
     const result = injectSkillContent({
