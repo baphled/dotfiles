@@ -11,7 +11,7 @@ import { join } from 'path'
 import { selectSkills, type SkillAutoLoaderConfig, type SkillSelectionInput } from './lib/skill-selector'
 import { AgentConfigCache } from './lib/agent-config-parser'
 import { filterSkillsAgainstCache } from './lib/skill-validation-filter'
-import { injectSkillContent, PROMPT_SIZE_CEILING, orderSkillsBySource } from './lib/skill-content-injection'
+import { injectSkillContent, PROMPT_SIZE_CEILING } from './lib/skill-content-injection'
 
 const PLUGIN_DIR = `${process.env.HOME}/.config/opencode/plugins`
 const CONFIG_FILE = join(PLUGIN_DIR, 'skill-auto-loader-config.jsonc')
@@ -74,8 +74,6 @@ function logInjection(event: {
   tool: string
   category?: string
   subagentType?: string
-  routedAgent?: string | null
-  routedPattern?: string | null
   injected: string[]
   existing: string[]
   final: string[]
@@ -136,7 +134,7 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
     await cache.init()
     skillCache = cache
   } catch {
-    console.debug('[SkillAutoLoader] skill-content-cache module not available, skill existence validation will be skipped')
+    console.warn('[SkillAutoLoader] skill-content-cache module not available, skill existence validation will be skipped')
   }
 
   const notify = createNotifier(_input.client)

@@ -518,13 +518,10 @@ describe('Scenario 3: 30KB ceiling enforcement', () => {
       skillCache: underCache,
     })
 
-    // Should NOT exceed ceiling — the injected content block wraps the raw content
-    // The block format adds ~30 bytes overhead; let's check either outcome
-    // What matters: ceilingExceeded = false when content is small enough
-    // (Our content is 30KB-50bytes plus ~30 bytes overhead = still under or at edge)
-    // Either way verify consistency: injected XOR ceilingExceeded
-    expect(result.injected || result.ceilingExceeded).toBe(true)
-    expect(result.injected && result.ceilingExceeded).toBe(false)
+    // Content is PROMPT_SIZE_CEILING - 50 bytes, so with ~30 bytes XML tag overhead
+    // total is still under ceiling — injection should succeed
+    expect(result.injected).toBe(true)
+    expect(result.ceilingExceeded).toBe(false)
   })
 
   test('saves evidence to task-12-e2e-ceiling.txt', () => {
