@@ -202,7 +202,8 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
         prompt,
         existingSkills,
         sessionId,
-        agentDefaultSkills
+        agentDefaultSkills,
+        codebaseSkills
       }
 
       // Run skill selection
