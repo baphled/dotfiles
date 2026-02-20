@@ -31,6 +31,12 @@ export interface InjectionInput {
   sources: SkillSource[]
   originalPrompt: string | undefined
   skillCache: SkillCache | null
+  /**
+   * Names of skills that are exempt from the byte budget and always injected.
+   * Baseline skills are prepended before the progressive loop runs over
+   * remaining skills. If omitted, all skills compete for the 20KB budget.
+   */
+  baselineSkills?: string[]
 }
 
 /** Result of skill content injection attempt. */
@@ -85,12 +91,17 @@ function buildSkillBlock(name: string, content: string): string {
  * - Skills are ordered: baseline → category/agent-default → keyword
  * - Each skill is wrapped in <skill name="..."> tags
  * - Content is PREPENDED to the original prompt
- * - If total injected content exceeds 20KB, injection is skipped entirely
+ * - Baseline skills (listed in `baselineSkills`) are always injected first,
+ *   exempt from the byte budget
+ * - Non-baseline skills are injected progressively in priority order until
+ *   the next skill would push total injected bytes over PROMPT_SIZE_CEILING
+ * - Skills that don't fit are tracked in `skillsDropped`
+ * - `ceilingExceeded` is true whenever any skills were dropped
  * - If skillCache is null, injection is skipped
  * - If skills array is empty, injection is skipped
  */
 export function injectSkillContent(input: InjectionInput): InjectionResult {
-  const { skills, sources, originalPrompt, skillCache } = input
+  const { skills, sources, originalPrompt, skillCache, baselineSkills = [] } = input
   const original = originalPrompt ?? ''
 
   // No-op conditions
@@ -98,35 +109,68 @@ export function injectSkillContent(input: InjectionInput): InjectionResult {
     return { prompt: original, injected: false, ceilingExceeded: false, skillsDropped: [] }
   }
 
-  // Order skills by source priority
-  const orderedSkills = orderSkillsBySource(skills, sources)
+  const baselineSet = new Set(baselineSkills)
 
-  // Build content blocks for skills that have cache entries
-  const blocks: string[] = []
-  for (const skillName of orderedSkills) {
+  // Separate skills into baseline-exempt and budget-constrained groups.
+  // Both groups are ordered by source priority.
+  const orderedSkills = orderSkillsBySource(skills, sources)
+  const baselineOrdered = orderedSkills.filter(s => baselineSet.has(s))
+  const nonBaselineOrdered = orderedSkills.filter(s => !baselineSet.has(s))
+
+  // --- Phase 1: Always inject baseline skills (exempt from budget) ---
+  const injectedBlocks: string[] = []
+  for (const skillName of baselineOrdered) {
     const content = skillCache.getSkillContent(skillName)
     if (content !== undefined) {
-      blocks.push(buildSkillBlock(skillName, content))
+      injectedBlocks.push(buildSkillBlock(skillName, content))
     }
   }
 
-  // Nothing to inject
-  if (blocks.length === 0) {
-    return { prompt: original, injected: false, ceilingExceeded: false, skillsDropped: [] }
+  // --- Phase 2: Progressive loop over non-baseline skills ---
+  // Baseline bytes reduce the available budget but are never dropped.
+  // Total budget = PROMPT_SIZE_CEILING; baseline consumes part of it.
+  const skillsDropped: string[] = []
+
+  // Compute bytes already committed by baseline blocks (including separators + trailing newline)
+  const baselineContent = injectedBlocks.length > 0
+    ? injectedBlocks.join('\n\n') + '\n\n'
+    : ''
+  let bytesUsed = Buffer.byteLength(baselineContent, 'utf8')
+
+  for (const skillName of nonBaselineOrdered) {
+    const content = skillCache.getSkillContent(skillName)
+    if (content === undefined) {
+      // No cache entry — skip silently (not counted as dropped)
+      continue
+    }
+    const block = buildSkillBlock(skillName, content)
+    // Cost: separator before block (if blocks already exist) + block content
+    const separator = injectedBlocks.length > 0 ? '\n\n' : ''
+    const addition = separator + block
+    const additionSize = Buffer.byteLength(addition, 'utf8')
+
+    if (bytesUsed + additionSize > PROMPT_SIZE_CEILING) {
+      skillsDropped.push(skillName)
+    } else {
+      bytesUsed += additionSize
+      injectedBlocks.push(block)
+    }
   }
 
-  // Join all blocks with double newline separators
-  const injectedContent = blocks.join('\n\n') + '\n\n'
-
-  // Enforce 20KB ceiling
-  if (injectedContent.length > PROMPT_SIZE_CEILING) {
-    return { prompt: original, injected: false, ceilingExceeded: true, skillsDropped: [] }
+  // Nothing was injected at all
+  if (injectedBlocks.length === 0) {
+    const ceilingExceeded = skillsDropped.length > 0
+    return { prompt: original, injected: false, ceilingExceeded, skillsDropped }
   }
+
+  // Assemble final injected content
+  const injectedContent = injectedBlocks.join('\n\n') + '\n\n'
+  const ceilingExceeded = skillsDropped.length > 0
 
   // Compose final prompt: injected content prepended, original appended
   const finalPrompt = original
     ? `${injectedContent}${original}`
     : injectedContent.trimEnd()
 
-  return { prompt: finalPrompt, injected: true, ceilingExceeded: false, skillsDropped: [] }
+  return { prompt: finalPrompt, injected: true, ceilingExceeded, skillsDropped }
 }

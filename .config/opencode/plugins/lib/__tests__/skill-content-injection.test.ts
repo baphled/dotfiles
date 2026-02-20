@@ -542,9 +542,10 @@ describe('progressive injection', () => {
   })
 
   it('injected is true as long as at least baseline content was injected (even when all non-baseline skills are dropped)', () => {
-    // Baseline is 1KB, two large non-baseline skills fill the rest
+    // Baseline is 1KB (~1064 bytes with block overhead), leaving ~19KB of budget.
+    // Each non-baseline skill is 19KB content (~19488 bytes block) — exceeds remaining budget alone.
     const baselineContent = makeContent(1 * 1024)
-    const hugeContent = makeContent(11 * 1024) // each alone exceeds what's left after baseline
+    const hugeContent = makeContent(19 * 1024) // each alone exceeds what's left after baseline
     const cache = makeSkillCache({
       'baseline-skill': baselineContent,
       'skill-x': hugeContent,
@@ -599,6 +600,72 @@ describe('progressive injection', () => {
     // ceilingExceeded is true whenever skillsDropped is non-empty
     expect(result.skillsDropped.length).toBeGreaterThan(0)
     expect(result.ceilingExceeded).toBe(true)
+  })
+
+  it('skillsDropped is populated with the names of skills that did not fit', () => {
+    // One small baseline, two large keyword skills that individually exceed the remaining budget
+    const smallContent = makeContent(100)
+    const largeContent = makeContent(PROMPT_SIZE_CEILING) // alone fills the whole ceiling
+    const cache = makeSkillCache({
+      'baseline-skill': smallContent,
+      'heavy-keyword-1': largeContent,
+      'heavy-keyword-2': largeContent,
+    })
+    const sources: SkillSource[] = [
+      { skill: 'baseline-skill',  source: 'baseline' },
+      { skill: 'heavy-keyword-1', source: 'keyword' },
+      { skill: 'heavy-keyword-2', source: 'keyword' },
+    ]
+
+    const result = injectSkillContent({
+      skills: ['baseline-skill', 'heavy-keyword-1', 'heavy-keyword-2'],
+      sources,
+      originalPrompt: 'Task',
+      skillCache: cache,
+    })
+
+    // Both heavy keywords must appear in skillsDropped
+    expect(result.skillsDropped).toContain('heavy-keyword-1')
+    expect(result.skillsDropped).toContain('heavy-keyword-2')
+    // The baseline skill that was injected must NOT appear in skillsDropped
+    expect(result.skillsDropped).not.toContain('baseline-skill')
+  })
+
+  it('source-priority ordering: lower-priority non-baseline skills are dropped first when budget exhausted', () => {
+    // Baseline: 1KB (always fits)
+    // Category: takes ~60% of remaining budget (fits)
+    // Keyword:  takes ~60% of remaining budget (doesn't fit — no room after category)
+    const baselineContent = makeContent(1 * 1024) // 1KB
+    const baselineBlock = blockSize('baseline', baselineContent)
+    const remaining = PROMPT_SIZE_CEILING - baselineBlock
+    // Category fills 60% of remaining, keyword tries to fill another 60% (overflow)
+    const categoryContent = makeContent(Math.floor(remaining * 0.6))
+    const keywordContent  = makeContent(Math.floor(remaining * 0.6))
+
+    const cache = makeSkillCache({
+      'baseline':     baselineContent,
+      'cat-skill':    categoryContent,
+      'kw-skill':     keywordContent,
+    })
+    const sources: SkillSource[] = [
+      { skill: 'baseline',  source: 'baseline' },
+      { skill: 'cat-skill', source: 'category' },
+      { skill: 'kw-skill',  source: 'keyword' },
+    ]
+
+    const result = injectSkillContent({
+      skills: ['baseline', 'cat-skill', 'kw-skill'],
+      sources,
+      originalPrompt: 'Task',
+      skillCache: cache,
+    })
+
+    // Higher-priority (category) should be injected
+    expect(result.prompt).toContain('<skill name="cat-skill">')
+    // Lower-priority (keyword) should be dropped
+    expect(result.skillsDropped).toContain('kw-skill')
+    // Category must NOT be in skillsDropped
+    expect(result.skillsDropped).not.toContain('cat-skill')
   })
 })
 
