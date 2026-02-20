@@ -88,7 +88,7 @@ beforeAll(async () => {
 describe('Scenario 1: Go development task', () => {
   const INPUT_PROMPT = 'Implement a Go REST API with goroutines'
 
-  test('selectSkills includes golang from keyword pattern', () => {
+  test('selectSkills does NOT include golang from keyword pattern (language skills come from codebase detection)', () => {
     const input: SkillSelectionInput = {
       category: 'deep',
       prompt: INPUT_PROMPT,
@@ -96,7 +96,9 @@ describe('Scenario 1: Go development task', () => {
     }
 
     const result = selectSkills(input, config)
-    expect(result.skills).toContain('golang')
+    // golang should NOT come from keyword patterns - language skills come from codebase detection
+    const golangFromKeyword = result.sources.find(s => s.skill === 'golang' && s.source === 'keyword')
+    expect(golangFromKeyword).toBeUndefined()
   })
 
   test('selected skills do NOT contain go-expert (removed in Task 2)', () => {
@@ -124,7 +126,7 @@ describe('Scenario 1: Go development task', () => {
     }
   })
 
-  test('golang skill source is keyword', () => {
+  test('golang skill is NOT selected when not in project (no go.mod)', () => {
     const input: SkillSelectionInput = {
       category: 'deep',
       prompt: INPUT_PROMPT,
@@ -132,13 +134,14 @@ describe('Scenario 1: Go development task', () => {
     }
 
     const result = selectSkills(input, config)
+    // Without codebase detection (no go.mod), golang should NOT be selected at all
     const golangSource = result.sources.find(s => s.skill === 'golang')
-    expect(golangSource).toBeDefined()
-    expect(golangSource!.source).toBe('keyword')
+    expect(golangSource).toBeUndefined()
   })
 
   test('35KB ceiling guard is correctly applied to large skill sets', () => {
     // Real skill content for deep+golang may exceed the 35KB ceiling.
+    // NOTE: golang is NOT in keywords anymore - language skills come from codebase detection
     // Progressive injection: baseline skills are ALWAYS injected; non-baseline
     // skills are dropped when they would push usage over the ceiling.
     const input: SkillSelectionInput = {
@@ -162,10 +165,10 @@ describe('Scenario 1: Go development task', () => {
       expect(injectionResult.injected).toBe(true)
       expect(injectionResult.skillsDropped.length).toBeGreaterThan(0)
     } else {
-      // Under ceiling: injection must succeed with golang content
+      // Under ceiling: injection must succeed (golang NOT in keywords anymore)
       expect(injectionResult.ceilingExceeded).toBe(false)
       expect(injectionResult.injected).toBe(true)
-      expect(injectionResult.prompt).toContain('<skill name="golang">')
+      // golang is NOT in prompt - it comes from codebase detection, not keywords
     }
   })
 

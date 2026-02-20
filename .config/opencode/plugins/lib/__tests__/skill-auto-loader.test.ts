@@ -88,14 +88,16 @@ describe('skill-auto-loader — real config integration', () => {
       expect(result.skills).toContain('cyber-security')
     })
 
-    it('includes golang skills triggered by the golang keyword pattern', () => {
+    it('golang is NOT triggered by keyword pattern (language skills come from codebase detection)', () => {
       const input: SkillSelectionInput = {
         existingSkills: [],
         prompt: 'security audit for golang app',
       }
       const result = selectSkills(input, realConfig)
 
-      expect(result.skills).toContain('golang')
+      // golang should NOT come from keywords - language skills come from codebase detection
+      const golangFromKeyword = result.sources.find(s => s.skill === 'golang' && s.source === 'keyword')
+      expect(golangFromKeyword).toBeUndefined()
     })
 
     it('records security skills with source set to keyword', () => {

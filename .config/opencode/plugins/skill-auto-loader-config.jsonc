@@ -114,15 +114,6 @@
       "priority": 9
     },
     {
-      "pattern": "(?:write|create|build|implement).*(?:app|application|program|project|feature|service)",
-      "skills": [
-        "architecture",
-        "clean-code",
-        "error-handling"
-      ],
-      "priority": 9
-    },
-    {
       "pattern": "test|spec|assert|expect|describe|tdd",
       "skills": [
         "ginkgo-gomega",
@@ -130,35 +121,7 @@
       ],
       "priority": 8
     },
-    {
-      "pattern": "golang|\\.go |go module|goroutine|go app",
-      "skills": [
-        "golang"
-      ],
-      "priority": 8
-    },
-    {
-      "pattern": "ruby|rails|rspec|gem",
-      "skills": [
-        "ruby",
-        "rspec-testing"
-      ],
-      "priority": 8
-    },
-    {
-      "pattern": "javascript|typescript|node|react|vue",
-      "skills": [
-        "javascript"
-      ],
-      "priority": 8
-    },
-    {
-      "pattern": "nix|flake|nixos|nix-shell",
-      "skills": [
-        "nix"
-      ],
-      "priority": 8
-    },
+
     {
       "pattern": "cli|command.?line|bubble\\.tea|bubbletea|tui|terminal ui",
       "skills": [

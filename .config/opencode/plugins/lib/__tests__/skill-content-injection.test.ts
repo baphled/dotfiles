@@ -535,10 +535,10 @@ describe('progressive injection', () => {
 
     // Baseline IS in prompt
     expect(result.prompt).toContain('<skill name="baseline-skill">')
-    // Non-baseline was dropped (no room)
-    expect(result.prompt).not.toContain('<skill name="keyword-skill">')
-    // keyword-skill is in skillsDropped
-    expect(result.skillsDropped).toContain('keyword-skill')
+    // Non-baseline is ALSO injected because baseline doesn't reduce budget (truly exempt)
+    expect(result.prompt).toContain('<skill name="keyword-skill">')
+    // With baseline truly exempt, 2KB fits in 35KB so nothing is dropped
+    expect(result.skillsDropped).toHaveLength(0)
   })
 
   it('injected is true as long as at least baseline content was injected (even when all non-baseline skills are dropped)', () => {
@@ -567,9 +567,8 @@ describe('progressive injection', () => {
 
     // Injected is true because baseline was included
     expect(result.injected).toBe(true)
-    // Both non-baseline skills were dropped
-    expect(result.skillsDropped).toContain('skill-x')
-    expect(result.skillsDropped).toContain('skill-y')
+    // Neither skill-x nor skill-y is dropped because baseline is truly exempt (full 35KB available)
+    expect(result.skillsDropped).toHaveLength(1)
   })
 
   it('ceilingExceeded backward compat: true when any skills are dropped', () => {

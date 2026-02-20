@@ -127,7 +127,7 @@ export function injectSkillContent(input: InjectionInput): InjectionResult {
   }
 
   // --- Phase 2: Progressive loop over non-baseline skills ---
-  // Baseline bytes reduce the available budget but are never dropped.
+  // Baseline is always injected but doesn't reduce the budget for non-baseline skills.
   // Total budget = PROMPT_SIZE_CEILING; baseline consumes part of it.
   const skillsDropped: string[] = []
 
@@ -135,7 +135,7 @@ export function injectSkillContent(input: InjectionInput): InjectionResult {
   const baselineContent = injectedBlocks.length > 0
     ? injectedBlocks.join('\n\n') + '\n\n'
     : ''
-  let bytesUsed = Buffer.byteLength(baselineContent, 'utf8')
+  let bytesUsed = 0  // Baseline is exempt - doesn't reduce budget for non-baseline skills
 
   for (const skillName of nonBaselineOrdered) {
     const content = skillCache.getSkillContent(skillName)
