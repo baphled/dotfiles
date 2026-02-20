@@ -685,6 +685,85 @@ describe('selectSkills — Focus Parameter (replaces subagent_mappings)', () => 
   })
 })
 
+describe('selectSkills — Codebase Skills (Tier 2.5)', () => {
+  it('injects codebaseSkills when provided, with source set to codebase', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      codebaseSkills: ['golang'],
+    }
+    const result = selectSkills(input, testConfig)
+
+    expect(result.skills).toContain('golang')
+    expect(result.sources.some(s => s.skill === 'golang' && s.source === 'codebase')).toBe(true)
+  })
+
+  it('orders codebase skills after role skills and before keyword skills', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+      codebaseSkills: ['golang'],
+      prompt: 'refactor the code',
+    }
+    const result = selectSkills(input, testConfig)
+
+    const nonBaselineSources = result.sources.filter(s => s.source !== 'baseline')
+    const categoryIdx = nonBaselineSources.findIndex(s => s.source === 'category')
+    const codebaseIdx = nonBaselineSources.findIndex(s => s.source === 'codebase')
+    const keywordIdx = nonBaselineSources.findIndex(s => s.source === 'keyword')
+
+    // codebase must appear after category (role) skills
+    expect(codebaseIdx).toBeGreaterThan(categoryIdx)
+    // codebase must appear before keyword skills
+    expect(codebaseIdx).toBeLessThan(keywordIdx)
+  })
+
+  it('does not duplicate codebaseSkills already present in existingSkills', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: ['golang'],
+      codebaseSkills: ['golang'],
+    }
+    const result = selectSkills(input, testConfig)
+
+    const golangCount = result.skills.filter(s => s === 'golang').length
+    expect(golangCount).toBe(1)
+    // Should NOT appear in sources since it was already in existingSkills (added via autoSkillsSet dedup)
+    const codebaseSources = result.sources.filter(s => s.source === 'codebase')
+    expect(codebaseSources.some(s => s.skill === 'golang')).toBe(false)
+  })
+
+  it('produces no codebase sources when codebaseSkills is not provided', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+    }
+    const result = selectSkills(input, testConfig)
+
+    const codebaseSources = result.sources.filter(s => s.source === 'codebase')
+    expect(codebaseSources).toHaveLength(0)
+  })
+
+  it('excludes codebase skills when count cap is already reached by baseline and role skills', () => {
+    const config: SkillAutoLoaderConfig = {
+      ...testConfig,
+      baseline_skills: [],
+      max_auto_skills: 1,
+      role_mappings: {
+        'implementation': ['clean-code'],
+      },
+    }
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'implementation',
+      codebaseSkills: ['golang'],
+    }
+    const result = selectSkills(input, config)
+
+    // count cap of 1 is consumed by clean-code from role, golang should be excluded
+    const nonBaselineSources = result.sources.filter(s => s.source !== 'baseline')
+    expect(nonBaselineSources.length).toBeLessThanOrEqual(1)
+    expect(result.skills).not.toContain('golang')
+  })
+})
+
 describe('selectSkills — Byte Budget Cap (max_auto_skills_bytes)', () => {
   it('truncates non-baseline skills greedily when total size exceeds max_auto_skills_bytes', () => {
     const config: SkillAutoLoaderConfig = {

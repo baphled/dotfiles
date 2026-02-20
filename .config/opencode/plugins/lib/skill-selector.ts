@@ -26,11 +26,12 @@ export interface SkillSelectionInput {
   existingSkills: string[]
   sessionId?: string
   agentDefaultSkills?: string[]
+  codebaseSkills?: string[]
 }
 
 export interface SkillSource {
   skill: string
-  source: 'baseline' | 'category' | 'agent-default' | 'keyword'
+  source: 'baseline' | 'category' | 'agent-default' | 'codebase' | 'keyword'
   pattern?: string
 }
 
@@ -113,6 +114,17 @@ export function selectSkills(
       if (!autoSkillsSet.has(skill)) {
         autoSkillsSet.add(skill)
         sources.push({ skill, source: 'agent-default' })
+      }
+    }
+  }
+
+  // === Tier 2.5: Codebase-detected language skills ===
+  if (input.codebaseSkills) {
+    const existingSkillsSet = new Set<string>(input.existingSkills)
+    for (const skill of input.codebaseSkills) {
+      if (!autoSkillsSet.has(skill) && !existingSkillsSet.has(skill)) {
+        autoSkillsSet.add(skill)
+        sources.push({ skill, source: 'codebase' })
       }
     }
   }
