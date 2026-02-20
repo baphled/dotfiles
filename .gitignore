@@ -384,6 +384,7 @@ opencode-message-backup-*/
 /.kariya/
 .lmstudio-home-pointer
 .nix-channels
+.opencode
 
 # ── Binaries and symlinks (non-portable) ─────────────────────
 .local/bin/claude
