@@ -29,7 +29,6 @@ I provide expert guidance in Domain-Driven Design (DDD). I help create software 
 ## Patterns & examples
 
 **Pattern: Aggregate Root with Invariants**
-
 ```go
 type Order struct {
     id     OrderID
@@ -48,7 +47,6 @@ func (o *Order) AddItem(p Product, qty int) error {
 ```
 
 **Pattern: Value Object (Immutable)**
-
 ```go
 type Money struct {
     amount   decimal.Decimal
@@ -63,8 +61,29 @@ func (m Money) Add(other Money) (Money, error) {
 }
 ```
 
-**Pattern: Repository Interface**
+**Pattern: Domain Events**
+```go
+type OrderPlaced struct {
+    OrderID OrderID
+    Total   Money
+}
 
+func (o *Order) Place() error {
+    o.status = StatusPlaced
+    o.recordEvent(OrderPlaced{o.id, o.total})
+    return nil
+}
+```
+
+**Pattern: Specification Pattern**
+```go
+type PremiumCustomerSpec struct{}
+func (s PremiumCustomerSpec) IsSatisfiedBy(c *Customer) bool {
+    return c.TotalSpend().GreaterThan(Threshold)
+}
+```
+
+**Pattern: Repository Interface**
 ```go
 type OrderRepository interface {
     FindByID(ctx context.Context, id OrderID) (*Order, error)

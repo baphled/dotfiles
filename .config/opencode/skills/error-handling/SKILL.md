@@ -102,13 +102,20 @@ if err != nil {
 }
 ```
 
+## Resilience Patterns
+
+- **Retry with Exponential Backoff:** Use for transient errors (network, DB). Delay increases each attempt.
+- **Circuit Breaker:** Stop trying after repeated failures; allow recovery time. States: Closed, Open, Half-Open.
+- **Graceful Degradation:** Reduce functionality but stay available (e.g., fallback to cached data).
+- **Bulkhead Pattern:** Isolate resources (e.g., separate thread pools) to prevent failure cascade.
+
 ## Anti-patterns to avoid
 
-- ❌ **Ignoring errors** (`_ = f.Close()`) — Hides data loss; at minimum log or wrap
-- ❌ **Wrapping without `%w`** — `fmt.Errorf("x: %v", err)` breaks `errors.Is`/`errors.As` chain
+- ❌ **Swallowing exceptions** — Hides data loss; at minimum log or wrap
 - ❌ **Log-and-return** — Duplicates error reporting; handle OR propagate, not both
-- ❌ **Panicking for input validation** — Panic kills the process; return a `ValidationError` instead
-- ❌ **Stringly-typed errors** (`if err.Error() == "not found"`) — Fragile; use sentinel errors
+- ❌ **Exceptions for control flow** — Use for exceptional cases only
+- ❌ **Generic catch-all** — Catching `Exception` hides specific errors
+- ❌ **Ignoring transient errors** — Not retrying when appropriate
 
 ## Related skills
 

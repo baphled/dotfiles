@@ -1,36 +1,45 @@
 ---
-name: migration-strategies
-description: Execute migrations safely - database schema changes, data transformations
-category: Database Persistence
+id: skill-migration-strategies
+tier: T2
+category: Database-Persistence
 ---
 
 # Skill: migration-strategies
+
 ## What I do
+- **Schema Evolution**: Plan and execute schema changes (adding/modifying/removing tables, columns, constraints).
+- **Data Transformation**: Perform data migrations between schemas or systems.
+- **Zero-Downtime Planning**: Implement multi-phase strategies (Expand/Contract) for high-availability systems.
+- **Rollback Design**: Ensure every migration is reversible with tested rollback paths.
+- **Performance Optimisation**: Minimise table locks and use batching for large-scale data changes.
 
-I provide expertise in execute migrations safely - database schema changes, data transformations. This skill covers core concepts, patterns, and best practices for execute migrations safely - database schema changes, data transformations.
 ## When to use me
+- Planning schema changes for production databases.
+- Implementing zero-downtime deployment strategies.
+- Refactoring database structure whilst maintaining backward compatibility.
+- Coordinating schema changes with application deployments.
 
-- When working with migration-strategies
-- When you need expertise in execute migrations safely - database schema changes, data transformations
-- When making decisions related to this domain
-- When reviewing code or designs in this area
 ## Core principles
+- **Safety First**: Every migration must be reversible and tested on production-like data.
+- **Backward Compatibility**: Ensure old application versions work during migration phases.
+- **Incremental Changes**: Break large migrations into smaller, safer steps (Expand/Contract pattern).
+- **Performance Awareness**: Use batch processing and non-locking index creation.
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
 ## Patterns & examples
 
-### Common Pattern in migration-strategies
-Describe a typical approach with benefits and tradeoffs.
+### Batch Processing (Go/GORM)
+```go
+func (m *Migration) Up(db *gorm.DB) error {
+    batchSize := 1000
+    for {
+        res := db.Exec("UPDATE users SET status = 'active' WHERE status IS NULL LIMIT ?", batchSize)
+        if res.Error != nil || res.RowsAffected == 0 { return res.Error }
+        time.Sleep(100 * time.Millisecond)
+    }
+}
+```
 
-### Alternative Pattern
-Show another way to approach problems in migration-strategies.
 ## Anti-patterns to avoid
-
-❌ Common mistake with migration-strategies—what goes wrong and why
-❌ When NOT to use migration-strategies—valid reasons to choose alternatives
-## Related skills
-
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+❌ **Non-Reversible Migrations**: Not providing a `Down` method or rollback path.
+❌ **Direct Schema Changes**: Running `AutoMigrate` in application startup instead of managed migration files.
+❌ **Dropping Columns Immediately**: Breaking running application versions that still expect the column.

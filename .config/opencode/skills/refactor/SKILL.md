@@ -37,6 +37,8 @@ I enforce safe, systematic refactoring: verify tests pass first, make one struct
 | Extract interface | Multiple implementations needed | `Notifier` from `EmailNotifier` |
 | Move method | Method uses another struct's data more | Move to the struct it queries |
 | Inline | Abstraction adds no value | Remove single-use helper |
+| Magic Number | Unexplained numeric literals | `100` → `DISCOUNT_THRESHOLD` |
+| Simplify Cond | Nested/complex logic | Guard clauses, extract predicate |
 
 **Extract function (step by step):**
 ```go

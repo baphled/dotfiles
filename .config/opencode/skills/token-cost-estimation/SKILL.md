@@ -1,7 +1,7 @@
 ---
 name: token-cost-estimation
 description: Estimate and track token costs before work sessions - complexity, duration, resources
-category: Session Knowledge
+category: Core Universal
 ---
 
 # Skill: token-cost-estimation

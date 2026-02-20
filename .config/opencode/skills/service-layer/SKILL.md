@@ -29,18 +29,15 @@ I provide expertise in designing application services that orchestrate business 
 ## Patterns & examples
 
 **Pattern: Application Service Orchestration**
-
 ```go
 func (s *OrderService) PlaceOrder(ctx context.Context, req Request) error {
     customer, _ := s.customerRepo.Find(req.CustomerID)
     order := domain.NewOrder(customer.ID())
     
-    // Domain object contains the complex business rules
     if err := order.AddItems(req.Items); err != nil {
         return err
     }
     
-    // Service coordinates persistence and side effects
     if err := s.orderRepo.Save(ctx, order); err != nil {
         return err
     }
@@ -50,19 +47,40 @@ func (s *OrderService) PlaceOrder(ctx context.Context, req Request) error {
 ```
 
 **Pattern: Transactional Unit of Work**
-
 ```go
 func (s *Service) Execute(ctx context.Context, cmd Command) error {
     return s.db.Transaction(func(tx *gorm.DB) error {
         repo := s.repo.WithTx(tx)
-        // multiple operations in one transaction
         return repo.Save(ctx, data)
     })
 }
 ```
 
-**Pattern: DTO Mapping**
+**Pattern: Validation at Boundary**
+```go
+func (s *Service) Handle(ctx context.Context, cmd Command) error {
+    if err := cmd.Validate(); err != nil {
+        return fmt.Errorf("invalid command: %w", err)
+    }
+    // ... proceed to domain
+}
+```
 
+**Pattern: Saga (Compensating Transactions)**
+```go
+func (s *OrderSaga) Execute(ctx context.Context, cmd Command) error {
+    id, err := s.orders.Create(ctx, cmd)
+    if err != nil { return err }
+    
+    if err := s.inventory.Reserve(ctx, cmd); err != nil {
+        s.orders.Cancel(ctx, id) // Compensate
+        return err
+    }
+    return nil
+}
+```
+
+**Pattern: DTO Mapping**
 ```go
 func (s *Service) Get(id ID) (*DTO, error) {
     model, err := s.repo.Find(id)

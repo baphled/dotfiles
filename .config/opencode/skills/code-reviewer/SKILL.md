@@ -26,6 +26,19 @@ I guide thorough code reviews across three dimensions: correctness (does it work
 4. **Architecture respect** - Do changes follow layer boundaries?
 5. **Constructive feedback** - Suggest improvements, don't just criticise
 
+## Common Code Smells
+
+| Smell | Description | Suggestion |
+|-------|-------------|------------|
+| **God Object** | Class knows/does everything | Split into focused classes |
+| **Long Method** | Function exceeds 50 lines | Extract smaller methods |
+| **Feature Envy** | Method uses another class more | Move method to envied class |
+| **Data Clump** | Same fields appear repeatedly | Extract parameter object |
+| **Primitive Obsession** | Primitives instead of domain objects | Create value objects |
+| **Switch Statements** | Type checking with conditionals | Replace with polymorphism |
+| **Shotgun Surgery** | One change requires many file edits | Consolidate related code |
+| **Divergent Change** | One class changes for many reasons | Apply Single Responsibility |
+
 ## Review checklist
 
 ```
@@ -72,27 +85,13 @@ Use parameterised queries to prevent injection.
 
 SHOULD: Extract this 40-line function into smaller units.
 The validation, transformation, and persistence are separate concerns.
-
-CONSIDER: `processData` could be more descriptive.
-Maybe `transformEventsToTimeline`?
 ```
 
-**Architecture red flags:**
-```
-- Screen importing from repository directly (skip service layer)
-- Domain types with database tags (leaking infrastructure)
-- Circular dependencies between packages
-- Business logic in HTTP handlers or UI components
-```
-
-**Security red flags:**
-```
-- fmt.Sprintf with SQL (use parameterised queries)
-- os.Open with user-supplied path (path traversal)
-- Logging sensitive data (passwords, tokens)
-- Missing auth middleware on protected routes
-- Hardcoded secrets or API keys
-```
+**Language-Specific Review Points:**
+- **Go:** Error handling (`if err != nil`), context for cancellation, goroutine leaks, small interfaces.
+- **Ruby:** `frozen_string_literal`, ActiveRecord N+1 queries, symbols vs strings, idiomatic blocks.
+- **TS:** Promises handled, `const` over `let`, specific types (no `any`), event listener cleanup.
+- **C++:** RAII for resources, smart pointers, const correctness, move semantics.
 
 ## Anti-patterns to avoid
 
