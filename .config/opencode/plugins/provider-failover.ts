@@ -1,7 +1,6 @@
 /** Provider Failover Plugin — rate-limit tracking and alternative suggestions */
 import type { Plugin, PluginInput } from '@opencode-ai/plugin'
 import { tool } from '@opencode-ai/plugin'
-import { z } from 'zod'
 import { HealthManager } from './lib/provider-health'
 import { getFallbackChain, getEstimatedTaskCost, getProviderMetadata } from './lib/fallback-config'
 import { existsSync, unlinkSync } from 'fs'
@@ -67,7 +66,7 @@ function createNotifier(client: PluginInput['client']) {
 
 const lastModelBySession: Map<string, { provider: string; model: string }> = new Map()
 
-export const ProviderFailoverPlugin: Plugin = async (_input) => {
+const ProviderFailoverPlugin: Plugin = async (_input) => {
   const healthManager = new HealthManager()
   const notify = createNotifier(_input.client)
   await notify('Plugin loaded. Health state initialised.', 'info', 3000)
@@ -136,10 +135,10 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       'provider-health': tool({
         description: 'Display provider health status and failover chain information. Use recommend=true with tier to get the best available model before delegating to an agent.',
         args: {
-          tier: z.string().optional().describe('Show fallback chain for specific tier (T0, T1, T2, T3)'),
-          reset: z.boolean().optional().describe('Clear health state file and reset'),
-          recommend: z.boolean().optional().describe('Return the first healthy provider/model for the given tier. Requires tier parameter. Use BEFORE delegating to check rate limits and capacity.'),
-          estimated_requests: z.number().optional().describe('Estimated number of requests the task will need. Used with recommend to skip providers without enough remaining capacity. Defaults to tier estimate if omitted.'),
+          tier: tool.schema.string().optional().describe('Show fallback chain for specific tier (T0, T1, T2, T3)'),
+          reset: tool.schema.boolean().optional().describe('Clear health state file and reset'),
+          recommend: tool.schema.boolean().optional().describe('Return the first healthy provider/model for the given tier. Requires tier parameter. Use BEFORE delegating to check rate limits and capacity.'),
+          estimated_requests: tool.schema.number().optional().describe('Estimated number of requests the task will need. Used with recommend to skip providers without enough remaining capacity. Defaults to tier estimate if omitted.'),
         },
         execute: async (args) => {
           if (args.reset) {
@@ -229,3 +228,5 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
     },
   }
 }
+
+export default ProviderFailoverPlugin

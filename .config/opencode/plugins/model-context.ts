@@ -5,7 +5,7 @@ const CACHE_DIR = `${process.env.HOME}/.cache/opencode`
 const MODELS_CACHE = `${CACHE_DIR}/models.json`
 const MODELS_DIFF = `${CACHE_DIR}/models-diff.json`
 
-export const ModelContextPlugin: Plugin = async () => {
+const ModelContextPlugin: Plugin = async () => {
   return {
     "shell.env": async (input, output) => {
       // Inject cache paths for scripts to access programmatically
@@ -44,3 +44,5 @@ export const ModelContextPlugin: Plugin = async () => {
     }
   }
 }
+
+export default ModelContextPlugin

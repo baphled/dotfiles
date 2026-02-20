@@ -17,7 +17,7 @@ const logEvent = (event: { type: string; properties: unknown }) => {
   appendFileSync(LOG_FILE, JSON.stringify(entry) + "\n")
 }
 
-export const EventLoggerPlugin: Plugin = async () => {
+const EventLoggerPlugin: Plugin = async () => {
   initLog()
 
   return {
@@ -85,3 +85,5 @@ export const EventLoggerPlugin: Plugin = async () => {
     },
   }
 }
+
+export default EventLoggerPlugin

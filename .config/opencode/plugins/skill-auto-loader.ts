@@ -97,7 +97,7 @@ function createNotifier(client: PluginInput['client']) {
   }
 }
 
-export const SkillAutoLoaderPlugin: Plugin = async (_input) => {
+const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   // Initialize config and agent cache at plugin load time
   config = loadConfig()
   
@@ -189,3 +189,5 @@ export const SkillAutoLoaderPlugin: Plugin = async (_input) => {
     }
   }
 }
+
+export default SkillAutoLoaderPlugin
