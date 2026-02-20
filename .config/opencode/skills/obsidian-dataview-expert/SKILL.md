@@ -53,15 +53,9 @@ const skills = pages.where(p =>
 ### Rendering Components
 ```javascript
 dv.header(2, "Active Skills");
-dv.paragraph("Total verified skills: " + skills.length);
-
-// Dynamic Table
-dv.table(["Skill", "Category", "Last Modified"], 
-    skills.map(p => [p.file.link, p.category, p.file.mtime])
+dv.table(["Skill", "Category"], 
+    skills.map(p => [p.file.link, p.category])
 );
-
-// Dynamic List
-dv.list(pages.file.link);
 ```
 
 ## Common patterns
@@ -84,27 +78,10 @@ try {
 For visually engaging resource indexes (requires `dashboard` cssclass in frontmatter).
 ```javascript
 const groups = skills.groupBy(p => p.category);
-const css = `<style>
-.skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
-.skill-card { border: 1px solid var(--background-modifier-border); border-radius: 8px; padding: 12px; background: var(--background-secondary); }
-</style>`;
-dv.el("div", css);
-
 for (const group of groups) {
     dv.header(3, group.key);
-    const cards = group.rows.map(p => 
-        `<div class="skill-card"><div>${p.file.link}</div><div>${p.lead || ""}</div></div>`
-    ).join("");
-    dv.el("div", cards, { cls: "skill-grid" });
+    dv.list(group.rows.file.link);
 }
-```
-
-### CustomJS Integration
-When logic exceeds note-local complexity.
-```javascript
-const { VaultUtils } = await cJS();
-const data = VaultUtils.getProcessedData(dv.pages("#data"));
-dv.table(["Field"], data.map(d => [d.value]));
 ```
 
 ## Error handling

@@ -8,129 +8,89 @@ category: Database Persistence
 
 ## What I do
 
-I provide database operations expertise: transaction management, batch operations, query optimisation, migration strategies, connection pooling, and SQLite-specific patterns for Go applications using GORM.
+I provide database operations expertise: transaction management, batch operations, query optimisation, migration strategies, connection pooling, and SQLite-specific patterns for Go applications using GORM. I ensure structured data access using the repository pattern to isolate business logic from persistence concerns.
 
 ## When to use me
 
+- Implementing data access layers with the repository pattern
 - Managing database transactions and error recovery
-- Optimising queries (indexes, batch inserts, pagination)
+- Optimising queries (indexes, batch inserts, pagination, N+1 prevention)
 - Writing and running database migrations
-- Configuring connection pools and SQLite pragmas
+- Configuring connection pools and SQLite pragmas (WAL, foreign keys)
 - Handling concurrent database access safely
+- Building testable data access code with mock repositories
 
 ## Core principles
 
-1. **Transactions for atomicity** - Multi-step writes in transactions, always
-2. **Batch operations** - Insert/update in batches, not row-by-row
-3. **Indexes for reads** - Index columns used in WHERE, JOIN, ORDER BY
-4. **Migrations are versioned** - Never alter production schemas ad-hoc
-5. **SQLite pragmas matter** - WAL mode, foreign keys, busy timeout
+1. **Repository Pattern** - Abstraction of implementation details via interfaces in the domain layer.
+2. **Transactions for atomicity** - Multi-step writes in transactions; always return domain-specific errors.
+3. **Batch operations** - Insert/update in batches for performance (avoid row-by-row loops).
+4. **Query Optimisation** - Use eager loading (Preload) to prevent N+1 queries and leverage indices.
+5. **SQLite Best Practices** - Use WAL mode, foreign keys, and appropriate busy timeouts.
 
 ## Patterns & examples
 
-**SQLite configuration:**
+### SQLite Configuration & Repository
 ```go
 func OpenDatabase(path string) (*gorm.DB, error) {
   db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
     Logger: logger.Default.LogMode(logger.Warn),
+    PrepareStmt: true,
   })
   if err != nil { return nil, err }
 
   sqlDB, _ := db.DB()
-  sqlDB.SetMaxOpenConns(1)  // SQLite: single writer
+  sqlDB.SetMaxOpenConns(1) // SQLite single writer
 
-  // Essential SQLite pragmas
-  db.Exec("PRAGMA journal_mode=WAL")       // concurrent reads
-  db.Exec("PRAGMA foreign_keys=ON")         // enforce FK constraints
-  db.Exec("PRAGMA busy_timeout=5000")       // wait 5s on lock
-  db.Exec("PRAGMA synchronous=NORMAL")      // balance safety/speed
+  // SQLite pragmas
+  db.Exec("PRAGMA journal_mode=WAL")
+  db.Exec("PRAGMA foreign_keys=ON")
+  db.Exec("PRAGMA busy_timeout=5000")
 
   return db, nil
 }
 ```
 
-**Batch insert:**
+### Transaction Management
 ```go
-// ✅ Correct: batch insert for performance
-users := make([]User, 1000)
-// ... populate users ...
-
-db.CreateInBatches(users, 100)  // 100 per batch
-
-// ❌ Wrong: one insert per row (1000 separate transactions)
-for _, u := range users {
-  db.Create(&u)
+func (s *Service) Process(ctx context.Context, data Data) error {
+  return s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+    repo := NewRepo(tx)
+    if err := repo.Create(ctx, data); err != nil { return err }
+    return repo.UpdateStats(ctx)
+  })
 }
 ```
 
-**Pagination pattern:**
+### Batch Operations & Pagination
 ```go
-type PaginationParams struct {
-  Page     int
-  PageSize int
-}
+// Batch Insert
+db.CreateInBatches(users, 100)
 
-func (r *repo) FindPaginated(params PaginationParams) ([]User, int64, error) {
+// Paginated List with Preloading
+func (r *repo) List(ctx context.Context, page, size int) ([]User, error) {
   var users []User
-  var total int64
-
-  db := r.db.Model(&User{})
-  db.Count(&total)
-
-  offset := (params.Page - 1) * params.PageSize
-  err := db.Offset(offset).Limit(params.PageSize).
-    Order("created_at DESC").Find(&users).Error
-
-  return users, total, err
-}
-```
-
-**Safe migration pattern:**
-```go
-func Migrate(db *gorm.DB) error {
-  // AutoMigrate for development/testing
-  return db.AutoMigrate(
-    &User{},
-    &Order{},
-    &Item{},
-  )
-}
-
-// For production: use versioned migrations
-// with golang-migrate or goose
-// Each migration is a numbered SQL file:
-// 001_create_users.up.sql
-// 001_create_users.down.sql
-```
-
-**Upsert (create or update):**
-```go
-// ✅ Correct: atomic upsert
-db.Clauses(clause.OnConflict{
-  Columns:   []clause.Column{{Name: "email"}},
-  DoUpdates: clause.AssignmentColumns([]string{"name", "updated_at"}),
-}).Create(&user)
-
-// ❌ Wrong: find-then-create race condition
-existing, _ := repo.FindByEmail(email)
-if existing == nil {
-  repo.Create(&user)  // another goroutine might create between check and insert
-} else {
-  repo.Update(existing)
+  err := r.db.WithContext(ctx).
+    Preload("Profile").
+    Offset((page - 1) * size).
+    Limit(size).
+    Find(&users).Error
+  return users, err
 }
 ```
 
 ## Anti-patterns to avoid
 
-- ❌ Row-by-row inserts in loops (use `CreateInBatches`)
-- ❌ Missing SQLite pragmas (WAL, foreign_keys, busy_timeout)
-- ❌ `SELECT *` when only needing few columns (use `Select("id", "name")`)
-- ❌ Ad-hoc schema changes in production (use versioned migrations)
-- ❌ Ignoring transaction rollback on error (use `db.Transaction` callback)
+- ❌ Leaking ORM details (e.g., `gorm.Model`) to the service layer.
+- ❌ Row-by-row inserts in loops; always use `CreateInBatches`.
+- ❌ N+1 query problem; use `Preload` for associations.
+- ❌ Missing SQLite pragmas; WAL mode and foreign keys are essential for performance/integrity.
+- ❌ Ignoring transaction boundaries for multi-step operations.
 
 ## Related skills
 
-- `gorm-repository` - Repository pattern over GORM
+- `gorm-repository` - Detailed GORM ORM patterns
 - `migration-strategies` - Safe database migration workflows
-- `golang` - Core Go patterns for database code
-- `security` - SQL injection prevention (parameterised queries)
+- `sql` - SQL query optimisation and best practices
+- `error-handling` - Domain error mapping
+- `architecture` - Layered architecture and separation of concerns

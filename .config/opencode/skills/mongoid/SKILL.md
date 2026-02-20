@@ -1,36 +1,49 @@
 ---
-name: mongoid
-description: Mongoid ORM for MongoDB (Ruby-specific)
-category: Database Persistence
+id: skill-mongoid
+tier: T2
+category: Database-Persistence
 ---
 
 # Skill: mongoid
+
 ## What I do
+- **Document Modelling**: Design document structures using fields, embedding, and referencing.
+- **Querying**: Build complex queries and aggregations using Mongoid's criteria API.
+- **Associations**: Manage relationships (embeds_one/many, has_many, belongs_to).
+- **Atomic Operations**: Perform efficient updates (inc, set, push, pull) without full document rewrites.
+- **Optimisation**: Design indices and implement eager loading (includes) to prevent N+1 queries.
 
-I provide expertise in mongoid orm for mongodb (ruby-specific). This skill covers core concepts, patterns, and best practices for mongoid orm for mongodb (ruby-specific).
 ## When to use me
+- Building Ruby/Rails applications with MongoDB.
+- Storing hierarchical or flexible-schema data.
+- Implementing complex aggregations or geospatial queries.
+- Optimising MongoDB performance in a Ruby environment.
 
-- When working with mongoid
-- When you need expertise in mongoid orm for mongodb (ruby-specific)
-- When making decisions related to this domain
-- When reviewing code or designs in this area
 ## Core principles
+- **Embedding vs Referencing**: Prefer embedding for 1-to-few/static data; reference for 1-to-many/unbounded data.
+- **ActiveModel Integration**: Leverage Rails-style validations and callbacks for data integrity.
+- **Atomic Persistence**: Use `inc`, `set`, and `push` to avoid race conditions.
+- **Index Strategy**: Ensure all frequent query patterns are covered by background indices.
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
 ## Patterns & examples
 
-### Common Pattern in mongoid
-Describe a typical approach with benefits and tradeoffs.
+### Document Definition (Ruby)
+```ruby
+class Order
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  
+  field :status, type: String, default: 'pending'
+  field :total, type: BigDecimal
+  
+  belongs_to :user
+  embeds_many :line_items
+  
+  index({ user_id: 1, created_at: -1 }, { background: true })
+end
+```
 
-### Alternative Pattern
-Show another way to approach problems in mongoid.
 ## Anti-patterns to avoid
-
-❌ Common mistake with mongoid—what goes wrong and why
-❌ When NOT to use mongoid—valid reasons to choose alternatives
-## Related skills
-
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+❌ **Over-Embedding**: Unbounded document growth causing performance degradation.
+❌ **N+1 Queries**: Not using `.includes(:association)` for referenced documents.
+❌ **Missing Indices**: Performing full collection scans on frequent queries.

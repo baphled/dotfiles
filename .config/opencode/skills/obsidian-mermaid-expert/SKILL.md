@@ -8,7 +8,7 @@ category: Session Knowledge
 
 ## What I do
 
-I provide comprehensive expertise in creating and maintaining Mermaid diagrams within Obsidian. I enable agents to transform complex technical concepts, architectures, and workflows into clear, text-based visual documentation that remains version-controllable and easily editable.
+I provide expertise in creating Mermaid diagrams within Obsidian, transforming technical concepts and workflows into clear, version-controllable visual documentation.
 
 ## When to use me
 
@@ -28,72 +28,26 @@ I provide comprehensive expertise in creating and maintaining Mermaid diagrams w
 
 ## Diagram types
 
-### Flowchart (Most Common)
+### Flowchart
 Used for process flows, decision trees, and algorithm logic.
-- **Direction**: `TD` (Top-Down) or `LR` (Left-Right). `LR` is often better for wide terminal-based workflows.
-- **Syntax Example**:
-  ```mermaid
-  flowchart TD
-      subgraph Process [Core Logic]
-          A[Start] --> B{Valid?}
-          B -- Yes --> C[[Process Data]]
-          B -- No --> D[(Error Log)]
-      end
-      C --> E(End)
-  ```
+- **Direction**: `TD` (Top-Down) or `LR` (Left-Right)
+- **Example**: `A[Start] --> B{Valid?} --> C[Process]`
 
 ### Sequence Diagram
-Visualises object interactions and temporal message passing.
-- **Syntax Example**:
-  ```mermaid
-  sequenceDiagram
-      participant C as Client
-      participant S as Server
-      C->>S: Request Data
-      activate S
-      S-->>C: Response (JSON)
-      deactivate S
-      Note over C,S: Connection closed
-  ```
+Visualises object interactions and message passing.
+- **Example**: `C->>S: Request` then `S-->>C: Response`
 
 ### State Diagram
 Ideal for object lifecycles and workflow transitions.
-- **Syntax Example**:
-  ```mermaid
-  stateDiagram-v2
-      [*] --> Idle
-      Idle --> Busy: Start
-      state Busy {
-          [*] --> Processing
-          Processing --> Validating
-      }
-      Busy --> [*]: Success
-  ```
+- **Example**: `[*] --> Idle --> Busy --> [*]`
 
 ### Class Diagram
-Useful for documenting Go interfaces, Ruby classes, or generic OO structures.
-- **Syntax Example**:
-  ```mermaid
-  classDiagram
-      class Repository {
-          <<interface>>
-          +Save(data) error
-          +Find(id) Entity
-      }
-      Repository <|.. SQLRepo : implements
-  ```
+Useful for documenting interfaces and OO structures.
+- **Example**: `class Repository { +Save() +Find() }`
 
 ### Entity-Relationship Diagram (ERD)
-Standard for database schema documentation and data modeling.
-- **Syntax Example**:
-  ```mermaid
-  erDiagram
-      USER ||--o{ POST : "writes"
-      USER {
-          string email PK
-          string username
-      }
-  ```
+Standard for database schema documentation.
+- **Example**: `USER ||--o{ POST : "writes"`
 
 ### Gantt Chart & Git Graph
 Used for project management and branch strategy visualisations.
@@ -102,17 +56,17 @@ Used for project management and branch strategy visualisations.
 
 ## Obsidian-specific considerations
 
-- **Theme Compatibility**: Mermaid in Obsidian automatically adapts to dark and light themes. Avoid hardcoding colours; use `classDef` and `class` for semantic styling instead.
-- **Rendering Limits**: Extremely large diagrams (100+ nodes) may lag or fail to render. Break them into subgraphs or separate files.
-- **Interactivity**: You can use `click` commands to link nodes to other Obsidian notes: `click NodeID "[[Other Note]]"`.
-- **Live Preview**: Always verify the diagram in Obsidian's Live Preview or Reading mode, as syntax errors in the `mermaid` block will prevent rendering entirely.
+- **Theme Compatibility**: Mermaid adapts to dark/light themes. Use `classDef` for semantic styling.
+- **Rendering Limits**: Large diagrams (100+ nodes) may lag. Break into subgraphs or separate files.
+- **Interactivity**: Link nodes to notes: `click NodeID "[[Other Note]]"`
+- **Live Preview**: Verify in Reading mode; syntax errors prevent rendering.
 
 ## When to use Mermaid vs alternatives
 
-- **Use Mermaid for**: Technical documentation, architecture, logic flows, and state machines where the structure is the primary focus.
-- **Use ChartJS (via plugin)**: For data-heavy visualisations, bar charts, line graphs, and statistical representations.
-- **Use Canvas**: For non-linear brainstorming or when spatial layout is more important than declarative structure.
-- **Use DataViewJS**: For dynamic tables or lists generated from vault metadata.
+- **Mermaid**: Technical documentation, architecture, logic flows, state machines
+- **ChartJS**: Data visualisations, bar/line charts, statistics
+- **Canvas**: Non-linear brainstorming, spatial layouts
+- **DataViewJS**: Dynamic tables from vault metadata
 
 ## Anti-patterns to avoid
 

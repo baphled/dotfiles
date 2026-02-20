@@ -8,53 +8,39 @@ category: Database Persistence
 
 ## What I do
 
-I provide GraphQL API expertise: schema design, type system, resolvers, query/mutation patterns, error handling, pagination, and N+1 prevention with dataloaders.
+I provide GraphQL API expertise: schema design, type hierarchies, resolvers, query/mutation patterns, real-time subscriptions, error handling, pagination, and performance optimisation. I focus on building flexible, type-safe APIs that avoid overfetching and the N+1 query problem through the DataLoader pattern.
 
 ## When to use me
 
-- Designing GraphQL schemas and type hierarchies
-- Writing queries, mutations, and subscriptions
-- Implementing resolvers with proper error handling
-- Optimising with dataloaders to prevent N+1 queries
-- Pagination patterns (cursor-based, offset)
+- Designing GraphQL schemas (SDL) and type relationships
+- Implementing resolvers for queries, mutations, and subscriptions
+- Optimising data loading using DataLoaders to batch and cache queries
+- Implementing cursor-based pagination (Relay spec) for large datasets
+- Designing typed error payloads and schema-level validation
+- Aggregating data from multiple microservices or database sources
+- Implementing field-level authorisation and query complexity limiting
 
 ## Core principles
 
-1. **Schema-first design** - Define your schema before writing resolvers
-2. **Types model the domain** - Types are domain concepts, not database tables
-3. **Nullable by default** - Fields are nullable unless explicitly `!` (non-null)
-4. **Dataloaders for N+1** - Batch and cache field resolution across queries
-5. **Errors are typed** - Use union types or error extensions, not just strings
+1. **Schema-First Design** - Define the contract between frontend and backend using a strongly-typed schema before implementation.
+2. **Types Model the Domain** - Model types based on domain concepts and client needs, not internal database structures.
+3. **Nullable by Default** - Embrace nullability; only use `!` when a field is guaranteed to be present even in error states.
+4. **Efficient Data Loading** - Always use the DataLoader pattern to batch field resolution and prevent N+1 query performance issues.
+5. **Contract Evolution** - Evolve the schema through deprecation and additive changes; avoid breaking existing clients.
 
 ## Patterns & examples
 
-**Schema design:**
+### Schema Design (SDL)
 ```graphql
 type User {
   id: ID!
   name: String!
-  email: String!
-  orders(first: Int, after: String): OrderConnection!
-}
-
-type Order {
-  id: ID!
-  total: Float!
-  status: OrderStatus!
-  items: [OrderItem!]!
-  createdAt: DateTime!
-}
-
-enum OrderStatus {
-  PENDING
-  CONFIRMED
-  SHIPPED
-  DELIVERED
+  orders(first: Int = 10, after: String): OrderConnection!
 }
 
 type Query {
+  me: User
   user(id: ID!): User
-  users(first: Int!, after: String): UserConnection!
 }
 
 type Mutation {
@@ -62,95 +48,36 @@ type Mutation {
 }
 ```
 
-**Input types and payloads:**
-```graphql
-# ✅ Correct: dedicated input type and result payload
-input CreateOrderInput {
-  userId: ID!
-  items: [OrderItemInput!]!
+### Resolver with DataLoader (Go)
+```go
+// OrderResolver batches user lookups across all orders in a list
+func (r *orderResolver) User(ctx context.Context, obj *model.Order) (*model.User, error) {
+  return GetLoaders(ctx).UserLoader.Load(ctx, obj.UserID)
 }
-
-input OrderItemInput {
-  productId: ID!
-  quantity: Int!
-}
-
-type CreateOrderPayload {
-  order: Order
-  errors: [UserError!]!
-}
-
-type UserError {
-  field: String!
-  message: String!
-}
-
-# ❌ Wrong: bare scalar arguments
-# createOrder(userId: ID!, productId: ID!, qty: Int!): Order
 ```
 
-**Cursor-based pagination (Relay spec):**
+### Cursor Pagination (Relay)
 ```graphql
-type UserConnection {
-  edges: [UserEdge!]!
+type OrderConnection {
+  edges: [OrderEdge!]!
   pageInfo: PageInfo!
   totalCount: Int!
-}
-
-type UserEdge {
-  node: User!
-  cursor: String!
-}
-
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
-}
-
-# Query: users(first: 10, after: "cursor123")
-```
-
-**Resolver with dataloader (Go, gqlgen):**
-```go
-// ✅ Correct: dataloader batches user lookups
-func (r *orderResolver) User(ctx context.Context, obj *Order) (*User, error) {
-  return r.userLoader.Load(ctx, obj.UserID)
-}
-
-// Dataloader setup — batches calls within same request
-func NewUserLoader(repo UserRepository) *dataloader.Loader[uint, *User] {
-  return dataloader.NewBatchedLoader(func(ctx context.Context, ids []uint) []*dataloader.Result[*User] {
-    users, _ := repo.FindByIDs(ids)
-    // map results back to input order
-    userMap := make(map[uint]*User)
-    for _, u := range users { userMap[u.ID] = u }
-    results := make([]*dataloader.Result[*User], len(ids))
-    for i, id := range ids {
-      results[i] = &dataloader.Result[*User]{Data: userMap[id]}
-    }
-    return results
-  })
-}
-
-// ❌ Wrong: N+1 — one DB query per order
-func (r *orderResolver) User(ctx context.Context, obj *Order) (*User, error) {
-  return r.repo.FindByID(obj.UserID)  // called once per order in list
 }
 ```
 
 ## Anti-patterns to avoid
 
-- ❌ Exposing database schema as GraphQL schema (model the domain, not tables)
-- ❌ No dataloaders on list resolvers (causes N+1 queries)
-- ❌ Returning generic error strings (use typed errors with field/message)
-- ❌ Offset pagination for large datasets (use cursor-based)
-- ❌ Deeply nested queries without depth limiting (DoS risk)
+- ❌ Exposing database schema directly as the GraphQL schema.
+- ❌ Missing DataLoaders for list resolvers; causes N+1 query degradation.
+- ❌ Generic error strings; use typed error payloads with `field` and `message`.
+- ❌ Offset pagination for large/frequent datasets; use opaque cursors.
+- ❌ Deeply nested queries without depth or complexity limiting (DoS risk).
 
 ## Related skills
 
 - `api-design` - General API design principles
-- `golang` - Go resolver implementations (gqlgen)
-- `javascript` - JS resolver implementations (Apollo)
-- `security` - Query depth limiting and rate limiting
+- `db-operations` - Database and repository patterns
+- `sql` - Query optimisation and indexing
+- `error-handling` - Typed error patterns
+- `security` - Authentication and query depth limiting
+- `architecture` - Layer separation with repository pattern

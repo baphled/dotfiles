@@ -8,7 +8,7 @@ category: DevOps Operations
 
 ## What I do
 
-I provide comprehensive expertise in terminal recording and automated demonstration generation using [VHS](https://github.com/charmbracelet/vhs). This skill focuses on creating high-quality, repeatable visual documentation for the KaRiya project, including happy-path scenarios, sad-path error handling, and complex multi-step intent interactions.
+I provide expertise in terminal recording and automated demonstration generation using [VHS](https://github.com/charmbracelet/vhs) for KaRiya, including happy-path scenarios, error handling, and multi-step intent interactions.
 
 ## When to use me
 
@@ -19,9 +19,9 @@ I provide comprehensive expertise in terminal recording and automated demonstrat
 
 ## Core principles
 
-1. **Deterministic Interaction**: Every tape should produce the same result regardless of the environment. Use temporary databases and isolated configurations.
-2. **Visual Pacing**: Demos are for humans. Pace interactions (using `Sleep`) so viewers can follow the logic, especially when displaying error messages or final results.
-3. **KaRiya Conventions**: Adhere to project-standard terminal dimensions and key bindings to ensure visual consistency across all project demos.
+1. **Deterministic**: Use temporary databases and isolated configurations for reproducible results.
+2. **Visual Pacing**: Pace interactions with `Sleep` so viewers can follow the logic.
+3. **KaRiya Conventions**: Use standard terminal dimensions and key bindings for consistency.
 
 ## VHS Tape Syntax Reference
 
@@ -44,15 +44,13 @@ Consistent visual presentation is maintained via standard settings usually found
 - **FontSize**: 18
 
 ### Menu Navigation
-KaRiya's main menu order is defined in `DefaultMenuItems()`.
-- To select an intent: Use `Down` key followed by `Enter`.
-- **Warning**: Do not hardcode absolute positions (e.g., "press Down 4 times") as `DefaultMenuItems()` may change. Reference the intent name in comments.
+- Select intent: Use `Down` key followed by `Enter`.
+- Don't hardcode positions; reference intent names in comments.
 
 ### Form Interactions
-KaRiya forms (built with `huh`) follow specific interaction rules:
-- **Field Navigation**: Use `Tab` to move between form fields.
-- **Dropdowns/Selects**: Press `/` to open search, type a partial match, then `Enter`.
-- **Confirm Fields**: These require a `Left` arrow press followed by `Enter` to confirm "Yes" (the default is often "No").
+- **Navigation**: Use `Tab` to move between fields.
+- **Dropdowns**: Press `/` to search, type match, then `Enter`.
+- **Confirm**: Send `Left` then `Enter` to confirm "Yes".
 
 ### Key Bindings
 Standard TUI bindings to record:
@@ -74,33 +72,31 @@ Standard TUI bindings to record:
 
 ## Timing Guidelines
 
-To ensure the viewer can keep up with the action:
-- **Launch**: `Sleep 3s` after starting the application to allow the UI and database to initialize.
-- **Inter-action**: `Sleep 500ms` between key presses to prevent the demo from feeling "jittery".
-- **Result Display**: `Sleep 2s` after a significant action (like submitting a form) before navigating away, giving the viewer time to see the confirmation message.
+- **Launch**: `Sleep 3s` after starting the application.
+- **Inter-action**: `Sleep 500ms` between key presses.
+- **Result Display**: `Sleep 2s` after significant actions.
 
 ## Common Issues and Fixes
 
-| Issue | Likely Cause | Solution |
-|-------|--------------|----------|
-| **Tape Hangs** | Incorrect key sequence or missing `Enter`. | Verify the sequence manually in a terminal first. Ensure `Enter` follows every `Type` action that requires submission. |
-| **Form Doesn't Submit** | Missing `Left` on Confirm fields. | In `huh` confirm fields, explicitly send `Key Left` then `Key Enter`. |
-| **Dropdown Fails** | Position changed or item not focused. | Use `/` to trigger search, `Type` the item name, and then `Key Enter`. This is more robust than counting `Down` presses. |
-| **UI Not Rendering** | Too fast typing/interaction. | Increase `Sleep` after launch and between major transitions. |
+| Issue | Solution |
+|-------|----------|
+| **Tape Hangs** | Ensure `Enter` follows every `Type` action. |
+| **Form Doesn't Submit** | Send `Key Left` then `Key Enter` on confirm fields. |
+| **Dropdown Fails** | Use `/` to search instead of counting `Down` presses. |
+| **UI Not Rendering** | Increase `Sleep` after launch and transitions. |
 
 ## Setup Pattern
 
-Always wrap the application launch in `Hide`/`Show` to avoid showing environmental setup:
+Wrap application launch in `Hide`/`Show`:
 
 ```vhs
 Hide
-Type "mkdir -p /tmp/kariya-demo && cp config.yaml /tmp/kariya-demo/"
+Type "mkdir -p /tmp/demo && cp config.yaml /tmp/demo/"
 Key Enter
-Type "./kariya --config /tmp/kariya-demo/config.yaml --db /tmp/kariya-demo/demo.db"
+Type "./kariya --config /tmp/demo/config.yaml --db /tmp/demo/demo.db"
 Key Enter
 Sleep 3s
 Show
-# ... demo steps ...
 ```
 
 ## Related skills

@@ -8,7 +8,7 @@ category: Session Knowledge
 
 ## What I do
 
-I provide comprehensive expertise in the Obsidian Charts plugin, which enables interactive Chart.js visualisations directly within Obsidian notes. I specialise in translating quantitative data into meaningful visual patterns using YAML-based code blocks and dynamic DataviewJS integrations.
+I provide expertise in the Obsidian Charts plugin for interactive Chart.js visualisations. I specialise in translating quantitative data into meaningful visual patterns using YAML-based code blocks and DataviewJS integrations.
 
 ## When to use me
 
@@ -19,10 +19,10 @@ I provide comprehensive expertise in the Obsidian Charts plugin, which enables i
 
 ## Core principles
 
-1. **Match Visualisation to Data Structure:** Choose chart types based on the analytical goal (e.g. line charts for trends, bar charts for comparisons).
-2. **Simplicity and Clarity:** Maximise the data-to-ink ratio. Minimise "chart junk", ensure clear labelling, and use appropriate font sizes for readability.
-3. **Data Integrity:** Avoid misleading axes. Always begin bar chart Y-axes at zero to maintain proportional accuracy.
-4. **Integration Efficiency:** Prefer dynamic DataviewJS charts for live-updating data over static YAML blocks where the data source is internal to Obsidian.
+1. **Match Visualisation to Data:** Choose chart types based on analytical goals (trends, comparisons, distributions).
+2. **Simplicity and Clarity:** Maximise data-to-ink ratio, minimise clutter, ensure clear labelling.
+3. **Data Integrity:** Avoid misleading axes. Bar chart Y-axes must start at zero.
+4. **Integration Efficiency:** Use DataviewJS for live-updating data over static YAML blocks.
 
 ## Chart syntax
 
@@ -117,7 +117,7 @@ series:
 ## Advanced features
 
 ### DataviewJS Integration
-For live visualisations, use DataviewJS to query vault data and pass it to `window.renderChart`.
+Query vault data and pass to `window.renderChart` for live visualisations.
 
 ```dataviewjs
 const pages = dv.pages('"Projects"');
@@ -140,17 +140,17 @@ window.renderChart(chartData, this.container);
 ```
 
 ### Styling and Configuration
-- **tension:** (0-1) Controls line smoothness. Use 0.2-0.4 for professional-looking line charts.
-- **width/height:** Controls the container size (e.g. `width: 80%`).
-- **labelColors:** Automatically applies series colours to labels.
-- **legendPosition:** Set to `top`, `bottom`, `left`, or `right`.
-- **beginAtZero:** Critical for bar charts to prevent misleading visual gaps.
+- **tension:** (0-1) Controls line smoothness (0.2-0.4 recommended).
+- **width/height:** Container size (e.g. `width: 80%`).
+- **labelColors:** Applies series colours to labels.
+- **legendPosition:** `top`, `bottom`, `left`, or `right`.
+- **beginAtZero:** Critical for bar charts to prevent misleading gaps.
 
 ## When to use ChartJS vs alternatives
 
-- **Use ChartJS for:** Quantitative data, trends over time, categorical comparisons, and statistical distributions.
-- **Use Mermaid for:** Architecture diagrams, flowcharts, Gantt charts, or entity-relationship diagrams.
-- **Use Dataview Tables for:** Detailed lists where raw values are more important than visual patterns.
+- **ChartJS:** Quantitative data, trends, comparisons, distributions.
+- **Mermaid:** Diagrams, flowcharts, Gantt charts, ERDs.
+- **Dataview Tables:** Detailed lists where raw values matter more than patterns.
 
 ## Anti-patterns to avoid
 

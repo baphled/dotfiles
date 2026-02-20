@@ -1,36 +1,48 @@
 ---
-name: sql
-description: SQL query optimisation and patterns for efficient database operations
-category: Database Persistence
+id: skill-sql
+tier: T2
+category: Database-Persistence
 ---
 
 # Skill: sql
+
 ## What I do
+- **Query Optimisation**: Analyse and tune slow-running queries using `EXPLAIN`.
+- **Index Design**: Create and manage indices to support efficient query patterns.
+- **Advanced SQL**: Implement Common Table Expressions (CTEs), Window Functions, and Recursive CTEs.
+- **Data Analysis**: Perform complex aggregations, filtering, and analytical queries.
+- **Bulk Operations**: Optimise large-scale inserts, updates, and deletes.
 
-I provide expertise in sql query optimisation and patterns for efficient database operations. This skill covers core concepts, patterns, and best practices for sql query optimisation and patterns for efficient database operations.
 ## When to use me
+- Writing complex queries involving multiple joins or subqueries.
+- Identifying and fixing performance bottlenecks in database access.
+- Designing database schemas and efficient indexing strategies.
+- Migrating ORM-generated queries to optimised raw SQL.
 
-- When working with sql
-- When you need expertise in sql query optimisation and patterns for efficient database operations
-- When making decisions related to this domain
-- When reviewing code or designs in this area
 ## Core principles
+- **Efficiency First**: Design queries to leverage indices and minimise data transfer.
+- **Readability**: Break complex logic into readable CTEs and document business rules.
+- **Performance Awareness**: Use `EXPLAIN` regularly; avoid N+1 queries.
+- **Security**: Always use parameterised queries to prevent SQL injection.
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
 ## Patterns & examples
 
-### Common Pattern in sql
-Describe a typical approach with benefits and tradeoffs.
+### CTE for Readability (PostgreSQL/MySQL)
+```sql
+WITH active_users AS (
+    SELECT id, name FROM users WHERE status = 'active'
+),
+user_orders AS (
+    SELECT user_id, COUNT(*) as order_count, SUM(total) as total_spent
+    FROM orders GROUP BY user_id
+)
+SELECT u.name, uo.order_count, uo.total_spent
+FROM active_users u
+JOIN user_orders uo ON u.id = uo.user_id;
+```
 
-### Alternative Pattern
-Show another way to approach problems in sql.
 ## Anti-patterns to avoid
-
-❌ Common mistake with sql—what goes wrong and why
-❌ When NOT to use sql—valid reasons to choose alternatives
-## Related skills
-
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+❌ **SELECT ***: Returning unnecessary data and risking breakage on schema changes.
+❌ **Leading Wildcards**: `LIKE '%text'` prevents index usage.
+❌ **Implicit Conversions**: Comparing different data types.
+❌ **Application-Level Joins**: Fetching data in a loop instead of using a SQL join.
