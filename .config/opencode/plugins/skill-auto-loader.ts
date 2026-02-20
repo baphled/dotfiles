@@ -231,9 +231,9 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
         })
 
         if (injectionResult.ceilingExceeded) {
-          console.warn(
-            `[SkillAutoLoader] Skill content budget exceeded, ` +
-            `${injectionResult.skillsDropped.length} skill(s) dropped: ${injectionResult.skillsDropped.join(', ')}`
+          notify(
+            `Skill content budget exceeded, ${injectionResult.skillsDropped.length} skill(s) dropped: ${injectionResult.skillsDropped.join(', ')}`,
+            'warning'
           )
         }
         if (injectionResult.injected) {
