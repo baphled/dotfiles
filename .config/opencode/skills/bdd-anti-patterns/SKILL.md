@@ -52,6 +52,73 @@ I identify and provide remediation for common BDD anti-patterns. I ensure tests 
 - ❌ **Implementation Details** — Testing internal function calls or database queries
 - ❌ **Vague Language** — Scenarios that a non-technical person cannot understand
 - ❌ **The "Mega-Scenario"** — One scenario testing 20+ steps of an entire journey
+- ❌ **Character-by-character typing** — Using `TypeText()` to fill form fields in BDD steps
+- ❌ **Tab navigation in steps** — Using `Tab`/`PressKey(tea.KeyTab)` to move between form fields
+- ❌ **Field clearing in steps** — Using `ClearTextField()`/`PressKey(tea.KeyCtrlU)`/backspace loops
+
+## KaRiya TUI Form Mechanics (CRITICAL)
+
+**ARCHITECTURAL DECISION**: BDD steps MUST be declarative — create data via domain/service layer, test behaviour only.
+
+### Anti-pattern: Form field typing
+
+```go
+// ❌ WRONG: Types 47 chars one-by-one into a huh form
+func iAddANewFact(ctx context.Context, text string) (context.Context, error) {
+    env := support.GetAppEnv(ctx)
+    env.TypeText(text)  // Fragile, timing-dependent, tests form mechanics
+    env.Confirm()
+    return ctx, nil
+}
+```
+
+### Anti-pattern: Multi-step form navigation
+
+```go
+// ❌ WRONG: Tab-type-tab-type chain tests form layout, not behaviour
+func iCreateABurst(ctx context.Context, name, desc string) (context.Context, error) {
+    env := support.GetAppEnv(ctx)
+    env.ClearTextField()           // Clear existing text
+    env.TypeText(name)             // Type into name field
+    env.PressKey(tea.KeyTab)       // Tab to description
+    env.TypeText(desc)             // Type into description field
+    env.Confirm()                  // Submit
+    return ctx, nil
+}
+```
+
+### Correct: Declarative data creation
+
+```go
+// ✅ CORRECT: Create data via domain/service, inject into intent state
+func iAddANewFact(ctx context.Context, text string) (context.Context, error) {
+    env := support.GetAppEnv(ctx)
+    fact := &career.Fact{Text: text}
+    // Create via service/repo
+    err := env.Service.SaveFact(ctx, fact)
+    if err != nil { return ctx, err }
+    // Wire into active intent's review state so it appears in the view
+    intent := env.GetActiveIntent()
+    intent.AddFactToReview(fact)
+    return ctx, nil
+}
+```
+
+### What IS legitimate app interaction (keep as-is)
+
+These are NOT anti-patterns — they test real app navigation behaviour:
+
+- `env.PressKeyRune('f')` — Opening editors (app navigation)
+- `env.PressKeyRune('q')` — Quitting (app navigation)
+- `env.Confirm()` — Confirming dialogs/modals (app interaction)
+- `env.Cancel()` / escape — Cancelling (app interaction)
+- `env.NavigateDown()` — List navigation (app navigation)
+- `env.PressKeyRune('y'/'n')` — Yes/no prompts (app interaction)
+
+### Decision rule
+
+> If the step is **filling form fields** or **navigating between form controls**, it is an anti-pattern.
+> If the step is **triggering an app action** (open, close, navigate, confirm), it is legitimate.
 
 ## Related skills
 

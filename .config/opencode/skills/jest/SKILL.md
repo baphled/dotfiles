@@ -1,7 +1,7 @@
 ---
 name: jest
 description: Jest testing framework for JavaScript/TypeScript
-category: Testing BDD
+category: Testing-BDD
 ---
 
 # Skill: jest

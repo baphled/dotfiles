@@ -104,6 +104,17 @@ Describe("UserService", func() {
 - ❌ **Skipping the acceptance test** — Going straight to unit tests loses the outside-in benefit
 - ❌ **Too many scenarios per feature** — Focus on key paths; extract edge cases to unit tests
 - ❌ **Developer-only language** — If stakeholders can't read it, it's not BDD
+- ❌ **Form field typing in steps** (`env.TypeText()`) — Create data via domain/service layer, not by typing into form UI
+- ❌ **Form navigation in steps** (`Tab`, `ClearTextField`) — Steps should bypass form mechanics entirely
+
+## TUI applications: Declarative data creation
+
+For Bubble Tea / huh form-based applications, BDD steps that create or modify data MUST use the domain/service layer directly. Form UI is an implementation detail.
+
+**Pattern**: Given/When steps create data → service/repository → inject into intent state
+**Assertion**: Then steps verify via `env.GetView()` (what the user would see)
+
+This keeps tests stable when form layout, field order, or input mechanics change.
 
 ## Related skills
 

@@ -5,32 +5,81 @@ category: Testing BDD
 ---
 
 # Skill: test-fixtures-go
+
 ## What I do
 
-I provide expertise in factory-go and gofakeit for go test fixtures. This skill covers core concepts, patterns, and best practices for factory-go and gofakeit for go test fixtures.
+I provide expertise in generating realistic test data for Go using `factory-go` patterns and `gofakeit`. I specialise in the functional options pattern for flexible, composable, and type-safe test fixtures.
+
 ## When to use me
 
-- When working with test-fixtures-go
-- When you need expertise in factory-go and gofakeit for go test fixtures
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- Creating realistic mock data for Go unit and integration tests.
+- Implementing the functional options pattern for object builders.
+- Need random but structured data (UUIDs, emails, names) in tests.
+- DRYing up test setup code across multiple Go spec files.
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Realistic Data** — Use `gofakeit` to generate data that mimics production values (valid emails, real-looking names).
+2. **Functional Options** — Prefer `func(*Type)` options for builders to keep the API clean and extensible.
+3. **Type Safety** — Ensure fixtures return the correct types and handle mandatory fields by default.
+4. **Minimal Setup** — Fixtures should return a valid object with zero arguments; override only what's needed.
+
 ## Patterns & examples
 
-### Common Pattern in test-fixtures-go
-Describe a typical approach with benefits and tradeoffs.
+### Functional Options Pattern (Recommended)
+```go
+type User struct {
+    ID        string
+    Email     string
+    FirstName string
+    Role      string
+}
 
-### Alternative Pattern
-Show another way to approach problems in test-fixtures-go.
+func NewUser(opts ...func(*User)) *User {
+    user := &User{
+        ID:        gofakeit.UUID(),
+        Email:     gofakeit.Email(),
+        FirstName: gofakeit.FirstName(),
+        Role:      "user",
+    }
+    for _, opt := range opts {
+        opt(user)
+    }
+    return user
+}
+
+// Options
+func WithEmail(e string) func(*User) { return func(u *User) { u.Email = e } }
+func WithRole(r string) func(*User)  { return func(u *User) { u.Role = r } }
+
+// Usage
+admin := NewUser(WithRole("admin"))
+```
+
+### Integration with Ginkgo
+```go
+var _ = Describe("UserService", func() {
+    var user *User
+    
+    BeforeEach(func() {
+        user = NewUser(WithRole("admin"))
+    })
+    
+    It("grants admin privileges", func() {
+        Expect(user.Role).To(Equal("admin"))
+    })
+})
+```
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with test-fixtures-go—what goes wrong and why
-❌ When NOT to use test-fixtures-go—valid reasons to choose alternatives
+- ❌ **Hardcoded Constants** — Leads to "mystery guest" problems and fragile tests.
+- ❌ **Manual Struct Literals** — Duplicates setup logic and makes adding fields painful.
+- ❌ **Over-complex Builders** — If a fixture needs 10+ options, the struct likely needs refactoring.
+
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `test-fixtures` - Universal patterns for test data.
+- `ginkgo-gomega` - Go BDD testing framework.
+- `golang` - Core Go language idioms.
+

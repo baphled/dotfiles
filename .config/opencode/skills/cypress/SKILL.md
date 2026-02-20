@@ -1,7 +1,7 @@
 ---
 name: cypress
 description: Cypress E2E testing framework for web applications
-category: Testing BDD
+category: Testing-BDD
 ---
 
 # Skill: cypress

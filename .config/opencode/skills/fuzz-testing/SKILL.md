@@ -1,7 +1,7 @@
 ---
 name: fuzz-testing
 description: Fuzzing for finding edge cases and crashes
-category: Testing BDD
+category: Testing-BDD
 ---
 
 # Skill: fuzz-testing

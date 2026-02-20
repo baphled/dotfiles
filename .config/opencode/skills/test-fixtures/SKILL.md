@@ -5,32 +5,76 @@ category: Testing BDD
 ---
 
 # Skill: test-fixtures
+
 ## What I do
 
-I provide expertise in test data factory patterns. This skill covers core concepts, patterns, and best practices for test data factory patterns.
+I provide expertise in consistent, realistic test data through factory patterns. I replace manual construction of complex test objects with factories that provide sensible defaults while allowing precise overrides for specific test scenarios.
+
 ## When to use me
 
-- When working with test-fixtures
-- When you need expertise in test data factory patterns
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- Defining test data once and reusing it across entire test suites (DRY).
+- Need valid, realistic objects without cluttering tests with irrelevant setup details.
+- Isolating tests from changes in object internal structures (e.g. new mandatory fields).
+- Managing complex object graphs and relationships in tests.
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **DRY Test Data** — Define test objects once, reuse everywhere.
+2. **Realistic Defaults** — Use faker libraries for realistic, but random, data out of the box.
+3. **Explicit Customisation** — Override only what matters for the specific test case.
+4. **Independence** — Ensure each test gets fresh, non-shared objects to avoid leaks.
+5. **Type Safety** — Factories should return correctly typed objects or valid database records.
+
 ## Patterns & examples
 
-### Common Pattern in test-fixtures
-Describe a typical approach with benefits and tradeoffs.
+### Factory Functions (Universal Pattern)
+```typescript
+// JavaScript/TypeScript example
+import { faker } from '@faker-js/faker';
 
-### Alternative Pattern
-Show another way to approach problems in test-fixtures.
+export function createUser(overrides = {}) {
+  return {
+    id: faker.string.uuid(),
+    email: faker.internet.email(),
+    firstName: faker.person.firstName(),
+    role: 'user',
+    createdAt: new Date(),
+    ...overrides,
+  };
+}
+
+// Usage in tests
+const admin = createUser({ role: 'admin' });
+```
+
+### Traits and States (Ruby/FactoryBot)
+```ruby
+FactoryBot.define do
+  factory :user do
+    email { Faker::Internet.email }
+    trait :admin do
+      role { 'admin' }
+    end
+    trait :with_posts do
+      after(:create) { |u| create_list(:post, 3, author: u) }
+    end
+  end
+end
+
+# Usage
+author = create(:user, :with_posts)
+```
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with test-fixtures—what goes wrong and why
-❌ When NOT to use test-fixtures—valid reasons to choose alternatives
+- ❌ **Hardcoded Constants** — e.g. "test@test.com"; use random/realistic data to avoid accidental collisions.
+- ❌ **Manual Over-setup** — Setting 10 fields in a test that only cares about one; use factory defaults.
+- ❌ **Shared Mutable Fixtures** — Sharing the same object instance between tests; leads to flaky tests.
+- ❌ **Business Logic in Factories** — Factories should only create data, not perform complex operations.
+
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `test-fixtures-go` - Go-specific factory-go/gofakeit implementation.
+- `bdd-workflow` - Using fixtures effectively in the Red-Green-Refactor cycle.
+- `clean-code` - Applying DRY and Single Responsibility to test data.
+

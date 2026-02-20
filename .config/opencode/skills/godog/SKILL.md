@@ -1,7 +1,7 @@
 ---
 name: godog
 description: Gherkin runner for Go
-category: Testing BDD
+category: Testing-BDD
 ---
 
 # Godog (Gherkin for Go)

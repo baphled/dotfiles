@@ -62,6 +62,25 @@ When("I log in", () => {
 - ❌ **Incidental Detail** — Don't include IDs or internal data structures in Gherkin
 - ❌ **Scenario Bloat** — Keep scenarios to 3-8 steps; split if they exceed 15
 - ❌ **Duplicate Coverage** — Don't test validation logic in BDD if unit tests cover it
+- ❌ **Form Field Typing** (`env.TypeText()` in steps) — Create data via domain/service instead
+- ❌ **Form Navigation** (Tab between fields in steps) — Data creation should bypass form UI entirely
+
+## KaRiya TUI: Declarative Data Creation
+
+**ARCHITECTURAL DECISION**: BDD steps that create or modify data MUST do so via the domain/service layer, not by driving form UI.
+
+**Why**: `TypeText()` sends characters one-by-one through the Bubble Tea update loop. This is timing-dependent, fragile, and tests huh form mechanics rather than business behaviour.
+
+**Pattern**:
+1. **Given/When steps that create data** → Use service/repository to create, inject into intent state
+2. **When steps that trigger actions** → Use app navigation keys (legitimate interaction)
+3. **Then steps that verify outcomes** → Use `env.GetView()` to check what the user would see
+
+**Legitimate app interactions** (NOT anti-patterns):
+- Opening editors (`env.PressKeyRune('f')`)
+- Navigation (`env.NavigateDown()`, `env.PressKeyRune('j')`)
+- Confirmation (`env.Confirm()`)
+- Cancellation (`env.Cancel()`)
 
 ## Related skills
 

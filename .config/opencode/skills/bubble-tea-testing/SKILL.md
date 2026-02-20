@@ -8,7 +8,7 @@ category: Testing BDD
 
 ## What I do
 
-I provide Bubble Tea testing expertise: testing Update logic with simulated messages, verifying View output, testing commands, component integration tests, and using teatest for program-level testing.
+I provide Bubble Tea testing expertise: testing Update logic, verifying View output, testing commands, component integration, and using teatest for program-level testing.
 
 ## When to use me
 
@@ -20,11 +20,11 @@ I provide Bubble Tea testing expertise: testing Update logic with simulated mess
 
 ## Core principles
 
-1. **Test Update directly** - Feed messages to Update, assert on returned model
+1. **Test Update directly** - Feed messages, assert on returned model
 2. **View is pure** - Test View output as string matching
-3. **Commands are testable** - Commands return messages; test the message type
-4. **Isolate components** - Test child components independently before composition
-5. **Golden files for complex views** - Use teatest golden files for visual regression
+3. **Commands are testable** - Test message types returned by commands
+4. **Isolate components** - Test components independently before composition
+5. **Golden files** - Use teatest golden files for visual regression
 
 ## Patterns & examples
 
@@ -158,11 +158,11 @@ See: KaRiya Obsidian note "Bubble Tea + Huh Testing Contract"
 
 ## Anti-patterns to avoid
 
-- ❌ Testing via terminal output only (test Update logic directly first)
+- ❌ Testing via terminal output only (test Update logic directly)
 - ❌ Skipping View tests (rendering bugs are common)
-- ❌ Testing Lip Gloss styling in unit tests (test content, not colours)
-- ❌ Large integration tests without unit coverage (pyramid: many unit, few integration)
-- ❌ Ignoring command return values (commands drive async behaviour)
+- ❌ Testing Lip Gloss styling (test content, not colours)
+- ❌ Large integration tests without unit coverage
+- ❌ Ignoring command return values
 
 ## Related skills
 

@@ -1,7 +1,7 @@
 ---
 name: e2e-testing
 description: End-to-end testing patterns using test harnesses
-category: Testing BDD
+category: Testing-BDD
 ---
 
 # Skill: e2e-testing

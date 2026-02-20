@@ -101,6 +101,21 @@ It("handles nested tables", func() {
 5. If tests still pass → test suite has a blind spot
 ```
 
+## Testing Strategies for Proof
+
+- **Example-Based Testing:** Specific inputs produce specific outputs (happy path, error cases).
+- **Property-Based Testing:** Invariants that should always hold true (e.g., sorting preserves length).
+- **Mutation Testing:** Verify tests actually catch defects by mutating production code.
+- **Fuzz Testing:** Test with random/malformed inputs to find unexpected failures or crashes.
+- **Boundary Testing:** Focus on limits (zero, max, empty, null) where logic most often fails.
+
+## Proving Claims Through Tests
+
+- **Pure Functions:** Call multiple times with same input; verify identical output & no side effects.
+- **Thread Safety:** Run concurrently with multiple goroutines/threads; check for data races.
+- **Error Handling:** Test every error path explicitly to prove all failures are managed.
+- **Optimisation:** Prove behaviour is preserved by running identical tests on slow/fast versions.
+
 ## Anti-patterns to avoid
 
 - ❌ Testing only happy paths (doesn't prove much)
