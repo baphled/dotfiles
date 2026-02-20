@@ -120,14 +120,16 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   agentCache = new AgentConfigCache()
   await agentCache.init()
 
-  // Detect codebase languages at plugin init time
+  // Detect codebase languages at init time
+  // codebaseSkills will be passed to selectSkills in Task 10 (selector tier codebase detection)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let codebaseSkills: string[] = []
   try {
-    const PLUGIN_PARENT_DIR = join(PLUGIN_DIR, '..')
-    const detection = await detectCodebaseLanguages(PLUGIN_PARENT_DIR)
+    const cwd = process.cwd()
+    const detection = await detectCodebaseLanguages(cwd)
     codebaseSkills = detection.skills
   } catch {
-    // Detection failure is non-fatal
+    // Non-fatal: codebase detection failure should not prevent plugin from loading
   }
 
   // Attempt to initialise skill content cache (Task 4 parallel module)
@@ -149,12 +151,9 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
     console.warn('[SkillAutoLoader] skill-content-cache module not available, skill existence validation will be skipped')
   }
 
-  // Build skill sizes map for byte budget enforcement
+  // Build skill sizes map for byte budget enforcement in selectSkills
+  // Starts empty; the selector treats missing entries as 0 bytes (no-op when empty)
   const skillSizes = new Map<string, number>()
-  if (skillCache) {
-    // We don't have a direct "list all skills" API, so sizes are populated lazily
-    // during selection — the selector handles missing entries as 0 bytes
-  }
 
   const notify = createNotifier(_input.client)
   notify('Skill Auto-Loader loaded', 'info', 3000)
@@ -233,9 +232,10 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
         if (injectionResult.ceilingExceeded) {
           console.warn(
             `[SkillAutoLoader] Skill content budget exceeded, ` +
-            `dropped: [${injectionResult.skillsDropped.join(', ')}]`
+            `${injectionResult.skillsDropped.length} skill(s) dropped: ${injectionResult.skillsDropped.join(', ')}`
           )
-        } else if (injectionResult.injected) {
+        }
+        if (injectionResult.injected) {
           args.prompt = injectionResult.prompt
         }
 
