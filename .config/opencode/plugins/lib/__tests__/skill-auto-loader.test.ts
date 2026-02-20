@@ -137,7 +137,7 @@ describe('skill-auto-loader — real config integration', () => {
   })
 
   describe('session continuation', () => {
-    it('returns an empty skills array when session_id is provided and skip_on_session_continue is true', () => {
+    it('returns baseline skills when session_id is provided and skip_on_session_continue is true', () => {
       const input: SkillSelectionInput = {
         category: 'deep',
         existingSkills: [],
@@ -146,10 +146,13 @@ describe('skill-auto-loader — real config integration', () => {
       }
       const result = selectSkills(input, realConfig)
 
-      expect(result.skills).toHaveLength(0)
+      expect(result.skills).toHaveLength(BASELINE.length)
+      for (const skill of BASELINE) {
+        expect(result.skills).toContain(skill)
+      }
     })
 
-    it('returns an empty sources array when session_id is provided and skip_on_session_continue is true', () => {
+    it('returns baseline sources when session_id is provided and skip_on_session_continue is true', () => {
       const input: SkillSelectionInput = {
         category: 'deep',
         existingSkills: [],
@@ -157,7 +160,10 @@ describe('skill-auto-loader — real config integration', () => {
       }
       const result = selectSkills(input, realConfig)
 
-      expect(result.sources).toHaveLength(0)
+      expect(result.sources).toHaveLength(BASELINE.length)
+      for (const skill of BASELINE) {
+        expect(result.sources.some(s => s.skill === skill && s.source === 'baseline')).toBe(true)
+      }
     })
   })
 
