@@ -1,20 +1,31 @@
 /**
- * Provider Health State Manager (Simplified)
+ * Provider Health State Manager
  *
- * Tracks rate-limited providers and their expiry times.
+ * Tracks rate-limited providers, their expiry times, and usage counters.
+ * Usage tracking enables capacity-aware model selection — providers near
+ * their limits are skipped unless the task fits within remaining budget.
+ *
  * Persists to ~/.cache/opencode/provider-health.json using atomic writes.
  */
 
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'fs'
-import { getFallbackChain, type ProviderEntry } from './fallback-config'
+import { getFallbackChain, getProviderMetadata, type ProviderEntry } from './fallback-config'
 
 const CACHE_DIR = `${process.env.HOME}/.cache/opencode`
 const HEALTH_FILE = `${CACHE_DIR}/provider-health.json`
 
+export interface UsageRecord {
+  requestCount: number
+  periodStart: string
+  periodType: 'monthly' | 'per-minute'
+  lastRequest: string
+}
+
 interface HealthData {
   version: 1
   lastUpdated: string
-  rateLimits: Record<string, string> // key → ISO expiry timestamp
+  rateLimits: Record<string, string>
+  usage: Record<string, UsageRecord>
 }
 
 export class HealthManager {
@@ -84,6 +95,76 @@ export class HealthManager {
   }
 
   /**
+   * Record a request against a provider's usage counter.
+   * Automatically resets the counter when the tracking period has elapsed.
+   */
+  recordUsage(provider: string): void {
+    const meta = getProviderMetadata(provider)
+    if (meta.rateLimit.type === 'none') return
+
+    const now = new Date()
+    const existing = this.data.usage[provider]
+
+    if (existing && !this.isPeriodExpired(existing, meta.rateLimit.resetIntervalMs)) {
+      existing.requestCount++
+      existing.lastRequest = now.toISOString()
+    } else {
+      this.data.usage[provider] = {
+        requestCount: 1,
+        periodStart: now.toISOString(),
+        periodType: meta.rateLimit.type,
+        lastRequest: now.toISOString(),
+      }
+    }
+
+    this.data.lastUpdated = now.toISOString()
+  }
+
+  /**
+   * Get remaining request capacity for a provider within its current period.
+   * Returns null for providers with no limits (e.g. Ollama).
+   */
+  getRemainingCapacity(provider: string): number | null {
+    const meta = getProviderMetadata(provider)
+    if (meta.rateLimit.type === 'none' || !meta.rateLimit.threshold) return null
+
+    const record = this.data.usage[provider]
+    if (!record) return meta.rateLimit.threshold
+
+    if (this.isPeriodExpired(record, meta.rateLimit.resetIntervalMs)) {
+      return meta.rateLimit.threshold
+    }
+
+    return Math.max(0, meta.rateLimit.threshold - record.requestCount)
+  }
+
+  /**
+   * Check whether a provider has enough remaining capacity for an estimated task cost.
+   * Returns true for providers with no limits.
+   */
+  hasCapacityForTask(provider: string, estimatedRequests: number): boolean {
+    const remaining = this.getRemainingCapacity(provider)
+    if (remaining === null) return true
+    return remaining >= estimatedRequests
+  }
+
+  /**
+   * Get the usage record for a provider, or null if none tracked.
+   */
+  getUsage(provider: string): UsageRecord | null {
+    return this.data.usage[provider] || null
+  }
+
+  /**
+   * Check whether a usage tracking period has elapsed.
+   */
+  private isPeriodExpired(record: UsageRecord, resetIntervalMs?: number): boolean {
+    if (!resetIntervalMs) return false
+    const periodStart = new Date(record.periodStart).getTime()
+    return Date.now() >= periodStart + resetIntervalMs
+  }
+
+  /**
    * Get all tracked providers and their rate-limit status
    */
   getAllStatus(): Record<string, { rateLimitedUntil: string | null }> {
@@ -127,27 +208,35 @@ export class HealthManager {
         version: 1,
         lastUpdated: new Date().toISOString(),
         rateLimits: {},
+        usage: {},
       }
     }
 
     try {
       const raw = readFileSync(HEALTH_FILE, 'utf-8')
-      const parsed = JSON.parse(raw) as HealthData
+      const parsed = JSON.parse(raw) as Partial<HealthData>
 
       if (!parsed.rateLimits || typeof parsed.rateLimits !== 'object') {
         return {
           version: 1,
           lastUpdated: new Date().toISOString(),
           rateLimits: {},
+          usage: {},
         }
       }
 
-      return parsed
+      return {
+        version: 1,
+        lastUpdated: parsed.lastUpdated || new Date().toISOString(),
+        rateLimits: parsed.rateLimits,
+        usage: parsed.usage && typeof parsed.usage === 'object' ? parsed.usage : {},
+      }
     } catch {
       return {
         version: 1,
         lastUpdated: new Date().toISOString(),
         rateLimits: {},
+        usage: {},
       }
     }
   }

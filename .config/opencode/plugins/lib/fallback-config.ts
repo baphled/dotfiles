@@ -71,7 +71,6 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
     ],
     T2: [
       { provider: 'opencode', model: 'big-pickle', tier: 'T2' },
-      { provider: 'opencode', model: 'kimi-k2.5-free', tier: 'T2' },
       { provider: 'github-copilot', model: 'gpt-5', tier: 'T2' },
       { provider: 'github-copilot', model: 'claude-sonnet-4', tier: 'T2' },
       { provider: 'github-copilot', model: 'gemini-2.5-pro', tier: 'T2' },
@@ -83,7 +82,6 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
       { provider: 'github-copilot', model: 'gpt-5.2-codex', tier: 'T3' },
       { provider: 'anthropic', model: 'claude-opus-4-6', tier: 'T3' },
       { provider: 'opencode', model: 'big-pickle', tier: 'T2' },
-      { provider: 'opencode', model: 'kimi-k2.5-free', tier: 'T2' },
     ],
   };
 
@@ -143,6 +141,34 @@ export function getProviderMetadata(provider: string): ProviderMetadata {
       description: 'Unknown provider',
     }
   );
+}
+
+/**
+ * Estimated request cost per tier.
+ *
+ * These are conservative defaults. The orchestrator can override
+ * with a specific estimate when calling provider-health(recommend=true).
+ *
+ * T0: Local model, single request
+ * T1: Explore/librarian — lightweight search, 1-3 requests
+ * T2: Implementation/build — multiple tool calls, iterations, 5-15 requests
+ * T3: Oracle/ultrabrain — complex reasoning, fewer but heavier, 3-10 requests
+ */
+const TIER_COST_ESTIMATES: Record<string, number> = {
+  T0: 1,
+  T1: 3,
+  T2: 10,
+  T3: 5,
+};
+
+/**
+ * Get the estimated request cost for a task in a given tier.
+ *
+ * @param tier - T0, T1, T2, or T3
+ * @returns Estimated number of requests the task will consume
+ */
+export function getEstimatedTaskCost(tier: string): number {
+  return TIER_COST_ESTIMATES[tier] ?? TIER_COST_ESTIMATES['T2'];
 }
 
 /**

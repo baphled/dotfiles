@@ -3,7 +3,7 @@ import type { Plugin, PluginInput } from '@opencode-ai/plugin'
 import { tool } from '@opencode-ai/plugin'
 import { z } from 'zod'
 import { HealthManager } from './lib/provider-health'
-import { getFallbackChain } from './lib/fallback-config'
+import { getFallbackChain, getEstimatedTaskCost, getProviderMetadata } from './lib/fallback-config'
 import { existsSync, unlinkSync } from 'fs'
 
 const DEFAULT_RETRY_AFTER_SECONDS = 60
@@ -12,7 +12,7 @@ const FAILOVER_LOG_FILE = '/home/baphled/.config/opencode/failover.log'
 const MODEL_TIER_MAP: Record<string, string> = {
   'gpt-5-nano': 'T1', 'minimax-m2.5-free': 'T1', 'gpt-5-mini': 'T1',
   'claude-haiku-4.5': 'T1', 'gemini-3-flash-preview': 'T1',
-  'big-pickle': 'T2', 'kimi-k2.5-free': 'T2', 'gpt-5': 'T2', 'gpt-4.1': 'T2',
+  'big-pickle': 'T2', 'gpt-5': 'T2', 'gpt-4.1': 'T2',
   'claude-sonnet-4': 'T2', 'claude-sonnet-4.5': 'T2', 'grok-code-fast-1': 'T2',
   'gemini-3-pro-preview': 'T2', 'gemini-2.5-pro': 'T2',
   'claude-opus-4.5': 'T3', 'claude-opus-4.6': 'T3', 'claude-opus-41': 'T3',
@@ -83,6 +83,8 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
       const tier = resolveModelTier(input.model.id)
       const healthKey = `${providerName}/${input.model.id}`
       lastModelBySession.set(input.sessionID, { provider: providerName, model: input.model.id })
+      healthManager.recordUsage(providerName)
+      healthManager.flush().catch(() => {})
       if (!healthManager.isRateLimited(healthKey)) return
 
       const expiry = healthManager.getRateLimitExpiry(healthKey)
@@ -132,10 +134,12 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
 
     tool: {
       'provider-health': tool({
-        description: 'Display provider health status and failover chain information',
+        description: 'Display provider health status and failover chain information. Use recommend=true with tier to get the best available model before delegating to an agent.',
         args: {
           tier: z.string().optional().describe('Show fallback chain for specific tier (T0, T1, T2, T3)'),
           reset: z.boolean().optional().describe('Clear health state file and reset'),
+          recommend: z.boolean().optional().describe('Return the first healthy provider/model for the given tier. Requires tier parameter. Use BEFORE delegating to check rate limits and capacity.'),
+          estimated_requests: z.number().optional().describe('Estimated number of requests the task will need. Used with recommend to skip providers without enough remaining capacity. Defaults to tier estimate if omitted.'),
         },
         execute: async (args) => {
           if (args.reset) {
@@ -146,16 +150,70 @@ export const ProviderFailoverPlugin: Plugin = async (_input) => {
             }
             return '✅ Health state already clean.'
           }
+          if (args.recommend) {
+            if (!args.tier) return '❌ `recommend` requires a `tier` parameter (T0, T1, T2, T3).'
+            const tierKey = args.tier.toUpperCase()
+            const chain = getFallbackChain(tierKey)
+            if (chain.length === 0) return `❌ Unknown tier: ${args.tier}`
+            const estimatedCost = args.estimated_requests ?? getEstimatedTaskCost(tierKey)
+            const healthy = healthManager.getHealthyAlternatives(tierKey)
+            const skippedForCapacity: Array<{ provider: string; model: string; remaining: number }> = []
+            let pick: typeof healthy[0] | null = null
+            for (const candidate of healthy) {
+              const remaining = healthManager.getRemainingCapacity(candidate.provider)
+              if (remaining !== null && remaining < estimatedCost) {
+                skippedForCapacity.push({ provider: candidate.provider, model: candidate.model, remaining })
+                continue
+              }
+              pick = candidate
+              break
+            }
+            if (pick) {
+              const remaining = healthManager.getRemainingCapacity(pick.provider)
+              const capacityNote = remaining !== null ? ` [${remaining} requests remaining]` : ''
+              const altCount = healthy.length - skippedForCapacity.length - 1
+              let result = `✅ **${pick.provider}/${pick.model}** (${tierKey})${capacityNote}`
+              if (altCount > 0) result += ` — ${altCount} more alternative(s) available`
+              if (skippedForCapacity.length > 0) {
+                const skippedNames = skippedForCapacity.map(s => `${s.provider}/${s.model} (${s.remaining} left)`).join(', ')
+                result += `\n⚠️ Skipped (insufficient capacity for ~${estimatedCost} requests): ${skippedNames}`
+              }
+              return result
+            }
+            if (skippedForCapacity.length > 0) {
+              const best = skippedForCapacity.sort((a, b) => b.remaining - a.remaining)[0]
+              return `⚠️ No provider in ${tierKey} has enough capacity for ~${estimatedCost} requests. ` +
+                `Best available: **${best.provider}/${best.model}** with ${best.remaining} remaining. ` +
+                `Consider a lower tier or wait for limits to reset.`
+            }
+            const status = healthManager.getAllStatus()
+            const limitedEntries = chain
+              .map(e => ({ ...e, key: `${e.provider}/${e.model}` }))
+              .filter(e => status[e.key]?.rateLimitedUntil)
+            if (limitedEntries.length > 0) {
+              const soonest = limitedEntries
+                .map(e => ({ ...e, expiry: new Date(status[e.key].rateLimitedUntil!).getTime() }))
+                .sort((a, b) => a.expiry - b.expiry)[0]
+              const expiryTime = new Date(soonest.expiry).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+              return `⚠️ All ${tierKey} models rate limited. Soonest available: **${soonest.provider}/${soonest.model}** at ${expiryTime}`
+            }
+            return `⚠️ No healthy models available for ${tierKey}.`
+          }
           if (args.tier) {
             const chain = getFallbackChain(args.tier.toUpperCase())
             if (chain.length === 0) return `Unknown tier: ${args.tier}`
-            let output = `## Fallback Chain: ${args.tier.toUpperCase()}\n\n| # | Provider | Model | Rate Limited |\n|---|----------|-------|--------------|\n`
+            let output = `## Fallback Chain: ${args.tier.toUpperCase()}\n\n| # | Provider | Model | Rate Limited | Capacity |\n|---|----------|-------|--------------|-----------|\n`
             const status = healthManager.getAllStatus()
             for (let i = 0; i < chain.length; i++) {
               const e = chain[i]
               const key = `${e.provider}/${e.model}`
               const rl = status[key]?.rateLimitedUntil
-              output += `| ${i + 1} | ${e.provider} | ${e.model} | ${rl ? `Until ${rl}` : '✅'} |\n`
+              const remaining = healthManager.getRemainingCapacity(e.provider)
+              const meta = getProviderMetadata(e.provider)
+              const capacityText = remaining !== null
+                ? `${remaining}/${meta.rateLimit.threshold} ${meta.rateLimit.type === 'monthly' ? 'monthly' : '/min'}`
+                : '∞'
+              output += `| ${i + 1} | ${e.provider} | ${e.model} | ${rl ? `Until ${rl}` : '✅'} | ${capacityText} |\n`
             }
             return output
           }
