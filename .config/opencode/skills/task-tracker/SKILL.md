@@ -95,3 +95,4 @@ Progress: 1/5 complete, ~380/3500 tokens used
 - `time-management` - Time per task tracking
 - `scope-management` - Task list reflects scope
 - `checklist-discipline` - Rigorous status updates
+- `long-running-agent` — Multi-session harness pattern (uses task-tracker per session)

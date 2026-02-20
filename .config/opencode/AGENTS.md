@@ -160,6 +160,30 @@ When addressing review feedback:
 
 ---
 
+## Evaluator-Optimizer Workflow
+
+Use when output quality improves measurably through critique. Two signs of good fit:
+(1) a human's feedback demonstrably improves the output; (2) the evaluator can
+provide that feedback autonomously.
+
+| Trigger                 | Generator       | Evaluator          |
+|-------------------------|-----------------|--------------------|
+| Code needs review       | Senior-Engineer | QA-Engineer        |
+| Documentation quality   | Writer          | Tech-Lead          |
+| Security audit          | Senior-Engineer | Security-Engineer  |
+| Architecture review     | Senior-Engineer | Tech-Lead          |
+
+**Pattern:**
+1. Generator produces output
+2. Evaluator critiques with specific, actionable feedback
+3. Generator revises based on critique
+4. Repeat until criteria met (max 3 iterations)
+
+**Do not use for:** Simple tasks, single-file changes, or when clear evaluation
+criteria do not exist. The overhead is not worth it.
+
+---
+
 ## Three Pillars
 
 1. **Always-Active Discipline** — pre-action, memory-keeper, search first

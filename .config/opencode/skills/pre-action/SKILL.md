@@ -24,6 +24,30 @@ I force deliberate thinking before significant action: clarify the goal, underst
 4. Choose consciously—make explicit trade-off decisions
 5. Verify understanding—confirm you've grasped the problem
 
+## Mid-chain reflection (sequential tool use)
+
+When executing a chain of sequential tool calls where each step depends on the
+previous result, apply a reflection step between calls:
+
+**After each significant tool result, ask:**
+- Does this result change my plan?
+- Am I still on the right path, or do I need to backtrack?
+- Do I have all information needed for the next step?
+
+**Before any irreversible action, verify:**
+- What exactly will this change?
+- Is this the right target (file, record, resource)?
+- Can I undo this if wrong?
+
+**When results are unexpected, stop and reassess:**
+- Why did I get this result?
+- Does my mental model need updating?
+- Should I try a different approach?
+
+This is distinct from upfront pre-action thinking — it is reactive, triggered by
+new information from tool results. Most valuable in long tool chains, policy-heavy
+environments, and sequential decisions where mistakes compound.
+
 ## Decision triggers
 
 - Always-active: load with every agent session automatically

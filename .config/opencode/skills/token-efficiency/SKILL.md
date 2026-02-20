@@ -95,3 +95,4 @@ Track these to measure efficiency:
 - `pre-action` - Clarify before prompting
 - `parallel-execution` - Efficiency through parallelism
 - `scope-management` - Scope affects token usage
+- `context-efficient-tools` — Tool result filtering (complements prompt-level efficiency)
