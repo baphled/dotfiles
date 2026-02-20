@@ -12,6 +12,8 @@ default_skills:
   - agent-discovery
   - pre-action
   - epistemic-rigor
+  - memory-keeper
+  - skill-discovery
 ---
 
 # SysOp Agent

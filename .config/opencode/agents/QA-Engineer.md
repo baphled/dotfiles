@@ -13,6 +13,8 @@ default_skills:
   - bdd-workflow
   - critical-thinking
   - agent-discovery
+  - memory-keeper
+  - skill-discovery
 ---
 
 # QA Engineer Agent

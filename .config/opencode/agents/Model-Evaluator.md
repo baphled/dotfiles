@@ -16,6 +16,8 @@ default_skills:
   - memory-keeper
   - critical-thinking
   - benchmarking
+  - skill-discovery
+  - agent-discovery
 ---
 
 # Model Evaluator Agent

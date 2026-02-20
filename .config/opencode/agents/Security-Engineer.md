@@ -13,6 +13,8 @@ default_skills:
   - pre-action
   - critical-thinking
   - epistemic-rigor
+  - memory-keeper
+  - skill-discovery
 ---
 
 # Security Engineer Agent

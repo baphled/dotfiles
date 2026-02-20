@@ -13,6 +13,9 @@ default_skills:
   - epistemic-rigor
   - question-resolver
   - note-taking
+  - pre-action
+  - memory-keeper
+  - skill-discovery
 ---
 
 # Data Analyst Agent

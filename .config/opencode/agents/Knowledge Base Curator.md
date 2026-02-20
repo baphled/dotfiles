@@ -20,6 +20,7 @@ default_skills:
   - documentation-writing
   - british-english
   - memory-keeper
+  - pre-action
 ---
 
 ## Skill usage requirement

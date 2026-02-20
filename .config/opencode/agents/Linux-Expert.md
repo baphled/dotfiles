@@ -12,6 +12,8 @@ default_skills:
   - agent-discovery
   - pre-action
   - note-taking
+  - memory-keeper
+  - skill-discovery
 ---
 
 # Linux Expert Agent

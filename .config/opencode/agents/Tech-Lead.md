@@ -13,6 +13,8 @@ default_skills:
   - critical-thinking
   - justify-decision
   - agent-discovery
+  - memory-keeper
+  - skill-discovery
 ---
 
 # Tech Lead Agent

@@ -13,6 +13,9 @@ default_skills:
   - note-taking
   - token-efficiency
   - agent-discovery
+  - pre-action
+  - memory-keeper
+  - skill-discovery
 ---
 
 # Writer Agent

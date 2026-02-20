@@ -12,6 +12,8 @@ default_skills:
   - agent-discovery
   - pre-action
   - nix
+  - memory-keeper
+  - skill-discovery
 ---
 
 # Nix Expert Agent

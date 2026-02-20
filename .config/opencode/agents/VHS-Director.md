@@ -12,6 +12,8 @@ default_skills:
   - pre-action
   - vhs
   - agent-discovery
+  - memory-keeper
+  - skill-discovery
 ---
 
 # VHS Director Agent

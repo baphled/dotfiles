@@ -14,6 +14,7 @@ default_skills:
   - clean-code
   - bdd-workflow
   - agent-discovery
+  - skill-discovery
 ---
 
 # Senior Engineer Agent

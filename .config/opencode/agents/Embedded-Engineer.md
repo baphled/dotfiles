@@ -13,6 +13,8 @@ default_skills:
   - pre-action
   - critical-thinking
   - cpp
+  - memory-keeper
+  - skill-discovery
 ---
 
 # Embedded Engineer Agent
