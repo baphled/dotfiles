@@ -134,7 +134,7 @@ export const SkillAutoLoaderPlugin: Plugin = async (_input) => {
 
       // Get category or subagent_type
       const category = args.category as string | undefined
-      let subagentType = args.subagentType as string | undefined
+       let subagentType = (args.subagent_type ?? args.subagentType) as string | undefined
       
       // Get prompt for keyword analysis
       const prompt = args.prompt as string | undefined
@@ -163,28 +163,28 @@ export const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       // Run skill selection
       const result = selectSkills(selectionInput, config)
 
-      // Update load_skills with injected skills
-      args.load_skills = result.skills
-
-      // Log the injection event
-      logInjection({
-        timestamp: new Date().toISOString(),
-        tool: input.tool,
-        category,
-        subagentType,
-        injected: result.skills,
-        existing: existingSkills,
-        final: result.skills,
-        sources: result.sources as Array<{ skill: string; source: string; pattern?: string }>
-      })
-
-      // Show toast notification
+      // Update load_skills with injected skills only if result is non-empty
       if (result.skills.length > 0) {
-        const skillCount = result.skills.length
+        args.load_skills = result.skills
+
+        // Log the injection event
+        logInjection({
+          timestamp: new Date().toISOString(),
+          tool: input.tool,
+          category,
+          subagentType,
+          injected: result.skills,
+          existing: existingSkills,
+          final: result.skills,
+          sources: result.sources as Array<{ skill: string; source: string; pattern?: string }>
+        })
+
+        // Show toast notification
+        const autoCount = result.skills.length - existingSkills.length
         const existingCount = existingSkills.length
         const skillsList = result.skills.slice(0, 3).join(', ')
         const more = result.skills.length > 3 ? ` +${result.skills.length - 3} more` : ''
-        notify(`⚡ Skills: ${skillsList}${more} (${skillCount} auto + ${existingCount} explicit)`, 'success', 4000)
+        notify(`⚡ Skills: ${skillsList}${more} (${autoCount} auto + ${existingCount} explicit)`, 'success', 4000)
       }
     }
   }

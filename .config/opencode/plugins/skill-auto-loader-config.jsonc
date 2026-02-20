@@ -3,7 +3,7 @@
   "baseline_skills": [
     "pre-action",
     "memory-keeper",
-    "auto-discovery",
+    "skill-discovery",
     "agent-discovery",
     "token-cost-estimation"
   ],
@@ -63,7 +63,22 @@
       "architecture",
       "systems-thinker"
     ],
-    "sisyphus-junior": []
+    "sisyphus-junior": [],
+    // Specialist agents - supplementary skills beyond agent default_skills
+    "Senior-Engineer": ["clean-code", "tdd-workflow", "error-handling", "golang"],
+    "QA-Engineer": ["bdd-workflow", "ginkgo-gomega", "godog", "tdd-workflow"],
+    "Security-Engineer": ["security", "cyber-security", "epistemic-rigor"],
+    "Tech-Lead": ["architecture", "trade-off-analysis", "systems-thinker", "justify-decision"],
+    "DevOps": ["docker", "automation", "infrastructure-as-code", "devops"],
+    "Writer": ["british-english", "documentation-writing", "information-architecture"],
+    "Data-Analyst": ["epistemic-rigor", "question-resolver", "critical-thinking"],
+    "Embedded-Engineer": ["cpp", "platformio", "embedded-testing"],
+    "Nix-Expert": ["nix", "configuration-management"],
+    "Linux-Expert": ["scripter", "automation"],
+    "SysOp": ["incident-response", "monitoring", "logging-observability"],
+    "VHS-Director": ["vhs"],
+    "Knowledge Base Curator": ["obsidian-structure", "obsidian-dataview-expert", "obsidian-frontmatter"],
+    "Model-Evaluator": ["benchmarking", "critical-thinking", "epistemic-rigor"]
   },
 
   // Keyword patterns for prompt analysis
