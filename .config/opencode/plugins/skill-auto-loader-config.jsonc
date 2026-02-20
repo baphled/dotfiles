@@ -121,8 +121,7 @@
     {
       "pattern": "golang|\\.go |go module|goroutine|go app",
       "skills": [
-        "golang",
-        "go-expert"
+        "golang"
       ],
       "priority": 8
     },

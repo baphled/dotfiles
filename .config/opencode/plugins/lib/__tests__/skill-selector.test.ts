@@ -26,7 +26,7 @@ const testConfig: SkillAutoLoaderConfig = {
   keyword_patterns: [
     { pattern: 'security|vulnerabilit|auth|encrypt', skills: ['security', 'cyber-security'], priority: 9 },
     { pattern: 'test|spec|assert|expect|describe|tdd', skills: ['ginkgo-gomega', 'bdd-workflow', 'tdd-workflow'], priority: 8 },
-    { pattern: 'golang|\\.go |go module|goroutine', skills: ['golang', 'go-expert'], priority: 8 },
+    { pattern: 'golang|\\.go |go module|goroutine', skills: ['golang'], priority: 8 },
     { pattern: 'refactor|clean|simplif', skills: ['refactor', 'clean-code', 'design-patterns'], priority: 7 },
   ],
 }
@@ -173,7 +173,7 @@ describe('selectSkills — Tier 3: Keyword Pattern Matching', () => {
     expect(result.skills).toContain('tdd-workflow')
   })
 
-  it("prompt containing 'golang' triggers golang and go-expert skills", () => {
+  it("prompt containing 'golang' triggers golang skill", () => {
     const input: SkillSelectionInput = {
       existingSkills: [],
       prompt: 'Implement a golang HTTP server with middleware',
@@ -181,7 +181,6 @@ describe('selectSkills — Tier 3: Keyword Pattern Matching', () => {
     const result = selectSkills(input, testConfig)
 
     expect(result.skills).toContain('golang')
-    expect(result.skills).toContain('go-expert')
   })
 
   it("prompt containing 'refactor' triggers refactor, clean-code, and design-patterns skills", () => {
@@ -242,7 +241,7 @@ describe('selectSkills — Tier 3: Keyword Pattern Matching', () => {
       ...testConfig,
       keyword_patterns: [
         { pattern: '[invalid(regex', skills: ['should-not-appear'], priority: 10 },
-        { pattern: 'golang', skills: ['golang', 'go-expert'], priority: 8 },
+         { pattern: 'golang', skills: ['golang'], priority: 8 },
       ],
     }
     const input: SkillSelectionInput = {
@@ -259,7 +258,7 @@ describe('selectSkills — Tier 3: Keyword Pattern Matching', () => {
 })
 
 describe('selectSkills — Session Continuation', () => {
-  it('returns empty result when sessionId is present and skip_on_session_continue is true', () => {
+  it('returns baseline skills only (no category/keyword) when sessionId is present and skip_on_session_continue is true', () => {
     const input: SkillSelectionInput = {
       existingSkills: [],
       category: 'ultrabrain',
@@ -268,8 +267,14 @@ describe('selectSkills — Session Continuation', () => {
     }
     const result = selectSkills(input, testConfig)
 
-    expect(result.skills).toHaveLength(0)
-    expect(result.sources).toHaveLength(0)
+    // Should have baseline skills
+    expect(result.skills).toContain('pre-action')
+    expect(result.skills).toContain('memory-keeper')
+
+    // Should NOT have category skills
+    expect(result.skills).not.toContain('architecture')
+    expect(result.skills).not.toContain('critical-thinking')
+    expect(result.skills).not.toContain('systems-thinker')
   })
 
   it('still injects skills when sessionId is present but skip_on_session_continue is false', () => {
@@ -293,6 +298,61 @@ describe('selectSkills — Session Continuation', () => {
 
     expect(result.skills).toContain('pre-action')
     expect(result.skills).toContain('memory-keeper')
+  })
+
+  it('returns baseline skills when sessionId is present and skip_on_session_continue is true', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      sessionId: 'ses_abc123',
+    }
+    const result = selectSkills(input, testConfig)
+
+    expect(result.skills).toContain('pre-action')
+    expect(result.skills).toContain('memory-keeper')
+  })
+
+  it('does NOT return category/keyword skills when sessionId is present and skip_on_session_continue is true', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      category: 'ultrabrain',
+      prompt: 'security test golang refactor',
+      sessionId: 'ses_abc123',
+    }
+    const result = selectSkills(input, testConfig)
+
+    // Should have baseline skills
+    expect(result.skills).toContain('pre-action')
+    expect(result.skills).toContain('memory-keeper')
+
+    // Should NOT have category skills from 'ultrabrain'
+    expect(result.skills).not.toContain('architecture')
+    expect(result.skills).not.toContain('critical-thinking')
+    expect(result.skills).not.toContain('systems-thinker')
+
+    // Should NOT have keyword skills
+    expect(result.skills).not.toContain('security')
+    expect(result.skills).not.toContain('golang')
+    expect(result.skills).not.toContain('refactor')
+  })
+
+  it('merges baseline skills with existing skills when sessionId is present and skip_on_session_continue is true', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: ['playwright', 'custom-skill'],
+      sessionId: 'ses_abc123',
+    }
+    const result = selectSkills(input, testConfig)
+
+    // Should have baseline skills
+    expect(result.skills).toContain('pre-action')
+    expect(result.skills).toContain('memory-keeper')
+
+    // Should have existing skills
+    expect(result.skills).toContain('playwright')
+    expect(result.skills).toContain('custom-skill')
+
+    // Should not have duplicates
+    const preActionCount = result.skills.filter(s => s === 'pre-action').length
+    expect(preActionCount).toBe(1)
   })
 })
 
