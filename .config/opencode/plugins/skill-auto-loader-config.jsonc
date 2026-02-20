@@ -3,7 +3,6 @@
   "baseline_skills": [
     "pre-action",
     "memory-keeper",
-    "skill-discovery",
     "agent-discovery",
     "token-cost-estimation"
   ],
@@ -69,20 +68,30 @@
     ],
     "sisyphus-junior": [],
     // Specialist agents - supplementary skills beyond agent default_skills
-    "Senior-Engineer": ["clean-code", "tdd-workflow", "error-handling", "golang"],
-    "QA-Engineer": ["bdd-workflow", "ginkgo-gomega", "godog", "tdd-workflow"],
-    "Security-Engineer": ["security", "cyber-security", "epistemic-rigor"],
-    "Tech-Lead": ["architecture", "trade-off-analysis", "systems-thinker", "justify-decision"],
+    "Senior-Engineer": ["error-handling"],
+    "QA-Engineer": [],
+    "Security-Engineer": ["security", "cyber-security"],
+    "Tech-Lead": ["architecture", "trade-off-analysis", "systems-thinker"],
     "DevOps": ["docker", "automation", "infrastructure-as-code", "devops"],
-    "Writer": ["british-english", "documentation-writing", "information-architecture"],
+    "Writer": ["documentation-writing", "information-architecture"],
     "Data-Analyst": ["epistemic-rigor", "question-resolver", "critical-thinking"],
-    "Embedded-Engineer": ["cpp", "platformio", "embedded-testing"],
+    "Embedded-Engineer": ["embedded-testing"],
     "Nix-Expert": ["nix", "configuration-management"],
     "Linux-Expert": ["scripter", "automation"],
     "SysOp": ["incident-response", "monitoring", "logging-observability"],
     "VHS-Director": ["vhs"],
     "Knowledge Base Curator": ["obsidian-structure", "obsidian-dataview-expert", "obsidian-frontmatter"],
-    "Model-Evaluator": ["benchmarking", "critical-thinking", "epistemic-rigor"]
+    "Model-Evaluator": ["benchmarking"]
+  },
+
+  // Focus-based role skills. ZERO language or library skills here.
+  // Language skills come from codebase detection (Task 8).
+  // Library skills come from keyword patterns.
+  "role_mappings": {
+    "testing": ["bdd-workflow"],
+    "implementation": ["clean-code", "error-handling", "design-patterns"],
+    "review": ["code-reviewer", "clean-code", "critical-thinking"],
+    "refactoring": ["refactor", "clean-code", "design-patterns"]
   },
 
   // Keyword patterns for prompt analysis
@@ -117,8 +126,7 @@
       "pattern": "test|spec|assert|expect|describe|tdd",
       "skills": [
         "ginkgo-gomega",
-        "bdd-workflow",
-        "tdd-workflow"
+        "bdd-workflow"
       ],
       "priority": 8
     },

@@ -303,16 +303,16 @@ describe('injectSkillContent — prompt composition', () => {
 })
 
 // ---------------------------------------------------------------------------
-// injectSkillContent — 30KB ceiling enforcement
+// injectSkillContent — 20KB ceiling enforcement
 // ---------------------------------------------------------------------------
 
-describe('injectSkillContent — 30KB ceiling enforcement', () => {
-  it('exports PROMPT_SIZE_CEILING as 30KB (30 * 1024)', () => {
-    expect(PROMPT_SIZE_CEILING).toBe(30 * 1024)
+describe('injectSkillContent — 20KB ceiling enforcement', () => {
+  it('exports PROMPT_SIZE_CEILING as 20KB (20 * 1024)', () => {
+    expect(PROMPT_SIZE_CEILING).toBe(20 * 1024)
   })
 
-  it('skips content injection when total injected content exceeds 30KB', () => {
-    // Create a skill with content just over the 30KB limit
+  it('skips content injection when total injected content exceeds 20KB', () => {
+    // Create a skill with content just over the 20KB limit
     const largeContent = 'x'.repeat(PROMPT_SIZE_CEILING + 1)
     const cache = makeSkillCache({ 'large-skill': largeContent })
     const sources: SkillSource[] = [{ skill: 'large-skill', source: 'baseline' }]
@@ -333,7 +333,7 @@ describe('injectSkillContent — 30KB ceiling enforcement', () => {
 
   it('allows injection when total content is exactly at the ceiling', () => {
     // Content size at exactly ceiling (accounting for XML wrapper overhead)
-    // We need: `<skill name="X">\n{content}\n</skill>` total <= 30KB
+    // We need: `<skill name="X">\n{content}\n</skill>` total <= 20KB
     const wrapperSize = '<skill name="at-limit">\n'.length + '\n</skill>\n\n'.length
     const contentSize = PROMPT_SIZE_CEILING - wrapperSize
     const content = 'y'.repeat(contentSize)
@@ -351,7 +351,7 @@ describe('injectSkillContent — 30KB ceiling enforcement', () => {
     expect(result.injected).toBe(true)
   })
 
-  it('injects normally when content is well under 30KB', () => {
+  it('injects normally when content is well under 20KB', () => {
     const cache = makeSkillCache({ 'small-skill': 'Small content.' })
     const sources: SkillSource[] = [{ skill: 'small-skill', source: 'baseline' }]
 

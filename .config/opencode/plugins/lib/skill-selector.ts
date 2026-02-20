@@ -13,6 +13,8 @@ export interface SkillAutoLoaderConfig {
   skip_on_session_continue: boolean
   category_mappings: Record<string, string[]>
   subagent_mappings: Record<string, string[]>
+  role_mappings?: Record<string, string[]>
+  max_auto_skills_bytes?: number
   keyword_patterns: Array<{ pattern: string; skills: string[]; priority: number }>
 }
 

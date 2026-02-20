@@ -20,12 +20,12 @@ const testConfig: SkillAutoLoaderConfig = {
     'librarian': [],
     'oracle': ['critical-thinking', 'architecture', 'systems-thinker'],
     'sisyphus-junior': [],
-    'Senior-Engineer': ['clean-code', 'tdd-workflow', 'error-handling', 'golang'],
-    'QA-Engineer': ['bdd-workflow', 'ginkgo-gomega', 'godog', 'tdd-workflow'],
+    'Senior-Engineer': ['error-handling'],
+    'QA-Engineer': [],
   },
   keyword_patterns: [
     { pattern: 'security|vulnerabilit|auth|encrypt', skills: ['security', 'cyber-security'], priority: 9 },
-    { pattern: 'test|spec|assert|expect|describe|tdd', skills: ['ginkgo-gomega', 'bdd-workflow', 'tdd-workflow'], priority: 8 },
+    { pattern: 'test|spec|assert|expect|describe|tdd', skills: ['ginkgo-gomega', 'bdd-workflow'], priority: 8 },
     { pattern: 'golang|\\.go |go module|goroutine', skills: ['golang'], priority: 8 },
     { pattern: 'refactor|clean|simplif', skills: ['refactor', 'clean-code', 'design-patterns'], priority: 7 },
   ],
@@ -125,14 +125,14 @@ describe('selectSkills — Tier 2: Subagent Mappings', () => {
     expect(categorySources).toHaveLength(0)
   })
 
-  it("maps subagent type 'Senior-Engineer' to clean-code, tdd-workflow, error-handling, and golang", () => {
+  it("maps subagent type 'Senior-Engineer' to error-handling", () => {
     const input: SkillSelectionInput = { subagentType: 'Senior-Engineer', existingSkills: [] }
     const result = selectSkills(input, testConfig)
 
-    expect(result.skills).toContain('clean-code')
-    expect(result.skills).toContain('tdd-workflow')
     expect(result.skills).toContain('error-handling')
-    expect(result.skills).toContain('golang')
+    expect(result.skills).not.toContain('clean-code')
+    expect(result.skills).not.toContain('bdd-workflow')
+    expect(result.skills).not.toContain('golang')
   })
 
   it('includes agent default skills in the result with source set to agent-default', () => {
@@ -161,7 +161,7 @@ describe('selectSkills — Tier 3: Keyword Pattern Matching', () => {
     expect(result.sources.some(s => s.skill === 'security' && s.source === 'keyword')).toBe(true)
   })
 
-  it("prompt containing 'test' triggers ginkgo-gomega, bdd-workflow, and tdd-workflow skills", () => {
+  it("prompt containing 'test' triggers ginkgo-gomega and bdd-workflow skills", () => {
     const input: SkillSelectionInput = {
       existingSkills: [],
       prompt: 'Write test cases for the payment service',
@@ -170,7 +170,6 @@ describe('selectSkills — Tier 3: Keyword Pattern Matching', () => {
 
     expect(result.skills).toContain('ginkgo-gomega')
     expect(result.skills).toContain('bdd-workflow')
-    expect(result.skills).toContain('tdd-workflow')
   })
 
   it("prompt containing 'golang' triggers golang skill", () => {
@@ -487,39 +486,38 @@ describe('selectSkills — max_auto_skills Cap raised to 10', () => {
       ...testConfig,
       baseline_skills: ['pre-action', 'memory-keeper'],
       max_auto_skills: 10,
-      keyword_patterns: [
-        { pattern: 'security', skills: ['security', 'cyber-security'], priority: 9 },
-        { pattern: 'test', skills: ['ginkgo-gomega', 'bdd-workflow', 'tdd-workflow'], priority: 8 },
-        { pattern: 'golang', skills: ['golang'], priority: 8 },
-        { pattern: 'refactor', skills: ['refactor', 'design-patterns'], priority: 7 },
-        { pattern: 'database', skills: ['gorm-repository', 'sql'], priority: 7 },
-      ],
-    }
-    const input: SkillSelectionInput = {
-      existingSkills: [],
-      // Prompt matches all 5 keyword patterns → 10 unique non-baseline skills
-      prompt: 'security test golang refactor database',
-    }
-    const result = selectSkills(input, config)
+       keyword_patterns: [
+         { pattern: 'security', skills: ['security', 'cyber-security'], priority: 9 },
+         { pattern: 'test', skills: ['ginkgo-gomega', 'bdd-workflow'], priority: 8 },
+         { pattern: 'golang', skills: ['golang'], priority: 8 },
+         { pattern: 'refactor', skills: ['refactor', 'design-patterns'], priority: 7 },
+         { pattern: 'database', skills: ['gorm-repository', 'sql'], priority: 7 },
+       ],
+     }
+     const input: SkillSelectionInput = {
+       existingSkills: [],
+       // Prompt matches all 5 keyword patterns → 9 unique non-baseline skills
+       prompt: 'security test golang refactor database',
+     }
+     const result = selectSkills(input, config)
 
-    // All 8 distinct non-baseline skills from the matched patterns should be present
-    const expectedNonBaselineSkills = [
-      'security',
-      'cyber-security',
-      'ginkgo-gomega',
-      'bdd-workflow',
-      'tdd-workflow',
-      'golang',
-      'refactor',
-      'design-patterns',
-    ]
-    for (const skill of expectedNonBaselineSkills) {
-      expect(result.skills).toContain(skill)
-    }
+      // All 7 distinct non-baseline skills from the matched patterns should be present
+      const expectedNonBaselineSkills = [
+        'security',
+        'cyber-security',
+        'ginkgo-gomega',
+        'bdd-workflow',
+        'golang',
+        'refactor',
+        'design-patterns',
+      ]
+     for (const skill of expectedNonBaselineSkills) {
+       expect(result.skills).toContain(skill)
+     }
 
-    // Exactly 8 non-baseline skills (not limited to 5)
-    const nonBaselineSources = result.sources.filter(s => s.source !== 'baseline')
-    expect(nonBaselineSources.length).toBeGreaterThanOrEqual(8)
+     // Exactly 7 non-baseline skills (not limited to 5)
+     const nonBaselineSources = result.sources.filter(s => s.source !== 'baseline')
+     expect(nonBaselineSources.length).toBeGreaterThanOrEqual(7)
   })
 
   it('still caps at max_auto_skills when more than 10 non-baseline skills would match', () => {
@@ -527,14 +525,14 @@ describe('selectSkills — max_auto_skills Cap raised to 10', () => {
       ...testConfig,
       baseline_skills: [],
       max_auto_skills: 10,
-      keyword_patterns: [
-        // 12 unique skills across patterns
-        { pattern: 'security', skills: ['security', 'cyber-security', 'epistemic-rigor'], priority: 9 },
-        { pattern: 'test', skills: ['ginkgo-gomega', 'bdd-workflow', 'tdd-workflow'], priority: 8 },
-        { pattern: 'golang', skills: ['golang', 'clean-code'], priority: 8 },
-        { pattern: 'refactor', skills: ['refactor', 'design-patterns'], priority: 7 },
-        { pattern: 'database', skills: ['gorm-repository', 'sql', 'db-operations'], priority: 7 },
-      ],
+       keyword_patterns: [
+         // 11 unique skills across patterns
+         { pattern: 'security', skills: ['security', 'cyber-security', 'epistemic-rigor'], priority: 9 },
+         { pattern: 'test', skills: ['ginkgo-gomega', 'bdd-workflow'], priority: 8 },
+         { pattern: 'golang', skills: ['golang', 'clean-code'], priority: 8 },
+         { pattern: 'refactor', skills: ['refactor', 'design-patterns'], priority: 7 },
+         { pattern: 'database', skills: ['gorm-repository', 'sql', 'db-operations'], priority: 7 },
+       ],
     }
     const input: SkillSelectionInput = {
       existingSkills: [],
@@ -613,6 +611,6 @@ describe('selectSkills — All Three Tiers Combined', () => {
 
     expect(result.skills).toContain('pre-action')
     expect(result.skills).toContain('clean-code')
-    expect(result.skills).toContain('tdd-workflow')
+    expect(result.skills).toContain('error-handling')
   })
 })

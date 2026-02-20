@@ -124,8 +124,8 @@ describe('orchestrator-only — skill-auto-loader-config.jsonc subagent_mappings
     expect(subagentMappings['Senior-Engineer'].length).toBeGreaterThan(0)
   })
 
-  it("'QA-Engineer' has a non-empty skills array", () => {
-    expect(subagentMappings['QA-Engineer'].length).toBeGreaterThan(0)
+  it("'QA-Engineer' has an empty skills array (language/library skills removed)", () => {
+    expect(subagentMappings['QA-Engineer']).toEqual([])
   })
 
   it("'Security-Engineer' has a non-empty skills array", () => {

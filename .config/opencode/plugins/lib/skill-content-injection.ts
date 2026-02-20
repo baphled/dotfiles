@@ -11,13 +11,13 @@
  *   </skill>
  *
  * Skills are ordered: baseline → category/agent-default → keyword
- * Total injected content is capped at 30KB (PROMPT_SIZE_CEILING).
+ * Total injected content is capped at 20KB (PROMPT_SIZE_CEILING).
  */
 
 import type { SkillSource } from './skill-selector'
 
 /** Maximum bytes of injected skill content before falling back to names-only. */
-export const PROMPT_SIZE_CEILING = 30 * 1024 // 30KB
+export const PROMPT_SIZE_CEILING = 20 * 1024 // 20KB
 
 /** Interface for skill cache — subset used by injection logic. */
 export interface SkillCache {
@@ -39,8 +39,10 @@ export interface InjectionResult {
   prompt: string
   /** Whether content was actually injected into the prompt. */
   injected: boolean
-  /** Whether injection was skipped because content exceeded the 30KB ceiling. */
+  /** Whether injection was skipped because content exceeded the 20KB ceiling. */
   ceilingExceeded: boolean
+  /** Names of skills that were selected but not injected (for future progressive injection). */
+  skillsDropped: string[]
 }
 
 /**
@@ -83,7 +85,7 @@ function buildSkillBlock(name: string, content: string): string {
  * - Skills are ordered: baseline → category/agent-default → keyword
  * - Each skill is wrapped in <skill name="..."> tags
  * - Content is PREPENDED to the original prompt
- * - If total injected content exceeds 30KB, injection is skipped entirely
+ * - If total injected content exceeds 20KB, injection is skipped entirely
  * - If skillCache is null, injection is skipped
  * - If skills array is empty, injection is skipped
  */
@@ -93,7 +95,7 @@ export function injectSkillContent(input: InjectionInput): InjectionResult {
 
   // No-op conditions
   if (!skillCache || skills.length === 0) {
-    return { prompt: original, injected: false, ceilingExceeded: false }
+    return { prompt: original, injected: false, ceilingExceeded: false, skillsDropped: [] }
   }
 
   // Order skills by source priority
@@ -110,15 +112,15 @@ export function injectSkillContent(input: InjectionInput): InjectionResult {
 
   // Nothing to inject
   if (blocks.length === 0) {
-    return { prompt: original, injected: false, ceilingExceeded: false }
+    return { prompt: original, injected: false, ceilingExceeded: false, skillsDropped: [] }
   }
 
   // Join all blocks with double newline separators
   const injectedContent = blocks.join('\n\n') + '\n\n'
 
-  // Enforce 30KB ceiling
+  // Enforce 20KB ceiling
   if (injectedContent.length > PROMPT_SIZE_CEILING) {
-    return { prompt: original, injected: false, ceilingExceeded: true }
+    return { prompt: original, injected: false, ceilingExceeded: true, skillsDropped: [] }
   }
 
   // Compose final prompt: injected content prepended, original appended
@@ -126,5 +128,5 @@ export function injectSkillContent(input: InjectionInput): InjectionResult {
     ? `${injectedContent}${original}`
     : injectedContent.trimEnd()
 
-  return { prompt: finalPrompt, injected: true, ceilingExceeded: false }
+  return { prompt: finalPrompt, injected: true, ceilingExceeded: false, skillsDropped: [] }
 }
