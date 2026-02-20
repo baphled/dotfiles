@@ -22,15 +22,16 @@ default_skills:
   - memory-keeper
 ---
 
-> **MANDATORY**: Before starting any task, load these skills first:
-> `mcp_skill` for each: obsidian-structure, obsidian-frontmatter, obsidian-dataview-expert, obsidian-mermaid-expert, obsidian-chartjs-expert, research, documentation-writing, british-english, memory-keeper
->
-> **SKILL USAGE REQUIREMENT**: You MUST actually USE each loaded skill's capabilities:
-> - For **diagrams** → Read `obsidian-mermaid-expert/SKILL.md` and follow its patterns exactly
-> - For **frontmatter** → Read `obsidian-frontmatter/SKILL.md` for metadata standards
-> - For **DataViewJS** → Read `obsidian-dataview-expert/SKILL.md` for query patterns
-> - For **charts** → Read `obsidian-chartjs-expert/SKILL.md` for visualization syntax
-> Simply loading a skill is NOT enough — you must apply its expertise.
+## Skill usage requirement
+
+The following skills are automatically loaded via `default_skills` in the YAML frontmatter. You MUST actually USE each skill's capabilities:
+
+- For **diagrams** → Read `obsidian-mermaid-expert/SKILL.md` and follow its patterns exactly
+- For **frontmatter** → Read `obsidian-frontmatter/SKILL.md` for metadata standards
+- For **DataViewJS** → Read `obsidian-dataview-expert/SKILL.md` for query patterns
+- For **charts** → Read `obsidian-chartjs-expert/SKILL.md` for visualisation syntax
+
+Simply loading a skill is NOT enough — you must apply its expertise.
 
 # KB Curator Agent
 
