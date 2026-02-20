@@ -475,6 +475,79 @@ describe('selectSkills — max_auto_skills Cap', () => {
   })
 })
 
+describe('selectSkills — max_auto_skills Cap raised to 10', () => {
+  // RED: This test documents that the old cap of 5 was too restrictive.
+  // With max_auto_skills: 5 and baseline_skills: [], only 5 skills are returned
+  // even though 8 unique non-baseline skills match the prompt.
+  it('returns 8 non-baseline skills when cap is 10 and enough patterns match', () => {
+    // Configure a rich set of keyword patterns that together produce 10+ unique skills.
+    // With max_auto_skills: 5 (old value) only 5 non-baseline skills would be returned.
+    // With max_auto_skills: 10 all 8 should be included.
+    const config: SkillAutoLoaderConfig = {
+      ...testConfig,
+      baseline_skills: ['pre-action', 'memory-keeper'],
+      max_auto_skills: 10,
+      keyword_patterns: [
+        { pattern: 'security', skills: ['security', 'cyber-security'], priority: 9 },
+        { pattern: 'test', skills: ['ginkgo-gomega', 'bdd-workflow', 'tdd-workflow'], priority: 8 },
+        { pattern: 'golang', skills: ['golang'], priority: 8 },
+        { pattern: 'refactor', skills: ['refactor', 'design-patterns'], priority: 7 },
+        { pattern: 'database', skills: ['gorm-repository', 'sql'], priority: 7 },
+      ],
+    }
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      // Prompt matches all 5 keyword patterns → 10 unique non-baseline skills
+      prompt: 'security test golang refactor database',
+    }
+    const result = selectSkills(input, config)
+
+    // All 8 distinct non-baseline skills from the matched patterns should be present
+    const expectedNonBaselineSkills = [
+      'security',
+      'cyber-security',
+      'ginkgo-gomega',
+      'bdd-workflow',
+      'tdd-workflow',
+      'golang',
+      'refactor',
+      'design-patterns',
+    ]
+    for (const skill of expectedNonBaselineSkills) {
+      expect(result.skills).toContain(skill)
+    }
+
+    // Exactly 8 non-baseline skills (not limited to 5)
+    const nonBaselineSources = result.sources.filter(s => s.source !== 'baseline')
+    expect(nonBaselineSources.length).toBeGreaterThanOrEqual(8)
+  })
+
+  it('still caps at max_auto_skills when more than 10 non-baseline skills would match', () => {
+    const config: SkillAutoLoaderConfig = {
+      ...testConfig,
+      baseline_skills: [],
+      max_auto_skills: 10,
+      keyword_patterns: [
+        // 12 unique skills across patterns
+        { pattern: 'security', skills: ['security', 'cyber-security', 'epistemic-rigor'], priority: 9 },
+        { pattern: 'test', skills: ['ginkgo-gomega', 'bdd-workflow', 'tdd-workflow'], priority: 8 },
+        { pattern: 'golang', skills: ['golang', 'clean-code'], priority: 8 },
+        { pattern: 'refactor', skills: ['refactor', 'design-patterns'], priority: 7 },
+        { pattern: 'database', skills: ['gorm-repository', 'sql', 'db-operations'], priority: 7 },
+      ],
+    }
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      prompt: 'security test golang refactor database',
+    }
+    const result = selectSkills(input, config)
+
+    // Should not exceed 10 non-baseline skills even though 13 would match
+    const nonBaselineSources = result.sources.filter(s => s.source !== 'baseline')
+    expect(nonBaselineSources.length).toBeLessThanOrEqual(10)
+  })
+})
+
 describe('selectSkills — All Three Tiers Combined', () => {
   it('merges baseline, category, and keyword skills into a single deduplicated result', () => {
     const input: SkillSelectionInput = {
