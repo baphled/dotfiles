@@ -56,46 +56,6 @@ const skillConfig = loadSkillConfig()
 const subagentMappings = skillConfig['subagent_mappings'] as Record<string, string[]>
 
 describe('orchestrator-only — oh-my-opencode.jsonc agent configuration', () => {
-  describe('sisyphus', () => {
-    it('has an agent config entry', () => {
-      expect(agents['sisyphus']).toBeDefined()
-    })
-
-    it('prompt_append contains DELEGATE AUTOMATICALLY instruction', () => {
-      const promptAppend = agents['sisyphus']['prompt_append'] as string
-      expect(promptAppend).toContain('DELEGATE AUTOMATICALLY')
-    })
-
-    it('prompt_append contains PHASE 0 classification instruction', () => {
-      const promptAppend = agents['sisyphus']['prompt_append'] as string
-      expect(promptAppend).toContain('PHASE 0')
-    })
-
-    it('does not have mode set to subagent', () => {
-      expect(agents['sisyphus']['mode']).not.toBe('subagent')
-    })
-  })
-
-  describe('atlas', () => {
-    it('has an agent config entry', () => {
-      expect(agents['atlas']).toBeDefined()
-    })
-
-    it('prompt_append contains DELEGATE AUTOMATICALLY instruction', () => {
-      const promptAppend = agents['atlas']['prompt_append'] as string
-      expect(promptAppend).toContain('DELEGATE AUTOMATICALLY')
-    })
-
-    it('prompt_append contains PHASE 0 classification instruction', () => {
-      const promptAppend = agents['atlas']['prompt_append'] as string
-      expect(promptAppend).toContain('PHASE 0')
-    })
-
-    it('does not have mode set to subagent', () => {
-      expect(agents['atlas']['mode']).not.toBe('subagent')
-    })
-  })
-
   describe('specialist agents have mode: subagent', () => {
     const specialistAgents = [
       'Senior-Engineer',
@@ -214,5 +174,74 @@ describe('orchestrator-only — skill-auto-loader-config.jsonc subagent_mappings
 
   it("'Model-Evaluator' has a non-empty skills array", () => {
     expect(subagentMappings['Model-Evaluator'].length).toBeGreaterThan(0)
+  })
+})
+
+describe('orchestrator-only — permission enforcement (deterministic)', () => {
+  const orchestrators = ['sisyphus', 'hephaestus', 'atlas']
+
+  for (const name of orchestrators) {
+    describe(name, () => {
+      it('has edit permission set to deny', () => {
+        const permission = agents[name]['permission'] as Record<string, string>
+        expect(permission['edit']).toBe('deny')
+      })
+
+      it('has bash permission set to allow (for orchestration commands)', () => {
+        const permission = agents[name]['permission'] as Record<string, string>
+        expect(permission['bash']).toBe('allow')
+      })
+
+      it('does not have mode set to subagent', () => {
+        expect(agents[name]['mode']).not.toBe('subagent')
+      })
+
+      it('prompt_append contains DELEGATE AUTOMATICALLY instruction', () => {
+        const promptAppend = agents[name]['prompt_append'] as string
+        expect(promptAppend).toContain('DELEGATE AUTOMATICALLY')
+      })
+
+      it('prompt_append contains PHASE 0 classification instruction', () => {
+        const promptAppend = agents[name]['prompt_append'] as string
+        expect(promptAppend).toContain('PHASE 0')
+      })
+    })
+  }
+})
+
+describe('sisyphus-junior — worker agent classification', () => {
+  it('has edit permission set to allow (worker can modify files)', () => {
+    const permission = agents['sisyphus-junior']['permission'] as Record<string, string>
+    expect(permission['edit']).toBe('allow')
+  })
+
+  it('does not contain PHASE 0 classification (workers execute, not classify)', () => {
+    const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
+    expect(promptAppend).not.toContain('PHASE 0')
+  })
+
+  it('does not contain DELEGATE AUTOMATICALLY (workers execute, not delegate)', () => {
+    const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
+    expect(promptAppend).not.toContain('DELEGATE AUTOMATICALLY')
+  })
+
+  it('does not contain SPECIALIST AGENT ROUTING (workers do not route)', () => {
+    const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
+    expect(promptAppend).not.toContain('SPECIALIST AGENT ROUTING')
+  })
+
+  it('contains worker identity preamble', () => {
+    const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
+    expect(promptAppend).toContain('worker agent')
+  })
+
+  it('retains MANDATORY DISCIPLINE block', () => {
+    const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
+    expect(promptAppend).toContain('MANDATORY DISCIPLINE')
+  })
+
+  it('retains COMMIT WORKFLOW block', () => {
+    const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
+    expect(promptAppend).toContain('COMMIT WORKFLOW')
   })
 })
