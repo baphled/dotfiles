@@ -11,6 +11,7 @@ import { join } from 'path'
 import { selectSkills, type SkillAutoLoaderConfig, type SkillSelectionInput } from './lib/skill-selector'
 import { AgentConfigCache } from './lib/agent-config-parser'
 import { filterSkillsAgainstCache } from './lib/skill-validation-filter'
+import { injectSkillContent, PROMPT_SIZE_CEILING, orderSkillsBySource } from './lib/skill-content-injection'
 
 const PLUGIN_DIR = `${process.env.HOME}/.config/opencode/plugins`
 const CONFIG_FILE = join(PLUGIN_DIR, 'skill-auto-loader-config.jsonc')
@@ -43,7 +44,7 @@ const DEFAULT_CONFIG: SkillAutoLoaderConfig = {
 
 let config: SkillAutoLoaderConfig = DEFAULT_CONFIG
 let agentCache: AgentConfigCache
-let skillCache: { hasSkill(name: string): boolean } | null = null
+let skillCache: { hasSkill(name: string): boolean; getSkillContent(name: string): string | undefined } | null = null
 
 /**
  * Load config from JSONC file (strips comments).
@@ -122,6 +123,7 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
     const cacheModule = require('./lib/skill-content-cache') as {
       SkillContentCache: new (dir: string) => {
         hasSkill(name: string): boolean
+        getSkillContent(name: string): string | undefined
         init(): Promise<void>
       }
     }
@@ -191,6 +193,26 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       // Update load_skills with injected skills only if result is non-empty
       if (validatedSkills.length > 0) {
         args.load_skills = validatedSkills
+
+        // === Content Injection ===
+        // Inject skill CONTENT directly into args.prompt for deterministic loading.
+        // This avoids relying on agents to call mcp_skill at runtime.
+        const originalPrompt = (args.prompt as string | undefined) ?? ''
+        const injectionResult = injectSkillContent({
+          skills: validatedSkills,
+          sources: result.sources,
+          originalPrompt,
+          skillCache,
+        })
+
+        if (injectionResult.ceilingExceeded) {
+          console.warn(
+            `[SkillAutoLoader] Skill content exceeds ${PROMPT_SIZE_CEILING} bytes ceiling, ` +
+            `skipping content injection (falling back to load_skills names only)`
+          )
+        } else if (injectionResult.injected) {
+          args.prompt = injectionResult.prompt
+        }
 
         // Log the injection event
         logInjection({
