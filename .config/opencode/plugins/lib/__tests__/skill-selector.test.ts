@@ -7,6 +7,7 @@ import type {
 const testConfig: SkillAutoLoaderConfig = {
   baseline_skills: ['pre-action', 'memory-keeper'],
   max_auto_skills: 5,
+  max_auto_skills_bytes: 20480, // 20KB budget for non-baseline skills
   skip_on_session_continue: true,
   category_mappings: {
     'visual-engineering': ['frontend-ui-ux', 'accessibility', 'clean-code'],
@@ -22,6 +23,12 @@ const testConfig: SkillAutoLoaderConfig = {
     'sisyphus-junior': [],
     'Senior-Engineer': ['error-handling'],
     'QA-Engineer': [],
+  },
+  role_mappings: {
+    'testing': ['bdd-workflow'],
+    'implementation': ['clean-code', 'error-handling', 'design-patterns'],
+    'review': ['code-reviewer', 'clean-code', 'critical-thinking'],
+    'refactoring': ['refactor', 'clean-code', 'design-patterns'],
   },
   keyword_patterns: [
     { pattern: 'security|vulnerabilit|auth|encrypt', skills: ['security', 'cyber-security'], priority: 9 },
@@ -612,5 +619,174 @@ describe('selectSkills — All Three Tiers Combined', () => {
     expect(result.skills).toContain('pre-action')
     expect(result.skills).toContain('clean-code')
     expect(result.skills).toContain('error-handling')
+  })
+})
+
+describe('selectSkills — Focus Parameter (replaces subagent_mappings)', () => {
+  it('adds role_mappings skills when focus is provided without subagentType', () => {
+    const input: SkillSelectionInput & { focus?: string } = {
+      existingSkills: [],
+      focus: 'testing',
+    }
+    const result = selectSkills(input, testConfig)
+
+    // focus: "testing" → role_mappings.testing → ['bdd-workflow']
+    expect(result.skills).toContain('bdd-workflow')
+    const categorySources = result.sources.filter(s => s.source === 'category')
+    expect(categorySources.some(s => s.skill === 'bdd-workflow')).toBe(true)
+  })
+
+  it('uses focus role_mappings instead of subagent_mappings when both focus and subagentType are provided', () => {
+    const input: SkillSelectionInput & { focus?: string } = {
+      existingSkills: [],
+      focus: 'implementation',
+      subagentType: 'Senior-Engineer',
+    }
+    const result = selectSkills(input, testConfig)
+
+    // focus: "implementation" → role_mappings.implementation → ['clean-code', 'error-handling', 'design-patterns']
+    expect(result.skills).toContain('clean-code')
+    expect(result.skills).toContain('error-handling')
+    expect(result.skills).toContain('design-patterns')
+
+    // subagent_mappings['Senior-Engineer'] = ['error-handling'] should NOT be used as a separate source
+    // focus REPLACES subagent_mappings, so error-handling comes from role_mappings, not subagent_mappings
+    const categorySources = result.sources.filter(s => s.source === 'category')
+    const errorHandlingSource = categorySources.find(s => s.skill === 'error-handling')
+    expect(errorHandlingSource).toBeDefined()
+
+    // Verify design-patterns is present (only in role_mappings, NOT in Senior-Engineer subagent_mappings)
+    expect(categorySources.some(s => s.skill === 'design-patterns')).toBe(true)
+  })
+
+  it('falls back to subagent_mappings when focus is an unknown role', () => {
+    const input: SkillSelectionInput & { focus?: string } = {
+      existingSkills: [],
+      focus: 'unknown-role',
+      subagentType: 'Senior-Engineer',
+    }
+    const result = selectSkills(input, testConfig)
+
+    // unknown focus → no role_mappings match → falls back to subagent_mappings
+    // Senior-Engineer subagent_mappings = ['error-handling']
+    expect(result.skills).toContain('error-handling')
+  })
+
+  it('uses subagent_mappings when focus is absent (existing behaviour unchanged)', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      subagentType: 'Senior-Engineer',
+    }
+    const result = selectSkills(input, testConfig)
+
+    // No focus → subagent_mappings as normal
+    expect(result.skills).toContain('error-handling')
+    expect(result.skills).not.toContain('design-patterns')
+  })
+})
+
+describe('selectSkills — Byte Budget Cap (max_auto_skills_bytes)', () => {
+  it('truncates non-baseline skills greedily when total size exceeds max_auto_skills_bytes', () => {
+    const config: SkillAutoLoaderConfig = {
+      ...testConfig,
+      baseline_skills: ['pre-action'],
+      max_auto_skills: 10,
+      max_auto_skills_bytes: 5000, // 5KB cap
+    }
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      category: 'ultrabrain', // → architecture, critical-thinking, systems-thinker
+    }
+
+    // Each skill is ~3KB, so only 1 fits within 5KB budget
+    const skillSizes = new Map<string, number>([
+      ['architecture', 3000],
+      ['critical-thinking', 3000],
+      ['systems-thinker', 3000],
+    ])
+    const result = selectSkills(input, config, skillSizes)
+
+    // Total of 3 category skills = 9KB > 5KB cap
+    // Greedy: keeps first (highest priority) skills until budget exhausted
+    const nonBaselineSources = result.sources.filter(s => s.source !== 'baseline')
+    expect(nonBaselineSources.length).toBeLessThan(3)
+  })
+
+  it('keeps higher-priority skills when byte budget is exhausted', () => {
+    const config: SkillAutoLoaderConfig = {
+      ...testConfig,
+      baseline_skills: [],
+      max_auto_skills: 10,
+      max_auto_skills_bytes: 4000,
+      keyword_patterns: [
+        { pattern: 'security', skills: ['security'], priority: 9 },
+        { pattern: 'refactor', skills: ['refactor'], priority: 7 },
+      ],
+    }
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      prompt: 'security refactor',
+    }
+
+    // security (priority 9) = 3KB, refactor (priority 7) = 3KB
+    // Budget is 4KB, so only security fits
+    const skillSizes = new Map<string, number>([
+      ['security', 3000],
+      ['refactor', 3000],
+    ])
+    const result = selectSkills(input, config, skillSizes)
+
+    // Higher priority security should be kept
+    expect(result.skills).toContain('security')
+    // Lower priority refactor should be dropped
+    expect(result.skills).not.toContain('refactor')
+  })
+
+  it('applies no byte cap when skillSizes is not provided (existing count-cap behaviour)', () => {
+    const config: SkillAutoLoaderConfig = {
+      ...testConfig,
+      baseline_skills: [],
+      max_auto_skills: 10,
+      max_auto_skills_bytes: 1, // Extremely restrictive byte cap
+    }
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      category: 'ultrabrain', // → architecture, critical-thinking, systems-thinker
+    }
+
+    // No skillSizes param → byte cap should NOT apply
+    const result = selectSkills(input, config)
+
+    // All 3 category skills should be present (count cap of 10 is not hit)
+    expect(result.skills).toContain('architecture')
+    expect(result.skills).toContain('critical-thinking')
+    expect(result.skills).toContain('systems-thinker')
+  })
+
+  it('never drops baseline skills due to byte budget', () => {
+    const config: SkillAutoLoaderConfig = {
+      ...testConfig,
+      baseline_skills: ['pre-action', 'memory-keeper'],
+      max_auto_skills: 10,
+      max_auto_skills_bytes: 100, // Very small budget
+    }
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      category: 'ultrabrain',
+    }
+
+    // Baseline skills have large sizes but should never be dropped
+    const skillSizes = new Map<string, number>([
+      ['pre-action', 5000],
+      ['memory-keeper', 5000],
+      ['architecture', 3000],
+      ['critical-thinking', 3000],
+      ['systems-thinker', 3000],
+    ])
+    const result = selectSkills(input, config, skillSizes)
+
+    // Baseline skills always present regardless of byte budget
+    expect(result.skills).toContain('pre-action')
+    expect(result.skills).toContain('memory-keeper')
   })
 })
