@@ -21,6 +21,7 @@ export interface SkillAutoLoaderConfig {
 export interface SkillSelectionInput {
   category?: string
   subagentType?: string
+  focus?: string
   prompt?: string
   existingSkills: string[]
   sessionId?: string
@@ -41,11 +42,18 @@ export interface SkillSelectionResult {
 /**
  * Select skills based on input context using three-tier algorithm.
  * 
- * @param input - Context including category, prompt, existing skills, etc.
+ * @param input - Context including category, focus, prompt, existing skills, etc.
  * @param config - Skill auto-loader configuration
+ * @param skillSizes - Optional map of skill name → byte size. When provided, a byte
+ *                     budget cap is applied to non-baseline skills using greedy selection
+ *                     (highest-priority first) up to `config.max_auto_skills_bytes`.
  * @returns Selected skills and their sources
  */
-export function selectSkills(input: SkillSelectionInput, config: SkillAutoLoaderConfig): SkillSelectionResult {
+export function selectSkills(
+  input: SkillSelectionInput,
+  config: SkillAutoLoaderConfig,
+  skillSizes?: Map<string, number>,
+): SkillSelectionResult {
   const sources: SkillSource[] = []
   const autoSkillsSet = new Set<string>()
 
@@ -80,7 +88,18 @@ export function selectSkills(input: SkillSelectionInput, config: SkillAutoLoader
     }
   }
 
-  if (input.subagentType && config.subagent_mappings[input.subagentType]) {
+  // focus REPLACES subagent_mappings when provided and matched; falls back to subagent_mappings
+  const focusSkills = input.focus ? config.role_mappings?.[input.focus] : undefined
+  if (focusSkills !== undefined) {
+    // Known focus: use role_mappings, skip subagent_mappings entirely
+    for (const skill of focusSkills) {
+      if (!autoSkillsSet.has(skill)) {
+        autoSkillsSet.add(skill)
+        sources.push({ skill, source: 'category' })
+      }
+    }
+  } else if (input.subagentType && config.subagent_mappings[input.subagentType]) {
+    // No focus (or unknown focus): fall back to subagent_mappings
     for (const skill of config.subagent_mappings[input.subagentType]) {
       if (!autoSkillsSet.has(skill)) {
         autoSkillsSet.add(skill)
@@ -147,11 +166,34 @@ export function selectSkills(input: SkillSelectionInput, config: SkillAutoLoader
     }
   }
 
-  // Keep baseline + capped category/keyword
+  // Keep baseline + capped category/keyword (count cap)
   const finalAutoSkills = new Set<string>(baselineSkills)
   for (const skill of categoryAndKeywordSkills) {
     if ((finalAutoSkills.size - baselineSkills.length) >= config.max_auto_skills) break
     finalAutoSkills.add(skill)
+  }
+
+  // === Apply byte budget cap to non-baseline skills (when skillSizes provided) ===
+  // Greedy selection: non-baseline skills are already in priority order (Tier 2 then Tier 3 by priority).
+  // Accumulate bytes until adding the next skill would exceed max_auto_skills_bytes.
+  if (skillSizes && config.max_auto_skills_bytes !== undefined) {
+    const byteBudget = config.max_auto_skills_bytes
+    let usedBytes = 0
+    const byteCapSkills = new Set<string>(baselineSkills)
+
+    for (const skill of categoryAndKeywordSkills) {
+      if (!finalAutoSkills.has(skill)) continue // already dropped by count cap
+      const size = skillSizes.get(skill) ?? 0
+      if (usedBytes + size > byteBudget) continue // drop: would exceed budget
+      usedBytes += size
+      byteCapSkills.add(skill)
+    }
+
+    // Replace finalAutoSkills with byte-capped set
+    finalAutoSkills.clear()
+    for (const skill of byteCapSkills) {
+      finalAutoSkills.add(skill)
+    }
   }
 
   // Rebuild sources array with capped skills
