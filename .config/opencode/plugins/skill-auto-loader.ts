@@ -10,6 +10,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { selectSkills, type SkillAutoLoaderConfig, type SkillSelectionInput } from './lib/skill-selector'
 import { AgentConfigCache } from './lib/agent-config-parser'
+import { filterSkillsAgainstCache } from './lib/skill-validation-filter'
 
 const PLUGIN_DIR = `${process.env.HOME}/.config/opencode/plugins`
 const CONFIG_FILE = join(PLUGIN_DIR, 'skill-auto-loader-config.jsonc')
@@ -42,6 +43,7 @@ const DEFAULT_CONFIG: SkillAutoLoaderConfig = {
 
 let config: SkillAutoLoaderConfig = DEFAULT_CONFIG
 let agentCache: AgentConfigCache
+let skillCache: { hasSkill(name: string): boolean } | null = null
 
 /**
  * Load config from JSONC file (strips comments).
@@ -113,6 +115,24 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   agentCache = new AgentConfigCache()
   await agentCache.init()
 
+  // Attempt to initialise skill content cache (Task 4 parallel module)
+  try {
+    // Dynamic require so a missing module doesn't prevent the plugin from loading
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const cacheModule = require('./lib/skill-content-cache') as {
+      SkillContentCache: new (dir: string) => {
+        hasSkill(name: string): boolean
+        init(): Promise<void>
+      }
+    }
+    const SKILLS_DIR = join(PLUGIN_DIR, '..', 'skills')
+    const cache = new cacheModule.SkillContentCache(SKILLS_DIR)
+    await cache.init()
+    skillCache = cache
+  } catch {
+    console.debug('[SkillAutoLoader] skill-content-cache module not available, skill existence validation will be skipped')
+  }
+
   const notify = createNotifier(_input.client)
   notify('Skill Auto-Loader loaded', 'info', 3000)
 
@@ -163,9 +183,14 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       // Run skill selection
       const result = selectSkills(selectionInput, config)
 
+      // === Skill Existence Validation ===
+      // Filter out any skills that don't have a corresponding SKILL.md file.
+      // If skillCache is not available (module not yet installed), skip validation.
+      const { filtered: validatedSkills } = filterSkillsAgainstCache(result.skills, skillCache)
+
       // Update load_skills with injected skills only if result is non-empty
-      if (result.skills.length > 0) {
-        args.load_skills = result.skills
+      if (validatedSkills.length > 0) {
+        args.load_skills = validatedSkills
 
         // Log the injection event
         logInjection({
@@ -173,17 +198,17 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
           tool: input.tool,
           category,
           subagentType,
-          injected: result.skills,
+          injected: validatedSkills,
           existing: existingSkills,
-          final: result.skills,
+          final: validatedSkills,
           sources: result.sources as Array<{ skill: string; source: string; pattern?: string }>
         })
 
         // Show toast notification
-        const autoCount = result.skills.length - existingSkills.length
+        const autoCount = validatedSkills.length - existingSkills.length
         const existingCount = existingSkills.length
-        const skillsList = result.skills.slice(0, 3).join(', ')
-        const more = result.skills.length > 3 ? ` +${result.skills.length - 3} more` : ''
+        const skillsList = validatedSkills.slice(0, 3).join(', ')
+        const more = validatedSkills.length > 3 ? ` +${validatedSkills.length - 3} more` : ''
         notify(`⚡ Skills: ${skillsList}${more} (${autoCount} auto + ${existingCount} explicit)`, 'success', 4000)
       }
     }
