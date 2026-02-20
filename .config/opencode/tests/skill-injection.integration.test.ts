@@ -5,15 +5,15 @@
  * skills directory. Tests selectSkills → injectSkillContent with real data.
  *
  * Scenarios:
- *   1. Go development task — golang skill selected, 30KB ceiling enforced
+ *   1. Go development task — golang skill selected, 20KB ceiling enforced
  *   2. Session continuation — baseline-only, no category/keyword skills
- *   3. 30KB ceiling enforcement — ceiling exceeded, injection skipped
+ *   3. 20KB ceiling enforcement — ceiling exceeded, progressive injection applied
  *   4. Writing task — writing-related skills selected and injected
  *
- * NOTE: Real skill content for the Go task exceeds the 30KB ceiling when all
- * baseline + category + keyword skills are combined (~33KB). This is by design:
- * the ceiling guard correctly prevents oversized injection and falls back to
- * load_skills names only.
+ * NOTE: Real skill content for the Go task may exceed the 20KB ceiling when all
+ * baseline + category + keyword skills are combined. This is by design:
+ * the ceiling guard uses progressive injection — baseline skills are always
+ * injected; non-baseline skills are dropped when they would exceed the budget.
  */
 
 import { describe, test, expect, beforeAll } from 'bun:test'
@@ -137,10 +137,10 @@ describe('Scenario 1: Go development task', () => {
     expect(golangSource!.source).toBe('keyword')
   })
 
-  test('30KB ceiling guard is correctly applied to large skill sets', () => {
-    // Real skill content for deep+golang exceeds 30KB ceiling.
-    // The ceiling guard must either: (a) skip injection entirely (ceilingExceeded=true)
-    // or (b) succeed if content happens to fit. The pipeline must be CONSISTENT.
+  test('20KB ceiling guard is correctly applied to large skill sets', () => {
+    // Real skill content for deep+golang may exceed the 20KB ceiling.
+    // Progressive injection: baseline skills are ALWAYS injected; non-baseline
+    // skills are dropped when they would push usage over the ceiling.
     const input: SkillSelectionInput = {
       category: 'deep',
       prompt: INPUT_PROMPT,
@@ -157,10 +157,10 @@ describe('Scenario 1: Go development task', () => {
     })
 
     if (injectedSize > PROMPT_SIZE_CEILING) {
-      // Ceiling exceeded: guard must activate
+      // Ceiling exceeded: baseline skills are still injected; non-baseline skills dropped
       expect(injectionResult.ceilingExceeded).toBe(true)
-      expect(injectionResult.injected).toBe(false)
-      expect(injectionResult.prompt).toBe(INPUT_PROMPT)
+      expect(injectionResult.injected).toBe(true)
+      expect(injectionResult.skillsDropped.length).toBeGreaterThan(0)
     } else {
       // Under ceiling: injection must succeed with golang content
       expect(injectionResult.ceilingExceeded).toBe(false)
@@ -169,7 +169,7 @@ describe('Scenario 1: Go development task', () => {
     }
   })
 
-  test('injection result is consistent — injected XOR ceilingExceeded (never both true)', () => {
+  test('injection result is consistent — injected or ceiling not exceeded (progressive injection)', () => {
     const input: SkillSelectionInput = {
       category: 'deep',
       prompt: INPUT_PROMPT,
@@ -184,11 +184,12 @@ describe('Scenario 1: Go development task', () => {
       skillCache: cache,
     })
 
-    // Both cannot be true simultaneously
-    expect(injectionResult.injected && injectionResult.ceilingExceeded).toBe(false)
+    // NEW: injected and ceilingExceeded CAN both be true (baseline injected, non-baseline dropped)
+    // Invariant: at least one of injection succeeded OR ceiling was not exceeded
+    expect(injectionResult.injected || !injectionResult.ceilingExceeded).toBe(true)
   })
 
-  test('original prompt is preserved when ceiling is exceeded', () => {
+  test('non-baseline skills are dropped when ceiling is exceeded', () => {
     const input: SkillSelectionInput = {
       category: 'deep',
       prompt: INPUT_PROMPT,
@@ -205,7 +206,9 @@ describe('Scenario 1: Go development task', () => {
         originalPrompt: INPUT_PROMPT,
         skillCache: cache,
       })
-      expect(injectionResult.prompt).toBe(INPUT_PROMPT)
+      // NEW: baseline skills ARE injected when ceiling exceeded; non-baseline are dropped
+      expect(injectionResult.ceilingExceeded).toBe(true)
+      expect(injectionResult.skillsDropped.length).toBeGreaterThan(0)
     }
     // Under ceiling: no-op (still passes)
   })
@@ -436,10 +439,10 @@ describe('Scenario 2: Session continuation — baseline only', () => {
 // Scenario 3: 30KB ceiling enforcement
 // ============================================================
 
-describe('Scenario 3: 30KB ceiling enforcement', () => {
+describe('Scenario 3: 20KB ceiling enforcement', () => {
   /**
    * Build a mock SkillCache where every skill returns oversized content.
-   * Total injected blocks will exceed PROMPT_SIZE_CEILING (30KB).
+   * Total injected blocks will exceed PROMPT_SIZE_CEILING (20KB).
    */
   function buildOverflowCache(skillNames: string[]): SkillCache {
     // Each skill gets ~10KB of content; 4+ skills will exceed 30KB
@@ -452,10 +455,10 @@ describe('Scenario 3: 30KB ceiling enforcement', () => {
     }
   }
 
-  const OVERFLOW_SKILLS = ['pre-action', 'memory-keeper', 'skill-discovery', 'agent-discovery']
+  const OVERFLOW_SKILLS = ['pre-action', 'memory-keeper', 'agent-discovery']
   const ORIGINAL_PROMPT = 'Continue implementing the feature'
 
-  test('ceilingExceeded is true when total injected content > 30KB', () => {
+  test('ceilingExceeded is true when total injected content > 20KB', () => {
     const overflowCache = buildOverflowCache(OVERFLOW_SKILLS)
 
     // Build sources manually to match the skills
@@ -471,7 +474,7 @@ describe('Scenario 3: 30KB ceiling enforcement', () => {
     expect(result.ceilingExceeded).toBe(true)
   })
 
-  test('injected is false when ceiling exceeded', () => {
+  test('injected is true when all skills are baseline-sourced (baseline exempt from budget)', () => {
     const overflowCache = buildOverflowCache(OVERFLOW_SKILLS)
     const sources = OVERFLOW_SKILLS.map(s => ({ skill: s, source: 'baseline' as const }))
 
@@ -482,10 +485,12 @@ describe('Scenario 3: 30KB ceiling enforcement', () => {
       skillCache: overflowCache,
     })
 
-    expect(result.injected).toBe(false)
+    // All 3 skills are baseline-sourced; baseline skills are exempt from the budget
+    // and always injected — so injected must be true
+    expect(result.injected).toBe(true)
   })
 
-  test('original prompt is preserved unchanged when ceiling exceeded', () => {
+  test('prompt contains baseline skill blocks when all skills are baseline-sourced', () => {
     const overflowCache = buildOverflowCache(OVERFLOW_SKILLS)
     const sources = OVERFLOW_SKILLS.map(s => ({ skill: s, source: 'baseline' as const }))
 
@@ -496,15 +501,16 @@ describe('Scenario 3: 30KB ceiling enforcement', () => {
       skillCache: overflowCache,
     })
 
-    expect(result.prompt).toBe(ORIGINAL_PROMPT)
+    // Baseline skills are always injected — prompt must contain their blocks
+    expect(result.prompt).toContain('<skill name="pre-action">')
   })
 
-  test('PROMPT_SIZE_CEILING constant is 30KB (30720 bytes)', () => {
-    expect(PROMPT_SIZE_CEILING).toBe(30 * 1024)
+  test('PROMPT_SIZE_CEILING constant is 20KB (20480 bytes)', () => {
+    expect(PROMPT_SIZE_CEILING).toBe(20 * 1024)
   })
 
-  test('injection succeeds with content just under 30KB ceiling', () => {
-    // Single skill with content just under the 30KB ceiling
+  test('injection succeeds with content just under 20KB ceiling', () => {
+    // Single skill with content just under the 20KB ceiling
     const justUnderContent = 'Y'.repeat(PROMPT_SIZE_CEILING - 50) // leave room for tags
     const underCache: SkillCache = {
       hasSkill: (name: string) => name === 'test-skill',
@@ -535,18 +541,18 @@ describe('Scenario 3: 30KB ceiling enforcement', () => {
       skillCache: overflowCache,
     })
 
-    const totalContentSize = OVERFLOW_SKILLS.length * 10 * 1024 // each 10KB × 4 skills = 40KB
+    const totalContentSize = OVERFLOW_SKILLS.length * 10 * 1024 // each 10KB × 3 skills = 30KB
     const evidence = [
-      '=== Task 12 E2E: 30KB Ceiling Enforcement ===',
+      '=== Task 12 E2E: 20KB Ceiling Enforcement ===',
       '',
       `Skills used: ${OVERFLOW_SKILLS.join(', ')}`,
       `Content per skill: 10KB (10240 bytes)`,
       `Total content size (approx): ${totalContentSize} bytes`,
-      `PROMPT_SIZE_CEILING: ${PROMPT_SIZE_CEILING} bytes (30KB)`,
+      `PROMPT_SIZE_CEILING: ${PROMPT_SIZE_CEILING} bytes (20KB)`,
       '',
       `ceilingExceeded: ${result.ceilingExceeded} (expected: true)`,
-      `injected: ${result.injected} (expected: false)`,
-      `prompt === originalPrompt: ${result.prompt === ORIGINAL_PROMPT} (expected: true)`,
+      `injected: ${result.injected} (expected: true — baseline skills always injected)`,
+      `prompt contains baseline blocks: ${result.prompt.includes('<skill name="pre-action">')} (expected: true)`,
       '',
       'PASS: All ceiling assertions verified.',
     ].join('\n')
@@ -728,7 +734,7 @@ describe('Pipeline consistency', () => {
   })
 
   test('config baseline_skills matches expected set', () => {
-    const expectedBaseline = ['pre-action', 'memory-keeper', 'skill-discovery', 'agent-discovery', 'token-cost-estimation']
+    const expectedBaseline = ['pre-action', 'memory-keeper', 'agent-discovery', 'token-cost-estimation']
     for (const skill of expectedBaseline) {
       expect(config.baseline_skills).toContain(skill)
     }
