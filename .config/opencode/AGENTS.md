@@ -51,6 +51,55 @@ Every task that requires file modification or content creation MUST follow this 
 
 ---
 
+## Tool Restrictions (Deterministic Enforcement)
+
+Orchestration-only behaviour is enforced via **permission gates**, not just prompt instructions.
+
+### Orchestrators (edit: deny)
+
+These agents **cannot** use Edit or Write tools. They classify, delegate, and verify — nothing else.
+
+| Agent | `edit` | `bash` | Role |
+|-------|--------|--------|------|
+| `sisyphus` | deny | allow | Primary orchestrator |
+| `hephaestus` | deny | allow | Orchestrator (Claude Code) |
+| `atlas` | deny | allow | Orchestrator (OpenCode) |
+
+### Workers (edit: allow)
+
+These agents **can** modify files. They receive delegated tasks from orchestrators.
+
+| Agent | `edit` | `bash` | Role |
+|-------|--------|--------|------|
+| `sisyphus-junior` | allow | allow | Generic worker (category fallback) |
+| `Senior-Engineer` | allow | allow | Software engineering |
+| `QA-Engineer` | allow | allow | Testing and quality |
+| `Writer` | allow | deny | Documentation |
+| `DevOps` | allow | allow | Infrastructure |
+| `VHS-Director` | allow | allow | Terminal recordings |
+| `Embedded-Engineer` | allow | allow | Firmware |
+| `Knowledge Base Curator` | allow | deny | Knowledge management |
+| `Model-Evaluator` | allow | allow | Model testing |
+
+### Read-Only Specialists (edit: deny)
+
+These agents advise but do not modify files.
+
+| Agent | `edit` | `bash` | Role |
+|-------|--------|--------|------|
+| `Tech-Lead` | deny | allow | Architecture decisions |
+| `Security-Engineer` | deny | allow | Security auditing |
+| `Data-Analyst` | deny | allow | Data analysis |
+| `Nix-Expert` | deny | allow | Nix guidance |
+| `Linux-Expert` | deny | allow | Linux guidance |
+| `SysOp` | deny | allow | Operations guidance |
+
+### Why permissions, not just prompts?
+
+Prompt-based rules ("NEVER edit files directly") are non-deterministic — models can ignore them. Permission gates are **enforced by the framework** and cannot be bypassed.
+
+---
+
 ## Universal Skills (AUTO-LOAD)
 
 These skills load on EVERY task() call:
