@@ -5,12 +5,12 @@
  * skills directory. Tests selectSkills → injectSkillContent with real data.
  *
  * Scenarios:
- *   1. Go development task — golang skill selected, 20KB ceiling enforced
+ *   1. Go development task — golang skill selected, 35KB ceiling enforced
  *   2. Session continuation — baseline-only, no category/keyword skills
- *   3. 20KB ceiling enforcement — ceiling exceeded, progressive injection applied
+ *   3. 35KB ceiling enforcement — ceiling exceeded, progressive injection applied
  *   4. Writing task — writing-related skills selected and injected
  *
- * NOTE: Real skill content for the Go task may exceed the 20KB ceiling when all
+ * NOTE: Real skill content for the Go task may exceed the 35KB ceiling when all
  * baseline + category + keyword skills are combined. This is by design:
  * the ceiling guard uses progressive injection — baseline skills are always
  * injected; non-baseline skills are dropped when they would exceed the budget.
@@ -137,8 +137,8 @@ describe('Scenario 1: Go development task', () => {
     expect(golangSource!.source).toBe('keyword')
   })
 
-  test('20KB ceiling guard is correctly applied to large skill sets', () => {
-    // Real skill content for deep+golang may exceed the 20KB ceiling.
+  test('35KB ceiling guard is correctly applied to large skill sets', () => {
+    // Real skill content for deep+golang may exceed the 35KB ceiling.
     // Progressive injection: baseline skills are ALWAYS injected; non-baseline
     // skills are dropped when they would push usage over the ceiling.
     const input: SkillSelectionInput = {
@@ -245,7 +245,7 @@ describe('Scenario 1: Go development task', () => {
       `Baseline skills all present: ${config.baseline_skills.every(b => result.skills.includes(b))} (expected: true)`,
       '',
       `Computed injected content size: ${injectedSize} bytes`,
-      `30KB ceiling: ${PROMPT_SIZE_CEILING} bytes`,
+      `35KB ceiling: ${PROMPT_SIZE_CEILING} bytes`,
       `Ceiling exceeded: ${injectedSize > PROMPT_SIZE_CEILING}`,
       '',
       `Injection result:`,
@@ -254,7 +254,7 @@ describe('Scenario 1: Go development task', () => {
       `  original prompt preserved: ${injectionResult.ceilingExceeded ? injectionResult.prompt === INPUT_PROMPT : injectionResult.injected}`,
       `  consistent (not both true): ${!(injectionResult.injected && injectionResult.ceilingExceeded)}`,
       '',
-      'NOTE: Real skill content for this scenario (~33KB) exceeds the 30KB ceiling.',
+      'NOTE: Real skill content for this scenario (~33KB) exceeds the 35KB ceiling.',
       'The ceiling guard correctly prevents oversized injection and falls back to',
       'load_skills names only. This is expected, correct behaviour.',
       '',
@@ -436,17 +436,17 @@ describe('Scenario 2: Session continuation — baseline only', () => {
 })
 
 // ============================================================
-// Scenario 3: 30KB ceiling enforcement
+// Scenario 3: 35KB ceiling enforcement
 // ============================================================
 
-describe('Scenario 3: 20KB ceiling enforcement', () => {
+describe('Scenario 3: 35KB ceiling enforcement', () => {
   /**
    * Build a mock SkillCache where every skill returns oversized content.
-   * Total injected blocks will exceed PROMPT_SIZE_CEILING (20KB).
+   * Total injected blocks will exceed PROMPT_SIZE_CEILING (35KB).
    */
   function buildOverflowCache(skillNames: string[]): SkillCache {
-    // Each skill gets ~10KB of content; 4+ skills will exceed 30KB
-    const largeChunk = 'X'.repeat(10 * 1024) // 10KB per skill
+    // Each skill gets ~13KB of content; 3 skills × 13KB = 39KB > 35KB ceiling
+    const largeChunk = 'X'.repeat(13 * 1024) // 13KB per skill
     const contents = new Map<string, string>(skillNames.map(n => [n, largeChunk]))
 
     return {
@@ -458,7 +458,7 @@ describe('Scenario 3: 20KB ceiling enforcement', () => {
   const OVERFLOW_SKILLS = ['pre-action', 'memory-keeper', 'agent-discovery']
   const ORIGINAL_PROMPT = 'Continue implementing the feature'
 
-  test('ceilingExceeded is true when total injected content > 20KB', () => {
+  test('ceilingExceeded is true when total injected content > 35KB', () => {
     const overflowCache = buildOverflowCache(OVERFLOW_SKILLS)
 
     // Build sources manually to match the skills
@@ -505,12 +505,12 @@ describe('Scenario 3: 20KB ceiling enforcement', () => {
     expect(result.prompt).toContain('<skill name="pre-action">')
   })
 
-  test('PROMPT_SIZE_CEILING constant is 20KB (20480 bytes)', () => {
-    expect(PROMPT_SIZE_CEILING).toBe(20 * 1024)
+  test('PROMPT_SIZE_CEILING constant is 35KB (35840 bytes)', () => {
+    expect(PROMPT_SIZE_CEILING).toBe(35 * 1024)
   })
 
-  test('injection succeeds with content just under 20KB ceiling', () => {
-    // Single skill with content just under the 20KB ceiling
+  test('injection succeeds with content just under 35KB ceiling', () => {
+    // Single skill with content just under the 35KB ceiling
     const justUnderContent = 'Y'.repeat(PROMPT_SIZE_CEILING - 50) // leave room for tags
     const underCache: SkillCache = {
       hasSkill: (name: string) => name === 'test-skill',
@@ -541,14 +541,14 @@ describe('Scenario 3: 20KB ceiling enforcement', () => {
       skillCache: overflowCache,
     })
 
-    const totalContentSize = OVERFLOW_SKILLS.length * 10 * 1024 // each 10KB × 3 skills = 30KB
+    const totalContentSize = OVERFLOW_SKILLS.length * 13 * 1024 // each 13KB × 3 skills = 39KB
     const evidence = [
-      '=== Task 12 E2E: 20KB Ceiling Enforcement ===',
+      '=== Task 12 E2E: 35KB Ceiling Enforcement ===',
       '',
       `Skills used: ${OVERFLOW_SKILLS.join(', ')}`,
-      `Content per skill: 10KB (10240 bytes)`,
+      `Content per skill: 13KB (13312 bytes)`,
       `Total content size (approx): ${totalContentSize} bytes`,
-      `PROMPT_SIZE_CEILING: ${PROMPT_SIZE_CEILING} bytes (20KB)`,
+      `PROMPT_SIZE_CEILING: ${PROMPT_SIZE_CEILING} bytes (35KB)`,
       '',
       `ceilingExceeded: ${result.ceilingExceeded} (expected: true)`,
       `injected: ${result.injected} (expected: true — baseline skills always injected)`,

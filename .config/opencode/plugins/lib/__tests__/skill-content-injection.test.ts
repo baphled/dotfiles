@@ -303,16 +303,16 @@ describe('injectSkillContent — prompt composition', () => {
 })
 
 // ---------------------------------------------------------------------------
-// injectSkillContent — 20KB ceiling enforcement
+// injectSkillContent — 35KB ceiling enforcement
 // ---------------------------------------------------------------------------
 
-describe('injectSkillContent — 20KB ceiling enforcement', () => {
-  it('exports PROMPT_SIZE_CEILING as 20KB (20 * 1024)', () => {
-    expect(PROMPT_SIZE_CEILING).toBe(20 * 1024)
+describe('injectSkillContent — 35KB ceiling enforcement', () => {
+  it('exports PROMPT_SIZE_CEILING as 35KB (35 * 1024)', () => {
+    expect(PROMPT_SIZE_CEILING).toBe(35 * 1024)
   })
 
-  it('skips content injection when total injected content exceeds 20KB', () => {
-    // Create a skill with content just over the 20KB limit
+  it('skips content injection when total injected content exceeds 35KB', () => {
+    // Create a skill with content just over the 35KB limit
     const largeContent = 'x'.repeat(PROMPT_SIZE_CEILING + 1)
     const cache = makeSkillCache({ 'large-skill': largeContent })
     const sources: SkillSource[] = [{ skill: 'large-skill', source: 'baseline' }]
@@ -333,7 +333,7 @@ describe('injectSkillContent — 20KB ceiling enforcement', () => {
 
   it('allows injection when total content is exactly at the ceiling', () => {
     // Content size at exactly ceiling (accounting for XML wrapper overhead)
-    // We need: `<skill name="X">\n{content}\n</skill>` total <= 20KB
+    // We need: `<skill name="X">\n{content}\n</skill>` total <= 35KB
     const wrapperSize = '<skill name="at-limit">\n'.length + '\n</skill>\n\n'.length
     const contentSize = PROMPT_SIZE_CEILING - wrapperSize
     const content = 'y'.repeat(contentSize)
@@ -351,7 +351,7 @@ describe('injectSkillContent — 20KB ceiling enforcement', () => {
     expect(result.injected).toBe(true)
   })
 
-  it('injects normally when content is well under 20KB', () => {
+  it('injects normally when content is well under 35KB', () => {
     const cache = makeSkillCache({ 'small-skill': 'Small content.' })
     const sources: SkillSource[] = [{ skill: 'small-skill', source: 'baseline' }]
 
@@ -406,16 +406,16 @@ describe('progressive injection', () => {
     return `<skill name="${name}">\n${content}\n</skill>\n\n`.length
   }
 
-  it('5 skills totalling 25KB → first N that fit under 20KB are injected, rest dropped', () => {
-    // Each skill is 5KB content — 5 × 5KB = 25KB total (over 20KB ceiling)
-    // With block overhead, only the first 3 should fit (≈15KB+) before ceiling
-    const skill5KB = makeContent(5 * 1024)
+  it('5 skills totalling 40KB → first N that fit under 35KB are injected, rest dropped', () => {
+    // Each skill is 8KB content — 5 × 8KB = 40KB total (over 35KB ceiling)
+    // With block overhead, only the first 4 should fit (≈32KB+) before ceiling
+    const skill8KB = makeContent(8 * 1024)
     const cache = makeSkillCache({
-      'skill-a': skill5KB,
-      'skill-b': skill5KB,
-      'skill-c': skill5KB,
-      'skill-d': skill5KB,
-      'skill-e': skill5KB,
+      'skill-a': skill8KB,
+      'skill-b': skill8KB,
+      'skill-c': skill8KB,
+      'skill-d': skill8KB,
+      'skill-e': skill8KB,
     })
     const sources: SkillSource[] = [
       { skill: 'skill-a', source: 'baseline' },
@@ -456,7 +456,7 @@ describe('progressive injection', () => {
     // Baseline skill is small
     const baselineContent = makeContent(1 * 1024) // 1KB
     // Non-baseline skills are large enough that together they exceed the remaining budget
-    const largeContent = makeContent(10 * 1024) // 10KB each
+    const largeContent = makeContent(20 * 1024) // 20KB each — two together (40KB) exceed 35KB ceiling
     const cache = makeSkillCache({
       'skill-a': baselineContent,
       'skill-b': largeContent,
@@ -483,8 +483,8 @@ describe('progressive injection', () => {
     expect(nonBaselineDropped.length).toBeGreaterThan(0)
   })
 
-  it('when total non-baseline content < 20KB, all skills injected and skillsDropped is empty', () => {
-    // 3 skills × 2KB = 6KB total — well under 20KB
+  it('when total non-baseline content < 35KB, all skills injected and skillsDropped is empty', () => {
+    // 3 skills × 2KB = 6KB total — well under 35KB
     const smallContent = makeContent(2 * 1024)
     const cache = makeSkillCache({
       'skill-a': smallContent,
@@ -513,8 +513,8 @@ describe('progressive injection', () => {
   })
 
   it('when even the first non-baseline skill exceeds remaining budget, only baseline is injected', () => {
-    // Baseline fills most of the budget (~19KB), then non-baseline is 2KB — doesn't fit
-    const bigBaselineContent = makeContent(19 * 1024)
+    // Baseline fills most of the budget (~34KB), then non-baseline is 2KB — doesn't fit
+    const bigBaselineContent = makeContent(34 * 1024)
     const smallNonBaseline = makeContent(2 * 1024)
     const cache = makeSkillCache({
       'baseline-skill': bigBaselineContent,
@@ -542,10 +542,10 @@ describe('progressive injection', () => {
   })
 
   it('injected is true as long as at least baseline content was injected (even when all non-baseline skills are dropped)', () => {
-    // Baseline is 1KB (~1064 bytes with block overhead), leaving ~19KB of budget.
-    // Each non-baseline skill is 19KB content (~19488 bytes block) — exceeds remaining budget alone.
+    // Baseline is 1KB (~1064 bytes with block overhead), leaving ~34KB of budget.
+    // Each non-baseline skill is 34KB content (~34848 bytes block) — exceeds remaining budget alone.
     const baselineContent = makeContent(1 * 1024)
-    const hugeContent = makeContent(19 * 1024) // each alone exceeds what's left after baseline
+    const hugeContent = makeContent(34 * 1024) // each alone exceeds what's left after baseline
     const cache = makeSkillCache({
       'baseline-skill': baselineContent,
       'skill-x': hugeContent,
@@ -573,14 +573,14 @@ describe('progressive injection', () => {
   })
 
   it('ceilingExceeded backward compat: true when any skills are dropped', () => {
-    // 5KB × 5 = 25KB total — will exceed 20KB ceiling
-    const skill5KB = makeContent(5 * 1024)
+    // 8KB × 5 = 40KB total — will exceed 35KB ceiling
+    const skill8KB = makeContent(8 * 1024)
     const cache = makeSkillCache({
-      'skill-a': skill5KB,
-      'skill-b': skill5KB,
-      'skill-c': skill5KB,
-      'skill-d': skill5KB,
-      'skill-e': skill5KB,
+      'skill-a': skill8KB,
+      'skill-b': skill8KB,
+      'skill-c': skill8KB,
+      'skill-d': skill8KB,
+      'skill-e': skill8KB,
     })
     const sources: SkillSource[] = [
       { skill: 'skill-a', source: 'baseline' },

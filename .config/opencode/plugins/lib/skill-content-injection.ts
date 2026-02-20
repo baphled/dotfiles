@@ -11,13 +11,13 @@
  *   </skill>
  *
  * Skills are ordered: baseline → category/agent-default → keyword
- * Total injected content is capped at 20KB (PROMPT_SIZE_CEILING).
+ * Total injected content is capped at 35KB (PROMPT_SIZE_CEILING).
  */
 
 import type { SkillSource } from './skill-selector'
 
 /** Maximum bytes of injected skill content before falling back to names-only. */
-export const PROMPT_SIZE_CEILING = 20 * 1024 // 20KB
+export const PROMPT_SIZE_CEILING = 35 * 1024 // 35KB
 
 /** Interface for skill cache — subset used by injection logic. */
 export interface SkillCache {
@@ -34,7 +34,7 @@ export interface InjectionInput {
   /**
    * Names of skills that are exempt from the byte budget and always injected.
    * Baseline skills are prepended before the progressive loop runs over
-   * remaining skills. If omitted, all skills compete for the 20KB budget.
+   * remaining skills. If omitted, all skills compete for the 35KB budget.
    */
   baselineSkills?: string[]
 }
@@ -45,7 +45,7 @@ export interface InjectionResult {
   prompt: string
   /** Whether content was actually injected into the prompt. */
   injected: boolean
-  /** Whether injection was skipped because content exceeded the 20KB ceiling. */
+  /** Whether injection was skipped because content exceeded the 35KB ceiling. */
   ceilingExceeded: boolean
   /** Names of skills that were selected but not injected (for future progressive injection). */
   skillsDropped: string[]
