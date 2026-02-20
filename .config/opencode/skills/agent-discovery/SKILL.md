@@ -1,7 +1,7 @@
 ---
 name: agent-discovery
 description: Automatically discover and route to appropriate specialist agents
-category: meta
+category: Core Universal
 compatibility: agent
 ---
 
@@ -125,11 +125,11 @@ If you ARE the recommended agent, suppress it and skip to next best match. Preve
 ## Anti-patterns to avoid
 - ❌ Recommending for trivial tasks
 - ❌ Auto-invoking agents without announcement
-- ❌ Merging with skill discovery (handled by auto-discovery)
+- ❌ Merging with skill discovery (handled by skill-discovery)
 - ❌ Recommending yourself
 
 ## Related skills
-- `auto-discovery` — Automatically discover and load skills (companion skill)
+- `skill-discovery` — Automatically discover and load skills (companion skill)
 - `skill-discovery` — External community skill discovery
 - `clean-code` — Universal principle
 
