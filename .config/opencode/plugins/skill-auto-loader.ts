@@ -11,7 +11,8 @@ import { join } from 'path'
 import { selectSkills, type SkillAutoLoaderConfig, type SkillSelectionInput } from './lib/skill-selector'
 import { AgentConfigCache } from './lib/agent-config-parser'
 import { filterSkillsAgainstCache } from './lib/skill-validation-filter'
-import { injectSkillContent, PROMPT_SIZE_CEILING } from './lib/skill-content-injection'
+import { injectSkillContent } from './lib/skill-content-injection'
+import { detectCodebaseLanguages } from './lib/codebase-detector'
 
 const PLUGIN_DIR = `${process.env.HOME}/.config/opencode/plugins`
 const CONFIG_FILE = join(PLUGIN_DIR, 'skill-auto-loader-config.jsonc')
@@ -82,6 +83,7 @@ function logInjection(event: {
   contentSizeBytes: number
   skillsWithContent: string[]
   skillsWithoutContent: string[]
+  skillsDropped: string[]
 }): void {
   try {
     const line = JSON.stringify(event) + '\n'
@@ -118,6 +120,16 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   agentCache = new AgentConfigCache()
   await agentCache.init()
 
+  // Detect codebase languages at plugin init time
+  let codebaseSkills: string[] = []
+  try {
+    const PLUGIN_PARENT_DIR = join(PLUGIN_DIR, '..')
+    const detection = await detectCodebaseLanguages(PLUGIN_PARENT_DIR)
+    codebaseSkills = detection.skills
+  } catch {
+    // Detection failure is non-fatal
+  }
+
   // Attempt to initialise skill content cache (Task 4 parallel module)
   try {
     // Dynamic require so a missing module doesn't prevent the plugin from loading
@@ -135,6 +147,13 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
     skillCache = cache
   } catch {
     console.warn('[SkillAutoLoader] skill-content-cache module not available, skill existence validation will be skipped')
+  }
+
+  // Build skill sizes map for byte budget enforcement
+  const skillSizes = new Map<string, number>()
+  if (skillCache) {
+    // We don't have a direct "list all skills" API, so sizes are populated lazily
+    // during selection — the selector handles missing entries as 0 bytes
   }
 
   const notify = createNotifier(_input.client)
@@ -175,9 +194,12 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       }
 
       // Build selection input
+      const focus = args.focus as string | undefined
+
       const selectionInput: SkillSelectionInput = {
         category,
         subagentType,
+        focus,
         prompt,
         existingSkills,
         sessionId,
@@ -185,7 +207,7 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       }
 
       // Run skill selection
-      const result = selectSkills(selectionInput, config)
+      const result = selectSkills(selectionInput, config, skillSizes)
 
       // === Skill Existence Validation ===
       // Filter out any skills that don't have a corresponding SKILL.md file.
@@ -205,12 +227,13 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
           sources: result.sources,
           originalPrompt,
           skillCache,
+          baselineSkills: config.baseline_skills,
         })
 
         if (injectionResult.ceilingExceeded) {
           console.warn(
-            `[SkillAutoLoader] Skill content exceeds ${PROMPT_SIZE_CEILING} bytes ceiling, ` +
-            `skipping content injection (falling back to load_skills names only)`
+            `[SkillAutoLoader] Skill content budget exceeded, ` +
+            `dropped: [${injectionResult.skillsDropped.join(', ')}]`
           )
         } else if (injectionResult.injected) {
           args.prompt = injectionResult.prompt
@@ -240,6 +263,7 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
           contentSizeBytes,
           skillsWithContent,
           skillsWithoutContent,
+          skillsDropped: injectionResult.skillsDropped,
         })
 
         // Show toast notification
