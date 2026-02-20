@@ -365,6 +365,13 @@ Before marking any page as complete, verify:
 - [ ] British English spelling throughout
 - [ ] Memory updated with any corrections or new patterns learned
 
+## Self-documentation
+
+When your own behaviour, rules, or capabilities change, update the relevant KB page:
+- `3. Resources/Knowledge Base/AI Development System/Agents/Knowledge Base Curator.md`
+
+Record any new patterns or corrections in the memory MCP using the `kb-curator-correction-{topic}` naming convention.
+
 ## What I won't do
 
 - Modify files outside vault and ~/.config/opencode/ directories

@@ -230,3 +230,17 @@ Also update the knowledge graph via `memory_create_entities` with key findings.
 - Run tests from `~/.config/opencode` directory (where opencode.json lives)
 - Compare against known baselines: GLM 4.7 cloud sees all 47 tools
 - The model must be added to `opencode.json` before testing via `opencode run`
+
+## KB Curator integration
+
+When your work creates, modifies, or documents anything that relates to this project or the OpenCode ecosystem, invoke the KB Curator agent to update the Obsidian vault:
+
+- **New features or plugins** → Document in the relevant KB section
+- **Agent or skill changes** → Sync agent/skill docs in the vault
+- **Architecture decisions** → Record in the KB under AI Development System
+- **Configuration changes** → Update relevant KB reference pages
+- **Bug fixes with broader implications** → Note in KB if it affects documented behaviour
+
+**How to invoke**: Delegate a task to `Knowledge Base Curator` with a clear description of what changed and what needs documenting.
+
+> You do not need to invoke the KB Curator for routine task execution, minor fixes, or work that has no lasting documentation value.
