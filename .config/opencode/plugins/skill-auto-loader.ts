@@ -80,6 +80,10 @@ function logInjection(event: {
   existing: string[]
   final: string[]
   sources: Array<{ skill: string; source: string; pattern?: string }>
+  contentInjected: boolean
+  contentSizeBytes: number
+  skillsWithContent: string[]
+  skillsWithoutContent: string[]
 }): void {
   try {
     const line = JSON.stringify(event) + '\n'
@@ -215,6 +219,16 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
         }
 
         // Log the injection event
+        const contentSizeBytes = injectionResult.injected
+          ? injectionResult.prompt.length - originalPrompt.length
+          : 0
+        const skillsWithContent = validatedSkills.filter(
+          s => skillCache?.getSkillContent(s) !== undefined
+        )
+        const skillsWithoutContent = validatedSkills.filter(
+          s => !skillCache?.getSkillContent(s)
+        )
+
         logInjection({
           timestamp: new Date().toISOString(),
           tool: input.tool,
@@ -223,7 +237,11 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
           injected: validatedSkills,
           existing: existingSkills,
           final: validatedSkills,
-          sources: result.sources as Array<{ skill: string; source: string; pattern?: string }>
+          sources: result.sources as Array<{ skill: string; source: string; pattern?: string }>,
+          contentInjected: injectionResult.injected,
+          contentSizeBytes,
+          skillsWithContent,
+          skillsWithoutContent,
         })
 
         // Show toast notification
