@@ -47,16 +47,24 @@ export function selectSkills(input: SkillSelectionInput, config: SkillAutoLoader
   const sources: SkillSource[] = []
   const autoSkillsSet = new Set<string>()
 
-  // Edge case: session continuation - skip if configured
-  if (input.sessionId && config.skip_on_session_continue) {
-    return { skills: [], sources: [] }
-  }
-
   // === Tier 1: Baseline skills (always included) ===
   for (const skill of config.baseline_skills) {
     if (!autoSkillsSet.has(skill)) {
       autoSkillsSet.add(skill)
       sources.push({ skill, source: 'baseline' })
+    }
+  }
+
+  // Edge case: session continuation - skip Tier 2 and Tier 3 if configured
+  if (input.sessionId && config.skip_on_session_continue) {
+    // Merge with existing skills and return (baseline only)
+    const allSkills = new Set<string>(input.existingSkills)
+    for (const skill of autoSkillsSet) {
+      allSkills.add(skill)
+    }
+    return {
+      skills: Array.from(allSkills),
+      sources: sources
     }
   }
 
