@@ -37,14 +37,47 @@
 
 ### Provider Selection Rules
 
-1. **Default: Copilot** — Use for all T1 and T2 work (subscription absorbs cost)
-2. **Anthropic for T3** — Opus not available on Copilot Pro (needs Pro+)
-3. **Overflow** — If Copilot 300 requests exhausted, fall back to Anthropic direct
-4. **Cross-provider fallback** — If one provider is down, try same-tier model from other
+1. **Health check FIRST** — Before every delegation, call `provider-health(tier=X, recommend=true)` to get the best available model. This prevents wasted round trips to rate-limited providers.
+2. **Default: Copilot** — Use for all T1 and T2 work (subscription absorbs cost)
+3. **Anthropic for T3** — Opus not available on Copilot Pro (needs Pro+)
+4. **Overflow** — If Copilot 300 requests exhausted, fall back to Anthropic direct
+5. **Cross-provider fallback** — If one provider is down, try same-tier model from other
+
+### Pre-Delegation Health Check (MANDATORY)
+
+Before EVERY delegation, check if the intended tier has a healthy model with enough capacity:
+
+```typescript
+// Basic: check health and get recommended model
+provider-health(tier="T2", recommend=true)
+// Returns: ✅ **opencode/big-pickle** (T2) [250 requests remaining] — 4 more alternative(s)
+
+// With cost estimate: specify expected request count for capacity check
+provider-health(tier="T2", recommend=true, estimated_requests=15)
+// Returns: ✅ **opencode/big-pickle** (T2) [250 requests remaining]
+// Or:      ⚠️ Skipped (insufficient capacity for ~15 requests): github-copilot/gpt-5 (3 left)
+// Or:      ⚠️ No provider in T2 has enough capacity for ~15 requests.
+
+// If ✅ → use the recommended provider/model for delegation
+// If ⚠️ (capacity) → use a lower tier, smaller task, or wait for limits to reset
+// If ⚠️ (rate limited) → wait, use a different tier, or inform the user
+```
+
+**Tier cost defaults** (used when `estimated_requests` is omitted):
+- T0: 1 request (local model)
+- T1: 3 requests (explore/librarian)
+- T2: 10 requests (implementation/build)
+- T3: 5 requests (oracle/complex reasoning)
+
+**Capacity display**: Use `provider-health(tier="T2")` to see the full fallback chain with remaining capacity per provider.
 
 ### Delegation Examples
 
 ```typescript
+// Step 1: Check health FIRST
+provider-health(tier="T1", recommend=true)
+// Step 2: Use the recommended model
+
 // Tier 1 — exploration (Copilot preferred)
 task(subagent_type="explore", model="copilot/gpt-4o-mini", run_in_background=true)
 task(subagent_type="librarian", model="copilot/gpt-4o-mini", run_in_background=true)

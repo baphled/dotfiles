@@ -28,16 +28,39 @@ Every user message MUST be classified before acting. If classification is skippe
 - Reading/exploring code (no changes)
 
 ### COMPLEX (discovery)
-- **auto-discovery** (skills): "Add tests" → load ginkgo-gomega, tdd-workflow
+- **skill-discovery** (skills): "Add tests" → load ginkgo-gomega, tdd-workflow
 - **agent-discovery** (agents): "Write a Go app" → delegate to Senior-Engineer
 - "Create a CLI" → load bubble-tea-expert, ui-design skills
 - "Build an API" → load api-design, golang skills
 - "Refactor module X" → load refactor, clean-code skills
 - Any task touching 2+ files → delegate via agent-discovery
 
+### Specialist Agent Routing Table
+
+**MANDATORY:** When delegating, use `subagent_type=` to route to the correct specialist. Fuzzy matching via agent-discovery is the fallback only when no specialist fits with ≥70% confidence.
+
+| Task Domain | `subagent_type=` |
+|-------------|-----------------|
+| Software engineering, implementation, new features, refactoring | `Senior-Engineer` |
+| Testing strategy, test writing, coverage, edge cases | `QA-Engineer` |
+| Security audits, vulnerability assessment, auth, encryption | `Security-Engineer` |
+| Architecture decisions, RFCs, trade-off analysis, design review | `Tech-Lead` |
+| CI/CD, infrastructure, containers, deployment, IaC | `DevOps` |
+| Documentation, READMEs, API docs, tutorials, blog posts | `Writer` |
+| Data exploration, log analysis, metrics, reporting | `Data-Analyst` |
+| Firmware, microcontrollers, RTOS, Arduino, ESP | `Embedded-Engineer` |
+| Nix, NixOS, flakes, reproducible builds | `Nix-Expert` |
+| Linux administration, configuration, troubleshooting | `Linux-Expert` |
+| Monitoring, incident response, runtime operations | `SysOp` |
+| Terminal recordings, demos, VHS tape generation | `VHS-Director` |
+| Obsidian vault, skill docs, knowledge base sync | `Knowledge Base Curator` |
+| LLM evaluation, model compatibility testing | `Model-Evaluator` |
+
+**Fallback:** No specialist matches → use generic category (`quick`, `deep`, `writing`, `ultrabrain`) with `sisyphus-junior`.
+
 ### Delegation Execution (automatic)
 
-1. **auto-discovery**: Identify keywords → select skills from keyword_patterns
+1. **skill-discovery**: Identify keywords → select skills from keyword_patterns
 2. **agent-discovery**: Match agent from specialist definitions (~/.config/opencode/agents/*.md)
 3. Determine tier: T1 (search), T2 (implementation), T3 (architecture)
 4. Identify parallelisable subtasks → fire concurrently
