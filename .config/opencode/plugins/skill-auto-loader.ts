@@ -121,7 +121,7 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   await agentCache.init()
 
   // Detect codebase languages at init time
-  // codebaseSkills will be passed to selectSkills in Task 10 (selector tier codebase detection)
+  // codebaseSkills from codebase detection, passed to selectSkills as Tier 2.5
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let codebaseSkills: string[] = []
   try {
