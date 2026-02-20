@@ -5,8 +5,7 @@
  * and caches the results at init time.
  */
 
-import { existsSync, readFileSync } from 'fs'
-import { readdir } from 'fs/promises'
+import * as fs from 'fs'
 import { join } from 'path'
 
 export interface AgentConfig {
@@ -31,20 +30,20 @@ export class AgentConfigCache {
     if (this.initialized) return
 
     try {
-      if (!existsSync(this.agentsDir)) {
+      if (!fs.existsSync(this.agentsDir)) {
         console.warn(`[AgentConfigCache] Agents directory not found: ${this.agentsDir}`)
         this.initialized = true
         return
       }
 
-      const files = await readdir(this.agentsDir)
+      const files = await fs.promises.readdir(this.agentsDir)
       
       for (const file of files) {
         if (!file.endsWith('.md')) continue
         
         const filePath = join(this.agentsDir, file)
         try {
-          const content = readFileSync(filePath, 'utf-8')
+          const content = fs.readFileSync(filePath, 'utf-8')
           const config = this.parseFrontmatter(content, file)
           
           if (config) {

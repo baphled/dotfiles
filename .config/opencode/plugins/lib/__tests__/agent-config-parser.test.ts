@@ -391,6 +391,7 @@ default_skills:
         'clean-code',
         'bdd-workflow',
         'agent-discovery',
+        'skill-discovery',
       ])
     })
 
@@ -403,6 +404,8 @@ default_skills:
         'bdd-workflow',
         'critical-thinking',
         'agent-discovery',
+        'memory-keeper',
+        'skill-discovery',
       ])
     })
 
