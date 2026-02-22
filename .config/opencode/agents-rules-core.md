@@ -28,7 +28,7 @@ Every user message MUST be classified before acting. If classification is skippe
 - Reading/exploring code (no changes)
 
 ### COMPLEX (discovery)
-- **skill-discovery** (skills): "Add tests" → load ginkgo-gomega, tdd-workflow
+- **skill-discovery** (skills): "Add tests" → load ginkgo-gomega, bdd-workflow
 - **agent-discovery** (agents): "Write a Go app" → delegate to Senior-Engineer
 - "Create a CLI" → load bubble-tea-expert, ui-design skills
 - "Build an API" → load api-design, golang skills
@@ -43,6 +43,7 @@ Every user message MUST be classified before acting. If classification is skippe
 |-------------|-----------------|
 | Software engineering, implementation, new features, refactoring | `Senior-Engineer` |
 | Testing strategy, test writing, coverage, edge cases | `QA-Engineer` |
+| Code review, PR feedback, change request response | `Code-Reviewer` |
 | Security audits, vulnerability assessment, auth, encryption | `Security-Engineer` |
 | Architecture decisions, RFCs, trade-off analysis, design review | `Tech-Lead` |
 | CI/CD, infrastructure, containers, deployment, IaC | `DevOps` |

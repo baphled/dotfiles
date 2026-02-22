@@ -107,6 +107,53 @@ Read `~/.config/opencode/commands/new-skill.md` for the authoritative "File Loca
 - **Skill auto-loader config**: ~/.config/opencode/plugins/skill-auto-loader-config.jsonc
 - **File locations reference**: ~/.config/opencode/commands/new-skill.md (see "File Locations Reference" table)
 
+## Vault sync script
+
+The vault depends on a shell script that reads `~/.config/opencode/` and generates JSON cache files consumed by CustomJS classes inside Obsidian.
+
+### Location
+
+```
+/home/baphled/vaults/baphled/scripts/sync-opencode-config.sh
+```
+
+### Purpose
+
+Reads the OpenCode configuration directory and writes a set of JSON files into `assets/opencode/` within the vault. The CustomJS classes in the vault read these JSON files to power dynamic dashboards and indexes without requiring live filesystem access from Obsidian.
+
+### Usage
+
+Run from the vault root:
+
+```bash
+bash scripts/sync-opencode-config.sh
+```
+
+### Output files (written to `assets/opencode/`)
+
+| File | Contents |
+|------|----------|
+| `system.json` | Component counts, full `AGENTS.md` content, and `opencode.json` configuration |
+| `agents.json` | All agent definitions from `~/.config/opencode/agents/` |
+| `skills.json` | All skill metadata from `~/.config/opencode/skills/` |
+| `commands.json` | All command definitions from `~/.config/opencode/commands/` |
+| `plugins.json` | Local plugins and external plugin specifications |
+
+### Auto-trigger
+
+The script is called automatically by the vault's `.git/hooks/pre-commit` hook, so every vault commit includes up-to-date JSON caches.
+
+### When to run manually
+
+Run the script manually after any of the following, before committing vault changes:
+
+- Adding, editing, or removing an agent definition in `~/.config/opencode/agents/`
+- Adding, editing, or removing a skill in `~/.config/opencode/skills/`
+- Adding, editing, or removing a command in `~/.config/opencode/commands/`
+- Changing plugin configuration
+
+If you forget to run it, the vault's CustomJS dashboards will display stale data until the next sync.
+
 ## Dynamic content rules (MANDATORY)
 
 These rules are NON-NEGOTIABLE. Every KB page you create or update MUST follow them.

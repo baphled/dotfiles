@@ -49,6 +49,29 @@ Every task that requires file modification or content creation MUST follow this 
 | Multi-file, investigation | deep | T2 |
 | Architecture, complex logic | ultrabrain | T3 |
 
+### Specialist Agent Routing
+
+Agents are **composable** — any specialist can delegate to another directly. Use Tech-Lead when multi-domain coordination is needed and the right pipeline isn't obvious. Otherwise, route to the specialist directly.
+
+| Task | Route to |
+|------|----------|
+| Multi-domain coordination, unclear specialist pipeline | Tech-Lead |
+| Implementation, bug fix, refactoring | Senior-Engineer |
+| Testing strategy, test writing, coverage | QA-Engineer |
+| Documentation, READMEs, tutorials, content | Writer |
+| Editorial review, structural editing, tone | Editor |
+| Research, investigation, synthesis | Researcher |
+| Security review, vulnerability assessment | Security-Engineer |
+| CI/CD, infrastructure, deployment | DevOps |
+| Data analysis, metrics, reporting | Data-Analyst |
+| KB, vault, knowledge management | Knowledge Base Curator |
+| Terminal recordings, demos | VHS-Director |
+| Embedded/microcontroller work | Embedded-Engineer |
+| Nix/flakes, reproducible builds | Nix-Expert |
+| Linux administration, system configuration | Linux-Expert |
+| System operations, monitoring | SysOp |
+| Model testing, evaluation | Model-Evaluator |
+
 ---
 
 ## Tool Restrictions (Deterministic Enforcement)
@@ -64,6 +87,7 @@ These agents **cannot** use Edit or Write tools. They classify, delegate, and ve
 | `sisyphus` | deny | allow | Primary orchestrator |
 | `hephaestus` | deny | allow | Orchestrator (Claude Code) |
 | `atlas` | deny | allow | Orchestrator (OpenCode) |
+| `Tech-Lead` | deny | allow | Engineering orchestrator |
 
 ### Workers (edit: allow)
 
@@ -74,6 +98,7 @@ These agents **can** modify files. They receive delegated tasks from orchestrato
 | `sisyphus-junior` | allow | allow | Generic worker (category fallback) |
 | `Senior-Engineer` | allow | allow | Software engineering |
 | `QA-Engineer` | allow | allow | Testing and quality |
+| `Code-Reviewer` | allow | allow | PR change request response |
 | `Writer` | allow | deny | Documentation |
 | `DevOps` | allow | allow | Infrastructure |
 | `VHS-Director` | allow | allow | Terminal recordings |
@@ -87,7 +112,6 @@ These agents advise but do not modify files.
 
 | Agent | `edit` | `bash` | Role |
 |-------|--------|--------|------|
-| `Tech-Lead` | deny | allow | Architecture decisions |
 | `Security-Engineer` | deny | allow | Security auditing |
 | `Data-Analyst` | deny | allow | Data analysis |
 | `Nix-Expert` | deny | allow | Nix guidance |
@@ -169,7 +193,7 @@ provide that feedback autonomously.
 | Trigger                 | Generator       | Evaluator          |
 |-------------------------|-----------------|--------------------|
 | Code needs review       | Senior-Engineer | QA-Engineer        |
-| Documentation quality   | Writer          | Tech-Lead          |
+| Documentation quality   | Writer          | Editor             |
 | Security audit          | Senior-Engineer | Security-Engineer  |
 | Architecture review     | Senior-Engineer | Tech-Lead          |
 

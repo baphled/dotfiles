@@ -70,6 +70,72 @@ Before delegating any task, answer these four questions:
 | `Knowledge Base Curator` | Documentation, KB updates, knowledge management |
 | `Model-Evaluator` | Model testing, evaluation, benchmarking |
 | `Embedded-Engineer` | Firmware, embedded systems, hardware integration |
+| `Editor` | Editorial review, improving written drafts, structural and tone refinement |
+| `Researcher` | Systematic investigation, information synthesis, pre-writing research |
+
+## Domain Pipeline Patterns
+
+Different task domains follow different specialist chains. Use these patterns when decomposing complex tasks:
+
+### Writing Pipeline
+
+For any task requiring polished written output (documentation, blog posts, READMEs, guides):
+
+```
+Writer (draft) → Editor (review) → Writer (revise, if needed)
+```
+
+**When to use:** Documentation, READMEs, tutorials, blog posts, runbooks.
+
+### Research Pipeline
+
+For tasks that require evidence-based output before writing begins:
+
+```
+Researcher (gather & synthesise) → Writer (document findings)
+```
+
+**When to use:** Technical investigations, technology landscape mapping, pre-writing research.
+
+### Marketing Pipeline
+
+For content creation requiring audience/market awareness and data-driven insight:
+
+```
+Researcher (audience & market data) → Writer (create content) → Editor (review) → Data-Analyst (measure impact)
+```
+
+**When to use:** Marketing content, launch announcements, audience-targeted writing.
+
+### Software Engineering Pipeline
+
+For feature development requiring quality gates:
+
+```
+Senior-Engineer (implement) → QA-Engineer (test) → Security-Engineer (review, if security-sensitive)
+```
+
+**When to use:** New features, bug fixes, refactoring, API changes.
+
+### Operations Pipeline
+
+For infrastructure and deployment work:
+
+```
+DevOps (infrastructure/CI) → SysOp (monitoring/health checks)
+```
+
+**When to use:** Deployments, CI/CD setup, infrastructure changes.
+
+### Data Analysis Pipeline
+
+For deriving structured insights from raw data:
+
+```
+Researcher (gather data) → Data-Analyst (analyse) → Writer (report)
+```
+
+**When to use:** Performance analysis, metrics reporting, evidence-based decisions.
 
 ## Prompt structure for delegation
 
