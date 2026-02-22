@@ -962,6 +962,115 @@ describe('selectSkills — Focus Suppresses Keyword Patterns', () => {
   })
 })
 
+describe('selectSkills — Focus + Language Test Framework Mapping', () => {
+  // Config with focus_language_mappings: when focus + codebaseSkills align,
+  // inject language-specific test framework skills.
+  const configWithFLM = {
+    ...testConfig,
+    focus_language_mappings: {
+      testing: {
+        golang: ['ginkgo-gomega'],
+        javascript: ['jest'],
+        ruby: ['rspec-testing'],
+      },
+    },
+  }
+
+  it('injects ginkgo-gomega when focus is testing and codebase includes golang', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+      codebaseSkills: ['golang'],
+    }
+    const result = selectSkills(input, configWithFLM)
+
+    expect(result.skills).toContain('ginkgo-gomega')
+  })
+
+  it('injects jest when focus is testing and codebase includes javascript', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+      codebaseSkills: ['javascript'],
+    }
+    const result = selectSkills(input, configWithFLM)
+
+    expect(result.skills).toContain('jest')
+  })
+
+  it('injects rspec-testing when focus is testing and codebase includes ruby', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+      codebaseSkills: ['ruby'],
+    }
+    const result = selectSkills(input, configWithFLM)
+
+    expect(result.skills).toContain('rspec-testing')
+  })
+
+  it('does NOT inject ginkgo-gomega when focus is implementation (only testing triggers frameworks)', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'implementation',
+      codebaseSkills: ['golang'],
+    }
+    const result = selectSkills(input, configWithFLM)
+
+    expect(result.skills).not.toContain('ginkgo-gomega')
+  })
+
+  it('does NOT inject any test framework when focus is testing but no codebaseSkills provided', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+    }
+    const result = selectSkills(input, configWithFLM)
+
+    expect(result.skills).not.toContain('ginkgo-gomega')
+    expect(result.skills).not.toContain('jest')
+    expect(result.skills).not.toContain('rspec-testing')
+  })
+
+  it('records focus-language-mapped skills with source "focus-language"', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+      codebaseSkills: ['golang'],
+    }
+    const result = selectSkills(input, configWithFLM)
+
+    const focusLangSources = result.sources.filter(s => s.source === 'focus-language' as string)
+    expect(focusLangSources.some(s => s.skill === 'ginkgo-gomega')).toBe(true)
+  })
+
+  it('injects multiple frameworks when codebase includes multiple languages', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+      codebaseSkills: ['golang', 'javascript'],
+    }
+    const result = selectSkills(input, configWithFLM)
+
+    expect(result.skills).toContain('ginkgo-gomega')
+    expect(result.skills).toContain('jest')
+  })
+
+  it('combines role_mappings skills with focus-language-mapped framework skills', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+      codebaseSkills: ['golang'],
+    }
+    const result = selectSkills(input, configWithFLM)
+
+    // role_mappings.testing → bdd-workflow (already works)
+    expect(result.skills).toContain('bdd-workflow')
+    // focus_language_mappings.testing.golang → ginkgo-gomega (new feature)
+    expect(result.skills).toContain('ginkgo-gomega')
+  })
+})
+
 describe('Config Cleanup — Go-specific skills not in keyword patterns', () => {
   // Load the ACTUAL config file (not the hardcoded test fixture)
   const configPath = resolve(__dirname, '../../skill-auto-loader-config.jsonc')

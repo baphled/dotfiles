@@ -90,6 +90,17 @@
     "refactoring": ["refactor", "clean-code", "design-patterns"]
   },
 
+  // Focus + language → framework mapping.
+  // When focus matches a key AND codebaseSkills includes a language sub-key,
+  // the mapped skills are injected. This replaces Go-specific keyword patterns.
+  "focus_language_mappings": {
+    "testing": {
+      "golang": ["ginkgo-gomega"],
+      "javascript": ["jest"],
+      "ruby": ["rspec-testing"]
+    }
+  },
+
   // Keyword patterns for prompt analysis
   // Ordered by priority (highest first)
   // Patterns are case-insensitive regex strings

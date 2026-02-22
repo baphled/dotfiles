@@ -15,6 +15,7 @@ export interface SkillAutoLoaderConfig {
   subagent_mappings: Record<string, string[]>
   role_mappings?: Record<string, string[]>
   max_auto_skills_bytes?: number
+  focus_language_mappings?: Record<string, Record<string, string[]>>
   keyword_patterns: Array<{ pattern: string; skills: string[]; priority: number }>
 }
 
@@ -31,7 +32,7 @@ export interface SkillSelectionInput {
 
 export interface SkillSource {
   skill: string
-  source: 'baseline' | 'category' | 'agent-default' | 'codebase' | 'keyword'
+  source: 'baseline' | 'category' | 'agent-default' | 'codebase' | 'focus-language' | 'keyword'
   pattern?: string
 }
 
@@ -125,6 +126,24 @@ export function selectSkills(
       if (!autoSkillsSet.has(skill) && !existingSkillsSet.has(skill)) {
         autoSkillsSet.add(skill)
         sources.push({ skill, source: 'codebase' })
+      }
+    }
+  }
+
+  // === Tier 2.75: Focus + Language mapping ===
+  if (config.focus_language_mappings && input.focus) {
+    const languageMappings = config.focus_language_mappings[input.focus]
+    if (languageMappings && input.codebaseSkills) {
+      for (const lang of input.codebaseSkills) {
+        const mappedSkills = languageMappings[lang]
+        if (mappedSkills) {
+          for (const skill of mappedSkills) {
+            if (!autoSkillsSet.has(skill)) {
+              autoSkillsSet.add(skill)
+              sources.push({ skill, source: 'focus-language' })
+            }
+          }
+        }
       }
     }
   }
