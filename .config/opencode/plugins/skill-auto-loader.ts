@@ -106,6 +106,50 @@ function createNotifier(client: PluginInput['client']) {
   }
 }
 
+/**
+ * Format skills for toast notification with grouping by source type.
+ */
+function formatSkillsToast(
+  validated: string[],
+  existing: string[],
+  sources: Array<{ skill: string; source: string; pattern?: string }>
+): string {
+  const sourceMap = new Map<string, string>()
+  for (const s of sources) {
+    sourceMap.set(s.skill, s.source)
+  }
+
+  const baseline: string[] = []
+  const auto: string[] = []
+  const keyword: string[] = []
+  const explicit: string[] = []
+
+  const existingSet = new Set(existing)
+
+  for (const skill of validated) {
+    const source = sourceMap.get(skill)
+    if (source === 'baseline') {
+      baseline.push(skill)
+    } else if (source === 'keyword') {
+      keyword.push(skill)
+    } else if (source === 'category' || source === 'agent-default' || source === 'codebase' || source === 'focus-language') {
+      auto.push(skill)
+    } else if (existingSet.has(skill)) {
+      explicit.push(skill)
+    } else {
+      auto.push(skill) // fallback
+    }
+  }
+
+  const lines: string[] = [`⚡ ${validated.length} skills loaded`]
+  if (baseline.length > 0) lines.push(`🔧 ${baseline.join(' · ')}`)
+  if (auto.length > 0) lines.push(`📦 ${auto.join(' · ')}`)
+  if (keyword.length > 0) lines.push(`🔍 ${keyword.join(' · ')}`)
+  if (explicit.length > 0) lines.push(`👤 ${explicit.join(' · ')}`)
+
+  return lines.join('\n')
+}
+
 const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   const notify = createNotifier(_input.client)
   const warnViaToast: WarnFn = (msg: string) => notify(msg, 'warning')
@@ -272,11 +316,8 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
         })
 
         // Show toast notification
-        const autoCount = validatedSkills.length - existingSkills.length
-        const existingCount = existingSkills.length
-        const skillsList = validatedSkills.slice(0, 3).join(', ')
-        const more = validatedSkills.length > 3 ? ` +${validatedSkills.length - 3} more` : ''
-        notify(`⚡ Skills: ${skillsList}${more} (${autoCount} auto + ${existingCount} explicit)`, 'success', 4000)
+        const duration = Math.max(4000, validatedSkills.length * 800)
+        notify(formatSkillsToast(validatedSkills, existingSkills, result.sources), 'success', duration)
       }
     }
   }
