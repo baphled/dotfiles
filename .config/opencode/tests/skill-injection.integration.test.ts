@@ -10,6 +10,8 @@
  *   3. 35KB ceiling enforcement — ceiling exceeded, progressive injection applied
  *   4. Writing task — writing-related skills selected and injected
  *
+ *   5. BDD Workflow — focus produces correct role-specific skills
+ *
  * NOTE: Real skill content for the Go task may exceed the 35KB ceiling when all
  * baseline + category + keyword skills are combined. This is by design:
  * the ceiling guard uses progressive injection — baseline skills are always
@@ -737,10 +739,7 @@ describe('Pipeline consistency', () => {
   })
 
   test('config baseline_skills matches expected set', () => {
-    const expectedBaseline = ['pre-action', 'memory-keeper', 'agent-discovery', 'token-cost-estimation']
-    for (const skill of expectedBaseline) {
-      expect(config.baseline_skills).toContain(skill)
-    }
+    expect(config.baseline_skills).toEqual(['pre-action', 'memory-keeper'])
   })
 
   test('config skip_on_session_continue is true', () => {
@@ -771,5 +770,198 @@ describe('Pipeline consistency', () => {
     expect(result.injected).toBe(false)
     expect(result.ceilingExceeded).toBe(false)
     expect(result.prompt).toBe('test prompt')
+  })
+})
+
+// ============================================================
+// Scenario 5: BDD Workflow — focus produces correct role-specific skills
+// ============================================================
+
+describe('Scenario 5: BDD Workflow — focus produces correct role-specific skills', () => {
+
+  describe('QA-Engineer — focus="testing" with Go project', () => {
+    const input: SkillSelectionInput = {
+      category: 'unspecified-high',
+      focus: 'testing',
+      subagentType: 'QA-Engineer',
+      codebaseSkills: ['golang'],
+      prompt: 'Write failing tests for the user registration feature',
+      existingSkills: [],
+    }
+
+    test('includes bdd-workflow from role_mappings', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('bdd-workflow')
+    })
+
+    test('includes ginkgo-gomega from focus+language mapping (testing+golang)', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('ginkgo-gomega')
+      const source = result.sources.find(s => s.skill === 'ginkgo-gomega')
+      expect(source).toBeDefined()
+      expect(source!.source).toBe('focus-language')
+    })
+
+    test('includes golang from codebase detection', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('golang')
+      const source = result.sources.find(s => s.skill === 'golang')
+      expect(source).toBeDefined()
+      expect(source!.source).toBe('codebase')
+    })
+
+    test('does NOT include keyword-matched skills (focus suppresses Tier 3)', () => {
+      const result = selectSkills(input, config)
+      // prompt contains "test" but focus is set, so bdd-workflow comes from role not keyword
+      const nonCriticalKeywordSkills = result.sources.filter(
+        s => s.source === 'keyword' && s.skill !== 'security' && s.skill !== 'playwright'
+      )
+      expect(nonCriticalKeywordSkills).toHaveLength(0)
+    })
+
+    test('total non-baseline skills <= max_auto_skills (6)', () => {
+      const result = selectSkills(input, config)
+      const nonBaselineSkills = result.skills.filter(s => !config.baseline_skills.includes(s))
+      expect(nonBaselineSkills.length).toBeLessThanOrEqual(config.max_auto_skills)
+    })
+
+    test('baseline skills are present', () => {
+      const result = selectSkills(input, config)
+      for (const baseline of config.baseline_skills) {
+        expect(result.skills).toContain(baseline)
+      }
+    })
+  })
+
+  describe('Senior-Engineer — focus="implementation"', () => {
+    const input: SkillSelectionInput = {
+      category: 'unspecified-high',
+      focus: 'implementation',
+      subagentType: 'Senior-Engineer',
+      codebaseSkills: ['golang'],
+      prompt: 'Implement the user registration feature with proper error handling',
+      existingSkills: [],
+    }
+
+    test('includes clean-code from role_mappings', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('clean-code')
+    })
+
+    test('includes error-handling from role_mappings', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('error-handling')
+    })
+
+    test('includes design-patterns from role_mappings', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('design-patterns')
+    })
+
+    test('includes golang from codebase detection', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('golang')
+      const source = result.sources.find(s => s.skill === 'golang')
+      expect(source).toBeDefined()
+      expect(source!.source).toBe('codebase')
+    })
+
+    test('does NOT include keyword-matched skills (focus suppresses Tier 3)', () => {
+      const result = selectSkills(input, config)
+      const nonCriticalKeywordSkills = result.sources.filter(
+        s => s.source === 'keyword' && s.skill !== 'security' && s.skill !== 'playwright'
+      )
+      expect(nonCriticalKeywordSkills).toHaveLength(0)
+    })
+
+    test('total non-baseline skills <= max_auto_skills (6)', () => {
+      const result = selectSkills(input, config)
+      const nonBaselineSkills = result.skills.filter(s => !config.baseline_skills.includes(s))
+      expect(nonBaselineSkills.length).toBeLessThanOrEqual(config.max_auto_skills)
+    })
+  })
+
+  describe('Code-Reviewer — focus="review"', () => {
+    const input: SkillSelectionInput = {
+      category: 'unspecified-high',
+      focus: 'review',
+      subagentType: 'Code-Reviewer',
+      codebaseSkills: ['golang'],
+      prompt: 'Review the user registration implementation for quality',
+      existingSkills: [],
+    }
+
+    test('includes code-reviewer from role_mappings', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('code-reviewer')
+    })
+
+    test('includes clean-code from role_mappings', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('clean-code')
+    })
+
+    test('includes critical-thinking from role_mappings', () => {
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('critical-thinking')
+    })
+
+    test('does NOT include keyword-matched skills (focus suppresses Tier 3)', () => {
+      const result = selectSkills(input, config)
+      const nonCriticalKeywordSkills = result.sources.filter(
+        s => s.source === 'keyword' && s.skill !== 'security' && s.skill !== 'playwright'
+      )
+      expect(nonCriticalKeywordSkills).toHaveLength(0)
+    })
+
+    test('total non-baseline skills <= max_auto_skills (6)', () => {
+      const result = selectSkills(input, config)
+      const nonBaselineSkills = result.skills.filter(s => !config.baseline_skills.includes(s))
+      expect(nonBaselineSkills.length).toBeLessThanOrEqual(config.max_auto_skills)
+    })
+  })
+
+  describe('BDD workflow cross-cutting — roles get different skills', () => {
+    test('testing role does NOT get implementation skills (clean-code, design-patterns)', () => {
+      const input: SkillSelectionInput = {
+        category: 'unspecified-high',
+        focus: 'testing',
+        subagentType: 'QA-Engineer',
+        codebaseSkills: ['golang'],
+        prompt: 'Write failing tests for the user registration feature',
+        existingSkills: [],
+      }
+      const result = selectSkills(input, config)
+      expect(result.skills).not.toContain('clean-code')
+      expect(result.skills).not.toContain('design-patterns')
+    })
+
+    test('implementation role does NOT get testing skills (ginkgo-gomega, jest)', () => {
+      const input: SkillSelectionInput = {
+        category: 'unspecified-high',
+        focus: 'implementation',
+        subagentType: 'Senior-Engineer',
+        codebaseSkills: ['golang'],
+        prompt: 'Implement the user registration feature with proper error handling',
+        existingSkills: [],
+      }
+      const result = selectSkills(input, config)
+      expect(result.skills).not.toContain('ginkgo-gomega')
+      expect(result.skills).not.toContain('jest')
+    })
+
+    test('QA-Engineer with JS project gets jest instead of ginkgo-gomega', () => {
+      const input: SkillSelectionInput = {
+        category: 'unspecified-high',
+        focus: 'testing',
+        subagentType: 'QA-Engineer',
+        codebaseSkills: ['javascript'],
+        prompt: 'Write failing tests for the user registration feature',
+        existingSkills: [],
+      }
+      const result = selectSkills(input, config)
+      expect(result.skills).toContain('jest')
+      expect(result.skills).not.toContain('ginkgo-gomega')
+    })
   })
 })
