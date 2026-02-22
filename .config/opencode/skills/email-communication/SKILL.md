@@ -5,31 +5,47 @@ category: Communication Writing
 ---
 
 # Skill: email-communication
+
 ## What I do
 
-I provide expertise in professional email communication for technical contexts. This skill covers core concepts, patterns, and best practices for professional email communication for technical contexts.
+I provide expertise in professional email communication within technical environments. I focus on concise, clear technical structure, escalation communication, and incident notifications to ensure effective asynchronous collaboration.
+
 ## When to use me
 
-- When working with email-communication
-- When you need expertise in professional email communication for technical contexts
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- Drafting technical status updates for stakeholders
+- Communicating during system incidents or escalations
+- Requesting technical help or clarification via email
+- Managing project coordination across teams asynchronously
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1.  **Conciseness** — Keep technical emails focused and avoid unnecessary filler.
+2.  **Subject Line Clarity** — Use descriptive subject lines that indicate priority and topic (e.g., "[URGENT] Incident #102: API Latency Spike").
+3.  **Actionable Content** — Clearly state any required actions or decisions at the top of the email.
+4.  **Context and Data** — Include relevant logs, screenshots, or metrics to support technical claims.
+5.  **Professional Tone** — Maintain a professional yet direct tone suitable for technical collaboration.
+
 ## Patterns & examples
 
-### Common Pattern in email-communication
-Describe a typical approach with benefits and tradeoffs.
+### Incident Notification Template
+- **Subject**: [Status] Incident Description - Current State
+- **Summary**: One-line description of what's happening.
+- **Impact**: Who is affected and how.
+- **Actions**: What is being done right now.
+- **ETA**: When the next update will be sent.
 
-### Alternative Pattern
-Show another way to approach problems in email-communication.
+### Technical Query Structure
+- **Problem**: Concise description of the blocker.
+- **Context**: What has been tried and relevant error logs.
+- **Goal**: What the desired outcome is.
+- **Request**: Specific question or action for the recipient.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with email-communication—what goes wrong and why
-❌ When NOT to use email-communication—valid reasons to choose alternatives
+-   ❌ **Vague Subject Lines** — Using subjects like "Question" or "Update" without context.
+-   ❌ **The Wall of Text** — Long paragraphs without bullet points or headings for readability.
+-   ❌ **Missing Context** — Sending a technical query without providing the necessary logs or environment details.
+-   ❌ **Emotional Language** — Using overly emotive or confrontational language during incidents.
 
 ## KB Reference
 
@@ -37,5 +53,7 @@ Show another way to approach problems in email-communication.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+-   `writing-style` — To maintain a consistent professional voice.
+-   `proof-reader` — For final clarity and correctness checks.
+-   `documentation-writing` — For general technical clarity.
+-   `mentoring` — For constructive technical communication.

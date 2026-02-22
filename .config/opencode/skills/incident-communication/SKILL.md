@@ -5,31 +5,42 @@ category: Communication Writing
 ---
 
 # Skill: incident-communication
+
 ## What I do
 
-I provide expertise in communicating about security and operational incidents professionally. This skill covers core concepts, patterns, and best practices for communicating about security and operational incidents professionally.
+I provide a structured approach to communicating during production incidents. I ensure that stakeholders are kept informed with clear, accurate, and timely updates that manage expectations and build trust.
+
 ## When to use me
 
-- When working with incident-communication
-- When you need expertise in communicating about security and operational incidents professionally
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When a production issue is first detected (initial notification)
+- To provide regular progress updates during an ongoing incident
+- When a workaround is identified or the issue is resolved
+- When drafting a post-resolution summary or "post-mortem" notice
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Be transparent, not speculative** — Share what is known and confirmed. Avoid guessing root causes until verified.
+2. **Consistent cadence** — Provide updates at regular intervals, even if there is no new progress to report.
+3. **Appropriate tone** — Be professional, calm, and empathetic to affected users.
+4. **Blameless language** — Focus on the technical failure and its resolution, not on individual mistakes.
+
 ## Patterns & examples
 
-### Common Pattern in incident-communication
-Describe a typical approach with benefits and tradeoffs.
+**Initial Notification Template:**
+> **Investigating**: We are aware of an issue impacting [Service Name]. Our engineering team is currently investigating. We will provide an update within the next [Timeframe, e.g., 30 minutes].
+> **Impact**: [Briefly describe what users are seeing, e.g., API requests are failing with 500 errors].
 
-### Alternative Pattern
-Show another way to approach problems in incident-communication.
+**Regular Update Template:**
+> **Update**: We have identified a potential cause related to [Area, e.g., database connection pooling] and are currently testing a mitigation. Next update in [Timeframe].
+
+**Resolution Notification Template:**
+> **Resolved**: The issue with [Service Name] has been resolved. All systems are operating normally. We will perform a full internal review to prevent recurrence.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with incident-communication—what goes wrong and why
-❌ When NOT to use incident-communication—valid reasons to choose alternatives
+- ❌ **Silent treatment** — Long periods of silence during a major incident can cause panic and frustration.
+- ❌ **Over-technical jargon** — Keep external communications understandable for all stakeholders.
+- ❌ **Promising unrealistic ETAs** — Only provide timelines that are achievable and conservative.
 
 ## KB Reference
 
@@ -37,5 +48,7 @@ Show another way to approach problems in incident-communication.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `incident-response` — Technical coordination and mitigation
+- `email-communication` — Professional communication patterns
+- `blameless-postmortem` — Learning from failures without assigning fault
+- `systems-thinker` — Understanding complex dependencies and impact

@@ -5,37 +5,60 @@ category: Session Knowledge
 ---
 
 # Skill: note-taking
+
 ## What I do
 
-I provide expertise in externalising reasoning; create notes for obsidian, blogs, docs. This skill covers core concepts, patterns, and best practices for externalising reasoning; create notes for obsidian, blogs, docs.
+I help you capture thoughts and information effectively to build long-term knowledge. I focus on creating notes that are easy to find and use later. I ensure that your note-taking process supports clear thinking and effective retrieval of information.
+
 ## When to use me
 
-- When working with note-taking
-- When you need expertise in externalising reasoning; create notes for obsidian, blogs, docs
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When you're investigating a complex issue and need to track your findings.
+- When you're attending a meeting or reading a technical document.
+- When you're brainstorming ideas for a new project or feature.
+- When you're building a personal knowledge base in Obsidian.
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Atomic notes**, write one idea per note so they're easier to link and reuse.
+2. **Capture vs Process**, separate the act of gathering information from the act of organising it.
+3. **Linking over tagging**, use bidirectional links to build a network of ideas rather than just categorising them.
+4. **Progressive summarisation**, layer your notes so you can quickly understand the key points later.
+
 ## Patterns & examples
 
-### Common Pattern in note-taking
-Describe a typical approach with benefits and tradeoffs.
+### Atomic notes
+Keep notes focused on a single concept or topic.
+- **Example**, Create a note titled "Dependency Injection" that explains only that pattern, rather than a broad note called "Design Patterns".
 
-### Alternative Pattern
-Show another way to approach problems in note-taking.
+### Progressive summarisation
+Use bolding and highlights to make key points stand out.
+- **Level 1**, Raw notes from a meeting.
+- **Level 2**, Bold the most important phrases.
+- **Level 3**, Write a one-sentence summary at the top.
+
+### Linking to build a graph
+Use `[[Link]]` syntax to connect related ideas.
+- **Pattern**, When writing a note about "Goroutines", link to "Concurrency" and "Channels".
+
+### Fleeting vs Permanent notes
+Differentiate between temporary thoughts and long-term knowledge.
+- **Fleeting**, Quick ideas captured in the moment.
+- **Permanent**, Carefully written notes that are added to your main knowledge base.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with note-taking—what goes wrong and why
-❌ When NOT to use note-taking—valid reasons to choose alternatives
+- ❌ **The "Note Graveyard"**, capturing information without ever reviewing or linking it.
+- ❌ **Over-categorisation**, spending too much time on folder structures instead of content and links.
+- ❌ **Duplicate notes**, creating multiple notes on the same topic because you couldn't find the existing one.
+- ❌ **Copy-pasting walls of text**, always rewrite information in your own words to ensure you understand it.
 
 ## KB Reference
 
-`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Note Taking.md`
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Note Taking.md`
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `knowledge-base`, for managing a large collection of notes.
+- `memory-keeper`, for capturing problem-solution pairs.
+- `documentation-writing`, for turning notes into formal docs.
+- `obsidian-structure`, for organising your vault.

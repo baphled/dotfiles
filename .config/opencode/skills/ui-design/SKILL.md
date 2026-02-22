@@ -5,31 +5,49 @@ category: UI Frameworks
 ---
 
 # Skill: ui-design
+
 ## What I do
 
-I provide expertise in terminal user interface design - visual hierarchy, layout, and clear interfaces. This skill covers core concepts, patterns, and best practices for terminal user interface design - visual hierarchy, layout, and clear interfaces.
+I help you design effective terminal user interfaces (TUIs). I focus on visual hierarchy, layout composition, and clear information display. I ensure that your terminal applications are readable, usable, and look professional while respecting the constraints of the terminal environment.
+
 ## When to use me
 
-- When working with ui-design
-- When you need expertise in terminal user interface design - visual hierarchy, layout, and clear interfaces
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When you're building a new TUI application.
+- When you're styling components like buttons, lists, or tables in the terminal.
+- When you're choosing a colour palette for your CLI.
+- When you're designing the layout of a dashboard or complex form.
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Visual hierarchy**, use bold text, colour, and spacing to draw attention to the most important elements.
+2. **Predictable layout**, use consistent spacing and alignment to create a sense of order and structure.
+3. **Clear status indicators**, provide immediate visual feedback for ongoing processes using spinners or progress bars.
+4. **Responsive design**, ensure that your TUI adapts gracefully to different terminal widths and heights.
+
 ## Patterns & examples
 
-### Common Pattern in ui-design
-Describe a typical approach with benefits and tradeoffs.
+### Styling with Lip Gloss
+Use a consistent pattern for styling TUI components.
+- **Pattern**, Define base styles for common elements like headers, borders, and focused items. Use padding and margins to create breathing room.
 
-### Alternative Pattern
-Show another way to approach problems in ui-design.
+### Colour palette selection
+Choose colours that are accessible and look good on most terminal themes.
+- **Good**, Use high-contrast colours for primary actions and subtle shades for background elements. Avoid relying purely on colour for meaning.
+
+### Keyboard shortcuts display
+Make it easy for users to discover and remember shortcuts.
+- **Example**, Display a footer or sidebar with common shortcuts like `[q] quit`, `[?] help`, or `[enter] select`.
+
+### Status and progress
+Keep the user informed about background tasks.
+- **Pattern**, Use a spinner for tasks with unknown duration and a progress bar for tasks with a known number of steps.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with ui-design—what goes wrong and why
-❌ When NOT to use ui-design—valid reasons to choose alternatives
+- ❌ **Information overload**, crowding the screen with too many elements. Use spacing and progressive disclosure to keep it simple.
+- ❌ **Illegible colour combinations**, using colours that are hard to read on certain backgrounds (e.g., light yellow on white).
+- ❌ **Rigid layouts**, designing UIs that break when the terminal window is resized.
+- ❌ **Hidden focus**, failing to clearly indicate which element is currently selected or has focus.
 
 ## KB Reference
 
@@ -37,5 +55,7 @@ Show another way to approach problems in ui-design.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `ux-design`, for designing the interaction flow.
+- `bubble-tea-expert`, for building TUIs with the Elm architecture.
+- `huh`, for building interactive forms.
+- `accessibility`, for making your TUI inclusive.

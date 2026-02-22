@@ -5,31 +5,44 @@ category: Thinking Analysis
 ---
 
 # Skill: trade-off-analysis
+
 ## What I do
 
-I provide expertise in systematically evaluate trade-offs when comparing alternatives. This skill covers core concepts, patterns, and best practices for systematically evaluate trade-offs when comparing alternatives.
+I systematically evaluate the pros and cons of different technical options. I ensure that every choice acknowledges what is being gained AND what is being sacrificed, avoiding the trap of believing in "perfect" solutions.
+
 ## When to use me
 
-- When working with trade-off-analysis
-- When you need expertise in systematically evaluate trade-offs when comparing alternatives
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When choosing between multiple competing libraries, frameworks, or tools
+- Before committing to a major architectural change
+- To resolve disagreement between different technical proposals
+- When requirements pull the system in different directions (e.g. speed vs reliability)
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **No silver bullets** — Every technical choice has a cost. If you haven't found the trade-off, you haven't looked hard enough.
+2. **Weighting criteria** — Rank your criteria by business impact (e.g. "Operational simplicity" may be more important than "Max throughput" for our current stage).
+3. **Reversibility assessment** — Hard-to-undo decisions require more rigorous trade-off analysis.
+4. **Time-horizon thinking** — Consider both the short-term benefit (speed of delivery) and long-term cost (maintenance, technical debt).
+
 ## Patterns & examples
 
-### Common Pattern in trade-off-analysis
-Describe a typical approach with benefits and tradeoffs.
+**Decision Matrix Example:**
+| Option | Speed | Reliability | Simplicity | Maintenance | Total Score |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| Option A (Serverless) | 5 | 3 | 5 | 5 | 18 |
+| Option B (Kubernetes) | 3 | 5 | 2 | 1 | 11 |
+*(Weighting: Reliability 50%, Speed 20%, Simplicity 20%, Maintenance 10%)*
 
-### Alternative Pattern
-Show another way to approach problems in trade-off-analysis.
+**Trade-off Mapping:**
+- **Gain:** Faster time to market with library X.
+- **Sacrifice:** Limited customisation, dependency on a third-party vendor.
+- **Decision:** Accept sacrifice for the next 6 months to validate the MVP.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with trade-off-analysis—what goes wrong and why
-❌ When NOT to use trade-off-analysis—valid reasons to choose alternatives
+- ❌ **Analysis paralysis** — Spending too long on trade-offs for reversible, low-impact decisions.
+- ❌ **Ignoring "shadow costs"** — Only looking at technical merits while ignoring developer training, operational overhead, and long-term support.
+- ❌ **Bias towards "new and shiny"** — Choosing a tool because it's interesting, while ignoring its lack of maturity or community support.
 
 ## KB Reference
 
@@ -37,5 +50,7 @@ Show another way to approach problems in trade-off-analysis.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `critical-thinking` — Validating the logic of the analysis
+- `justify-decision` — Documenting the chosen trade-off
+- `systems-thinker` — Understanding how trade-offs ripple through the system
+- `assumption-tracker` — Surfacing the assumptions that underlie the options

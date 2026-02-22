@@ -5,31 +5,43 @@ category: Thinking Analysis
 ---
 
 # Skill: justify-decision
+
 ## What I do
 
-I provide expertise in provide evidence-based justification for architectural and design decisions. This skill covers core concepts, patterns, and best practices for provide evidence-based justification for architectural and design decisions.
+I provide clear, structured rationale for technical choices. I focus on evidence, context, and consequences, ensuring that decisions are documented and defensible rather than based on mere opinion or habit.
+
 ## When to use me
 
-- When working with justify-decision
-- When you need expertise in provide evidence-based justification for architectural and design decisions
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When proposing a significant change to the architecture
+- When choosing between multiple competing libraries or frameworks
+- During the creation of Architectural Decision Records (ADRs)
+- When explaining a complex design choice to stakeholders
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Evidence over opinion** — Use benchmarks, documentation, or historical data to support claims.
+2. **Context is king** — Explain the specific constraints and requirements that led to the decision.
+3. **Consequence awareness** — Explicitly state what we are gaining AND what we are giving up (technical debt, complexity, etc.).
+4. **Distinguish reversibility** — Identify if a decision is a "one-way door" (hard to undo) or a "two-way door" (easy to pivot).
+
 ## Patterns & examples
 
-### Common Pattern in justify-decision
-Describe a typical approach with benefits and tradeoffs.
+**ADR-Style Justification:**
+- **Context:** We need to handle 10k concurrent WebSocket connections on a single node.
+- **Decision:** Use Elixir/Phoenix instead of Node.js.
+- **Evidence:** BEAM VM's lightweight process model and built-in distribution primitives.
+- **Consequences:** Team needs to learn a new language; better fault tolerance; lower operational overhead.
 
-### Alternative Pattern
-Show another way to approach problems in justify-decision.
+**Decision Confidence Matrix:**
+- **High Confidence:** Backed by production data or extensive spike results.
+- **Medium Confidence:** Backed by industry standard practices and documentation.
+- **Low Confidence:** Based on theoretical advantages; requires early validation.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with justify-decision—what goes wrong and why
-❌ When NOT to use justify-decision—valid reasons to choose alternatives
+- ❌ **Post-hoc rationalisation** — Making a choice based on preference then looking for evidence to support it.
+- ❌ **Ignoring alternatives** — Presenting a decision as the only option without acknowledging valid competitors.
+- ❌ **Vague justifications** — Using terms like "industry standard" or "best practice" without explaining why they apply here.
 
 ## KB Reference
 
@@ -37,5 +49,7 @@ Show another way to approach problems in justify-decision.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `trade-off-analysis` — Weighing options before justifying
+- `documentation-writing` — Recording the justification clearly
+- `critical-thinking` — Validating the logic of the justification
+- `architecture` — Applying justifications to system design

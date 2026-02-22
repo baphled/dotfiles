@@ -5,31 +5,43 @@ category: Thinking Analysis
 ---
 
 # Skill: question-resolver
+
 ## What I do
 
-I provide expertise in systematically resolve questions - determine if answerable, gather evidence. This skill covers core concepts, patterns, and best practices for systematically resolve questions - determine if answerable, gather evidence.
+I manage the process of finding answers to technical and domain-specific questions. I ensure that every question is classified, systematically researched using appropriate tools, and documented once resolved.
+
 ## When to use me
 
-- When working with question-resolver
-- When you need expertise in systematically resolve questions - determine if answerable, gather evidence
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When faced with an unknown API, library, or codebase pattern
+- To resolve ambiguity in user requests or requirements
+- During research spikes to understand a new technology
+- To track "known unknowns" that need resolution before proceeding
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Classify first** — Is it answerable now (documentation), through research (spikes/data), or unanswerable (requires stakeholder input)?
+2. **Structured investigation** — Use a methodical approach: hypothesise, search, verify.
+3. **Gather evidence** — Rely on documentation, code, or experimental results rather than hearsay.
+4. **Document the "why"** — Once resolved, record the answer and the evidence that supports it.
+
 ## Patterns & examples
 
-### Common Pattern in question-resolver
-Describe a typical approach with benefits and tradeoffs.
+**Question Log Template:**
+| Question | Type (Doc/Spike/Stake) | Priority | Resolution Status | Link to Evidence |
+| :--- | :--- | :--- | :--- | :--- |
+| "Does library X support IPv6 natively?" | Doc | High | Resolved | [Link to API Doc] |
+| "What is the max latency our users accept?" | Stake | Medium | Pending | N/A |
 
-### Alternative Pattern
-Show another way to approach problems in question-resolver.
+**Escalation Triggers:**
+- **Stuck:** 30+ minutes without a clear path forward → Escalate or shift approach.
+- **Ambiguous:** Requirement contradicts existing system behaviour → Escalate to stakeholder.
+- **Contradictory:** Documentation differs from actual code behaviour → Trust code, but verify why.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with question-resolver—what goes wrong and why
-❌ When NOT to use question-resolver—valid reasons to choose alternatives
+- ❌ **Rabbit holing** — Spending hours researching a low-priority question.
+- ❌ **The "I think" trap** — Accepting a plausible answer without actual verification.
+- ❌ **Ignoring "known unknowns"** — Proceeding with a plan while key questions remain unanswered.
 
 ## KB Reference
 
@@ -37,5 +49,7 @@ Show another way to approach problems in question-resolver.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `critical-thinking` — Validating the answers found
+- `assumption-tracker` — Identifying the questions that need to be asked
+- `knowledge-base` — Searching for existing answers
+- `epistemic-rigor` — Distinguishing between theories and facts

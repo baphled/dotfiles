@@ -5,31 +5,43 @@ category: Thinking Analysis
 ---
 
 # Skill: assumption-tracker
+
 ## What I do
 
-I provide expertise in explicitly track, test, and validate assumptions - prevent blind spots. This skill covers core concepts, patterns, and best practices for explicitly track, test, and validate assumptions - prevent blind spots.
+I surface and manage hidden assumptions. I ensure that every leap of faith in a design or plan is documented, tiered by risk, and systematically validated through evidence or testing.
+
 ## When to use me
 
-- When working with assumption-tracker
-- When you need expertise in explicitly track, test, and validate assumptions - prevent blind spots
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- Before starting a new feature or architectural change
+- When requirements are ambiguous or "common sense" is invoked
+- During technical planning sessions to identify "we think" vs "we know"
+- When evaluating third-party libraries or external API behaviours
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Surface the hidden** — If it isn't proven, it's an assumption.
+2. **Tier by risk** — Focus validation on assumptions with high impact and low certainty.
+3. **Validate early** — Use spikes, prototypes, or data lookups to turn assumptions into facts.
+4. **Document outcomes** — Record whether an assumption was proven true or false.
+
 ## Patterns & examples
 
-### Common Pattern in assumption-tracker
-Describe a typical approach with benefits and tradeoffs.
+**Assumption Logging Format:**
+| Assumption | Impact (H/M/L) | Certainty (H/M/L) | Validation Method | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| "The legacy API supports concurrent writes." | High | Low | Run concurrency spike test | Pending |
+| "Users prefer the sidebar over the top nav." | Medium | Medium | Review GA click maps | Validated |
 
-### Alternative Pattern
-Show another way to approach problems in assumption-tracker.
+**Validation Techniques:**
+- **Spike:** Write a small, throwaway script to test a technical hypothesis.
+- **Prototype:** Build a minimal UI to verify user interaction assumptions.
+- **Data Lookup:** Query logs or databases to confirm usage patterns.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with assumption-tracker—what goes wrong and why
-❌ When NOT to use assumption-tracker—valid reasons to choose alternatives
+- ❌ **"Trust me" logic** — Relying on seniority instead of evidence.
+- ❌ **Validation lag** — Building a full system on unverified, high-risk assumptions.
+- ❌ **Silent assumptions** — Failing to voice doubts during the planning phase.
 
 ## KB Reference
 
@@ -37,5 +49,7 @@ Show another way to approach problems in assumption-tracker.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `critical-thinking` — Rigorous analysis of claims
+- `epistemic-rigor` — Distinguishing belief from knowledge
+- `prove-correctness` — Evidence-based validation
+- `pre-action` — Deliberate thinking before execution

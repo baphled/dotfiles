@@ -5,31 +5,46 @@ category: Communication Writing
 ---
 
 # Skill: proof-reader
+
 ## What I do
 
-I provide expertise in proofreading and editing for clarity and correctness. This skill covers core concepts, patterns, and best practices for proofreading and editing for clarity and correctness.
+I provide expertise in proofreading and editing technical content. I focus on structural flow, paragraph clarity, and sentence-level precision to ensure technical accuracy and readability.
+
 ## When to use me
 
-- When working with proof-reader
-- When you need expertise in proofreading and editing for clarity and correctness
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- Reviewing technical documentation, blog posts, or emails before publication
+- Editing draft content for clarity, tone, and British English conventions
+- Verifying the accuracy of technical terms and code examples
+- Improving the flow and structure of long-form technical writing
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1.  **Multi-Pass Editing** — Review content in distinct stages: structural → paragraph → sentence → word.
+2.  **Clarity and Precision** — Ensure every sentence has a clear purpose and technical terms are used accurately.
+3.  **Passive to Active Voice** — Convert passive sentences to active ones to improve engagement and directness.
+4.  **Consistency** — Maintain consistent terminology, formatting, and tone throughout the piece.
+5.  **Technical Verification** — Double-check code examples, commands, and links for correctness.
+
 ## Patterns & examples
 
-### Common Pattern in proof-reader
-Describe a typical approach with benefits and tradeoffs.
+### Structural Review Checklist
+- **Goal**: Does the piece achieve its stated purpose?
+- **Audience**: Is the technical level appropriate for the intended reader?
+- **Flow**: Does the narrative arc move logically from one section to the next?
+- **Headings**: Are they descriptive and do they accurately reflect the content?
 
-### Alternative Pattern
-Show another way to approach problems in proof-reader.
+### Sentence Editing Pattern
+- **Before**: "It is important to note that the database should be backed up before the migration process is started." (Passive, wordy)
+- **After**: "Back up the database before starting the migration." (Active, concise)
+- **Before**: "We utilize a variety of different tools for the purpose of monitoring."
+- **After**: "We use several tools for monitoring."
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with proof-reader—what goes wrong and why
-❌ When NOT to use proof-reader—valid reasons to choose alternatives
+-   ❌ **Editing While Writing** — Trying to perfect sentences before the full draft is complete.
+-   ❌ **Ignoring Tone** — Failing to match the tone of the piece to the platform and audience.
+-   ❌ **Skimming Code** — Assuming code examples are correct without verifying them.
+-   ❌ **Over-Editing** — Stripping away the author's voice or making the content too clinical.
 
 ## KB Reference
 
@@ -37,5 +52,7 @@ Show another way to approach problems in proof-reader.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+-   `writing-style` — To maintain a consistent professional voice.
+-   `british-english` — To ensure correct regional spelling and grammar.
+-   `documentation-writing` — For general technical clarity.
+-   `blog-writing` — For engaging technical content.

@@ -1,41 +1,55 @@
 ---
 name: checklist-discipline
 description: Maintain rigorous checklist discipline with incremental updates
-category: Session Knowledge
+category: Thinking Analysis
 ---
 
 # Skill: checklist-discipline
+
 ## What I do
 
-I provide expertise in maintain rigorous checklist discipline with incremental updates. This skill covers core concepts, patterns, and best practices for maintain rigorous checklist discipline with incremental updates.
+I enforce the rigorous use of checklists to prevent cognitive overload and avoidable errors. I distinguish between different checklist types and ensure they are used as living documents during complex operations.
+
 ## When to use me
 
-- When working with checklist-discipline
-- When you need expertise in maintain rigorous checklist discipline with incremental updates
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- During repetitive but high-stakes operations (e.g. deployments, migrations)
+- When executing complex multi-step tasks that span multiple sessions
+- When creating standardised procedures for a team
+- To verify the "Definition of Done" for a task
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **DO-CONFIRM vs READ-DO** — Choose the right style. READ-DO for unfamiliar tasks; DO-CONFIRM for expert routines to verify completeness.
+2. **Incremental updates** — Tick off items immediately upon completion, never at the end.
+3. **Granularity balance** — Ensure steps are actionable but not trivial. Focus on the "killer steps" where errors often occur.
+4. **Living documents** — Update the checklist if a new edge case or error is discovered during execution.
+
 ## Patterns & examples
 
-### Common Pattern in checklist-discipline
-Describe a typical approach with benefits and tradeoffs.
+**Surgical Checklist Pattern:**
+Focus on high-risk transition points:
+- **Pre-flight:** Verify environment variables, backup status, and access permissions.
+- **Execution:** Atomic steps with specific verification commands.
+- **Post-flight:** Validate logs, health checks, and stakeholder notification.
 
-### Alternative Pattern
-Show another way to approach problems in checklist-discipline.
+**Checklist Design:**
+- **Actionable:** "Run npm test" instead of "Check tests".
+- **Verifiable:** "Ensure build/ folder exists" instead of "Check build".
+- **Concise:** Keep checklists to 5-9 items per logical section.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with checklist-discipline—what goes wrong and why
-❌ When NOT to use checklist-discipline—valid reasons to choose alternatives
+- ❌ **Batch ticking** — Marking items as done after the work is finished (defeats the purpose).
+- ❌ **Checklist bloat** — Including trivial steps that lead to "checklist fatigue" and skipping.
+- ❌ **Stale checklists** — Following a list that doesn't reflect the current state of the codebase.
+
 ## KB Reference
 
-`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Checklist Discipline.md`
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Checklist Discipline.md`
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
-- `evaluate-change-request` - Tracks change request completion
+- `task-completer` — Ensuring all requirements are met
+- `task-tracker` — Managing task lists and progress
+- `pre-action` — Deliberate planning before checklist execution
+- `documentation-writing` — Creating clear, usable procedures

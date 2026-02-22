@@ -5,31 +5,50 @@ category: Communication Writing
 ---
 
 # Skill: tutorial-writing
+
 ## What I do
 
-I provide expertise in step-by-step learning guides and tutorials for teaching concepts. This skill covers core concepts, patterns, and best practices for step-by-step learning guides and tutorials for teaching concepts.
+I provide expertise in crafting step-by-step learning guides and tutorials for teaching technical concepts. I focus on the Diátaxis tutorial format, prerequisite declaration, and expected outcomes per step.
+
 ## When to use me
 
-- When working with tutorial-writing
-- When you need expertise in step-by-step learning guides and tutorials for teaching concepts
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- Creating a "getting started" guide for a new project
+- Writing a step-by-step tutorial for a specific feature or workflow
+- Developing a training manual or workshop material
+- Onboarding new developers to a codebase or technology
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1.  **Diátaxis Tutorial Format** — Focus on learning by doing. The goal is to get the user to a successful result quickly.
+2.  **Prerequisite Declaration** — Clearly state any required tools, versions, and existing knowledge.
+3.  **Step-by-Step Structure** — Use logical, incremental steps with clear headings.
+4.  **Expected Outcomes** — Describe what the user should see or experience at the end of each step.
+5.  **Troubleshooting** — Anticipate common mistakes and provide solutions or pointers.
+
 ## Patterns & examples
 
-### Common Pattern in tutorial-writing
-Describe a typical approach with benefits and tradeoffs.
+### Tutorial Outline Template
+- **Title**: Action-oriented (e.g., "Building a Simple API in Node.js").
+- **Intro**: What will be built and what the reader will learn.
+- **Prerequisites**: Tools and knowledge needed.
+- **Step 1: Set Up**: Environment configuration.
+- **Step 2: Core Logic**: Implementing the main feature.
+- **Step 3: Test & Verify**: How to check the result.
+- **Summary**: Recap and next steps.
 
-### Alternative Pattern
-Show another way to approach problems in tutorial-writing.
+### Verification Step Pattern
+"Run the following command in your terminal:"
+```bash
+npm start
+```
+"You should see the message `Server running on port 3000`. If you see an error about `port already in use`, try changing the port in `config.js`."
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with tutorial-writing—what goes wrong and why
-❌ When NOT to use tutorial-writing—valid reasons to choose alternatives
+-   ❌ **Implicit Steps** — Assuming the user knows how to perform an action without explaining it.
+-   ❌ **Giant Code Dumps** — Providing the final solution without explaining how it was built.
+-   ❌ **No Verification** — Failing to include steps for the user to verify their progress.
+-   ❌ **Irrelevant Theory** — Including long explanations that distract from the learning-by-doing goal.
 
 ## KB Reference
 
@@ -37,5 +56,7 @@ Show another way to approach problems in tutorial-writing.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+-   `documentation-writing` — For general technical clarity.
+-   `writing-style` — To maintain a consistent professional voice.
+-   `proof-reader` — For final clarity and correctness checks.
+-   `mentoring` — For constructive technical communication.

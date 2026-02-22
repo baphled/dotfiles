@@ -1,40 +1,58 @@
 ---
 name: retrospective
 description: Learning from failures and successes, post-mortems, continuous improvement
-category: General Cross Cutting
+category: Thinking Analysis
 ---
 
 # Skill: retrospective
+
 ## What I do
 
-I provide expertise in learning from failures and successes, post-mortems, continuous improvement. This skill covers core concepts, patterns, and best practices for learning from failures and successes, post-mortems, continuous improvement.
+I manage the process of reflecting on past work to identify improvements. I facilitate blameless analysis of failures and capture successful patterns to ensure continuous improvement in the development process.
+
 ## When to use me
 
-- When working with retrospective
-- When you need expertise in learning from failures and successes, post-mortems, continuous improvement
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- After completing a major feature or project
+- Following a production incident (post-mortem)
+- Periodically (e.g. every sprint) to refine team workflows
+- When a recurring problem or friction point is identified
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Blamelessness** — Focus on system failures rather than individual mistakes. Assume everyone did the best they could with the information they had.
+2. **Action-oriented** — Every retrospective must produce specific, owner-assigned, and time-bound action items.
+3. **Timeline reconstruction** — For incidents, build a factual timeline before trying to identify causes.
+4. **Distinguish root vs contributing** — Use the "5 Whys" to dig past surface symptoms to the underlying system issue.
+
 ## Patterns & examples
 
-### Common Pattern in retrospective
-Describe a typical approach with benefits and tradeoffs.
+**4Ls Format:**
+- **Liked:** What went well? (e.g. "The new CI pipeline saved us hours.")
+- **Learned:** What new knowledge was gained? (e.g. "We learned that library X has a memory leak.")
+- **Lacked:** What was missing? (e.g. "We lacked clear requirements for the edge cases.")
+- **Longed For:** What do we want next time? (e.g. "I longed for more pair programming during the refactor.")
 
-### Alternative Pattern
-Show another way to approach problems in retrospective.
+**Root Cause Analysis (5 Whys Example):**
+- **Problem:** Deployment failed.
+- **Why?** The database migration timed out.
+- **Why?** It was trying to index a 100M row table.
+- **Why?** We didn't test the migration on a production-sized dataset.
+- **Why?** Our staging database is too small.
+- **Root Cause:** Inadequate testing environments for production scale.
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with retrospective—what goes wrong and why
-❌ When NOT to use retrospective—valid reasons to choose alternatives
+- ❌ **Pointing fingers** — Using the retro to air personal grievances or blame individuals.
+- ❌ **Retrospective amnesia** — Identifying the same problems repeatedly without taking action.
+- ❌ **Skipping successes** — Only focusing on what went wrong; it's equally important to know why things went well.
+
 ## KB Reference
 
-`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Retrospective.md`
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Retrospective.md`
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `critical-thinking` — Analysing the findings of the retro
+- `assumption-tracker` — Identifying assumptions that led to failure
+- `systems-thinker` — Understanding the system dynamics that led to issues
+- `memory-keeper` — Capturing the "Learned" section for future sessions

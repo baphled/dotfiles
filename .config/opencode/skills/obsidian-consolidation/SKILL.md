@@ -5,36 +5,70 @@ category: Session Knowledge
 ---
 
 # Skill: obsidian-consolidation
+
 ## What I do
 
-I provide expertise in systematically consolidate and refine zettelkasten notes on related themes. This skill covers core concepts, patterns, and best practices for systematically consolidate and refine zettelkasten notes on related themes.
+I provide expertise in the systematic consolidation and refinement of atomic notes within a Zettelkasten. I identify clusters of related ideas, merge overlapping content to reduce redundancy, and create high-level Maps of Content (MOCs) to maintain a navigable and cohesive knowledge base.
+
 ## When to use me
 
-- When working with obsidian-consolidation
-- When you need expertise in systematically consolidate and refine zettelkasten notes on related themes
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When the vault contains numerous small, fragmented notes on the same topic.
+- When you identify repetitive patterns or redundant information across multiple files.
+- When building a "Map of Content" (MOC) to synthesise a complex subject area.
+- When performing a periodic "vault garden" maintenance to refine knowledge structures.
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Progressive Summarisation** — Condense information in stages, moving from raw notes to bolded highlights, and finally to executive summaries.
+2. **Nuance Preservation** — Ensure that merging notes doesn't lose the subtle differences or specific contexts of the original atomic ideas.
+3. **Backlink Integrity** — Always update or preserve existing backlinks when notes are renamed, moved, or merged.
+4. **Atomic Balance** — Avoid over-consolidation that creates massive, unreadable "god-notes"; maintain a balance between synthesis and granularity.
+
 ## Patterns & examples
 
-### Common Pattern in obsidian-consolidation
-Describe a typical approach with benefits and tradeoffs.
+### The MOC (Map of Content) Pattern
+Create a central note that links to and briefly describes a cluster of related atomic notes.
+```markdown
+# Git Master MOC
+A collection of advanced Git workflows and patterns.
 
-### Alternative Pattern
-Show another way to approach problems in obsidian-consolidation.
+## Core Workflows
+- [[Atomic Commits]]: The foundation of clean history.
+- [[Feature Branching]]: Managing isolation.
+
+## Advanced Recovery
+- [[Git Reflog]]: The safety net.
+- [[Reset vs Revert]]: Choosing the right tool for undoing.
+```
+
+### Progressive Summarisation Template
+Apply layers of refinement to a consolidated note to make it quickly scannable.
+```markdown
+# Topic Summary
+**Key Insight**: [One sentence summary]
+
+## Raw Findings
+- [Point 1 from Note A]
+- [Point 2 from Note B (Refined: This replaces the less clear version in Note C)]
+
+## Synthesis
+[Paragraph connecting the above points into a cohesive argument]
+```
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with obsidian-consolidation—what goes wrong and why
-❌ When NOT to use obsidian-consolidation—valid reasons to choose alternatives
+- ❌ **The Junk Drawer** — Merging unrelated notes just because they share a single keyword.
+- ❌ **Losing History** — Deleting original atomic notes before verifying that all unique insights are captured in the new consolidated version.
+- ❌ **Broken Links** — Forgetting to use Obsidian's "Update links" feature when merging files, leading to dead paths.
+- ❌ **Over-Summarisation** — Stripping away so much detail that the note loses its utility for future deep-dives.
+
 ## KB Reference
 
 `~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Obsidian Consolidation.md`
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `obsidian-structure` — For deciding where consolidated notes and MOCs live in the PARA hierarchy.
+- `information-architecture` — For designing the high-level flow of the knowledge base.
+- `note-taking` — For capturing the original atomic ideas that eventually get consolidated.
+- `knowledge-base` — For querying the vault to find consolidation candidates.

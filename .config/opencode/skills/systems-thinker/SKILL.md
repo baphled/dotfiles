@@ -5,31 +5,43 @@ category: Thinking Analysis
 ---
 
 # Skill: systems-thinker
+
 ## What I do
 
-I provide expertise in understand complex systems, interconnections, and emergent behaviors. This skill covers core concepts, patterns, and best practices for understand complex systems, interconnections, and emergent behaviors.
+I analyse software and organisations as interconnected systems. I identify feedback loops, second-order effects, and leverage points to ensure that changes improve the system as a whole rather than just optimising a single part.
+
 ## When to use me
 
-- When working with systems-thinker
-- When you need expertise in understand complex systems, interconnections, and emergent behaviors
-- When making decisions related to this domain
-- When reviewing code or designs in this area
+- When designing distributed systems or microservices
+- To analyse the root cause of systemic issues or performance bottlenecks
+- When evaluating the impact of a change on downstream systems
+- To identify and mitigate unintended consequences of a proposal
+
 ## Core principles
 
-1. Principle 1: Foundation concept specific to this domain
-2. Principle 2: Common pattern or best practice
-3. Principle 3: When to apply this skill vs alternatives
+1. **Feedback loops** — Identify reinforcing (amplifying) and balancing (stabilising) loops that drive system behaviour.
+2. **Second-order effects** — Ask "and then what?" to anticipate the downstream consequences of a change.
+3. **Leverage points** — Find the small changes that can lead to large improvements in system performance.
+4. **Emergent behaviour** — Understand that complex systems exhibit behaviours that cannot be predicted by looking at individual components in isolation.
+
 ## Patterns & examples
 
-### Common Pattern in systems-thinker
-Describe a typical approach with benefits and tradeoffs.
+**Causal Loop Diagram (Simplified):**
+- **Action:** Increase test coverage.
+- **Immediate Effect:** More bugs found early.
+- **Second-order Effect:** Fewer production incidents.
+- **Long-term Effect:** Higher developer confidence and faster feature delivery (Reinforcing Loop).
 
-### Alternative Pattern
-Show another way to approach problems in systems-thinker.
+**System Leverage Points:**
+- **Low Leverage:** Tweaking parameters (e.g. changing a timeout value).
+- **Medium Leverage:** Changing system structure (e.g. moving from synchronous to asynchronous communication).
+- **High Leverage:** Changing the goals of the system (e.g. prioritising resilience over raw throughput).
+
 ## Anti-patterns to avoid
 
-❌ Common mistake with systems-thinker—what goes wrong and why
-❌ When NOT to use systems-thinker—valid reasons to choose alternatives
+- ❌ **Siloed optimisation** — Improving one component at the expense of the overall system (e.g. making a service extremely fast by overloading the database).
+- ❌ **Linear thinking** — Assuming that every effect has a single, direct cause.
+- ❌ **Ignoring delays** — Failing to account for the time it takes for a change to ripple through the system.
 
 ## KB Reference
 
@@ -37,5 +49,7 @@ Show another way to approach problems in systems-thinker.
 
 ## Related skills
 
-- `clean-code` – Applies across all domains
-- `critical-thinking` – For evaluating when to use this skill
+- `critical-thinking` — Foundation for system analysis
+- `retrospective` — Learning from systemic failures
+- `architecture` — Applying systems thinking to design
+- `trade-off-analysis` — Weighing system-wide impacts
