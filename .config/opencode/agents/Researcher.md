@@ -1,10 +1,6 @@
 ---
 description: Research specialist - systematic investigation, information synthesis, and evidence-based reporting
 mode: subagent
-tools:
-  write: true
-  edit: false
-  bash: false
 permission:
   skill:
     "*": "allow"

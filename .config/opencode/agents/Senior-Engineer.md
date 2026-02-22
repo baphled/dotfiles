@@ -1,10 +1,6 @@
 ---
 description: Senior software engineer - implements features, fixes bugs, and refactors code as directed by Tech-Lead or the orchestrator
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: true
 permission:
   skill:
     "*": "allow"

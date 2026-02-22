@@ -1,13 +1,6 @@
 ---
 description: Evaluates local LLM models for OpenCode compatibility - tests tool calling, performance, and agent viability
 mode: subagent
-tools:
-  bash: true
-  read: true
-  write: true
-  edit: true
-  glob: true
-  grep: true
 permission:
   skill:
     "*": "allow"

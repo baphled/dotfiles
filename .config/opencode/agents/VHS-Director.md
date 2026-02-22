@@ -1,10 +1,6 @@
 ---
 description: VHS tape generation specialist - creates terminal recordings for PR evidence, QA validation, and documentation
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: true
 permission:
   skill:
     "*": "allow"

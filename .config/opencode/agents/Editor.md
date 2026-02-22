@@ -1,10 +1,6 @@
 ---
 description: Editorial specialist - reviews, edits, and improves written content for clarity, structure, and tone
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: false
 permission:
   skill:
     "*": "allow"

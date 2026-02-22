@@ -1,10 +1,6 @@
 ---
 description: Technical writer expert - documentation, API docs, tutorials, blogs with accessible writing
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: false
 permission:
   skill:
     "*": "allow"

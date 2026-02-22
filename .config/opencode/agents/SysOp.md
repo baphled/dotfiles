@@ -1,10 +1,6 @@
 ---
 description: Runtime operations - monitoring, incident response, system administration, and operational support
 mode: subagent
-tools:
-  write: true
-  edit: false
-  bash: true
 permission:
   skill:
     "*": "allow"

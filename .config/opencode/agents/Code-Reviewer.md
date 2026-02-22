@@ -1,10 +1,6 @@
 ---
 description: Code review agent - fetches GitHub PR change requests via gh CLI and addresses them systematically
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: true
 permission:
   skill:
     "*": "allow"
@@ -74,10 +70,31 @@ Step 6: VERIFY — for every accepted change:
   lsp_diagnostics on changed files
   go build ./...
 
-Step 7: RESPOND — post consolidated summary:
+Step 7: REPLY TO COMMENTS — reply to EACH comment thread individually
+  # Get all comment IDs
+  gh api repos/$REPO/pulls/{PR}/comments --jq '.[] | {id: .id, path: .path, body: .body[:80]}'
+
+  # Reply to each comment with its resolution
+  gh api repos/$REPO/pulls/{PR}/comments -X POST \
+    -f body="Addressed — [specific description of fix]" \
+    -F in_reply_to={comment_id}
+
+  # Reply format by type:
+  # Accept:  "Addressed — [what was changed and why]"
+  # Challenge: "Respectfully disagree — [evidence]. Current behaviour is correct because [reason]."
+  # Clarify: "Could you clarify — [specific question]?"
+  # Defer: "Valid point — created issue #N to track this separately."
+
+Step 8: REBASE onto target branch
+  TARGET=$(gh pr view {PR} --json baseRefName -q '.baseRefName')
+  git fetch origin $TARGET
+  git rebase origin/$TARGET
+  git push --force-with-lease
+
+Step 9: RESPOND — post consolidated summary:
   gh pr review {PR} --comment -b "$(cat /tmp/review-response.md)"
 
-Step 8: CHECK CI
+Step 10: CHECK CI
   gh pr checks {PR}
 ```
 
@@ -107,6 +124,16 @@ gh pr checks {PR}
 
 # Check if any CHANGES_REQUESTED remain after addressing
 gh api repos/$REPO/pulls/{PR}/reviews | jq 'any(.[]; .state == "CHANGES_REQUESTED")'
+
+# Reply to a specific review comment thread
+gh api repos/$REPO/pulls/{PR}/comments -X POST \
+  -f body="Addressed — description of fix" \
+  -F in_reply_to=COMMENT_ID
+
+# Rebase onto target branch
+TARGET=$(gh pr view {PR} --json baseRefName -q '.baseRefName')
+git fetch origin $TARGET && git rebase origin/$TARGET
+git push --force-with-lease
 ```
 
 ## TodoWrite tracking
@@ -255,3 +282,5 @@ Keep each delegation atomic: one task, one agent, one outcome. This keeps your c
 - Use `git commit` directly — always use `make ai-commit FILE=<path>` with AI attribution
 - Mark a comment as addressed without providing before/after evidence
 - Guess at ambiguous feedback — always clarify before implementing
+- Skip replying to individual comment threads — every reviewer comment gets a direct reply
+- Push changes without rebasing onto the target branch first

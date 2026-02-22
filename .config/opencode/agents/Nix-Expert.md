@@ -1,10 +1,6 @@
 ---
 description: Nix and NixOS expertise - reproducible builds, flakes, package management, declarative systems
 mode: subagent
-tools:
-  write: false
-  edit: false
-  bash: true
 permission:
   skill:
     "*": "allow"

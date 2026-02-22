@@ -1,10 +1,6 @@
 ---
 description: Quality assurance and testing expert - adversarial tester, finds gaps and edge cases
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: true
 permission:
   skill:
     "*": "allow"

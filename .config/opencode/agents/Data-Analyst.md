@@ -1,10 +1,6 @@
 ---
 description: Data analyst - data exploration, statistical analysis, log analysis, deriving insights
 mode: subagent
-tools:
-  write: false
-  edit: false
-  bash: true
 permission:
   skill:
     "*": "allow"

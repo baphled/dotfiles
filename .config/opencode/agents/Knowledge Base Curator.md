@@ -1,10 +1,6 @@
 ---
 description: "Obsidian Knowledge Base curator subagent — reads vault files, writes/edits KB docs, syncs skill/agent/command documentation, audits links, reconciles inventories, enforces dynamic content standards"
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: true
 permission:
   skill:
     "*": "allow"

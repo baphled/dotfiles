@@ -1,10 +1,6 @@
 ---
 description: Embedded systems expert - firmware, microcontrollers, RTOS, IoT devices, hardware integration
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: true
 permission:
   skill:
     "*": "allow"

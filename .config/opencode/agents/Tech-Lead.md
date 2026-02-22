@@ -1,10 +1,6 @@
 ---
 description: Task orchestrator - decomposes complex tasks, delegates to specialist subagents, verifies results
 mode: subagent
-tools:
-  write: false
-  edit: false
-  bash: true
 permission:
   skill:
     "*": "allow"

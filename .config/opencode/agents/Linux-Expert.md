@@ -1,10 +1,6 @@
 ---
 description: Linux administration and system expertise - configuration, troubleshooting, package management
 mode: subagent
-tools:
-  write: false
-  edit: false
-  bash: true
 permission:
   skill:
     "*": "allow"
