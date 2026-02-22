@@ -6,11 +6,11 @@
   ],
 
   // Maximum number of auto-injected non-baseline skills (excludes explicitly provided ones).
-  // This cap serves as a prompt size guard: at ~2.5KB per skill file, 10 skills ≈ 25KB,
+  // This cap serves as a prompt size guard: at ~2.5KB per skill file, 6 skills ≈ 15KB,
   // keeping total auto-loaded skill content safely under the 30KB prompt size ceiling.
   // Baseline skills are always included and are NOT counted against this cap.
   // Raising this above ~12 risks exceeding the 30KB ceiling; raising above 20 will breach it.
-  "max_auto_skills": 10,
+  "max_auto_skills": 6,
 
   // Whether to skip injection when session_id is provided (continuation)
   "skip_on_session_continue": true,

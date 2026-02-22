@@ -1138,3 +1138,15 @@ describe('Config Cleanup — baseline must be exactly pre-action and memory-keep
     expect(actualConfig.baseline_skills).not.toContain('token-cost-estimation')
   })
 })
+
+describe('Config Cleanup — max_auto_skills must be 6', () => {
+  // Load the ACTUAL config file (not the hardcoded test fixture)
+  const configPath = resolve(__dirname, '../../skill-auto-loader-config.jsonc')
+  const configText = readFileSync(configPath, 'utf-8')
+  const jsonText = configText.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
+  const actualConfig = JSON.parse(jsonText) as SkillAutoLoaderConfig
+
+  it('max_auto_skills must be set to 6 for focus-based selection', () => {
+    expect(actualConfig.max_auto_skills).toBe(6)
+  })
+})
