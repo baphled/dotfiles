@@ -726,3 +726,26 @@ check-compliance:
 	@echo "🔍 Running compliance checks..."
 	@# TODO: Implement actual compliance checks (linting, tests, etc.)
 	@echo "✅ Compliance checks passed"
+
+# =============================================================================
+# Vault Sync
+# =============================================================================
+
+.PHONY: vault-sync
+
+# Sync opencode config (agents/skills/commands) to the Obsidian vault JSON cache
+# Usage: make vault-sync
+vault-sync:
+	@echo "🔄 Syncing OpenCode config to vault..."
+	@VAULT_ROOT="/home/baphled/vaults/baphled"; \
+	SYNC_SCRIPT="$$VAULT_ROOT/scripts/sync-opencode-config.sh"; \
+	if [ ! -f "$$SYNC_SCRIPT" ]; then \
+		echo "❌ ERROR: Sync script not found at $$SYNC_SCRIPT" >&2; \
+		exit 1; \
+	fi; \
+	if cd "$$VAULT_ROOT" && bash "$$SYNC_SCRIPT"; then \
+		echo "✅ Vault sync completed successfully"; \
+	else \
+		echo "❌ Vault sync failed — check output above for details" >&2; \
+		exit 1; \
+	fi
