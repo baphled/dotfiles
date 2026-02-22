@@ -70,11 +70,15 @@ Concrete patterns with code examples.
 ## Anti-patterns to avoid
 - Common mistakes
 
+## KB Reference
+
+Full coverage: `~/vaults/baphled/3. Resources/Knowledge Base/Skills/{Category}/{Name}.md`
+
 ## Related skills
 - `skill-a` - Pairs with this when doing X
 ```
 
-**Constraints:** Max 5KB. Frontmatter: ONLY name + description.
+**Constraints:** Max 5KB. Frontmatter: ONLY name + description. Always include `## KB Reference` pointing to the Obsidian KB doc.
 
 #### If Command:
 
@@ -271,6 +275,18 @@ Use the **memory-keeper** pattern.
 
 ---
 
+### Phase 7: Sync the Vault
+
+Run from `~/.config/opencode/`:
+
+```bash
+make vault-sync
+```
+
+This regenerates the vault's JSON cache (`assets/opencode/*.json`) so Obsidian dashboards reflect the new component immediately. The post-commit hook in `~/.git/hooks/post-commit` also runs this automatically when opencode config files are committed, but running manually confirms the sync succeeded.
+
+---
+
 ## Checklist (Must Complete ALL)
 
 ### Skill Creation Checklist
@@ -285,6 +301,7 @@ Use the **memory-keeper** pattern.
 - [ ] Common Workflows updated (if new workflow)
 - [ ] Related skills back-referenced
 - [ ] Memory graph updated
+- [ ] Run `make vault-sync` to update vault JSON cache
 
 ### Command Creation Checklist
 
@@ -292,6 +309,7 @@ Use the **memory-keeper** pattern.
 - [ ] Commands Reference updated (table, agent counts)
 - [ ] Common Workflows updated (selection guide, cross-patterns)
 - [ ] Memory graph updated
+- [ ] Run `make vault-sync` to update vault JSON cache
 
 ### Agent Creation Checklist
 
@@ -300,6 +318,7 @@ Use the **memory-keeper** pattern.
 - [ ] Agents Reference updated (table, flowchart, count)
 - [ ] Commands Reference updated (agent counts)
 - [ ] Memory graph updated
+- [ ] Run `make vault-sync` to update vault JSON cache
 
 ---
 

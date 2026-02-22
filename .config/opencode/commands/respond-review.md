@@ -1,39 +1,51 @@
 ---
 description: Evaluate and respond to all change requests - PR reviews, issues, feedback, and requests
-agent: senior-engineer
+agent: Code-Reviewer
 ---
 
 # Respond to Change Requests
 
-Craft thoughtful, evidence-based responses to all types of change requests and feedback.
+Fetch, evaluate, and address all change requests on a pull request using the `gh` CLI.
 
 ## Skills Loaded
 
 - `respond-to-review`
 - `evaluate-change-request`
+- `github-expert`
+
+## Usage
+
+Pass the PR number as the argument:
+
+```
+/respond-review 173
+```
 
 ## Scope
 
 This command handles all change request types:
 
-- **PR review comments** - Feedback on pull requests
-- **Issue feedback** - Comments on GitHub issues
-- **Plan feedback** - Comments on plans and specifications
-- **Verbal/chat requests** - Feedback from discussions and messages
+- **PR CHANGES_REQUESTED reviews** — Blocking reviewer feedback fetched via `gh api`
+- **Inline review comments** — File:line annotations fetched via `gh api .../comments`
+- **General PR comments** — Non-inline feedback via `gh pr view --comments`
+- **Issue feedback** — Comments on GitHub issues
+- **Verbal/chat requests** — Feedback from discussions and messages
 
 ## Workflow
 
-1. **TodoWrite** - Capture all requests as structured todos
-2. **Evaluate** - Assess each request (real issue, false positive, or working as intended)
-3. **Respond** - Craft thoughtful response with evidence
-4. **Verify** - Confirm change was made or explain why not
-5. **Report** - Summarize all addressed requests with line references
+1. **Fetch** — Auto-detect repo, fetch `CHANGES_REQUESTED` reviews and inline comments via `gh`
+2. **TodoWrite** — Create one todo per comment before touching any code
+3. **Classify** — Accept / Challenge / Clarify / Defer each item
+4. **Execute** — Implement accepted changes; gather evidence for challenges
+5. **Verify** — `make test`, `lsp_diagnostics`, `go build ./...` for every accepted change
+6. **Respond** — Post consolidated summary via `gh pr review {PR} --comment`
+7. **Check CI** — `gh pr checks {PR}`
 
 ## Response Types
 
-- **Accept** - Acknowledge and implement
-- **Challenge** - Provide evidence for keeping code
-- **Clarify** - Ask questions
-- **Defer** - Move to future issue
+- **Accept** — Implement + verify + provide before/after evidence
+- **Challenge** — Cite code or tests; mark REJECTED
+- **Clarify** — Post targeted question via `gh pr review`
+- **Defer** — Create follow-up issue; justify non-blocking
 
 $ARGUMENTS

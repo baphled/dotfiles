@@ -10,7 +10,7 @@ Write and debug tests with TDD and BDD approaches.
 ## Skills Loaded
 
 - `bdd-workflow`
-- `ginkgo-gomega` / `jest` / `rspec-testing` / `embedded-testing`
+- `ginkgo-gomega` / `jest` / `rspec-testing` / `embedded-testing` / `playwright`
 - `test-fixtures`
 
 $ARGUMENTS

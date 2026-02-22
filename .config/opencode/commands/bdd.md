@@ -12,6 +12,7 @@ Develop feature using Behavior-Driven Development with smallest-change workflow.
 - `cucumber`
 - `ginkgo-gomega`
 - `bdd-workflow`
+- `playwright`
 - `clean-code`
 
 ## Process
