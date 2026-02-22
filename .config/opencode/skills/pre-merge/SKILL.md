@@ -29,6 +29,12 @@ I enforce final validation before merging: run the pre-merge checklist to catch 
 ## Pre-merge checklist
 
 ```
+BRANCH STATUS
+[ ] Branch rebased onto target (git fetch origin next && git rebase origin/next)
+[ ] No merge commits in branch history
+[ ] Force-pushed with --force-with-lease after rebase
+[ ] All review comments replied to individually on GitHub
+
 AUTOMATED CHECKS
 [ ] CI pipeline green (all jobs passed)
 [ ] make check-compliance passes locally
@@ -56,6 +62,22 @@ DEPLOYMENT READINESS
 ```
 
 ## Patterns & examples
+
+**Rebase and sync before merge:**
+```bash
+# Determine target branch
+TARGET=$(gh pr view {PR} --json baseRefName -q '.baseRefName')
+
+# Rebase onto latest target
+git fetch origin $TARGET
+git rebase origin/$TARGET
+
+# Verify clean rebase
+git log --oneline origin/$TARGET..HEAD
+
+# Force-push safely
+git push --force-with-lease
+```
 
 **Running final checks:**
 ```bash
@@ -104,6 +126,8 @@ HIGH RISK: Database migration, public API change, auth changes
 - ❌ Resolving review threads without actually addressing them
 - ❌ Merging WIP or fixup commits without squashing
 - ❌ Skipping the checklist because "it's a small change"
+- ❌ Merging when branch is behind target — always rebase first
+- ❌ Resolving review threads without replying to each comment individually
 
 ## KB Reference
 
@@ -116,3 +140,4 @@ HIGH RISK: Database migration, public API change, auth changes
 - `create-pr` - PR creation that sets up for clean merge
 - `ai-commit` - Proper commit attribution
 - `release-management` - Post-merge release process
+- `auto-rebase` - Keeping branches up-to-date via automated rebase
