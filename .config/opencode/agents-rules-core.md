@@ -6,34 +6,14 @@
 
 Every user message MUST be classified before acting. If classification is skipped, the session is in violation.
 
-### Classification Algorithm
+### Task Classification
 
-```
-1. PARSE request for complexity signals
-2. IF any of these are true → COMPLEX:
-   - Multiple files/modules/packages mentioned or implied
-   - "write/create/build/implement" + "app/project/feature"
-   - Tests required (explicit or implied by project conventions)
-   - Architecture/design decisions needed
-   - Multiple domains (e.g., Go + CLI + tests)
-   - Estimated >50 lines of code
-3. IF COMPLEX → DELEGATE (no user permission needed)
-4. IF SIMPLE → work directly
-```
-
-### SIMPLE (work directly)
-- Single file edit with known location
-- Typo fix, rename, small config change
-- Direct answer from existing context
-- Reading/exploring code (no changes)
-
-### COMPLEX (discovery)
-- **skill-discovery** (skills): "Add tests" → load ginkgo-gomega, bdd-workflow
-- **agent-discovery** (agents): "Write a Go app" → delegate to Senior-Engineer
-- "Create a CLI" → load bubble-tea-expert, ui-design skills
-- "Build an API" → load api-design, golang skills
-- "Refactor module X" → load refactor, clean-code skills
-- Any task touching 2+ files → delegate via agent-discovery
+1. PARSE request for task signals
+2. Run skill-discovery
+3. Run agent-discovery
+4. Determine tier (T1/T2/T3)
+5. Identify parallelisable subtasks
+6. DELEGATE — do NOT ask user permission
 
 ### Specialist Agent Routing Table
 
@@ -71,15 +51,15 @@ Every user message MUST be classified before acting. If classification is skippe
 
 ### Anti-Patterns (VIOLATIONS)
 
-❌ User says "Write a Go app" → you start writing files directly
-❌ User says "Add feature X" → you ask "Should I delegate this?"
-❌ Multi-step task → you work sequentially instead of parallelising
-❌ Complex task → you skip classification and jump to tool calls
+❌ **Direct File Editing:** Orchestrator using `write` or `edit` tools directly.
+❌ **"Quick Fix" Trap:** Doing a small change directly because "it's faster".
+❌ **The "Simplicity" Lie:** Deciding a task is too simple to delegate. Even a single line change gets delegated.
+❌ **Investigative Overreach:** ANY file reading for context or understanding instead of delegating the exploration to a subagent.
 
-### DEFAULT BIAS: DELEGATE AUTOMATICALLY
+### DEFAULT BIAS: DELEGATE EVERYTHING
 
-When uncertain whether a task is SIMPLE or COMPLEX, classify as COMPLEX and delegate.
-This rule overrides: personal familiarity, assumption direct work is faster, user phrasing making it sound simple.
+When uncertain, classify as COMPLEX and delegate.
+This rule overrides: personal familiarity, assumption direct work is faster, or user phrasing making it sound simple.
 
 ---
 
@@ -142,7 +122,6 @@ For each change request, you MUST provide:
 - Status: FALSE POSITIVE
 
 ### Rejected Requests (N of total)
-
 **1. [Request Description]**
 - Why: [explanation]
 - Status: REJECTED

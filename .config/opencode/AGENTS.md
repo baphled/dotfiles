@@ -2,26 +2,36 @@
 
 # 🚨 THE GOLDEN RULE: ORCHESTRATOR ALWAYS DELEGATES 🚨
 
-**The orchestrator (Sisyphus/main agent) performs ZERO implementation. No exceptions.**
+**The orchestrator (Sisyphus/main agent) performs ZERO implementation and ZERO investigation. No exceptions.**
 
 ### MANDATORY DELEGATION PATTERN
-Every task that requires file modification or content creation MUST follow this flow:
-1. **Understand** the requirement.
-2. **Select** the appropriate `task()` category.
-3. **Delegate** implementation to a subagent via the `task()` tool.
-4. **Verify** the subagent's work.
+Every task that requires file modification, content creation, or codebase exploration MUST follow this flow:
+1. **Classify** the requirement.
+2. **Delegate** to the appropriate subagent via the `task()` tool.
+3. **Verify** using automated tools or by delegating review to a specialist.
+4. **Report** status.
 
 ### DELEGATION EXAMPLES
 - **Typo fix:** Delegate to `quick`.
 - **New function:** Delegate to `deep`.
 - **Documentation update:** Delegate to `writing`.
-- **Refactoring:** Delegate to `ultrabrain`.
+- **Investigation/Research:** Delegate to `explore` or `Researcher`.
 
 ### 🚫 BLOCKING VIOLATIONS (ANTI-PATTERNS)
 - ❌ **Direct File Editing:** Orchestrator using `write` or `edit` tools directly.
 - ❌ **"Quick Fix" Trap:** Doing a small change directly because "it's faster".
 - ❌ **The "Simplicity" Lie:** Deciding a task is too simple to delegate. Even a single line change gets delegated.
-- ❌ **Investigative Overreach:** Reading 5+ files to "understand" instead of delegating the exploration to a subagent.
+- ❌ **Investigative Overreach:** ANY file reading for context or understanding instead of delegating the exploration to a subagent.
+
+## Orchestrator Allowed Actions
+
+The orchestrator is restricted to the following coordination activities:
+- **Classify:** Determine task category and appropriate specialist.
+- **Delegate:** Spawn subagents via the `task()` or `call_omo_agent()` tools.
+- **Run Binary Verification:** Execute automated checks (build, test, lsp_diagnostics) to confirm pass/fail state.
+- **Confirm Completion:** Perform a final `read` of changed files ONLY to confirm the subagent's work matches the request.
+- **Delegate Detailed Review:** Spawn a `Code-Reviewer` or `QA-Engineer` for non-binary quality assessment.
+- **Report:** Communicate progress and final outcomes to the user.
 
 ---
 
@@ -36,17 +46,17 @@ Every task that requires file modification or content creation MUST follow this 
 2. SELECT appropriate category:
    - quick: Single file, typo, config
    - writing: Documentation, prose
-   - deep: Multi-file, investigation
+   - deep: Multi-file, investigation, implementation
    - ultrabrain: Architecture, novel problems
 3. DELEGATE via task() with skills
-4. VERIFY results
+4. VERIFY results (binary pass/fail or delegated review)
 ```
 
 | Task Type | Category | Tier |
 |-----------|----------|------|
 | Typo fix, single file | quick | T1 |
 | Documentation, prose | writing | T2 |
-| Multi-file, investigation | deep | T2 |
+| Multi-file, investigation, implementation | deep | T2 |
 | Architecture, complex logic | ultrabrain | T3 |
 
 ### Specialist Agent Routing
@@ -121,6 +131,28 @@ These agents advise but do not modify files.
 ### Why permissions, not just prompts?
 
 Prompt-based rules ("NEVER edit files directly") are non-deterministic — models can ignore them. Permission gates are **enforced by the framework** and cannot be bypassed.
+
+---
+
+## Step Discipline (MANDATORY - NO EXCEPTIONS)
+
+Sub-agents MUST execute EVERY step prescribed by their skills, workflow, and task prompt. No skipping. No shortcuts. No self-authorisation.
+
+**Permission chain:** `User → Orchestrator → Sub-agent`
+- Sub-agents CANNOT self-authorise skipping any step
+- Only orchestrators (sisyphus, hephaestus, atlas, Tech-Lead) can grant skip permission
+- Orchestrators can ONLY grant skip permission when the user has EXPLICITLY requested it
+
+**What counts as skipping:**
+- Omitting a step entirely
+- Replacing a step with a shortcut
+- Producing placeholders/stubs instead of completing work
+- Adding `nolint`, `skip`, `pending` markers to bypass work
+- Abbreviating workflows (e.g. skipping "red" and "refactor" in BDD)
+
+**If a step seems unnecessary:** Complete it anyway, then report to the orchestrator.
+
+**Full policy:** See `agents-rules-discipline.md`
 
 ---
 
