@@ -165,3 +165,34 @@ describe('detectCodebaseLanguages — Languages Field', () => {
     expect(result.languages).toEqual(['nix'])
   })
 })
+
+describe('Codebase Detection — must use project directory, not process.cwd()', () => {
+  let tempDir: string
+
+  afterEach(() => {
+    if (tempDir) cleanupDir(tempDir)
+  })
+
+  it('must not detect languages from directories other than the provided project path', async () => {
+    // The detector must only check the provided projectRoot, never process.cwd().
+    // This test verifies that a Go-only project does not pick up javascript
+    // from ~/.config/opencode/package.json (the CWD bug).
+    tempDir = createTempProjectDir(['go.mod'])
+
+    const result = await detectCodebaseLanguages(tempDir)
+
+    expect(result.skills).toContain('golang')
+    expect(result.skills).not.toContain('javascript')
+  })
+
+  it('calling with a Go project directory detects only golang', async () => {
+    // The detector itself works correctly when given the right path.
+    // This proves the fix: pass _input.directory instead of process.cwd().
+    tempDir = createTempProjectDir(['go.mod'])
+
+    const result = await detectCodebaseLanguages(tempDir)
+
+    expect(result.skills).toEqual(['golang'])
+    expect(result.skills).not.toContain('javascript')
+  })
+})

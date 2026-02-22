@@ -14,6 +14,8 @@ import { filterSkillsAgainstCache } from './lib/skill-validation-filter'
 import { injectSkillContent } from './lib/skill-content-injection'
 import { detectCodebaseLanguages } from './lib/codebase-detector'
 
+type WarnFn = (message: string) => void
+
 const PLUGIN_DIR = `${process.env.HOME}/.config/opencode/plugins`
 const CONFIG_FILE = join(PLUGIN_DIR, 'skill-auto-loader-config.jsonc')
 const LOG_FILE = `${process.env.HOME}/.config/opencode/logs/skill-auto-loader.log`
@@ -50,10 +52,10 @@ let skillCache: { hasSkill(name: string): boolean; getSkillContent(name: string)
 /**
  * Load config from JSONC file (strips comments).
  */
-function loadConfig(): SkillAutoLoaderConfig {
+function loadConfig(onWarn?: WarnFn): SkillAutoLoaderConfig {
   try {
     if (!existsSync(CONFIG_FILE)) {
-      console.warn('[SkillAutoLoader] Config file not found, using defaults')
+      onWarn?.('[SkillAutoLoader] Config file not found, using defaults')
       return DEFAULT_CONFIG
     }
 
@@ -62,7 +64,7 @@ function loadConfig(): SkillAutoLoaderConfig {
     const jsonContent = content.replace(/\/\/.*$/gm, '')
     return JSON.parse(jsonContent) as SkillAutoLoaderConfig
   } catch (err) {
-    console.warn(`[SkillAutoLoader] Failed to load config: ${err instanceof Error ? err.message : String(err)}`)
+    onWarn?.(`[SkillAutoLoader] Failed to load config: ${err instanceof Error ? err.message : String(err)}`)
     return DEFAULT_CONFIG
   }
 }
@@ -105,8 +107,11 @@ function createNotifier(client: PluginInput['client']) {
 }
 
 const SkillAutoLoaderPlugin: Plugin = async (_input) => {
+  const notify = createNotifier(_input.client)
+  const warnViaToast: WarnFn = (msg: string) => notify(msg, 'warning')
+
   // Initialize config and agent cache at plugin load time
-  config = loadConfig()
+  config = loadConfig(warnViaToast)
   
   // Ensure logs directory exists
   try {
@@ -117,7 +122,7 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
     // Ignore directory creation errors
   }
   
-  agentCache = new AgentConfigCache()
+  agentCache = new AgentConfigCache(undefined, warnViaToast)
   await agentCache.init()
 
   // Detect codebase languages at init time
@@ -125,8 +130,8 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let codebaseSkills: string[] = []
   try {
-    const cwd = process.cwd()
-    const detection = await detectCodebaseLanguages(cwd)
+    const projectDir = _input.directory
+    const detection = await detectCodebaseLanguages(projectDir)
     codebaseSkills = detection.skills
   } catch {
     // Non-fatal: codebase detection failure should not prevent plugin from loading
@@ -137,25 +142,24 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
     // Dynamic require so a missing module doesn't prevent the plugin from loading
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const cacheModule = require('./lib/skill-content-cache') as {
-      SkillContentCache: new (dir: string) => {
+      SkillContentCache: new (dir: string, onWarn?: (message: string) => void) => {
         hasSkill(name: string): boolean
         getSkillContent(name: string): string | undefined
         init(): Promise<void>
       }
     }
     const SKILLS_DIR = join(PLUGIN_DIR, '..', 'skills')
-    const cache = new cacheModule.SkillContentCache(SKILLS_DIR)
+    const cache = new cacheModule.SkillContentCache(SKILLS_DIR, warnViaToast)
     await cache.init()
     skillCache = cache
   } catch {
-    console.warn('[SkillAutoLoader] skill-content-cache module not available, skill existence validation will be skipped')
+    notify('skill-content-cache module not available, skill existence validation will be skipped', 'warning')
   }
 
   // Build skill sizes map for byte budget enforcement in selectSkills
   // Starts empty; the selector treats missing entries as 0 bytes (no-op when empty)
   const skillSizes = new Map<string, number>()
 
-  const notify = createNotifier(_input.client)
   notify('Skill Auto-Loader loaded', 'info', 3000)
 
   return {
@@ -212,7 +216,7 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       // === Skill Existence Validation ===
       // Filter out any skills that don't have a corresponding SKILL.md file.
       // If skillCache is not available (module not yet installed), skip validation.
-      const { filtered: validatedSkills } = filterSkillsAgainstCache(result.skills, skillCache)
+      const { filtered: validatedSkills } = filterSkillsAgainstCache(result.skills, skillCache, warnViaToast)
 
       // Update load_skills with injected skills only if result is non-empty
       if (validatedSkills.length > 0) {
