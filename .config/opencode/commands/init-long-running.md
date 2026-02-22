@@ -6,7 +6,7 @@ agent: senior-engineer
 # Initialise Long-Running Project
 
 Set up the scaffolding for a complex project that will span multiple agent sessions.
-Run this ONCE at the start — subsequent sessions use `/implement` with the
+Run this ONCE at the start: subsequent sessions use `/implement` with the
 `long-running-agent` skill loaded.
 
 ## When to use
@@ -20,11 +20,11 @@ Run this ONCE at the start — subsequent sessions use `/implement` with the
 1. Load `long-running-agent` skill
 2. Analyse requirements from `$ARGUMENTS`
 3. Create `feature_list.json` with ALL features marked `"passes": false`
-   - Be comprehensive — include functional, UI, edge case, and error features
+   - Be comprehensive: include functional, UI, edge case, and error features
    - Order by priority (highest first = most critical path)
    - Aim for 30–200 features depending on project scope
 4. Create `claude-progress.txt` with session 1 header
-5. Create `init.sh` — starts dev server and runs basic smoke test (exits 0 on success)
+5. Create `init.sh`: starts dev server and runs basic smoke test (exits 0 on success)
 6. Make initial git commit: `chore: initialise long-running agent harness`
 7. Report: feature count, estimated sessions, recommended next command
 
