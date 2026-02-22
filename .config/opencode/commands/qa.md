@@ -9,13 +9,13 @@ This command initiates a comprehensive quality assurance workflow. The focus is 
 
 ## Skills Loaded
 
-- `qa-engineer`
+- `bdd-workflow`
 - `prove-correctness`
 - `critical-thinking`
 - `security`
 - `cyber-security`
 
-## Focus Areas
+## When to Use
 
 - **Test Coverage Analysis**: Identify packages or paths with low coverage using tools like `go tool cover`.
 - **Edge Case Identification**: Look for boundary conditions, empty inputs, or unexpected data types.
