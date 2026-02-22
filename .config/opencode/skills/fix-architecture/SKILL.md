@@ -50,6 +50,10 @@ I diagnose and fix architecture violations detected by compliance checks. I guid
 - ❌ **Suppressing Warnings** - Silencing linters without fixing the design flaw
 - ❌ **Over-Engineering** - Adding unnecessary abstractions for simple code
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Domain-Architecture/Fix Architecture.md`
+
 ## Related skills
 
 - `architecture` - Understanding the patterns to move towards

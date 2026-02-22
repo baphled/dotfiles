@@ -112,6 +112,10 @@ try {
 - ❌ **Hardcoded Values**: Hardcoding dates or counts that should be derived from note metadata.
 - ❌ **American English**: Using `color` instead of `colour` or `initialize` instead of `initialise` in labels.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Obsidian Dataview Expert.md`
+
 ## Related skills
 
 - `obsidian-frontmatter`: Source of truth for all Dataview queries.

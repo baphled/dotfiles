@@ -101,6 +101,10 @@ func NewRouter(svc UserService) http.Handler {
 - ❌ **Breaking changes without versioning** — Renaming or removing fields breaks existing clients
 - ❌ **Exposing internal IDs** — Database auto-increment IDs leak information; consider UUIDs
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Domain-Architecture/API Design.md`
+
 ## Related skills
 
 - `architecture` - Layer boundaries that APIs sit within

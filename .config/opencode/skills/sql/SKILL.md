@@ -46,3 +46,8 @@ JOIN user_orders uo ON u.id = uo.user_id;
 ❌ **Leading Wildcards**: `LIKE '%text'` prevents index usage.
 ❌ **Implicit Conversions**: Comparing different data types.
 ❌ **Application-Level Joins**: Fetching data in a loop instead of using a SQL join.
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Database-Persistence/SQL.md`
+

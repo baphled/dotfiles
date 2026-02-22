@@ -30,6 +30,11 @@ Show another way to approach problems in writing-style.
 
 ❌ Common mistake with writing-style—what goes wrong and why
 ❌ When NOT to use writing-style—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Writing Style.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -30,6 +30,10 @@ Show another way to approach problems in obsidian-customjs-expert.
 
 ❌ Common mistake with obsidian-customjs-expert—what goes wrong and why
 ❌ When NOT to use obsidian-customjs-expert—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Obsidian CustomJS Expert.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -30,6 +30,10 @@ Show another way to approach problems in platformio.
 
 ❌ Common mistake with platformio—what goes wrong and why
 ❌ When NOT to use platformio—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Languages/PlatformIO.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

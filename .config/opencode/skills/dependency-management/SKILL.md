@@ -30,6 +30,11 @@ Show another way to approach problems in dependency-management.
 
 ❌ Common mistake with dependency-management—what goes wrong and why
 ❌ When NOT to use dependency-management—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Dependency Management.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

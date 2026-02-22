@@ -30,6 +30,11 @@ Show another way to approach problems in systems-thinker.
 
 ❌ Common mistake with systems-thinker—what goes wrong and why
 ❌ When NOT to use systems-thinker—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Systems Thinker.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

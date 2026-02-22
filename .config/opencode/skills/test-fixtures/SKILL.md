@@ -72,6 +72,10 @@ author = create(:user, :with_posts)
 - ❌ **Shared Mutable Fixtures** — Sharing the same object instance between tests; leads to flaky tests.
 - ❌ **Business Logic in Factories** — Factories should only create data, not perform complex operations.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Test Fixtures.md`
+
 ## Related skills
 
 - `test-fixtures-go` - Go-specific factory-go/gofakeit implementation.

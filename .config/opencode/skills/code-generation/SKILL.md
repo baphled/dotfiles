@@ -30,6 +30,10 @@ Show another way to approach problems in code-generation.
 
 ❌ Common mistake with code-generation—what goes wrong and why
 ❌ When NOT to use code-generation—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Code Generation.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -30,6 +30,11 @@ Show another way to approach problems in tutorial-writing.
 
 ❌ Common mistake with tutorial-writing—what goes wrong and why
 ❌ When NOT to use tutorial-writing—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Tutorial Writing.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

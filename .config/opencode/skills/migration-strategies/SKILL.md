@@ -43,3 +43,8 @@ func (m *Migration) Up(db *gorm.DB) error {
 ❌ **Non-Reversible Migrations**: Not providing a `Down` method or rollback path.
 ❌ **Direct Schema Changes**: Running `AutoMigrate` in application startup instead of managed migration files.
 ❌ **Dropping Columns Immediately**: Breaking running application versions that still expect the column.
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Delivery/Migration Strategies.md`
+

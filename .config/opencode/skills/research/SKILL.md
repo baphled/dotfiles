@@ -47,6 +47,11 @@ Use `investigation` skill for comprehensive multi-document codebase investigatio
 - Making claims without file path and line number evidence
 - Investigating without a clear question or scope
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Research.md`
+
 ## Related skills
 
 - `investigation` - Specialised form producing structured Obsidian documents with 6 parallel agents

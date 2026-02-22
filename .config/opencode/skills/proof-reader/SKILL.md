@@ -30,6 +30,11 @@ Show another way to approach problems in proof-reader.
 
 ❌ Common mistake with proof-reader—what goes wrong and why
 ❌ When NOT to use proof-reader—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Proof Reader.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

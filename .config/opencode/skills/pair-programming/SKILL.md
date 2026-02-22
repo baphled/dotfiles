@@ -30,6 +30,10 @@ Show another way to approach problems in pair-programming.
 
 ❌ Common mistake with pair-programming—what goes wrong and why
 ❌ When NOT to use pair-programming—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Pair Programming.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

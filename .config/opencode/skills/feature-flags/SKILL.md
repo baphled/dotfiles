@@ -64,6 +64,10 @@ default:      return renderBlueButton()
 - ❌ **Ignoring Metrics** — Increasing rollout percentage without checking error rates/latency.
 - ❌ **Hardcoding Defaults** — Use a central configuration source rather than scattered hardcoded checks.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Delivery/Feature Flags.md`
+
 ## Related skills
 
 - `devops` — Pipelines that deploy flagged code

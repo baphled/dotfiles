@@ -154,6 +154,11 @@ func (m model) View() string {
 - ❌ Monolithic Update function (decompose into component Updates)
 - ❌ Hardcoded ANSI codes (use Lip Gloss styles instead)
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/UI-Frameworks/Bubble Tea Expert.md`
+
 ## Related skills
 
 - `bubble-tea-testing` - Testing Bubble Tea applications

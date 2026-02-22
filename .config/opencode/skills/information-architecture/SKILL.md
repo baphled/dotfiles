@@ -30,6 +30,11 @@ Show another way to approach problems in information-architecture.
 
 ❌ Common mistake with information-architecture—what goes wrong and why
 ❌ When NOT to use information-architecture—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Information Architecture.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

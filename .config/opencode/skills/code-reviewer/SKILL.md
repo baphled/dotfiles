@@ -101,6 +101,10 @@ The validation, transformation, and persistence are separate concerns.
 - ❌ Blocking on preferences disguised as standards
 - ❌ Reviewing without understanding the problem being solved
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Code Reviewer.md`
+
 ## Related skills
 
 - `clean-code` - Standards to review against

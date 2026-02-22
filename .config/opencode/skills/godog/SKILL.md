@@ -122,3 +122,8 @@ See: KaRiya Obsidian note "Bubble Tea + Huh Testing Contract"
 - `huh-testing`: Form library testing
 - `test-fixtures-go`: Test data factories
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Godog.md`
+

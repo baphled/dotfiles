@@ -59,6 +59,10 @@ router.HandleFunc("/v2/users/{id}", h.GetUserV2)
 - ❌ **Inconsistent Versioning** — Mixing major version bumps with minor feature additions.
 - ❌ **Missing Migration Guides** — Forcing consumers to reverse-engineer how to move to the new version.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Delivery/Breaking Changes.md`
+
 ## Related skills
 
 - `api-design` — Designing APIs that are easy to evolve

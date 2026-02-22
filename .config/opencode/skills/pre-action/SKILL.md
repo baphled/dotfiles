@@ -54,3 +54,7 @@ environments, and sequential decisions where mistakes compound.
 - Load before `critical-thinking` for rigorous analysis of complex decisions
 - Load with `memory-keeper` to capture decision reasoning
 - For detailed decision frameworks, refer to Obsidian vault (memory-keeper will point there)
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Core-Universal/Pre Action.md`

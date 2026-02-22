@@ -100,6 +100,10 @@ todowrite([
 - Status: ADDRESSED
 ```
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Evaluate Change Request.md`
+
 ## Related skills
 
 - `critical-thinking` — Rigorous analysis of claims

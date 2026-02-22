@@ -78,6 +78,10 @@ Task completion is defined by the checklist, not just finishing code.
 - After: Verify every item in `TodoWrite` is `completed`.
 - Final: Generate the `Change Request Summary` report.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Respond To Review.md`
+
 ## Related skills
 
 - `evaluate-change-request` – Assessment of feedback validity.

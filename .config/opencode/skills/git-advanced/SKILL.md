@@ -30,6 +30,10 @@ Show another way to approach problems in git-advanced.
 
 ❌ Common mistake with git-advanced—what goes wrong and why
 ❌ When NOT to use git-advanced—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Git/Git Advanced.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -30,6 +30,10 @@ Show another way to approach problems in obsidian-consolidation.
 
 ❌ Common mistake with obsidian-consolidation—what goes wrong and why
 ❌ When NOT to use obsidian-consolidation—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Obsidian Consolidation.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

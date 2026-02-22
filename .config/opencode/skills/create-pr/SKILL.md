@@ -122,6 +122,10 @@ EOF
 - ❌ No description (reviewers shouldn't have to guess intent)
 - ❌ Targeting main directly (go through next first)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Git/Create PR.md`
+
 ## Related skills
 
 - `git-master` - Atomic commit strategy for PR commits

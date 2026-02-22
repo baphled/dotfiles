@@ -157,6 +157,11 @@ Describe("ListScreen", func() {
 - ❌ Hardcoded dimensions (respond to WindowSizeMsg)
 - ❌ Skipping View() tests (rendering bugs are real)
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/UI-Frameworks/Create Screen.md`
+
 ## Related skills
 
 - `create-intent` - Intents that own and display screens

@@ -94,9 +94,14 @@ cy.get('.results').should('exist');
 - ❌ Tests depending on other tests' state (each test independent)
 - ❌ Asserting on DOM structure (assert on visible text and behaviour)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Cypress.md`
+
 ## Related skills
 
 - `javascript` - Core JS/TS patterns used in Cypress
 - `jest` - Unit testing (complementary to Cypress E2E)
 - `e2e-testing` - General E2E testing patterns
+- `playwright` - Alternative browser testing framework
 - `bdd-workflow` - BDD cycle with Cypress

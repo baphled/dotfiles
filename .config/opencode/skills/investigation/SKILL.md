@@ -99,6 +99,10 @@ Create memory entities for key findings.
 
 ---
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Investigation.md`
+
 ## Related skills
 
 - `research` - General research methodology (investigation is a specialised form)

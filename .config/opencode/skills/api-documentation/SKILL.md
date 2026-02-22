@@ -30,6 +30,10 @@ Show another way to approach problems in api-documentation.
 
 ❌ Common mistake with api-documentation—what goes wrong and why
 ❌ When NOT to use api-documentation—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Domain-Architecture/API Documentation.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -30,6 +30,11 @@ Show another way to approach problems in justify-decision.
 
 ❌ Common mistake with justify-decision—what goes wrong and why
 ❌ When NOT to use justify-decision—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Justify Decision.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

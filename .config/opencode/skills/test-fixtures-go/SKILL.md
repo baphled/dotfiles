@@ -77,6 +77,10 @@ var _ = Describe("UserService", func() {
 - ❌ **Manual Struct Literals** — Duplicates setup logic and makes adding fields painful.
 - ❌ **Over-complex Builders** — If a fixture needs 10+ options, the struct likely needs refactoring.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Test Fixtures Go.md`
+
 ## Related skills
 
 - `test-fixtures` - Universal patterns for test data.

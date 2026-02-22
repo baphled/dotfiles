@@ -30,6 +30,10 @@ Show another way to approach problems in check-compliance.
 
 ❌ Common mistake with check-compliance—what goes wrong and why
 ❌ When NOT to use check-compliance—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Check Compliance.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

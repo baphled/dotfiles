@@ -77,6 +77,10 @@ JavaScript: Closures, promises/async-await, dependency injection
 - ❌ Treating patterns as dogma instead of guidelines
 - ❌ Over-engineering for "future flexibility"
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Design Patterns.md`
+
 ## Related skills
 
 - `clean-code` - Apply patterns to improve readability

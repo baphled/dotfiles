@@ -30,6 +30,11 @@ Show another way to approach problems in note-taking.
 
 ❌ Common mistake with note-taking—what goes wrong and why
 ❌ When NOT to use note-taking—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Note Taking.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

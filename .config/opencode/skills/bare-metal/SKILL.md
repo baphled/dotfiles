@@ -33,3 +33,7 @@ I guide physical server provisioning, colocation management, and dedicated hardw
 - Load with `automation` for deployment orchestration
 - Load with `monitoring` for hardware health tracking
 - For provisioning patterns, refer to Obsidian vault
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Bare Metal.md`

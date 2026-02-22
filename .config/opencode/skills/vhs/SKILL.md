@@ -99,6 +99,11 @@ Sleep 3s
 Show
 ```
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/UI-Frameworks/VHS.md`
+
 ## Related skills
 
 - `bubble-tea-expert` – Understanding the underlying TUI framework.

@@ -32,3 +32,7 @@ I enforce rigorous thinking: challenge claims with evidence, spot weak reasoning
 - With `assumption-tracker`: identify and test hidden assumptions
 - With `prove-correctness`: convert assumptions into verified facts
 - With `evaluate-change-request`: Evaluation engine for change requests
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Critical Thinking.md`

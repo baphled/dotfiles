@@ -99,6 +99,10 @@ type OrderRepository interface {
 - ❌ **Leaking Infrastructure** - Passing database types or HTTP request objects into the domain.
 - ❌ **God Models** - A single `User` or `Product` model trying to serve every team's needs.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Domain-Architecture/Domain Modeling.md`
+
 ## Related skills
 
 - `service-layer` - Orchestrates domain logic for specific use cases.

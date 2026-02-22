@@ -74,6 +74,10 @@ Expected: (X + 4Y + Z) / 6
 - ❌ Never updating estimates as you learn
 - ❌ Ignoring historical accuracy data
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Estimation.md`
+
 ## Related skills
 
 - `token-cost-estimation` - Uses complexity data for token estimates

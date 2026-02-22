@@ -34,6 +34,11 @@ When behind, cut features not affecting core value. Move polish to 'v1.1'. Focus
 Building perfect code for features users never requested
 Over-engineering before validating the approach works
 Refusing to cut scope even when timeline is impossible
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Pragmatic Problem Solving.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

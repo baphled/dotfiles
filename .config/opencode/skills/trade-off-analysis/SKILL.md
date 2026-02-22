@@ -30,6 +30,11 @@ Show another way to approach problems in trade-off-analysis.
 
 ❌ Common mistake with trade-off-analysis—what goes wrong and why
 ❌ When NOT to use trade-off-analysis—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Trade Off Analysis.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -30,6 +30,10 @@ Show another way to approach problems in style-guide.
 
 ❌ Common mistake with style-guide—what goes wrong and why
 ❌ When NOT to use style-guide—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Style Guide.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

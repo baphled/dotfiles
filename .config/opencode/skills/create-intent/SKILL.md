@@ -124,6 +124,10 @@ intents.Register("browsetimeline", func(deps *Dependencies) tea.Model {
 - ❌ Shared mutable state between intents (each is independent)
 - ❌ Skipping the test file (intent state transitions are critical to test)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Create Intent.md`
+
 ## Related skills
 
 - `create-screen` - Screen components that intents display

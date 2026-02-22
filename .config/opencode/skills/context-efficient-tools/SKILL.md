@@ -93,6 +93,10 @@ echo "Exit: $?"
 - ❌ Letting verbose build output fill context
 - ❌ Passing intermediate tool results verbatim to the next tool call
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Context Efficient Tools.md`
+
 ## Related skills
 
 - `token-efficiency` — Prompt-level efficiency (complements this skill)

@@ -34,6 +34,11 @@ Use semantic output. Test with common readers (NVDA, JAWS). Provide text labels 
 Relying on colour alone to convey information—always add text, icons, or patterns
 Missing focus indicators—make keyboard navigation invisible to users
 Audio/visual-only feedback—provide text alternatives for all signals
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Agent-Guidance/Accessibility.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

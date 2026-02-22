@@ -101,6 +101,10 @@ intent/
 - ❌ **God package** — Single `models/` package with everything; package by feature instead
 - ❌ **Leaking implementation** — Returning GORM models from service layer; map to domain types
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Domain-Architecture/Architecture.md`
+
 ## Related skills
 
 - `domain-modeling` - Designing entities and value objects in the domain layer

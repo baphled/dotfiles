@@ -30,6 +30,11 @@ Show another way to approach problems in devils-advocate.
 
 ❌ Common mistake with devils-advocate—what goes wrong and why
 ❌ When NOT to use devils-advocate—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Devils Advocate.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

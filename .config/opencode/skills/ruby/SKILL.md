@@ -80,6 +80,10 @@ ROLE = 'admin'.dup  # wasteful, implies mutation
 - ❌ Exception handling as control flow (use `dig`, `try`, explicit checks)
 - ❌ Mutable defaults in arguments (`def foo(items=[])`—use `nil` and initialize in body)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Languages/Ruby.md`
+
 ## Related skills
 
 - `clean-code` - SOLID principles in Ruby

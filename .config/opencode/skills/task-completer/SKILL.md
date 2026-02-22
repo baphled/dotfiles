@@ -30,6 +30,10 @@ Show another way to approach problems in task-completer.
 
 ❌ Common mistake with task-completer—what goes wrong and why
 ❌ When NOT to use task-completer—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Task Completer.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

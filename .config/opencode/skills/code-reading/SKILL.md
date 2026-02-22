@@ -102,6 +102,10 @@ REVIEW: PR description → tests → implementation → edge cases
 - ❌ Assuming without verifying (check the code, don't guess)
 - ❌ Skipping the README and directory structure overview
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Code Reading.md`
+
 ## Related skills
 
 - `research` - Systematic investigation methodology

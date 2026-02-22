@@ -128,6 +128,10 @@ EOF
 - ❌ Bundling multiple bugs in one report
 - ❌ Skipping severity (everything can't be P0)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Create Bug.md`
+
 ## Related skills
 
 - `debug-test` - Diagnosing the bug before reporting

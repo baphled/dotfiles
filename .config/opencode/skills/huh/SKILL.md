@@ -137,6 +137,11 @@ form := huh.NewForm(groups...).WithTheme(theme)
 - ❌ Complex logic in validators (keep validators simple; pre-process data)
 - ❌ Hardcoded styles (use themes for consistent appearance)
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/UI-Frameworks/Huh.md`
+
 ## Related skills
 
 - `huh-testing` - Testing huh form components

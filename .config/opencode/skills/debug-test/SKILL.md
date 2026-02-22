@@ -105,6 +105,10 @@ go tool cover -func=/tmp/cover.out | grep -v "100.0%"
 - ❌ Debugging without reading the full error output first
 - ❌ Leaving `FIt`/`FDescribe` focused tests in code
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Debug Test.md`
+
 ## Related skills
 
 - `ginkgo-gomega` - BDD testing framework used in tests

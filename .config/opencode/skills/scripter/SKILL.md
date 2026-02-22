@@ -82,6 +82,10 @@ fi
 ❌ **Silent failures** – Scripts that exit with 0 even when they failed to perform their intended task.
 ❌ **Using `ls` for file iteration** – Use `find` or globbing to handle filenames with spaces or newlines safely.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Languages/Scripter.md`
+
 ## Related skills
 
 - `automation` – Build automated workflows with scripts

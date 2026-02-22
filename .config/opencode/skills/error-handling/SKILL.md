@@ -117,6 +117,10 @@ if err != nil {
 - ❌ **Generic catch-all** — Catching `Exception` hides specific errors
 - ❌ **Ignoring transient errors** — Not retrying when appropriate
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Error Handling.md`
+
 ## Related skills
 
 - `golang` - Go idioms that underpin error patterns

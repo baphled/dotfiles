@@ -71,6 +71,11 @@ JWT_SECRET=changeme # Example only
 - ❌ **Logging Secrets** - Printing configuration to logs without sanitising sensitive values.
 - ❌ **Default Production Secrets** - Using "development" or "changeme" secrets in production.
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Configuration Management.md`
+
 ## Related skills
 
 - `security` - Secure handling of sensitive data.

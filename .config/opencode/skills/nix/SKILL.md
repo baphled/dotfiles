@@ -91,6 +91,11 @@ pkgs.dockerTools.buildImage {
 - ❌ **Missing Lockfiles** - Not committing `flake.lock`, leading to non-deterministic builds.
 - ❌ **Mixing Package Managers** - Using `apt` or `brew` alongside Nix for the same dependencies.
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Nix.md`
+
 ## Related skills
 
 - `infrastructure-as-code` - Declarative patterns for system state.

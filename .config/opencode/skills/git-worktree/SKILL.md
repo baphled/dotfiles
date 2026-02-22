@@ -30,6 +30,10 @@ Show another way to approach problems in git-worktree.
 
 ❌ Common mistake with git-worktree—what goes wrong and why
 ❌ When NOT to use git-worktree—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Git/Git Worktree.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

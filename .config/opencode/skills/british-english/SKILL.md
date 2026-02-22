@@ -30,6 +30,10 @@ Show another way to approach problems in british-english.
 
 ❌ Common mistake with british-english—what goes wrong and why
 ❌ When NOT to use british-english—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/British English.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

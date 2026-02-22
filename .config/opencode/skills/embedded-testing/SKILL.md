@@ -79,6 +79,10 @@ TEST(PWMTest, FrequencyAccuracy) {
 - ❌ **Only Testing on Hardware** - Slow feedback cycle; test logic on host first.
 - ❌ **Implementation Testing** - Testing private methods instead of visible behaviour.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Embedded Testing.md`
+
 ## Related skills
 
 - `cpp` - Core C++ idioms and patterns

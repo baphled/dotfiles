@@ -112,6 +112,10 @@ ISR(TIMER1_COMPA_vect) {
 - ❌ Floating-point arithmetic on hardware without FPU (slow)
 - ❌ Blocking calls in ISRs (prevents other interrupts)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Languages/Cpp.md`
+
 ## Related skills
 
 - `clean-code` - SOLID principles in C++

@@ -30,6 +30,11 @@ Show another way to approach problems in ux-design.
 
 ❌ Common mistake with ux-design—what goes wrong and why
 ❌ When NOT to use ux-design—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/UI-Frameworks/UX Design.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

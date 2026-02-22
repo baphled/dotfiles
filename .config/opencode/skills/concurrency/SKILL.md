@@ -128,6 +128,6 @@ func worker(ctx context.Context, in <-chan Job) error {
 - `error-handling` - Error propagation in concurrent code (errgroup)
 - `performance` - Profiling goroutine contention and scheduling
 
-## See also
+## KB Reference
 
-- Vault: `Knowledge Base/Skills/Performance-Profiling/Concurrency.md`
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Performance-Profiling/Concurrency.md`

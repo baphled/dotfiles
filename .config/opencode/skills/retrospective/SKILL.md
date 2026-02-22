@@ -30,6 +30,10 @@ Show another way to approach problems in retrospective.
 
 ❌ Common mistake with retrospective—what goes wrong and why
 ❌ When NOT to use retrospective—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Retrospective.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

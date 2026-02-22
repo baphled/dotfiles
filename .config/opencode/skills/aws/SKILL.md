@@ -75,6 +75,11 @@ func main() { lambda.Start(handler) }
 - ❌ **Root Account Usage** — Never use root for daily ops; create granular IAM users
 - ❌ **No Cost Monitoring** — Enable budgets and cost allocation tags to avoid bill shock
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/AWS.md`
+
 ## Related skills
 
 - `infrastructure-as-code` - Terraform and CloudFormation patterns

@@ -89,6 +89,10 @@ It("processes message eventually", func(done Done) {
 - ❌ Table-driven when Ginkgo specs would be clearer
 - ❌ Ignoring helper functions (extract test setup)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Ginkgo Gomega.md`
+
 ## Related skills
 
 - `bdd-workflow` - Red-Green-Refactor cycle that Ginkgo enables

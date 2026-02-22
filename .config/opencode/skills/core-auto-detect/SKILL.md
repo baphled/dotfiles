@@ -86,6 +86,11 @@ I detect project environments by scanning root-level files and recommend appropr
 - ❌ **Over-recommending** — Suggest 2-4 core skills per environment
 - ❌ **Ignoring skill composition** — Include `clean-code` in every recommendation
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Agent-Guidance/Core Auto Detect.md`
+
 ## Related skills
 
 - `clean-code` — Applies across all detected environments

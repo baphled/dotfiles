@@ -73,6 +73,10 @@ type OrderConnection {
 - ❌ Offset pagination for large/frequent datasets; use opaque cursors.
 - ❌ Deeply nested queries without depth or complexity limiting (DoS risk).
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Languages/GraphQL.md`
+
 ## Related skills
 
 - `api-design` - General API design principles

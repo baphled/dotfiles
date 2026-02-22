@@ -115,6 +115,10 @@ func NewTestDB() *TestDB {
 - ❌ Too many E2E tests (prefer unit tests, E2E for critical paths only)
 - ❌ Ignoring cleanup (leaked state causes flaky tests)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/E2E Testing.md`
+
 ## Related skills
 
 - `test-fixtures-go` - Factory patterns for test data
@@ -122,6 +126,7 @@ func NewTestDB() *TestDB {
 - `debug-test` - Diagnosing E2E test failures
 - `bdd-workflow` - Red-Green-Refactor cycle
 - `bubble-tea-testing` - TUI-specific testing patterns
+- `playwright` - Browser-based E2E testing
 
 ## View-Based Assertions (Bubble Tea + Huh Testing Contract)
 

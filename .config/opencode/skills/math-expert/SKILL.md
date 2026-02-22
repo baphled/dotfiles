@@ -70,3 +70,7 @@ I provide mathematical reasoning capabilities: statistics, probability theory, n
 - **Ignoring assumptions** — Every statistical test has prerequisites
 - **False precision** — Reporting 10 decimal places from noisy data
 - **Correlation ≠ causation** — Always consider confounders
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Math Expert.md`

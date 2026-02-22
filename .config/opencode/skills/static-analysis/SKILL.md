@@ -54,6 +54,10 @@ I provide guidance on static code analysis tools and patterns across multiple la
 - ❌ **No CI enforcement** - Local checks are easily bypassed or forgotten.
 - ❌ **Too many tools** - Overwhelming noise leads to the team ignoring results.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Static Analysis.md`
+
 ## Related skills
 
 - `clean-code` - The standards that static analysis enforces

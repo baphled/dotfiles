@@ -112,6 +112,10 @@ After session completion:
    → Update estimation heuristics
    ```
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Token Cost Estimation.md`
+
 ## Related skills
 
 - `pre-action` - Clarify scope before estimating

@@ -111,6 +111,10 @@ end
 - ❌ Deeply nested contexts beyond 3 levels (extract shared examples)
 - ❌ Using `before(:all)` with database state (leaks between tests)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/RSpec Testing.md`
+
 ## Related skills
 
 - `ruby` - Core Ruby idioms and patterns

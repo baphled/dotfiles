@@ -30,6 +30,11 @@ Show another way to approach problems in tool-usage-discipline.
 
 ❌ Common mistake with tool-usage-discipline—what goes wrong and why
 ❌ When NOT to use tool-usage-discipline—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Agent-Guidance/Tool Usage Discipline.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

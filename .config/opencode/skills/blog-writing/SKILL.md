@@ -30,6 +30,11 @@ Show another way to approach problems in blog-writing.
 
 ❌ Common mistake with blog-writing—what goes wrong and why
 ❌ When NOT to use blog-writing—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Blog Writing.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

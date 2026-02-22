@@ -92,6 +92,10 @@ env.SubmitHuhForm()  // ❌ FORBIDDEN — deadlocks
 - ❌ Tightly coupling tests to form UI (test values/results, not visual layout)
 - ❌ Large integration tests without unit validator coverage
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Huh Testing.md`
+
 ## Related skills
 
 - `huh` - The huh form library being tested

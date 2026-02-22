@@ -101,6 +101,11 @@ Issues: None
 - ❌ Leaving broken code at end of session
 - ❌ Declaring project done based on visual inspection alone
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Agent-Guidance/Long Running Agent.md`
+
 ## Related skills
 
 - `task-tracker` — Per-session task management

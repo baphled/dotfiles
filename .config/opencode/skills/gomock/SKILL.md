@@ -30,6 +30,10 @@ Show another way to approach problems in gomock.
 
 ❌ Common mistake with gomock—what goes wrong and why
 ❌ When NOT to use gomock—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Gomock.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -66,6 +66,11 @@ CMD ["npm", "start"]
 - ❌ **Hardcoded Config** — Use environment variables or volume mounts instead
 - ❌ **Large Layers** — Don't combine unrelated files; keep `.dockerignore` updated
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Docker.md`
+
 ## Related skills
 
 - `devops` - Broader operational patterns

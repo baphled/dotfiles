@@ -124,6 +124,10 @@ It("handles nested tables", func() {
 - ❌ Ignoring counterexamples that disprove the claim
 - ❌ Over-relying on example tests when properties would be stronger
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Prove Correctness.md`
+
 ## Related skills
 
 - `fuzz-testing` - Discover counterexamples automatically

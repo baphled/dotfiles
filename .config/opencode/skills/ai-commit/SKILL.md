@@ -30,6 +30,10 @@ Show another way to approach problems in ai-commit.
 
 ❌ Common mistake with ai-commit—what goes wrong and why
 ❌ When NOT to use ai-commit—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Git/AI Commit.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

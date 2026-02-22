@@ -135,6 +135,10 @@ EOF
 - ❌ Missing technical context (new contributor can't start)
 - ❌ Dependent tasks without explicit ordering
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Create Task.md`
+
 ## Related skills
 
 - `create-bug` - Bug-specific task structure

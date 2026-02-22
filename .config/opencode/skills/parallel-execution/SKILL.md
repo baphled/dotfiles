@@ -98,6 +98,10 @@ Savings: ~30-50% vs sequential
 - ❌ Ignoring parallelisation opportunities
 - ❌ Not tracking efficiency gains
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Parallel Execution.md`
+
 ## Related skills
 
 - `token-cost-estimation` - Benefits from parallel efficiency

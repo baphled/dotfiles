@@ -30,6 +30,10 @@ Show another way to approach problems in auto-rebase.
 
 ❌ Common mistake with auto-rebase—what goes wrong and why
 ❌ When NOT to use auto-rebase—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Git/Auto Rebase.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -113,6 +113,10 @@ f.Fuzz(func(t *testing.T, input string) {
 - ❌ Fuzzing functions with external dependencies (isolate with interfaces)
 - ❌ Asserting exact values instead of properties (fuzz inputs are random)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Fuzz Testing.md`
+
 ## Related skills
 
 - `prove-correctness` - Property-based testing complements fuzzing

@@ -30,6 +30,10 @@ Show another way to approach problems in security.
 
 ❌ Common mistake with security—what goes wrong and why
 ❌ When NOT to use security—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Security/Security.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

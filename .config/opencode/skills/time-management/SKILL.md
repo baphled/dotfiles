@@ -82,6 +82,10 @@ Duration multiplier:
 - ❌ Extending timeboxes repeatedly
 - ❌ Ignoring fatigue signals
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Time Management.md`
+
 ## Related skills
 
 - `token-cost-estimation` - Uses duration for token estimates

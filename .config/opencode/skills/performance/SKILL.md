@@ -125,6 +125,11 @@ result := b.String()
 - ❌ **`sync.Pool` everywhere** — Only helps for frequently allocated, short-lived objects; adds complexity
 - ❌ **Caching without eviction** — Unbounded caches leak memory; always set a size limit or TTL
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Performance-Profiling/Performance.md`
+
 ## Related skills
 
 - `benchmarking` - Detailed benchmark methodology and comparison

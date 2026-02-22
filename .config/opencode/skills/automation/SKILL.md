@@ -85,6 +85,11 @@ restartPolicy: Always
 - ❌ **No Rollback** - Automation that cannot be undone or reverted safely.
 - ❌ **Automation Drift** - Scripts that work locally but fail in CI/CD environments.
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Automation.md`
+
 ## Related skills
 
 - `devops` - CI/CD and operational excellence.

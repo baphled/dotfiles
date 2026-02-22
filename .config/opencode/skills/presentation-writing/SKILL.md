@@ -30,6 +30,11 @@ Show another way to approach problems in presentation-writing.
 
 ❌ Common mistake with presentation-writing—what goes wrong and why
 ❌ When NOT to use presentation-writing—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Presentation Writing.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

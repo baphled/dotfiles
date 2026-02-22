@@ -159,6 +159,10 @@ window.renderChart(chartData, this.container);
 - ❌ **Inappropriate Chart Types:** Using a pie chart for time series data or a line chart for unrelated categories.
 - ❌ **Poor Contrast:** Using series colours that are indistinguishable or clash with the Obsidian theme.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Obsidian ChartJS Expert.md`
+
 ## Related skills
 
 - `obsidian-dataview-expert` – Essential for querying data to populate charts.

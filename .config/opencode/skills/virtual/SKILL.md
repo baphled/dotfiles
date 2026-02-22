@@ -33,3 +33,7 @@ I guide virtualisation and VPS hosting deployment using providers like DigitalOc
 - Load with `scripter` for system administration tasks
 - Load with `configuration-management` for reproducible setups
 - For VPS hardening guides, refer to Obsidian vault
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Virtual.md`

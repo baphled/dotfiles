@@ -30,6 +30,11 @@ Show another way to approach problems in assumption-tracker.
 
 ❌ Common mistake with assumption-tracker—what goes wrong and why
 ❌ When NOT to use assumption-tracker—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Assumption Tracker.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

@@ -30,6 +30,11 @@ Show another way to approach problems in vue.
 
 ❌ Common mistake with vue—what goes wrong and why
 ❌ When NOT to use vue—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/UI-Frameworks/Vue.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

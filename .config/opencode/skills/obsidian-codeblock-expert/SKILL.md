@@ -30,6 +30,10 @@ Show another way to approach problems in obsidian-codeblock-expert.
 
 ❌ Common mistake with obsidian-codeblock-expert—what goes wrong and why
 ❌ When NOT to use obsidian-codeblock-expert—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Obsidian Codeblock Expert.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

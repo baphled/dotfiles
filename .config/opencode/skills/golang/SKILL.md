@@ -127,6 +127,6 @@ func good() error {
 - `ginkgo-gomega` - BDD testing framework for Go
 - `clean-code` - SOLID principles applied to Go
 
-## See also
+## KB Reference
 
-- Vault: `Knowledge Base/Skills/Languages/Go.md`
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Languages/Go.md`

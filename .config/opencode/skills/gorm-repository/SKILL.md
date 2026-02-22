@@ -78,6 +78,10 @@ err := db.Transaction(func(tx *gorm.DB) error {
 - ❌ Missing indexes on frequently queried columns or foreign keys.
 - ❌ Using `AutoMigrate` for production environments; prefer versioned migrations.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Database-Persistence/GORM Repository.md`
+
 ## Related skills
 
 - `db-operations` - General database and transaction patterns

@@ -83,6 +83,11 @@ resource "aws_db_instance" "main" {
 - ❌ **Hardcoded Values** — Use variables and data sources for cross-environment flexibility
 - ❌ **State in Git** — State files contain sensitive data and cause merge conflicts
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Infrastructure As Code.md`
+
 ## Related skills
 
 - `nix` - Declarative package management and system configuration

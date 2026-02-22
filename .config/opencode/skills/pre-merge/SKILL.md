@@ -105,6 +105,10 @@ HIGH RISK: Database migration, public API change, auth changes
 - ❌ Merging WIP or fixup commits without squashing
 - ❌ Skipping the checklist because "it's a small change"
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Git/Pre Merge.md`
+
 ## Related skills
 
 - `code-reviewer` - Review process that precedes pre-merge

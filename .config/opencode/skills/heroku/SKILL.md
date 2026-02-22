@@ -33,3 +33,7 @@ I guide Heroku Platform-as-a-Service deployment for rapid prototyping and small-
 - Load with `release-management` for Heroku pipelines and review apps
 - Load with `monitoring` for Heroku metrics and logging
 - For 12-factor principles, refer to Obsidian vault
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/Heroku.md`

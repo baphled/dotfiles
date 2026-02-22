@@ -89,6 +89,10 @@ Track these to measure efficiency:
 - ❌ Repeating context unnecessarily
 - ❌ Not learning from high-cost sessions
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Token Efficiency.md`
+
 ## Related skills
 
 - `token-cost-estimation` - Quantifies costs, identifies savings

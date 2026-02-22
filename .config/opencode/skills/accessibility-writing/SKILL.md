@@ -30,6 +30,11 @@ Show another way to approach problems in accessibility-writing.
 
 ❌ Common mistake with accessibility-writing—what goes wrong and why
 ❌ When NOT to use accessibility-writing—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Accessibility Writing.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

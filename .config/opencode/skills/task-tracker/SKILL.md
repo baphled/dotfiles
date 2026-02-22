@@ -88,6 +88,10 @@ Progress: 1/5 complete, ~380/3500 tokens used
 - ❌ Not scoring complexity upfront
 - ❌ Ignoring token variance patterns
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Task Tracker.md`
+
 ## Related skills
 
 - `token-cost-estimation` - Provides complexity and token data

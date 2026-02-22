@@ -124,6 +124,10 @@ expect(document.body).toMatchSnapshot();
 - ❌ Forgetting `await` on async assertions (test passes falsely)
 - ❌ Over-mocking (mock boundaries, not everything—test real logic)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Jest.md`
+
 ## Related skills
 
 - `javascript` - Core JS/TS idioms and patterns

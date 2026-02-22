@@ -52,6 +52,10 @@ func SearchUsers(query string) []User { ... }
 - ❌ **Big Bang Rewrites** — Replacing the entire system at once (extremely high risk)
 - ❌ **Silent Failures** — Allowing debt to cause bugs without alerting stakeholders
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Technical Debt.md`
+
 ## Related skills
 
 - `refactor` - Systematic code refactoring techniques

@@ -47,3 +47,8 @@ end
 ❌ **Over-Embedding**: Unbounded document growth causing performance degradation.
 ❌ **N+1 Queries**: Not using `.includes(:association)` for referenced documents.
 ❌ **Missing Indices**: Performing full collection scans on frequent queries.
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Database-Persistence/Mongoid.md`
+

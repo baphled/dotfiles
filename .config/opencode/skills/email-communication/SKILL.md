@@ -30,6 +30,11 @@ Show another way to approach problems in email-communication.
 
 ❌ Common mistake with email-communication—what goes wrong and why
 ❌ When NOT to use email-communication—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Email Communication.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

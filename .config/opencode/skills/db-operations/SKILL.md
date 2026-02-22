@@ -87,6 +87,10 @@ func (r *repo) List(ctx context.Context, page, size int) ([]User, error) {
 - ❌ Missing SQLite pragmas; WAL mode and foreign keys are essential for performance/integrity.
 - ❌ Ignoring transaction boundaries for multi-step operations.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Database-Persistence/DB Operations.md`
+
 ## Related skills
 
 - `gorm-repository` - Detailed GORM ORM patterns

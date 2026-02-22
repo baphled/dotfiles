@@ -91,6 +91,10 @@ func (s *Service) ProcessOrder(ctx context.Context, order *Order) error {
 - ❌ **Premature abstraction** — Don't create an interface for one implementation; wait for the second use
 - ❌ **Dead code** — Commented-out code, unused functions; delete it, git remembers
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Clean Code.md`
+
 ## Related skills
 
 - `golang` - Apply clean code principles idiomatically in Go

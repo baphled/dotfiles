@@ -30,6 +30,10 @@ Show another way to approach problems in pr-monitor.
 
 ❌ Common mistake with pr-monitor—what goes wrong and why
 ❌ When NOT to use pr-monitor—valid reasons to choose alternatives
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Git/PR Monitor.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

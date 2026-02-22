@@ -30,6 +30,11 @@ Show another way to approach problems in mentoring.
 
 ❌ Common mistake with mentoring—what goes wrong and why
 ❌ When NOT to use mentoring—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Agent-Guidance/Mentoring.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

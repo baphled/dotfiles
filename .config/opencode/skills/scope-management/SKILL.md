@@ -99,6 +99,10 @@ SCOPE CREEP DETECTED:
 - ❌ Forgetting deferred items
 - ❌ Ignoring token budget constraints
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Workflow-Orchestration/Scope Management.md`
+
 ## Related skills
 
 - `token-cost-estimation` - Uses resource data for estimates

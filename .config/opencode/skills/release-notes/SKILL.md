@@ -30,6 +30,11 @@ Show another way to approach problems in release-notes.
 
 ❌ Common mistake with release-notes—what goes wrong and why
 ❌ When NOT to use release-notes—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Communication-Writing/Release Notes.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains

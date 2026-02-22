@@ -118,6 +118,11 @@ func HealthHandler(w http.ResponseWriter, r *http.Request) {
 - ❌ No monitoring/alerts (you can't fix what you can't see)
 - ❌ Mutable infrastructure (treat servers as cattle, not pets)
 
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/DevOps-Operations/DevOps.md`
+
 ## Related skills
 
 - `github-expert` - GitHub Actions workflows and CI/CD

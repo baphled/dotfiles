@@ -96,6 +96,10 @@ func (s *Service) Get(id ID) (*DTO, error) {
 - ❌ **Service Layer Bypass** - Controllers calling repositories or third-party APIs directly.
 - ❌ **God Services** - A single service class handling unrelated business domains.
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Domain-Architecture/Service Layer.md`
+
 ## Related skills
 
 - `domain-modeling` - The rich models that services orchestrate.

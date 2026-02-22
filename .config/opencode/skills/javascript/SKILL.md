@@ -96,9 +96,14 @@ for (let i = 0; i < numbers.length; i++) {
 - ❌ Synchronous operations blocking event loop (use async)
 - ❌ Silent failures (always handle promise rejections)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Languages/JavaScript.md`
+
 ## Related skills
 
 - `clean-code` - SOLID principles in JavaScript
 - `bdd-workflow` - Test-driven development workflow
 - `jest` - Jest testing framework for JavaScript
 - `design-patterns` - Common patterns in JavaScript
+- `playwright` - Browser automation for JS/TS applications

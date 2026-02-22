@@ -85,6 +85,10 @@ NOT database issue (was belief)
 - ❌ Forgetting to update beliefs when evidence contradicts them
 - ❌ Acting with 100% confidence when you have 40% certainty
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Epistemic Rigour.md`
+
 ## Related skills
 
 - `critical-thinking` - Rigorously analyse information before trusting it

@@ -30,6 +30,11 @@ Show another way to approach problems in question-resolver.
 
 ❌ Common mistake with question-resolver—what goes wrong and why
 ❌ When NOT to use question-resolver—valid reasons to choose alternatives
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Thinking-Analysis/Question Resolver.md`
+
 ## Related skills
 
 - `clean-code` – Applies across all domains
