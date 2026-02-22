@@ -1,1145 +1,1218 @@
 [
-{
-  "name": "accessibility",
-  "description": "Ensure terminal applications are usable by everyone including users with disabilities",
-  "directory": "accessibility",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "accessibility-writing",
-  "description": "Guide creating accessible documentation and content for everyone",
-  "directory": "accessibility-writing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "ai-commit",
-  "description": "Create properly attributed commits for AI-generated code",
-  "directory": "ai-commit",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "api-design",
-  "description": "Design clean, consistent APIs - RESTful conventions, versioning, backwards compatibility",
-  "directory": "api-design",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "api-documentation",
-  "description": "Guide writing clear, comprehensive API documentation that helps developers integrate",
-  "directory": "api-documentation",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "architecture",
-  "description": "Enforce architectural patterns and layer boundaries",
-  "directory": "architecture",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "assumption-tracker",
-  "description": "Explicitly track, test, and validate assumptions - prevent blind spots",
-  "directory": "assumption-tracker",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "automation",
-  "description": "Eliminate repetitive tasks, build CI/CD pipelines, and create self-maintaining systems",
-  "directory": "automation",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "auto-rebase",
-  "description": "Automatically rebase PRs and resolve conflicts to keep branches up-to-date",
-  "directory": "auto-rebase",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "aws",
-  "description": "AWS cloud services including EC2, ECS, S3, Lambda, RDS for scalable cloud-native applications",
-  "directory": "aws",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "bare-metal",
-  "description": "Physical server provisioning, colocation, and dedicated hardware for performance-critical workloads",
-  "directory": "bare-metal",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "bdd-workflow",
-  "description": "Behaviour-Driven Development, Red-Green-Refactor cycle for test-driven development",
-  "directory": "bdd-workflow",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "benchmarking",
-  "description": "Go benchmarking for measuring and optimising code performance",
-  "directory": "benchmarking",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "blog-writing",
-  "description": "Blog post writing for technical content and thought leadership",
-  "directory": "blog-writing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "breaking-changes",
-  "description": "Managing backwards compatibility, deprecation, and migration strategies",
-  "directory": "breaking-changes",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "british-english",
-  "description": "Enforce British English spelling, grammar, and conventions in all written content",
-  "directory": "british-english",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "bubble-tea-expert",
-  "description": "Expert in Charm's Bubble Tea TUI framework and implementation patterns",
-  "directory": "bubble-tea-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "bubble-tea-testing",
-  "description": "Testing Bubble Tea TUI applications",
-  "directory": "bubble-tea-testing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "check-compliance",
-  "description": "Run full compliance checks before and after changes",
-  "directory": "check-compliance",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "checklist-discipline",
-  "description": "Maintain rigorous checklist discipline with incremental updates",
-  "directory": "checklist-discipline",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "clean-code",
-  "description": "Write clean, maintainable code following SOLID principles and the Boy Scout Rule",
-  "directory": "clean-code",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "code-generation",
-  "description": "Use go:generate effectively - mockgen, stringer, templates, reducing boilerplate",
-  "directory": "code-generation",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "code-reading",
-  "description": "Understand unfamiliar codebases quickly - navigation strategies, building mental models, finding entry points",
-  "directory": "code-reading",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "code-reviewer",
-  "description": "Comprehensive code review covering clean code, architecture, security",
-  "directory": "code-reviewer",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "concurrency",
-  "description": "Write safe, efficient concurrent Go code - goroutines, channels, sync primitives",
-  "directory": "concurrency",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "configuration-management",
-  "description": "Manage configuration properly - environment variables, config files, secrets",
-  "directory": "configuration-management",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "core-auto-detect",
-  "description": "Automatic environment detection and skill activation based on context",
-  "directory": "core-auto-detect",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "cpp",
-  "description": "C++ for embedded systems, Arduino, ESP8266/ESP32, PlatformIO, and modern C++ idioms",
-  "directory": "cpp",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "create-bug",
-  "description": "Create and document bug reports with proper structure for tracking and fixing",
-  "directory": "create-bug",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "create-intent",
-  "description": "Create a new intent with proper subdirectory structure following architecture",
-  "directory": "create-intent",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "create-pr",
-  "description": "Create a pull request following branching and merge strategies",
-  "directory": "create-pr",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "create-screen",
-  "description": "Create a new screen component following naming conventions and architecture",
-  "directory": "create-screen",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "create-task",
-  "description": "Create well-structured development tasks with clear acceptance criteria",
-  "directory": "create-task",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "critical-thinking",
-  "description": "Apply rigorous analysis - challenge claims, test assumptions, spot weak reasoning, demand evidence",
-  "directory": "critical-thinking",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "cucumber",
-  "description": "Gherkin/Cucumber BDD specification language",
-  "directory": "cucumber",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "cyber-security",
-  "description": "Vulnerability assessment, defensive programming, and attack prevention",
-  "directory": "cyber-security",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "cypress",
-  "description": "Cypress E2E testing framework for web applications",
-  "directory": "cypress",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "db-operations",
-  "description": "Database operations following repository patterns with GORM and SQLite",
-  "directory": "db-operations",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "debug-test",
-  "description": "Debug failing tests and common test issues in KaRiya",
-  "directory": "debug-test",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "dependency-management",
-  "description": "Manage Go modules safely - version constraints, security patches",
-  "directory": "dependency-management",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "design-patterns",
-  "description": "Recognise and apply design patterns appropriately",
-  "directory": "design-patterns",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "devils-advocate",
-  "description": "Challenge ideas, find weaknesses, and stress-test solutions before implementation",
-  "directory": "devils-advocate",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "devops",
-  "description": "CI/CD, infrastructure as code, containerisation, and operational excellence",
-  "directory": "devops",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "documentation-writing",
-  "description": "Write clear technical documentation - READMEs, ADRs, runbooks, API docs",
-  "directory": "documentation-writing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "domain-modeling",
-  "description": "Domain-Driven Design (DDD) and domain modelling patterns",
-  "directory": "domain-modeling",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "e2e-testing",
-  "description": "End-to-end testing patterns using test harnesses",
-  "directory": "e2e-testing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "email-communication",
-  "description": "Professional email communication for technical contexts",
-  "directory": "email-communication",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "embedded-testing",
-  "description": "Embedded systems testing patterns, hardware-in-the-loop",
-  "directory": "embedded-testing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "epistemic-rigor",
-  "description": "Know what you know, what you don't know, and the difference between belief and knowledge",
-  "directory": "epistemic-rigor",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "error-handling",
-  "description": "Language-agnostic error handling patterns and strategies",
-  "directory": "error-handling",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "estimation",
-  "description": "Estimate work effectively - break down tasks, account for uncertainty, evaluate complexity",
-  "directory": "estimation",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "evaluate-change-request",
-  "description": "Systematically evaluate change requests for validity before accepting — challenge weak evidence, verify claims, prevent blind acceptance",
-  "directory": "evaluate-change-request",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "feature-flags",
-  "description": "Safe feature rollouts using feature flags, gradual releases, and A/B testing",
-  "directory": "feature-flags",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "fix-architecture",
-  "description": "Diagnose and fix architecture violations",
-  "directory": "fix-architecture",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "fuzz-testing",
-  "description": "Fuzzing for finding edge cases and crashes",
-  "directory": "fuzz-testing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "ginkgo-gomega",
-  "description": "Ginkgo v2 BDD testing framework and Gomega assertions (Go)",
-  "directory": "ginkgo-gomega",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "git-advanced",
-  "description": "Advanced Git operations: rebasing, cherry-picking, bisect, history management",
-  "directory": "git-advanced",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "github-expert",
-  "description": "GitHub Actions, workflows, CLI, API, and repository management best practices",
-  "directory": "github-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "git-worktree",
-  "description": "Use Git worktrees for parallel development",
-  "directory": "git-worktree",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "godog",
-  "description": "Gherkin runner for Go",
-  "directory": "godog",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "golang",
-  "description": "Go language expertise including idioms, patterns, performance, concurrency, and best practices",
-  "directory": "golang",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "gomock",
-  "description": "GoMock for generating and using mock implementations of Go interfaces",
-  "directory": "gomock",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "gorm-repository",
-  "description": "GORM ORM, SQLite, and repository patterns",
-  "directory": "gorm-repository",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "graphql",
-  "description": "GraphQL API design and implementation patterns",
-  "directory": "graphql",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "heroku",
-  "description": "Heroku PaaS for rapid prototyping and deployment with managed infrastructure and add-ons",
-  "directory": "heroku",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "huh",
-  "description": "Interactive form library (Go) and patterns",
-  "directory": "huh",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "huh-testing",
-  "description": "Testing huh form library components",
-  "directory": "huh-testing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "incident-communication",
-  "description": "Communicating about security and operational incidents professionally",
-  "directory": "incident-communication",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "incident-response",
-  "description": "Handle production incidents: diagnose, mitigate, resolve, learn from failures",
-  "directory": "incident-response",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "information-architecture",
-  "description": "Structuring information and content for clarity and navigation",
-  "directory": "information-architecture",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "investigation",
-  "description": "Systematic codebase investigation producing structured Obsidian documentation with DataviewJS auto-indexing",
-  "directory": "investigation",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "javascript",
-  "description": "JavaScript/TypeScript, Vue.js, Node.js, async patterns, and modern ES6+ practices",
-  "directory": "javascript",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "jest",
-  "description": "Jest testing framework for JavaScript/TypeScript",
-  "directory": "jest",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "justify-decision",
-  "description": "Provide evidence-based justification for architectural and design decisions",
-  "directory": "justify-decision",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "knowledge-base",
-  "description": "Knowledge base management and storage across multiple formats",
-  "directory": "knowledge-base",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "logging-observability",
-  "description": "Implement structured logging, tracing, and metrics for debugging",
-  "directory": "logging-observability",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "math-expert",
-  "description": "Mathematical reasoning, statistics, probability, and numerical methods for data analysis and algorithm design",
-  "directory": "math-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "memory-keeper",
-  "description": "Capture discoveries, fixes, solutions, and patterns into a searchable knowledge graph for future reference",
-  "directory": "memory-keeper",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "mentoring",
-  "description": "Teaching and guiding junior engineers, code review coaching, knowledge transfer",
-  "directory": "mentoring",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "migration-strategies",
-  "description": "Execute migrations safely - database schema changes, data transformations",
-  "directory": "migration-strategies",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "mongoid",
-  "description": "Mongoid ORM for MongoDB (Ruby-specific)",
-  "directory": "mongoid",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "monitoring",
-  "description": "Post-deployment health checks, observability, and system monitoring",
-  "directory": "monitoring",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "new-skill",
-  "description": "Create new skills, commands, or agents with full integration into all workflows and documentation",
-  "directory": "new-skill",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "nix",
-  "description": "Nix package manager for reproducible builds, flakes, nix-shell development environments, and declarative package management",
-  "directory": "nix",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "note-taking",
-  "description": "Externalising reasoning; create notes for Obsidian, blogs, docs",
-  "directory": "note-taking",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-chartjs-expert",
-  "description": "Chartjs plugin expertise for embedding charts in Obsidian",
-  "directory": "obsidian-chartjs-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-codeblock-expert",
-  "description": "Code block and syntax highlighting expertise in Obsidian",
-  "directory": "obsidian-codeblock-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-consolidation",
-  "description": "Systematically consolidate and refine zettelkasten notes on related themes",
-  "directory": "obsidian-consolidation",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-customjs-expert",
-  "description": "CustomJS plugin expertise for scripting in Obsidian",
-  "directory": "obsidian-customjs-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-dataview-expert",
-  "description": "Dataview plugin expertise for dynamic queries and dashboards",
-  "directory": "obsidian-dataview-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-frontmatter",
-  "description": "Frontmatter management in Obsidian for metadata and organisation",
-  "directory": "obsidian-frontmatter",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-latex-expert",
-  "description": "LaTeX rendering expertise in Obsidian for mathematical notation",
-  "directory": "obsidian-latex-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-mermaid-expert",
-  "description": "Mermaid diagram plugin expertise for flowcharts and diagrams",
-  "directory": "obsidian-mermaid-expert",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "obsidian-structure",
-  "description": "Enforce PARA structure and tags in Obsidian vault properly",
-  "directory": "obsidian-structure",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "pair-programming",
-  "description": "Collaborate effectively through pairing - driver/navigator, mob programming",
-  "directory": "pair-programming",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "parallel-execution",
-  "description": "Maximise efficiency by running independent tasks in parallel - reduce token overhead",
-  "directory": "parallel-execution",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "performance",
-  "description": "Go performance optimisation, profiling, and writing efficient code",
-  "directory": "performance",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "platformio",
-  "description": "PlatformIO build system for embedded development with Arduino compatibility",
-  "directory": "platformio",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "pragmatic-problem-solving",
-  "description": "Focus on practical solutions - balance ideal with achievable, ship working",
-  "directory": "pragmatic-problem-solving",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "pre-action",
-  "description": "Mandatory decision framework - clarify goal, evaluate options, choose consciously before acting",
-  "directory": "pre-action",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "pre-merge",
-  "description": "Final validation checklist before merging PRs to ensure quality",
-  "directory": "pre-merge",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "presentation-writing",
-  "description": "Presentation and talk writing for conferences and technical talks",
-  "directory": "presentation-writing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "pr-monitor",
-  "description": "Monitor PR for CI status, reviews, and coordinate response workflow",
-  "directory": "pr-monitor",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "profiling",
-  "description": "Performance profiling and measurement tools for identifying bottlenecks",
-  "directory": "profiling",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "proof-reader",
-  "description": "Proofreading and editing for clarity and correctness",
-  "directory": "proof-reader",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "prove-correctness",
-  "description": "Write tests and provide evidence to prove or disprove claims about code",
-  "directory": "prove-correctness",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "question-resolver",
-  "description": "Systematically resolve questions - determine if answerable, gather evidence",
-  "directory": "question-resolver",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "refactor",
-  "description": "Systematic refactoring with safety nets and incremental changes",
-  "directory": "refactor",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "release-management",
-  "description": "Versioning, changelogs, release notes, and release branch management",
-  "directory": "release-management",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "release-notes",
-  "description": "Writing clear, comprehensive release notes for software releases",
-  "directory": "release-notes",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "research",
-  "description": "Systematic research and investigation for understanding codebases and technologies",
-  "directory": "research",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "respond-to-review",
-  "description": "Manage and execute code review feedback through evaluation, classification, implementation, and evidence reporting.",
-  "directory": "respond-to-review",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "retrofitting-types",
-  "description": "Add types to untyped code gradually without breaking functionality",
-  "directory": "retrofitting-types",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "retrospective",
-  "description": "Learning from failures and successes, post-mortems, continuous improvement",
-  "directory": "retrospective",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "rollback-recovery",
-  "description": "Handling failed deployments, reverting changes, and recovery procedures",
-  "directory": "rollback-recovery",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "rspec-testing",
-  "description": "RSpec BDD testing framework for Ruby",
-  "directory": "rspec-testing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "ruby",
-  "description": "Ruby development, RubyGems, Rails, clean code practices, and idiomatic Ruby",
-  "directory": "ruby",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "scope-management",
-  "description": "Manage scope effectively - identify resources, prevent creep, optimise for token budget",
-  "directory": "scope-management",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "scripter",
-  "description": "Bash, Python, and scripting languages for automation and tooling",
-  "directory": "scripter",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "security",
-  "description": "Secure coding practices including input validation, SQL injection prevention",
-  "directory": "security",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "service-layer",
-  "description": "Service layer patterns for business logic orchestration",
-  "directory": "service-layer",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "skill-discovery",
-  "description": "Proactively discover and suggest skills from skills.sh based on task context",
-  "directory": "skill-discovery",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "sql",
-  "description": "SQL query optimisation and patterns for efficient database operations",
-  "directory": "sql",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "static-analysis",
-  "description": "Static code analysis tools and patterns",
-  "directory": "static-analysis",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "style-guide",
-  "description": "Style guide enforcement and documentation conventions",
-  "directory": "style-guide",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "systems-thinker",
-  "description": "Understand complex systems, interconnections, and emergent behaviors",
-  "directory": "systems-thinker",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "task-completer",
-  "description": "Ensure tasks are fully completed with all requirements met and no loose ends",
-  "directory": "task-completer",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "task-tracker",
-  "description": "Track progress through structured task lists with complexity scoring and token tracking",
-  "directory": "task-tracker",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "tdd-workflow",
-  "description": "Follow the TDD Red-Green-Refactor cycle for KaRiya development with proper phase tracking",
-  "directory": "tdd-workflow",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "test-fixtures",
-  "description": "Test data factory patterns",
-  "directory": "test-fixtures",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "test-fixtures-go",
-  "description": "Factory-go and gofakeit for Go test fixtures",
-  "directory": "test-fixtures-go",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "time-management",
-  "description": "Manage time effectively - timeboxing, focus, duration estimation, productivity breaks",
-  "directory": "time-management",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "token-cost-estimation",
-  "description": "Estimate and track token costs before work sessions - complexity, duration, resources",
-  "directory": "token-cost-estimation",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "token-efficiency",
-  "description": "Maximise AI interaction value per token - techniques, patterns, integration with cost estimation",
-  "directory": "token-efficiency",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "tool-usage-discipline",
-  "description": "Use skills for domain knowledge, MCP tools over manual lookups",
-  "directory": "tool-usage-discipline",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "trade-off-analysis",
-  "description": "Systematically evaluate trade-offs when comparing alternatives",
-  "directory": "trade-off-analysis",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "tutorial-writing",
-  "description": "Step-by-step learning guides and tutorials for teaching concepts",
-  "directory": "tutorial-writing",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "ui-design",
-  "description": "Terminal user interface design - visual hierarchy, layout, and clear interfaces",
-  "directory": "ui-design",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "ux-design",
-  "description": "Intuitive user experiences in terminal applications - mental models, interaction patterns",
-  "directory": "ux-design",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "vhs",
-  "description": "Terminal recording and demos with VHS for creating compelling KaRiya demonstrations",
-  "directory": "vhs",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "virtual",
-  "description": "Virtualisation and VPS hosting including DigitalOcean, Linode, Hetzner, Vultr for self-managed infrastructure",
-  "directory": "virtual",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "vue",
-  "description": "Vue.js framework, components, state management, and routing patterns",
-  "directory": "vue",
-  "category": "",
-  "kb_note": ""
-}
-,
-{
-  "name": "writing-style",
-  "description": "Personal writing voice and communication style conventions",
-  "directory": "writing-style",
-  "category": "",
-  "kb_note": ""
-}
+  {
+    "name": "accessibility",
+    "display_name": "Accessibility",
+    "description": "Ensure terminal applications are usable by everyone including users with disabilities",
+    "directory": "accessibility",
+    "category": "UI-Frameworks",
+    "kb_note": "Accessibility"
+  },
+  {
+    "name": "accessibility-writing",
+    "display_name": "Accessibility Writing",
+    "description": "Guide creating accessible documentation and content for everyone",
+    "directory": "accessibility-writing",
+    "category": "Communication-Writing",
+    "kb_note": "Accessibility Writing"
+  },
+  {
+    "name": "agent-discovery",
+    "display_name": "Agent Discovery",
+    "description": "Automatically discover and route to appropriate specialist agents",
+    "directory": "agent-discovery",
+    "category": "Core-Universal",
+    "kb_note": "Agent Discovery"
+  },
+  {
+    "name": "ai-commit",
+    "display_name": "AI Commit",
+    "description": "Create properly attributed commits for AI-generated code",
+    "directory": "ai-commit",
+    "category": "Git",
+    "kb_note": "AI Commit"
+  },
+  {
+    "name": "api-design",
+    "display_name": "API Design",
+    "description": "Design clean, consistent APIs - RESTful conventions, versioning, backwards compatibility",
+    "directory": "api-design",
+    "category": "Domain-Architecture",
+    "kb_note": "API Design"
+  },
+  {
+    "name": "api-documentation",
+    "display_name": "API Documentation",
+    "description": "Guide writing clear, comprehensive API documentation that helps developers integrate",
+    "directory": "api-documentation",
+    "category": "Communication-Writing",
+    "kb_note": "API Documentation"
+  },
+  {
+    "name": "architecture",
+    "display_name": "Architecture",
+    "description": "Enforce architectural patterns and layer boundaries",
+    "directory": "architecture",
+    "category": "Code-Quality",
+    "kb_note": "Architecture"
+  },
+  {
+    "name": "assumption-tracker",
+    "display_name": "Assumption Tracker",
+    "description": "Explicitly track, test, and validate assumptions - prevent blind spots",
+    "directory": "assumption-tracker",
+    "category": "Thinking-Analysis",
+    "kb_note": "Assumption Tracker"
+  },
+  {
+    "name": "auto-rebase",
+    "display_name": "Auto Rebase",
+    "description": "Automatically rebase PRs and resolve conflicts to keep branches up-to-date",
+    "directory": "auto-rebase",
+    "category": "Git",
+    "kb_note": "Auto Rebase"
+  },
+  {
+    "name": "automation",
+    "display_name": "Automation",
+    "description": "Eliminate repetitive tasks, build CI/CD pipelines, and create self-maintaining systems",
+    "directory": "automation",
+    "category": "DevOps-Operations",
+    "kb_note": "Automation"
+  },
+  {
+    "name": "aws",
+    "display_name": "AWS",
+    "description": "AWS cloud infrastructure, managed services, security best practices, and Go SDK integration",
+    "directory": "aws",
+    "category": "DevOps-Operations",
+    "kb_note": "AWS"
+  },
+  {
+    "name": "bare-metal",
+    "display_name": "Bare Metal",
+    "description": "Physical server provisioning, colocation, and dedicated hardware for performance-critical workloads",
+    "directory": "bare-metal",
+    "category": "DevOps-Operations",
+    "kb_note": "Bare Metal"
+  },
+  {
+    "name": "bdd-anti-patterns",
+    "display_name": "BDD Anti-Patterns",
+    "description": "Library of common BDD mistakes and how to fix them",
+    "directory": "bdd-anti-patterns",
+    "category": "Testing-BDD",
+    "kb_note": "BDD Anti-Patterns"
+  },
+  {
+    "name": "bdd-best-practices",
+    "display_name": "BDD Best Practices",
+    "description": "Universal BDD best practices for writing high-quality executable specifications",
+    "directory": "bdd-best-practices",
+    "category": "Testing-BDD",
+    "kb_note": "BDD Best Practices"
+  },
+  {
+    "name": "bdd-workflow",
+    "display_name": "BDD Workflow",
+    "description": "Behaviour-Driven Development, Red-Green-Refactor cycle for test-driven development",
+    "directory": "bdd-workflow",
+    "category": "Testing-BDD",
+    "kb_note": "BDD Workflow"
+  },
+  {
+    "name": "benchmarking",
+    "display_name": "Benchmarking",
+    "description": "Go benchmarking for measuring and optimising code performance",
+    "directory": "benchmarking",
+    "category": "Performance-Profiling",
+    "kb_note": "Benchmarking"
+  },
+  {
+    "name": "blog-writing",
+    "display_name": "Blog Writing",
+    "description": "Blog post writing for technical content and thought leadership",
+    "directory": "blog-writing",
+    "category": "Communication-Writing",
+    "kb_note": "Blog Writing"
+  },
+  {
+    "name": "breaking-changes",
+    "display_name": "Breaking Changes",
+    "description": "Managing backwards compatibility, deprecation, and migration strategies",
+    "directory": "breaking-changes",
+    "category": "Domain-Architecture",
+    "kb_note": "Breaking Changes"
+  },
+  {
+    "name": "british-english",
+    "display_name": "British English",
+    "description": "Enforce British English spelling, grammar, and conventions in all written content",
+    "directory": "british-english",
+    "category": "Communication-Writing",
+    "kb_note": "British English"
+  },
+  {
+    "name": "bubble-tea-expert",
+    "display_name": "Bubble Tea Expert",
+    "description": "Expert in Charm's Bubble Tea TUI framework and implementation patterns",
+    "directory": "bubble-tea-expert",
+    "category": "UI-Frameworks",
+    "kb_note": "Bubble Tea Expert"
+  },
+  {
+    "name": "bubble-tea-testing",
+    "display_name": "Bubble Tea Testing",
+    "description": "Testing Bubble Tea TUI applications",
+    "directory": "bubble-tea-testing",
+    "category": "Testing-BDD",
+    "kb_note": "Bubble Tea Testing"
+  },
+  {
+    "name": "check-compliance",
+    "display_name": "Check Compliance",
+    "description": "Run full compliance checks before and after changes",
+    "directory": "check-compliance",
+    "category": "Code-Quality",
+    "kb_note": "Check Compliance"
+  },
+  {
+    "name": "checklist-discipline",
+    "display_name": "Checklist Discipline",
+    "description": "Maintain rigorous checklist discipline with incremental updates",
+    "directory": "checklist-discipline",
+    "category": "Session-Knowledge",
+    "kb_note": "Checklist Discipline"
+  },
+  {
+    "name": "clean-code",
+    "display_name": "Clean Code",
+    "description": "Write clean, maintainable code following SOLID principles and the Boy Scout Rule",
+    "directory": "clean-code",
+    "category": "Code-Quality",
+    "kb_note": "Clean Code"
+  },
+  {
+    "name": "code-generation",
+    "display_name": "Code Generation",
+    "description": "Use go:generate effectively - mockgen, stringer, templates, reducing boilerplate",
+    "directory": "code-generation",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Code Generation"
+  },
+  {
+    "name": "code-reading",
+    "display_name": "Code Reading",
+    "description": "Understand unfamiliar codebases quickly - navigation strategies, building mental models, finding entry points",
+    "directory": "code-reading",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Code Reading"
+  },
+  {
+    "name": "code-reviewer",
+    "display_name": "Code Reviewer",
+    "description": "Comprehensive code review covering clean code, architecture, security",
+    "directory": "code-reviewer",
+    "category": "Code-Quality",
+    "kb_note": "Code Reviewer"
+  },
+  {
+    "name": "concurrency",
+    "display_name": "Concurrency",
+    "description": "Write safe, efficient concurrent Go code - goroutines, channels, sync primitives",
+    "directory": "concurrency",
+    "category": "Performance-Profiling",
+    "kb_note": "Concurrency"
+  },
+  {
+    "name": "configuration-management",
+    "display_name": "Configuration Management",
+    "description": "Manage configuration properly - environment variables, config files, secrets",
+    "directory": "configuration-management",
+    "category": "DevOps-Operations",
+    "kb_note": "Configuration Management"
+  },
+  {
+    "name": "context-efficient-tools",
+    "display_name": "Context Efficient Tools",
+    "description": "Filter and transform tool results before they reach the model — prevent context bloat from large outputs",
+    "directory": "context-efficient-tools",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Context Efficient Tools"
+  },
+  {
+    "name": "core-auto-detect",
+    "display_name": "Core Auto Detect",
+    "description": "Automatic environment detection and skill activation based on context",
+    "directory": "core-auto-detect",
+    "category": "Session-Knowledge",
+    "kb_note": "Core Auto Detect"
+  },
+  {
+    "name": "cpp",
+    "display_name": "CPP",
+    "description": "C++ for embedded systems, Arduino, ESP8266/ESP32, PlatformIO, and modern C++ idioms",
+    "directory": "cpp",
+    "category": "Languages",
+    "kb_note": "CPP"
+  },
+  {
+    "name": "create-bug",
+    "display_name": "Create Bug",
+    "description": "Create and document bug reports with proper structure for tracking and fixing",
+    "directory": "create-bug",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Create Bug"
+  },
+  {
+    "name": "create-intent",
+    "display_name": "Create Intent",
+    "description": "Create a new intent with proper subdirectory structure following architecture",
+    "directory": "create-intent",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Create Intent"
+  },
+  {
+    "name": "create-pr",
+    "display_name": "Create Pr",
+    "description": "Create a pull request following branching and merge strategies",
+    "directory": "create-pr",
+    "category": "Delivery",
+    "kb_note": "Create Pr"
+  },
+  {
+    "name": "create-screen",
+    "display_name": "Create Screen",
+    "description": "Create a new screen component following naming conventions and architecture",
+    "directory": "create-screen",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Create Screen"
+  },
+  {
+    "name": "create-task",
+    "display_name": "Create Task",
+    "description": "Create well-structured development tasks with clear acceptance criteria",
+    "directory": "create-task",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Create Task"
+  },
+  {
+    "name": "critical-thinking",
+    "display_name": "Critical Thinking",
+    "description": "Apply rigorous analysis - challenge claims, test assumptions, spot weak reasoning, demand evidence",
+    "directory": "critical-thinking",
+    "category": "Thinking-Analysis",
+    "kb_note": "Critical Thinking"
+  },
+  {
+    "name": "cucumber",
+    "display_name": "Cucumber",
+    "description": "Gherkin/Cucumber BDD specification language",
+    "directory": "cucumber",
+    "category": "Testing-BDD",
+    "kb_note": "Cucumber"
+  },
+  {
+    "name": "cyber-security",
+    "display_name": "Cyber Security",
+    "description": "Vulnerability assessment, defensive programming, and attack prevention",
+    "directory": "cyber-security",
+    "category": "Security",
+    "kb_note": "Cyber Security"
+  },
+  {
+    "name": "cypress",
+    "display_name": "Cypress",
+    "description": "Cypress E2E testing framework for web applications",
+    "directory": "cypress",
+    "category": "Testing-BDD",
+    "kb_note": "Cypress"
+  },
+  {
+    "name": "db-operations",
+    "display_name": "DB Operations",
+    "description": "Database operations following repository patterns with GORM and SQLite",
+    "directory": "db-operations",
+    "category": "Database-Persistence",
+    "kb_note": "DB Operations"
+  },
+  {
+    "name": "debug-test",
+    "display_name": "Debug Test",
+    "description": "Debug failing tests and common test issues in KaRiya",
+    "directory": "debug-test",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Debug Test"
+  },
+  {
+    "name": "dependency-management",
+    "display_name": "Dependency Management",
+    "description": "Manage Go modules safely - version constraints, security patches",
+    "directory": "dependency-management",
+    "category": "Domain-Architecture",
+    "kb_note": "Dependency Management"
+  },
+  {
+    "name": "design-patterns",
+    "display_name": "Design Patterns",
+    "description": "Recognise and apply design patterns appropriately",
+    "directory": "design-patterns",
+    "category": "Code-Quality",
+    "kb_note": "Design Patterns"
+  },
+  {
+    "name": "devils-advocate",
+    "display_name": "Devils Advocate",
+    "description": "Challenge ideas, find weaknesses, and stress-test solutions before implementation",
+    "directory": "devils-advocate",
+    "category": "Thinking-Analysis",
+    "kb_note": "Devils Advocate"
+  },
+  {
+    "name": "devops",
+    "display_name": "DevOps",
+    "description": "CI/CD, infrastructure as code, containerisation, and operational excellence",
+    "directory": "devops",
+    "category": "DevOps-Operations",
+    "kb_note": "DevOps"
+  },
+  {
+    "name": "docker",
+    "display_name": "Docker",
+    "description": "Containerisation best practices, image optimisation, and multi-container orchestration",
+    "directory": "docker",
+    "category": "DevOps-Operations",
+    "kb_note": "Docker"
+  },
+  {
+    "name": "documentation-writing",
+    "display_name": "Documentation Writing",
+    "description": "Write clear technical documentation - READMEs, ADRs, runbooks, API docs",
+    "directory": "documentation-writing",
+    "category": "Communication-Writing",
+    "kb_note": "Documentation Writing"
+  },
+  {
+    "name": "domain-modeling",
+    "display_name": "Domain Modeling",
+    "description": "Domain-Driven Design (DDD) and domain modelling patterns",
+    "directory": "domain-modeling",
+    "category": "Domain-Architecture",
+    "kb_note": "Domain Modeling"
+  },
+  {
+    "name": "e2e-testing",
+    "display_name": "E2E Testing",
+    "description": "End-to-end testing patterns using test harnesses",
+    "directory": "e2e-testing",
+    "category": "Testing-BDD",
+    "kb_note": "E2E Testing"
+  },
+  {
+    "name": "email-communication",
+    "display_name": "Email Communication",
+    "description": "Professional email communication for technical contexts",
+    "directory": "email-communication",
+    "category": "Communication-Writing",
+    "kb_note": "Email Communication"
+  },
+  {
+    "name": "embedded-testing",
+    "display_name": "Embedded Testing",
+    "description": "Embedded systems testing patterns, hardware-in-the-loop",
+    "directory": "embedded-testing",
+    "category": "Testing-BDD",
+    "kb_note": "Embedded Testing"
+  },
+  {
+    "name": "epistemic-rigor",
+    "display_name": "Epistemic Rigor",
+    "description": "Know what you know, what you don't know, and the difference between belief and knowledge",
+    "directory": "epistemic-rigor",
+    "category": "Thinking-Analysis",
+    "kb_note": "Epistemic Rigor"
+  },
+  {
+    "name": "error-handling",
+    "display_name": "Error Handling",
+    "description": "Language-agnostic error handling patterns and strategies",
+    "directory": "error-handling",
+    "category": "Code-Quality",
+    "kb_note": "Error Handling"
+  },
+  {
+    "name": "estimation",
+    "display_name": "Estimation",
+    "description": "Estimate work effectively - break down tasks, account for uncertainty, evaluate complexity",
+    "directory": "estimation",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Estimation"
+  },
+  {
+    "name": "evaluate-change-request",
+    "display_name": "Evaluate Change Request",
+    "description": "Systematically evaluate change requests for validity before accepting — challenge weak evidence, verify claims, prevent blind acceptance",
+    "directory": "evaluate-change-request",
+    "category": "Code-Quality",
+    "kb_note": "Evaluate Change Request"
+  },
+  {
+    "name": "feature-flags",
+    "display_name": "Feature Flags",
+    "description": "Safe feature rollouts using feature flags, gradual releases, and A/B testing",
+    "directory": "feature-flags",
+    "category": "DevOps-Operations",
+    "kb_note": "Feature Flags"
+  },
+  {
+    "name": "fix-architecture",
+    "display_name": "Fix Architecture",
+    "description": "Diagnose and fix architecture violations",
+    "directory": "fix-architecture",
+    "category": "Code-Quality",
+    "kb_note": "Fix Architecture"
+  },
+  {
+    "name": "fuzz-testing",
+    "display_name": "Fuzz Testing",
+    "description": "Fuzzing for finding edge cases and crashes",
+    "directory": "fuzz-testing",
+    "category": "Testing-BDD",
+    "kb_note": "Fuzz Testing"
+  },
+  {
+    "name": "ginkgo-gomega",
+    "display_name": "Ginkgo Gomega",
+    "description": "Ginkgo v2 BDD testing framework and Gomega assertions (Go)",
+    "directory": "ginkgo-gomega",
+    "category": "Testing-BDD",
+    "kb_note": "Ginkgo Gomega"
+  },
+  {
+    "name": "git-advanced",
+    "display_name": "Git Advanced",
+    "description": "Advanced Git operations: rebasing, cherry-picking, bisect, history management",
+    "directory": "git-advanced",
+    "category": "Git",
+    "kb_note": "Git Advanced"
+  },
+  {
+    "name": "git-worktree",
+    "display_name": "Git Worktree",
+    "description": "Use Git worktrees for parallel development",
+    "directory": "git-worktree",
+    "category": "Git",
+    "kb_note": "Git Worktree"
+  },
+  {
+    "name": "github-expert",
+    "display_name": "GitHub Expert",
+    "description": "GitHub Actions, workflows, CLI, API, and repository management best practices",
+    "directory": "github-expert",
+    "category": "Git",
+    "kb_note": "GitHub Expert"
+  },
+  {
+    "name": "godog",
+    "display_name": "Godog",
+    "description": "Gherkin runner for Go",
+    "directory": "godog",
+    "category": "Testing-BDD",
+    "kb_note": "Godog"
+  },
+  {
+    "name": "golang",
+    "display_name": "Golang",
+    "description": "Go language expertise including idioms, patterns, performance, concurrency, and best practices",
+    "directory": "golang",
+    "category": "Languages",
+    "kb_note": "Golang"
+  },
+  {
+    "name": "gomock",
+    "display_name": "GoMock",
+    "description": "GoMock for generating and using mock implementations of Go interfaces",
+    "directory": "gomock",
+    "category": "General-Cross-Cutting",
+    "kb_note": "GoMock"
+  },
+  {
+    "name": "gorm-repository",
+    "display_name": "GORM Repository",
+    "description": "GORM ORM, SQLite, and repository patterns",
+    "directory": "gorm-repository",
+    "category": "Database-Persistence",
+    "kb_note": "GORM Repository"
+  },
+  {
+    "name": "graphql",
+    "display_name": "GraphQL",
+    "description": "GraphQL API design and implementation patterns",
+    "directory": "graphql",
+    "category": "Database-Persistence",
+    "kb_note": "GraphQL"
+  },
+  {
+    "name": "heroku",
+    "display_name": "Heroku",
+    "description": "Heroku PaaS for rapid prototyping and deployment with managed infrastructure and add-ons",
+    "directory": "heroku",
+    "category": "DevOps-Operations",
+    "kb_note": "Heroku"
+  },
+  {
+    "name": "huh",
+    "display_name": "Huh",
+    "description": "Interactive form library (Go) and patterns",
+    "directory": "huh",
+    "category": "UI-Frameworks",
+    "kb_note": "Huh"
+  },
+  {
+    "name": "huh-testing",
+    "display_name": "Huh Testing",
+    "description": "Testing huh form library components",
+    "directory": "huh-testing",
+    "category": "Testing-BDD",
+    "kb_note": "Huh Testing"
+  },
+  {
+    "name": "incident-communication",
+    "display_name": "Incident Communication",
+    "description": "Communicating about security and operational incidents professionally",
+    "directory": "incident-communication",
+    "category": "Communication-Writing",
+    "kb_note": "Incident Communication"
+  },
+  {
+    "name": "incident-response",
+    "display_name": "Incident Response",
+    "description": "Handle production incidents: diagnose, mitigate, resolve, learn from failures",
+    "directory": "incident-response",
+    "category": "Security",
+    "kb_note": "Incident Response"
+  },
+  {
+    "name": "information-architecture",
+    "display_name": "Information Architecture",
+    "description": "Structuring information and content for clarity and navigation",
+    "directory": "information-architecture",
+    "category": "Communication-Writing",
+    "kb_note": "Information Architecture"
+  },
+  {
+    "name": "infrastructure-as-code",
+    "display_name": "Infrastructure As Code",
+    "description": "Declarative infrastructure management, version-controlled environments, and immutable infrastructure",
+    "directory": "infrastructure-as-code",
+    "category": "DevOps-Operations",
+    "kb_note": "Infrastructure As Code"
+  },
+  {
+    "name": "investigation",
+    "display_name": "Investigation",
+    "description": "Systematic codebase investigation producing structured Obsidian documentation with DataviewJS auto-indexing",
+    "directory": "investigation",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Investigation"
+  },
+  {
+    "name": "javascript",
+    "display_name": "Javascript",
+    "description": "JavaScript/TypeScript, Vue.js, Node.js, async patterns, and modern ES6+ practices",
+    "directory": "javascript",
+    "category": "Languages",
+    "kb_note": "Javascript"
+  },
+  {
+    "name": "jest",
+    "display_name": "Jest",
+    "description": "Jest testing framework for JavaScript/TypeScript",
+    "directory": "jest",
+    "category": "Testing-BDD",
+    "kb_note": "Jest"
+  },
+  {
+    "name": "justify-decision",
+    "display_name": "Justify Decision",
+    "description": "Provide evidence-based justification for architectural and design decisions",
+    "directory": "justify-decision",
+    "category": "Thinking-Analysis",
+    "kb_note": "Justify Decision"
+  },
+  {
+    "name": "knowledge-base",
+    "display_name": "Knowledge Base",
+    "description": "Query memory graph, vault-rag, and Obsidian KB docs to find existing knowledge before investigating",
+    "directory": "knowledge-base",
+    "category": "Session-Knowledge",
+    "kb_note": "Knowledge Base"
+  },
+  {
+    "name": "logging-observability",
+    "display_name": "Logging Observability",
+    "description": "Implement structured logging, tracing, and metrics for debugging",
+    "directory": "logging-observability",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Logging Observability"
+  },
+  {
+    "name": "long-running-agent",
+    "display_name": "Long Running Agent",
+    "description": "Multi-session agent harness for complex projects spanning many context windows — initialiser/coding agent cycle",
+    "directory": "long-running-agent",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Long Running Agent"
+  },
+  {
+    "name": "math-expert",
+    "display_name": "Math Expert",
+    "description": "Mathematical reasoning, statistics, probability, and numerical methods for data analysis and algorithm design",
+    "directory": "math-expert",
+    "category": "Thinking-Analysis",
+    "kb_note": "Math Expert"
+  },
+  {
+    "name": "memory-keeper",
+    "display_name": "Memory Keeper",
+    "description": "Capture discoveries, fixes, solutions, and patterns into a searchable knowledge graph for future reference",
+    "directory": "memory-keeper",
+    "category": "Core-Universal",
+    "kb_note": "Memory Keeper"
+  },
+  {
+    "name": "mentoring",
+    "display_name": "Mentoring",
+    "description": "Teaching and guiding junior engineers, code review coaching, knowledge transfer",
+    "directory": "mentoring",
+    "category": "Communication-Writing",
+    "kb_note": "Mentoring"
+  },
+  {
+    "name": "migration-strategies",
+    "display_name": "Migration Strategies",
+    "description": "`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Delivery/Migration Strategies.md`",
+    "directory": "migration-strategies",
+    "category": "Database-Persistence",
+    "kb_note": "Migration Strategies"
+  },
+  {
+    "name": "mongoid",
+    "display_name": "Mongoid",
+    "description": "`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Database-Persistence/Mongoid.md`",
+    "directory": "mongoid",
+    "category": "Database-Persistence",
+    "kb_note": "Mongoid"
+  },
+  {
+    "name": "monitoring",
+    "display_name": "Monitoring",
+    "description": "Post-deployment health checks, observability, and system monitoring",
+    "directory": "monitoring",
+    "category": "DevOps-Operations",
+    "kb_note": "Monitoring"
+  },
+  {
+    "name": "new-skill",
+    "display_name": "New Skill",
+    "description": "Create new skills, commands, or agents with full integration into all workflows and documentation",
+    "directory": "new-skill",
+    "category": "Workflow-Orchestration",
+    "kb_note": "New Skill"
+  },
+  {
+    "name": "nix",
+    "display_name": "Nix",
+    "description": "Nix package manager for reproducible builds, flakes, nix-shell development environments, and declarative package management",
+    "directory": "nix",
+    "category": "DevOps-Operations",
+    "kb_note": "Nix"
+  },
+  {
+    "name": "note-taking",
+    "display_name": "Note Taking",
+    "description": "Externalising reasoning; create notes for Obsidian, blogs, docs",
+    "directory": "note-taking",
+    "category": "Session-Knowledge",
+    "kb_note": "Note Taking"
+  },
+  {
+    "name": "obsidian-chartjs-expert",
+    "display_name": "Obsidian Chartjs Expert",
+    "description": "Chartjs plugin expertise for embedding charts in Obsidian",
+    "directory": "obsidian-chartjs-expert",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Chartjs Expert"
+  },
+  {
+    "name": "obsidian-codeblock-expert",
+    "display_name": "Obsidian Codeblock Expert",
+    "description": "Code block and syntax highlighting expertise in Obsidian",
+    "directory": "obsidian-codeblock-expert",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Codeblock Expert"
+  },
+  {
+    "name": "obsidian-consolidation",
+    "display_name": "Obsidian Consolidation",
+    "description": "Systematically consolidate and refine zettelkasten notes on related themes",
+    "directory": "obsidian-consolidation",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Consolidation"
+  },
+  {
+    "name": "obsidian-customjs-expert",
+    "display_name": "Obsidian Customjs Expert",
+    "description": "CustomJS plugin expertise for scripting in Obsidian",
+    "directory": "obsidian-customjs-expert",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Customjs Expert"
+  },
+  {
+    "name": "obsidian-dataview-expert",
+    "display_name": "Obsidian Dataview Expert",
+    "description": "Dataview plugin expertise for dynamic queries and dashboards",
+    "directory": "obsidian-dataview-expert",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Dataview Expert"
+  },
+  {
+    "name": "obsidian-frontmatter",
+    "display_name": "Obsidian Frontmatter",
+    "description": "Frontmatter management in Obsidian for metadata and organisation",
+    "directory": "obsidian-frontmatter",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Frontmatter"
+  },
+  {
+    "name": "obsidian-latex-expert",
+    "display_name": "Obsidian Latex Expert",
+    "description": "LaTeX rendering expertise in Obsidian for mathematical notation",
+    "directory": "obsidian-latex-expert",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Latex Expert"
+  },
+  {
+    "name": "obsidian-mermaid-expert",
+    "display_name": "Obsidian Mermaid Expert",
+    "description": "Mermaid diagram plugin expertise for flowcharts and diagrams",
+    "directory": "obsidian-mermaid-expert",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Mermaid Expert"
+  },
+  {
+    "name": "obsidian-structure",
+    "display_name": "Obsidian Structure",
+    "description": "Enforce PARA structure and tags in Obsidian vault properly",
+    "directory": "obsidian-structure",
+    "category": "Session-Knowledge",
+    "kb_note": "Obsidian Structure"
+  },
+  {
+    "name": "pair-programming",
+    "display_name": "Pair Programming",
+    "description": "Collaborate effectively through pairing - driver/navigator, mob programming",
+    "directory": "pair-programming",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Pair Programming"
+  },
+  {
+    "name": "parallel-execution",
+    "display_name": "Parallel Execution",
+    "description": "Maximise efficiency by running independent tasks in parallel - reduce token overhead",
+    "directory": "parallel-execution",
+    "category": "Session-Knowledge",
+    "kb_note": "Parallel Execution"
+  },
+  {
+    "name": "performance",
+    "display_name": "Performance",
+    "description": "Go performance optimisation, profiling, and writing efficient code",
+    "directory": "performance",
+    "category": "Performance-Profiling",
+    "kb_note": "Performance"
+  },
+  {
+    "name": "platformio",
+    "display_name": "PlatformIO",
+    "description": "PlatformIO build system for embedded development with Arduino compatibility",
+    "directory": "platformio",
+    "category": "UI-Frameworks",
+    "kb_note": "PlatformIO"
+  },
+  {
+    "name": "playwright",
+    "display_name": "Playwright",
+    "description": "Playwright browser automation via Playwright MCP",
+    "directory": "playwright",
+    "category": "Testing-BDD",
+    "kb_note": "Playwright"
+  },
+  {
+    "name": "pr-monitor",
+    "display_name": "PR Monitor",
+    "description": "Monitor PR for CI status, reviews, and coordinate response workflow",
+    "directory": "pr-monitor",
+    "category": "Git",
+    "kb_note": "PR Monitor"
+  },
+  {
+    "name": "pragmatic-problem-solving",
+    "display_name": "Pragmatic Problem Solving",
+    "description": "Focus on practical solutions - balance ideal with achievable, ship working",
+    "directory": "pragmatic-problem-solving",
+    "category": "Thinking-Analysis",
+    "kb_note": "Pragmatic Problem Solving"
+  },
+  {
+    "name": "pre-action",
+    "display_name": "Pre Action",
+    "description": "Mandatory decision framework - clarify goal, evaluate options, choose consciously before acting",
+    "directory": "pre-action",
+    "category": "Core-Universal",
+    "kb_note": "Pre Action"
+  },
+  {
+    "name": "pre-merge",
+    "display_name": "Pre Merge",
+    "description": "Final validation checklist before merging PRs to ensure quality",
+    "directory": "pre-merge",
+    "category": "Git",
+    "kb_note": "Pre Merge"
+  },
+  {
+    "name": "presentation-writing",
+    "display_name": "Presentation Writing",
+    "description": "Presentation and talk writing for conferences and technical talks",
+    "directory": "presentation-writing",
+    "category": "Communication-Writing",
+    "kb_note": "Presentation Writing"
+  },
+  {
+    "name": "profiling",
+    "display_name": "Profiling",
+    "description": "Performance profiling and measurement tools for identifying bottlenecks",
+    "directory": "profiling",
+    "category": "Performance-Profiling",
+    "kb_note": "Profiling"
+  },
+  {
+    "name": "proof-reader",
+    "display_name": "Proof Reader",
+    "description": "Proofreading and editing for clarity and correctness",
+    "directory": "proof-reader",
+    "category": "Communication-Writing",
+    "kb_note": "Proof Reader"
+  },
+  {
+    "name": "prove-correctness",
+    "display_name": "Prove Correctness",
+    "description": "Write tests and provide evidence to prove or disprove claims about code",
+    "directory": "prove-correctness",
+    "category": "Code-Quality",
+    "kb_note": "Prove Correctness"
+  },
+  {
+    "name": "question-resolver",
+    "display_name": "Question Resolver",
+    "description": "Systematically resolve questions - determine if answerable, gather evidence",
+    "directory": "question-resolver",
+    "category": "Thinking-Analysis",
+    "kb_note": "Question Resolver"
+  },
+  {
+    "name": "refactor",
+    "display_name": "Refactor",
+    "description": "Systematic refactoring with safety nets and incremental changes",
+    "directory": "refactor",
+    "category": "Code-Quality",
+    "kb_note": "Refactor"
+  },
+  {
+    "name": "release-management",
+    "display_name": "Release Management",
+    "description": "Versioning, changelogs, release notes, and release branch management",
+    "directory": "release-management",
+    "category": "Delivery",
+    "kb_note": "Release Management"
+  },
+  {
+    "name": "release-notes",
+    "display_name": "Release Notes",
+    "description": "Writing clear, comprehensive release notes for software releases",
+    "directory": "release-notes",
+    "category": "Delivery",
+    "kb_note": "Release Notes"
+  },
+  {
+    "name": "research",
+    "display_name": "Research",
+    "description": "Systematic research and investigation for understanding codebases and technologies",
+    "directory": "research",
+    "category": "Session-Knowledge",
+    "kb_note": "Research"
+  },
+  {
+    "name": "respond-to-review",
+    "display_name": "Respond To Review",
+    "description": "Manage and execute code review feedback through evaluation, classification, implementation, and evidence reporting.",
+    "directory": "respond-to-review",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Respond To Review"
+  },
+  {
+    "name": "retrofitting-types",
+    "display_name": "Retrofitting Types",
+    "description": "Add types to untyped code gradually without breaking functionality",
+    "directory": "retrofitting-types",
+    "category": "Domain-Architecture",
+    "kb_note": "Retrofitting Types"
+  },
+  {
+    "name": "retrospective",
+    "display_name": "Retrospective",
+    "description": "Learning from failures and successes, post-mortems, continuous improvement",
+    "directory": "retrospective",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Retrospective"
+  },
+  {
+    "name": "rollback-recovery",
+    "display_name": "Rollback Recovery",
+    "description": "Handling failed deployments, reverting changes, and recovery procedures",
+    "directory": "rollback-recovery",
+    "category": "DevOps-Operations",
+    "kb_note": "Rollback Recovery"
+  },
+  {
+    "name": "rspec-testing",
+    "display_name": "RSpec Testing",
+    "description": "RSpec BDD testing framework for Ruby",
+    "directory": "rspec-testing",
+    "category": "Testing-BDD",
+    "kb_note": "RSpec Testing"
+  },
+  {
+    "name": "ruby",
+    "display_name": "Ruby",
+    "description": "Ruby development, RubyGems, Rails, clean code practices, and idiomatic Ruby",
+    "directory": "ruby",
+    "category": "Languages",
+    "kb_note": "Ruby"
+  },
+  {
+    "name": "scope-management",
+    "display_name": "Scope Management",
+    "description": "Manage scope effectively - identify resources, prevent creep, optimise for token budget",
+    "directory": "scope-management",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Scope Management"
+  },
+  {
+    "name": "scripter",
+    "display_name": "Scripter",
+    "description": "Bash, Python, and scripting languages for automation and tooling",
+    "directory": "scripter",
+    "category": "DevOps-Operations",
+    "kb_note": "Scripter"
+  },
+  {
+    "name": "security",
+    "display_name": "Security",
+    "description": "Secure coding practices including input validation, SQL injection prevention",
+    "directory": "security",
+    "category": "Security",
+    "kb_note": "Security"
+  },
+  {
+    "name": "service-layer",
+    "display_name": "Service Layer",
+    "description": "Service layer patterns for business logic orchestration",
+    "directory": "service-layer",
+    "category": "Domain-Architecture",
+    "kb_note": "Service Layer"
+  },
+  {
+    "name": "skill-discovery",
+    "display_name": "Skill Discovery",
+    "description": "Automatically discover/load local skills and suggest external skills based on task context",
+    "directory": "skill-discovery",
+    "category": "Core-Universal",
+    "kb_note": "Skill Discovery"
+  },
+  {
+    "name": "sql",
+    "display_name": "SQL",
+    "description": "`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Database-Persistence/SQL.md`",
+    "directory": "sql",
+    "category": "Database-Persistence",
+    "kb_note": "SQL"
+  },
+  {
+    "name": "static-analysis",
+    "display_name": "Static Analysis",
+    "description": "Static code analysis tools and patterns",
+    "directory": "static-analysis",
+    "category": "Code-Quality",
+    "kb_note": "Static Analysis"
+  },
+  {
+    "name": "style-guide",
+    "display_name": "Style Guide",
+    "description": "Style guide enforcement and documentation conventions",
+    "directory": "style-guide",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Style Guide"
+  },
+  {
+    "name": "systems-thinker",
+    "display_name": "Systems Thinker",
+    "description": "Understand complex systems, interconnections, and emergent behaviors",
+    "directory": "systems-thinker",
+    "category": "Thinking-Analysis",
+    "kb_note": "Systems Thinker"
+  },
+  {
+    "name": "task-completer",
+    "display_name": "Task Completer",
+    "description": "Ensure tasks are fully completed with all requirements met and no loose ends",
+    "directory": "task-completer",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Task Completer"
+  },
+  {
+    "name": "task-tracker",
+    "display_name": "Task Tracker",
+    "description": "Track progress through structured task lists with complexity scoring and token tracking",
+    "directory": "task-tracker",
+    "category": "Workflow-Orchestration",
+    "kb_note": "Task Tracker"
+  },
+  {
+    "name": "tdd-workflow",
+    "display_name": "TDD Workflow",
+    "description": "DEPRECATED - Use bdd-workflow instead",
+    "directory": "tdd-workflow",
+    "category": "General-Cross-Cutting",
+    "kb_note": "TDD Workflow"
+  },
+  {
+    "name": "technical-debt",
+    "display_name": "Technical Debt",
+    "description": "Identifying, documenting, and systematically managing technical debt to maintain codebase health",
+    "directory": "technical-debt",
+    "category": "Domain-Architecture",
+    "kb_note": "Technical Debt"
+  },
+  {
+    "name": "test-fixtures",
+    "display_name": "Test Fixtures",
+    "description": "Test data factory patterns",
+    "directory": "test-fixtures",
+    "category": "Testing-BDD",
+    "kb_note": "Test Fixtures"
+  },
+  {
+    "name": "test-fixtures-go",
+    "display_name": "Test Fixtures Go",
+    "description": "Factory-go and gofakeit for Go test fixtures",
+    "directory": "test-fixtures-go",
+    "category": "Testing-BDD",
+    "kb_note": "Test Fixtures Go"
+  },
+  {
+    "name": "time-management",
+    "display_name": "Time Management",
+    "description": "Manage time effectively - timeboxing, focus, duration estimation, productivity breaks",
+    "directory": "time-management",
+    "category": "Session-Knowledge",
+    "kb_note": "Time Management"
+  },
+  {
+    "name": "token-cost-estimation",
+    "display_name": "Token Cost Estimation",
+    "description": "Estimate and track token costs before work sessions - complexity, duration, resources",
+    "directory": "token-cost-estimation",
+    "category": "Core-Universal",
+    "kb_note": "Token Cost Estimation"
+  },
+  {
+    "name": "token-efficiency",
+    "display_name": "Token Efficiency",
+    "description": "Maximise AI interaction value per token - techniques, patterns, integration with cost estimation",
+    "directory": "token-efficiency",
+    "category": "Session-Knowledge",
+    "kb_note": "Token Efficiency"
+  },
+  {
+    "name": "tool-usage-discipline",
+    "display_name": "Tool Usage Discipline",
+    "description": "Use skills for domain knowledge, MCP tools over manual lookups",
+    "directory": "tool-usage-discipline",
+    "category": "General-Cross-Cutting",
+    "kb_note": "Tool Usage Discipline"
+  },
+  {
+    "name": "trade-off-analysis",
+    "display_name": "Trade Off Analysis",
+    "description": "Systematically evaluate trade-offs when comparing alternatives",
+    "directory": "trade-off-analysis",
+    "category": "Thinking-Analysis",
+    "kb_note": "Trade Off Analysis"
+  },
+  {
+    "name": "tutorial-writing",
+    "display_name": "Tutorial Writing",
+    "description": "Step-by-step learning guides and tutorials for teaching concepts",
+    "directory": "tutorial-writing",
+    "category": "Communication-Writing",
+    "kb_note": "Tutorial Writing"
+  },
+  {
+    "name": "ui-design",
+    "display_name": "UI Design",
+    "description": "Terminal user interface design - visual hierarchy, layout, and clear interfaces",
+    "directory": "ui-design",
+    "category": "UI-Frameworks",
+    "kb_note": "UI Design"
+  },
+  {
+    "name": "ux-design",
+    "display_name": "UX Design",
+    "description": "Intuitive user experiences in terminal applications - mental models, interaction patterns",
+    "directory": "ux-design",
+    "category": "UI-Frameworks",
+    "kb_note": "UX Design"
+  },
+  {
+    "name": "vhs",
+    "display_name": "VHS",
+    "description": "Terminal recording and demos with VHS for creating compelling KaRiya demonstrations",
+    "directory": "vhs",
+    "category": "DevOps-Operations",
+    "kb_note": "VHS"
+  },
+  {
+    "name": "virtual",
+    "display_name": "Virtual",
+    "description": "Virtualisation and VPS hosting including DigitalOcean, Linode, Hetzner, Vultr for self-managed infrastructure",
+    "directory": "virtual",
+    "category": "DevOps-Operations",
+    "kb_note": "Virtual"
+  },
+  {
+    "name": "vue",
+    "display_name": "Vue",
+    "description": "Vue.js framework, components, state management, and routing patterns",
+    "directory": "vue",
+    "category": "UI-Frameworks",
+    "kb_note": "Vue"
+  },
+  {
+    "name": "writing-style",
+    "display_name": "Writing Style",
+    "description": "Personal writing voice and communication style conventions",
+    "directory": "writing-style",
+    "category": "Communication-Writing",
+    "kb_note": "Writing Style"
+  }
 ]
