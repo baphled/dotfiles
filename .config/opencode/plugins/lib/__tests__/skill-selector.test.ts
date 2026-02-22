@@ -697,12 +697,12 @@ describe('selectSkills — Codebase Skills (Tier 2.5)', () => {
     expect(result.sources.some(s => s.skill === 'golang' && s.source === 'codebase')).toBe(true)
   })
 
-  it('orders codebase skills after role skills and before keyword skills', () => {
+  it('orders codebase skills after role skills and before keyword skills (with critical keyword)', () => {
     const input: SkillSelectionInput = {
       existingSkills: [],
       focus: 'testing',
       codebaseSkills: ['golang'],
-      prompt: 'refactor the code',
+      prompt: 'security refactor the code',
     }
     const result = selectSkills(input, testConfig)
 
@@ -867,5 +867,95 @@ describe('selectSkills — Byte Budget Cap (max_auto_skills_bytes)', () => {
     // Baseline skills always present regardless of byte budget
     expect(result.skills).toContain('pre-action')
     expect(result.skills).toContain('memory-keeper')
+  })
+})
+
+describe('selectSkills — Focus Suppresses Keyword Patterns', () => {
+  it('suppresses non-critical keyword patterns when focus matches role_mappings', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'testing',
+      prompt: 'Refactor the code to be cleaner', // matches refactor pattern (priority 7)
+    }
+    const result = selectSkills(input, testConfig)
+
+    // Focus is set and matches role_mappings → keywords with priority < 9 should NOT fire
+    const keywordSources = result.sources.filter(s => s.source === 'keyword')
+    expect(keywordSources).toHaveLength(0)
+
+    // Role mapping skills SHOULD be present
+    expect(result.skills).toContain('bdd-workflow')
+
+    // Keyword skills should NOT be present
+    expect(result.skills).not.toContain('refactor')
+    expect(result.skills).not.toContain('design-patterns')
+  })
+
+  it('still allows critical patterns (priority >= 9) even when focus is set', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'implementation',
+      prompt: 'Fix the security vulnerability in auth', // matches security pattern (priority 9)
+    }
+    const result = selectSkills(input, testConfig)
+
+    // Critical security pattern (priority 9) should still fire
+    expect(result.skills).toContain('security')
+    expect(result.skills).toContain('cyber-security')
+
+    // Role mapping skills should also be present
+    expect(result.skills).toContain('clean-code')
+    expect(result.skills).toContain('error-handling')
+    expect(result.skills).toContain('design-patterns')
+  })
+
+  it('suppresses ALL non-critical keyword patterns when focus is set', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'review',
+      prompt: 'test the golang database refactor', // matches test(p8), golang(p8), refactor(p7)
+    }
+    const result = selectSkills(input, testConfig)
+
+    // Role mapping skills should be present
+    expect(result.skills).toContain('code-reviewer')
+    expect(result.skills).toContain('clean-code')
+    expect(result.skills).toContain('critical-thinking')
+
+    // ALL non-critical keyword skills should be suppressed
+    expect(result.skills).not.toContain('ginkgo-gomega') // test pattern, priority 8
+    expect(result.skills).not.toContain('golang') // golang pattern, priority 8
+
+    // Note: 'refactor' from keyword source should be suppressed, but 'clean-code' is already
+    // in role_mappings so it's present from that source, not keywords
+    const keywordSources = result.sources.filter(s => s.source === 'keyword')
+    expect(keywordSources).toHaveLength(0)
+  })
+
+  it('fires keywords normally when focus is not set', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      prompt: 'Refactor the code to be cleaner', // matches refactor pattern
+    }
+    const result = selectSkills(input, testConfig)
+
+    // No focus → keywords should fire normally
+    expect(result.skills).toContain('refactor')
+    expect(result.skills).toContain('clean-code')
+    expect(result.skills).toContain('design-patterns')
+  })
+
+  it('fires keywords normally when focus does not match role_mappings', () => {
+    const input: SkillSelectionInput = {
+      existingSkills: [],
+      focus: 'unknown-role',
+      prompt: 'Refactor the code to be cleaner',
+    }
+    const result = selectSkills(input, testConfig)
+
+    // Unknown focus → no role_mappings match → keywords should fire normally
+    expect(result.skills).toContain('refactor')
+    expect(result.skills).toContain('clean-code')
+    expect(result.skills).toContain('design-patterns')
   })
 })

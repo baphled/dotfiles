@@ -132,11 +132,19 @@ export function selectSkills(
   // === Tier 3: Keyword pattern matching ===
   const prompt = input.prompt || ''
   
+  // When focus matches a known role, suppress non-critical keyword patterns
+  const focusMatchesRole = input.focus !== undefined && config.role_mappings?.[input.focus] !== undefined
+  
   if (prompt.trim().length > 0) {
     // Collect all keyword matches with their priorities
     const keywordMatches: Array<{ skill: string; priority: number; pattern: string }> = []
 
     for (const kp of config.keyword_patterns) {
+      // When focus matches a role, only allow critical patterns (priority >= 9)
+      if (focusMatchesRole && kp.priority < 9) {
+        continue
+      }
+
       try {
         // Use regex search (match) instead of test to avoid state issues
         const regex = new RegExp(kp.pattern, 'i')
