@@ -8,6 +8,8 @@
 import * as fs from 'fs'
 import { join } from 'path'
 
+export type WarnFn = (message: string) => void
+
 export interface AgentConfig {
   name: string
   description: string
@@ -20,7 +22,7 @@ export class AgentConfigCache {
   private agents: Map<string, AgentConfig> = new Map()
   private initialized: boolean = false
 
-  constructor(private agentsDir: string = DEFAULT_AGENTS_DIR) {}
+  constructor(private agentsDir: string = DEFAULT_AGENTS_DIR, private onWarn: WarnFn = () => {}) {}
 
   /**
    * Initialize the cache by reading all agent files.
@@ -31,7 +33,7 @@ export class AgentConfigCache {
 
     try {
       if (!fs.existsSync(this.agentsDir)) {
-        console.warn(`[AgentConfigCache] Agents directory not found: ${this.agentsDir}`)
+        this.onWarn(`[AgentConfigCache] Agents directory not found: ${this.agentsDir}`)
         this.initialized = true
         return
       }
@@ -52,11 +54,11 @@ export class AgentConfigCache {
             this.agents.set(agentName, config)
           }
         } catch (err) {
-          console.warn(`[AgentConfigCache] Failed to parse ${file}: ${err instanceof Error ? err.message : String(err)}`)
+          this.onWarn(`[AgentConfigCache] Failed to parse ${file}: ${err instanceof Error ? err.message : String(err)}`)
         }
       }
     } catch (err) {
-      console.warn(`[AgentConfigCache] Failed to read agents directory: ${err instanceof Error ? err.message : String(err)}`)
+      this.onWarn(`[AgentConfigCache] Failed to read agents directory: ${err instanceof Error ? err.message : String(err)}`)
     }
 
     this.initialized = true

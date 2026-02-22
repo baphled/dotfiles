@@ -10,13 +10,15 @@ import { existsSync, readFileSync, statSync } from 'fs'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
 
+type WarnFn = (message: string) => void
+
 const DEFAULT_SKILLS_DIR = `${process.env.HOME}/.config/opencode/skills`
 
 export class SkillContentCache {
   private cache: Map<string, string> = new Map()
   private initialized: boolean = false
 
-  constructor(private skillsDir: string = DEFAULT_SKILLS_DIR) {}
+  constructor(private skillsDir: string = DEFAULT_SKILLS_DIR, private onWarn: WarnFn = () => {}) {}
 
   /**
    * Initialize the cache by reading all SKILL.md files under each skill subdirectory.
@@ -27,7 +29,7 @@ export class SkillContentCache {
 
     try {
       if (!existsSync(this.skillsDir)) {
-        console.warn(`[SkillContentCache] Skills directory not found: ${this.skillsDir}`)
+        this.onWarn(`[SkillContentCache] Skills directory not found: ${this.skillsDir}`)
         this.initialized = true
         return
       }
@@ -42,7 +44,7 @@ export class SkillContentCache {
           const stat = statSync(entryPath)
           if (!stat.isDirectory()) continue
         } catch (err) {
-          console.warn(`[SkillContentCache] Failed to stat ${entry}: ${err instanceof Error ? err.message : String(err)}`)
+          this.onWarn(`[SkillContentCache] Failed to stat ${entry}: ${err instanceof Error ? err.message : String(err)}`)
           continue
         }
 
@@ -58,11 +60,11 @@ export class SkillContentCache {
           const body = this.stripFrontmatter(rawContent)
           this.cache.set(entry, body)
         } catch (err) {
-          console.warn(`[SkillContentCache] Failed to read ${entry}/SKILL.md: ${err instanceof Error ? err.message : String(err)}`)
+          this.onWarn(`[SkillContentCache] Failed to read ${entry}/SKILL.md: ${err instanceof Error ? err.message : String(err)}`)
         }
       }
     } catch (err) {
-      console.warn(`[SkillContentCache] Failed to read skills directory: ${err instanceof Error ? err.message : String(err)}`)
+      this.onWarn(`[SkillContentCache] Failed to read skills directory: ${err instanceof Error ? err.message : String(err)}`)
     }
 
     this.initialized = true

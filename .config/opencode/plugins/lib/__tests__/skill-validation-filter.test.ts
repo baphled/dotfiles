@@ -103,69 +103,54 @@ describe('filterSkillsAgainstCache — non-existent skills removed', () => {
 })
 
 describe('filterSkillsAgainstCache — warnings logged for removed skills', () => {
-  it('calls console.warn for each removed skill', () => {
-    const warnCalls: unknown[][] = []
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation((...args) => { warnCalls.push(args) })
+  it('calls onWarn for each removed skill', () => {
+    const onWarn = jest.fn()
     const cache = makeCache(['pre-action'])
 
     filterSkillsAgainstCache(
       ['pre-action', 'missing-skill'],
-      cache
+      cache,
+      onWarn
     )
 
-    // Exactly one warn was produced by this call
-    expect(warnCalls).toHaveLength(1)
-    expect(warnCalls[0][0]).toContain('missing-skill')
-
-    warnSpy.mockRestore()
+    expect(onWarn).toHaveBeenCalledTimes(1)
+    expect(onWarn).toHaveBeenCalledWith(expect.stringContaining('missing-skill'))
   })
 
   it('includes the skill name in the warning message', () => {
-    const warnCalls: unknown[][] = []
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation((...args) => { warnCalls.push(args) })
+    const onWarn = jest.fn()
     const cache = makeCache([])
 
-    filterSkillsAgainstCache(['ghost-skill'], cache)
+    filterSkillsAgainstCache(['ghost-skill'], cache, onWarn)
 
-    expect(warnCalls.some(call => String(call[0]).includes('ghost-skill'))).toBe(true)
-
-    warnSpy.mockRestore()
+    expect(onWarn).toHaveBeenCalledWith(expect.stringContaining('ghost-skill'))
   })
 
   it('includes [SkillAutoLoader] prefix in the warning', () => {
-    const warnCalls: unknown[][] = []
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation((...args) => { warnCalls.push(args) })
+    const onWarn = jest.fn()
     const cache = makeCache([])
 
-    filterSkillsAgainstCache(['no-such-skill'], cache)
+    filterSkillsAgainstCache(['no-such-skill'], cache, onWarn)
 
-    expect(warnCalls.some(call => String(call[0]).includes('[SkillAutoLoader]'))).toBe(true)
-
-    warnSpy.mockRestore()
+    expect(onWarn).toHaveBeenCalledWith(expect.stringContaining('[SkillAutoLoader]'))
   })
 
-  it('logs one warning per removed skill when multiple are missing', () => {
-    const warnCalls: unknown[][] = []
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation((...args) => { warnCalls.push(args) })
+  it('calls onWarn once per removed skill when multiple are missing', () => {
+    const onWarn = jest.fn()
     const cache = makeCache([])
 
-    filterSkillsAgainstCache(['fake-a', 'fake-b', 'fake-c'], cache)
+    filterSkillsAgainstCache(['fake-a', 'fake-b', 'fake-c'], cache, onWarn)
 
-    expect(warnCalls).toHaveLength(3)
-
-    warnSpy.mockRestore()
+    expect(onWarn).toHaveBeenCalledTimes(3)
   })
 
-  it('does not call console.warn when all skills are valid', () => {
-    const warnCalls: unknown[][] = []
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation((...args) => { warnCalls.push(args) })
+  it('does not call onWarn when all skills are valid', () => {
+    const onWarn = jest.fn()
     const cache = makeCache(['pre-action', 'memory-keeper'])
 
-    filterSkillsAgainstCache(['pre-action', 'memory-keeper'], cache)
+    filterSkillsAgainstCache(['pre-action', 'memory-keeper'], cache, onWarn)
 
-    expect(warnCalls).toHaveLength(0)
-
-    warnSpy.mockRestore()
+    expect(onWarn).not.toHaveBeenCalled()
   })
 })
 
@@ -190,14 +175,11 @@ describe('filterSkillsAgainstCache — graceful cache handling', () => {
     expect(result.removed).toEqual([])
   })
 
-  it('logs a debug message when validation is skipped due to missing cache', () => {
-    const debugCalls: unknown[][] = []
-    const debugSpy = jest.spyOn(console, 'debug').mockImplementation((...args) => { debugCalls.push(args) })
+  it('calls onWarn when validation is skipped due to missing cache', () => {
+    const onWarn = jest.fn()
 
-    filterSkillsAgainstCache(['pre-action'], undefined)
+    filterSkillsAgainstCache(['pre-action'], undefined, onWarn)
 
-    expect(debugCalls.some(call => String(call[0]).includes('[SkillAutoLoader]'))).toBe(true)
-
-    debugSpy.mockRestore()
+    expect(onWarn).toHaveBeenCalledWith(expect.stringContaining('[SkillAutoLoader]'))
   })
 })

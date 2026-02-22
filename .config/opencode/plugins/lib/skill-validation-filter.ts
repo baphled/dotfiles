@@ -10,6 +10,8 @@
  * unchanged and a debug message is logged.
  */
 
+type WarnFn = (message: string) => void
+
 /** Minimal interface required for validation — matches SkillContentCache */
 interface HasSkillCache {
   hasSkill(name: string): boolean
@@ -31,10 +33,11 @@ export interface FilterResult {
  */
 export function filterSkillsAgainstCache(
   skills: string[],
-  cache: HasSkillCache | null | undefined
+  cache: HasSkillCache | null | undefined,
+  onWarn?: WarnFn
 ): FilterResult {
   if (!cache) {
-    console.debug('[SkillAutoLoader] Skill cache not available, skipping existence validation')
+    onWarn?.('[SkillAutoLoader] Skill cache not available, skipping existence validation')
     return { filtered: [...skills], removed: [] }
   }
 
@@ -45,7 +48,7 @@ export function filterSkillsAgainstCache(
     if (cache.hasSkill(skill)) {
       filtered.push(skill)
     } else {
-      console.warn(`[SkillAutoLoader] Skill '${skill}' not found, skipping`)
+      onWarn?.(`[SkillAutoLoader] Skill '${skill}' not found, skipping`)
       removed.push(skill)
     }
   }

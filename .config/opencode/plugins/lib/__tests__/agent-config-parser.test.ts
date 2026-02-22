@@ -174,13 +174,12 @@ describe('AgentConfigCache', () => {
     })
 
     it('emits a warning when the agents directory does not exist', async () => {
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
-      const nonExistentCache = new AgentConfigCache('/tmp/this-directory-does-not-exist-ever')
+      const onWarn = jest.fn()
+      const nonExistentCache = new AgentConfigCache('/tmp/this-directory-does-not-exist-ever', onWarn)
 
       await nonExistentCache.init()
 
-      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('not found'))
-      warnSpy.mockRestore()
+      expect(onWarn).toHaveBeenCalledWith(expect.stringContaining('not found'))
     })
 
     it('is idempotent — multiple init() calls only read files once', async () => {
@@ -215,25 +214,25 @@ describe('AgentConfigCache', () => {
       fs.writeFileSync(badPath, STANDARD_FRONTMATTER)
       fs.chmodSync(badPath, 0o000)
 
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+      const onWarn = jest.fn()
+      const cacheWithWarn = new AgentConfigCache(tempDir, onWarn)
 
-      await cache.init()
+      await cacheWithWarn.init()
 
       fs.chmodSync(badPath, 0o644)
-      expect(cache.getAgentConfig('good')).toBeDefined()
-      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to parse'))
-      warnSpy.mockRestore()
+      expect(cacheWithWarn.getAgentConfig('good')).toBeDefined()
+      expect(onWarn).toHaveBeenCalledWith(expect.stringContaining('Failed to parse'))
     })
 
     it('warns when the readdir call itself fails', async () => {
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+      const onWarn = jest.fn()
       const readdirSpy = jest.spyOn(fs.promises, 'readdir').mockRejectedValueOnce(new Error('EIO'))
+      const cacheWithWarn = new AgentConfigCache(tempDir, onWarn)
 
-      await cache.init()
+      await cacheWithWarn.init()
 
-      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to read agents directory'))
-      expect(cache.getAllAgents()).toEqual([])
-      warnSpy.mockRestore()
+      expect(onWarn).toHaveBeenCalledWith(expect.stringContaining('Failed to read agents directory'))
+      expect(cacheWithWarn.getAllAgents()).toEqual([])
       readdirSpy.mockRestore()
     })
 
