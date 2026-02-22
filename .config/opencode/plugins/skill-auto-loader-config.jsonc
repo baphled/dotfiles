@@ -31,11 +31,9 @@
       "systems-thinker"
     ],
     "deep": [
-      "clean-code",
       "error-handling"
     ],
     "quick": [
-      "clean-code"
     ],
     "artistry": [
       "design-patterns",
@@ -46,10 +44,8 @@
       "documentation-writing"
     ],
     "unspecified-low": [
-      "clean-code"
     ],
     "unspecified-high": [
-      "clean-code",
       "error-handling"
     ]
   },

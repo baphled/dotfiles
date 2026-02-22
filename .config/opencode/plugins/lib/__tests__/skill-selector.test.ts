@@ -985,3 +985,27 @@ describe('Config Cleanup — Go-specific skills not in keyword patterns', () => 
     expect(allKeywordSkills).not.toContain('bubble-tea-expert')
   })
 })
+
+describe('Config Cleanup — clean-code not in non-programming categories', () => {
+  // Load the ACTUAL config file (not the hardcoded test fixture)
+  const configPath = resolve(__dirname, '../../skill-auto-loader-config.jsonc')
+  const configText = readFileSync(configPath, 'utf-8')
+  const jsonText = configText.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
+  const actualConfig = JSON.parse(jsonText) as SkillAutoLoaderConfig
+
+  it('clean-code must not appear in deep category mapping', () => {
+    expect(actualConfig.category_mappings['deep']).not.toContain('clean-code')
+  })
+
+  it('clean-code must not appear in quick category mapping', () => {
+    expect(actualConfig.category_mappings['quick']).not.toContain('clean-code')
+  })
+
+  it('clean-code must not appear in unspecified-low category mapping', () => {
+    expect(actualConfig.category_mappings['unspecified-low']).not.toContain('clean-code')
+  })
+
+  it('clean-code must not appear in unspecified-high category mapping', () => {
+    expect(actualConfig.category_mappings['unspecified-high']).not.toContain('clean-code')
+  })
+})
