@@ -1118,3 +1118,23 @@ describe('Config Cleanup — clean-code not in non-programming categories', () =
     expect(actualConfig.category_mappings['unspecified-high']).not.toContain('clean-code')
   })
 })
+
+describe('Config Cleanup — baseline must be exactly pre-action and memory-keeper', () => {
+  // Load the ACTUAL config file (not the hardcoded test fixture)
+  const configPath = resolve(__dirname, '../../skill-auto-loader-config.jsonc')
+  const configText = readFileSync(configPath, 'utf-8')
+  const jsonText = configText.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
+  const actualConfig = JSON.parse(jsonText) as SkillAutoLoaderConfig
+
+  it('baseline_skills must contain exactly pre-action and memory-keeper', () => {
+    expect(actualConfig.baseline_skills).toEqual(['pre-action', 'memory-keeper'])
+  })
+
+  it('baseline_skills must not contain agent-discovery', () => {
+    expect(actualConfig.baseline_skills).not.toContain('agent-discovery')
+  })
+
+  it('baseline_skills must not contain token-cost-estimation', () => {
+    expect(actualConfig.baseline_skills).not.toContain('token-cost-estimation')
+  })
+})

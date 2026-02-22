@@ -2,9 +2,7 @@
   // Skills always injected regardless of context
   "baseline_skills": [
     "pre-action",
-    "memory-keeper",
-    "agent-discovery",
-    "token-cost-estimation"
+    "memory-keeper"
   ],
 
   // Maximum number of auto-injected non-baseline skills (excludes explicitly provided ones).
