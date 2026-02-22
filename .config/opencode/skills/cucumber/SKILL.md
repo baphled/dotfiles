@@ -130,47 +130,9 @@ func thereShouldBeNEvents(ctx context.Context, n int) (context.Context, error) {
 }
 ```
 
-## KaRiya TUI: Declarative Step Pattern (MANDATORY)
+## KB Reference
 
-**ARCHITECTURAL DECISION**: BDD steps that create or modify data MUST use the domain/service layer. NEVER type into huh forms character-by-character.
-
-### FORBIDDEN in step definitions
-
-- `env.TypeText(text)` to fill form fields — fragile, timing-dependent
-- `env.PressKey(tea.KeyTab)` / `env.Tab()` to navigate between form fields
-- `env.ClearTextField()` / `env.PressKey(tea.KeyCtrlU)` / backspace loops to clear fields
-- Multi-step form navigation chains (tab→type→tab→type→submit)
-
-### CORRECT pattern
-
-```go
-// ✅ Create data via domain/service, wire into intent state
-func iAddANewFact(ctx context.Context, text string) (context.Context, error) {
-    env := support.GetAppEnv(ctx)
-    fact := &career.Fact{Text: text}
-    err := env.Service.SaveFact(ctx, fact)
-    if err != nil { return ctx, err }
-    // Inject into active intent's review state
-    intent := env.GetActiveIntent()
-    intent.AddFactToReview(fact)
-    return ctx, nil
-}
-```
-
-### LEGITIMATE app interactions (keep as-is)
-
-These test real app navigation, NOT form mechanics:
-- `env.PressKeyRune('f')` — open editors
-- `env.PressKeyRune('q')` — quit
-- `env.Confirm()` — confirm dialogs/modals
-- `env.Cancel()` — cancel/escape
-- `env.NavigateDown()` — list navigation
-- `env.PressKeyRune('y'/'n')` — yes/no prompts
-
-### Decision rule
-
-> **Filling form fields** or **navigating between form controls** = anti-pattern.
-> **Triggering app actions** (open, close, navigate, confirm) = legitimate.
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Cucumber.md`
 
 ## Related skills
 

@@ -17,6 +17,7 @@ I provide universal best practices for Behaviour-Driven Development, focusing on
 - Structuring scenarios for long-term maintainability
 - Deciding what should be a BDD test versus a unit test
 - Refining Gherkin steps to be survivable across UI changes
+- Applying BDD-style describe/context/it structure to unit tests (RSpec, Ginkgo, Jest)
 
 ## Core principles
 
@@ -51,9 +52,9 @@ When("I log in", () => {
 ```
 
 **The Test Pyramid Ratio:**
-- **BDD/E2E (20%)** — Critical user journeys and multi-system flows
+- **Acceptance/E2E (20%)** — Critical user journeys; Gherkin/Cucumber, Godog, Cypress
 - **Integration (40%)** — Service boundaries and data transformations
-- **Unit (40%)** — Algorithms, calculations, and UI mechanics
+- **Unit (40%)** — Algorithms, calculations, UI mechanics; RSpec, Ginkgo, Jest describe/it blocks are BDD at this level
 
 ## Anti-patterns to avoid
 
@@ -82,9 +83,13 @@ When("I log in", () => {
 - Confirmation (`env.Confirm()`)
 - Cancellation (`env.Cancel()`)
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/BDD Best Practices.md`
+
 ## Related skills
 
 - `bdd-workflow` - The overall BDD outside-in development cycle
 - `bdd-anti-patterns` - Comprehensive library of mistakes to avoid
 - `cucumber` - Executable specification runner
-- `tdd-workflow` - The inner loop of technical implementation
+- `bdd-workflow` - The inner loop of technical implementation

@@ -99,9 +99,13 @@ func (s *Service) CreateUser(ctx context.Context, req CreateReq) error {
 - ❌ **Refactoring while fixing a bug** — Fix the bug first (with regression test), then refactor
 - ❌ **Renaming + extracting in one step** — Two changes look like one; commit separately
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Refactor.md`
+
 ## Related skills
 
 - `clean-code` - Apply naming and structure principles during refactoring
 - `design-patterns` - Recognise opportunities to apply patterns
-- `tdd-workflow` - Refactor is the third phase of Red-Green-Refactor
+- `bdd-workflow` - Refactor is the third phase of Red-Green-Refactor
 - `golang` - Apply Go-specific idioms while refactoring

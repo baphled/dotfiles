@@ -8,7 +8,7 @@ category: Workflow Orchestration
 
 ## What I do
 
-I provide the complete checklist, templates, and file locations for creating new OpenCode components (skills, commands, agents). I ensure nothing is missed by encoding every integration point from the system.
+I provide the complete checklist, templates, and file locations for creating new OpenCode components (skills, commands, agents), encoding every integration point.
 
 ## When to use me
 
@@ -25,10 +25,10 @@ I provide the complete checklist, templates, and file locations for creating new
 
 ## Required integration points
 
-### For a new Skill (10 touchpoints):
+### For a new Skill (11 touchpoints):
 
 1. `~/.config/opencode/skills/{name}/SKILL.md` -- The skill file (max 5KB, name + description frontmatter only)
-2. `~/vaults/baphled/3. Resources/Knowledge Base/Skills/{Category}/{Name}.md` -- KB doc with full frontmatter
+2. `~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/{Category}/{Name}.md` -- KB doc with full frontmatter
 3. `~/vaults/baphled/3. Resources/Tech/OpenCode/Skills Inventory.md` -- Add to domain, update counts
 4. `~/vaults/baphled/3. Resources/Knowledge Base/Skills.md` -- Update category count, total, pairings
 5. `~/vaults/baphled/3. Resources/Tech/OpenCode/Skills Relationship Mapping.md` -- Add flow, grouping, pairings
@@ -37,21 +37,24 @@ I provide the complete checklist, templates, and file locations for creating new
 8. `~/vaults/baphled/3. Resources/Tech/OpenCode/Common Workflows.md` -- Add workflow if applicable
 9. Related skills' SKILL.md files -- Back-reference the new skill
 10. Memory graph -- Create entity with observations and relations
+11. `make vault-sync` (from `~/.config/opencode/`) -- Regenerate vault JSON cache so dashboards reflect the new skill
 
-### For a new Command (4 touchpoints):
+### For a new Command (5 touchpoints):
 
 1. `~/.config/opencode/commands/{name}.md` -- The command file
 2. `~/vaults/baphled/3. Resources/Tech/OpenCode/Commands Reference.md` -- Add to table, update agent counts
 3. `~/vaults/baphled/3. Resources/Tech/OpenCode/Common Workflows.md` -- Add to selection guide
 4. Memory graph -- Create entity
+5. `make vault-sync` (from `~/.config/opencode/`) -- Regenerate vault JSON cache
 
-### For a new Agent (5 touchpoints):
+### For a new Agent (6 touchpoints):
 
 1. `~/.config/opencode/agents/{name}.md` -- The agent file
 2. `~/vaults/baphled/3. Resources/Knowledge Base/Agents/{name}.md` -- KB doc
 3. `~/vaults/baphled/3. Resources/Tech/OpenCode/Agents Reference.md` -- Table, flowchart, count
 4. `~/vaults/baphled/3. Resources/Tech/OpenCode/Commands Reference.md` -- Update agent counts
 5. Memory graph -- Create entity
+6. `make vault-sync` (from `~/.config/opencode/`) -- Regenerate vault JSON cache
 
 ## Skill categories (for KB doc placement)
 
@@ -82,6 +85,12 @@ I provide the complete checklist, templates, and file locations for creating new
 - Not back-referencing in related skills
 - Not storing in memory graph (future sessions lose context)
 - Running updates sequentially when they can be parallel
+- Forgetting `make vault-sync` after creating a component — dashboards show stale data until the post-commit hook auto-syncs
+- Omitting the `## KB Reference` section — skills cap at 5KB; point agents to the KB doc for comprehensive coverage and extended examples
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Core-Universal/New Skill.md`
 
 ## Related skills
 

@@ -8,10 +8,11 @@ category: Testing BDD
 
 ## What I do
 
-I teach Behaviour-Driven Development: writing executable specifications in Given/When/Then format, aligning stakeholders through shared language, and implementing features through the outside-in Red-Green-Refactor cycle.
+I teach Behaviour-Driven Development at all levels — unit specs (RSpec, Ginkgo, Jest's describe/it), integration tests, and acceptance tests (Gherkin/Cucumber). BDD is a mindset: describe behaviour in domain language, drive development outside-in. The framework is secondary.
 
 ## When to use me
 
+- Writing BDD-style unit tests with RSpec, Ginkgo, or Jest's describe/it blocks
 - Writing acceptance tests before implementation (outside-in)
 - Defining feature behaviour with stakeholders using Gherkin
 - Structuring Ginkgo/Gomega specs with Describe/Context/It
@@ -107,18 +108,12 @@ Describe("UserService", func() {
 - ❌ **Form field typing in steps** (`env.TypeText()`) — Create data via domain/service layer, not by typing into form UI
 - ❌ **Form navigation in steps** (`Tab`, `ClearTextField`) — Steps should bypass form mechanics entirely
 
-## TUI applications: Declarative data creation
+## KB Reference
 
-For Bubble Tea / huh form-based applications, BDD steps that create or modify data MUST use the domain/service layer directly. Form UI is an implementation detail.
-
-**Pattern**: Given/When steps create data → service/repository → inject into intent state
-**Assertion**: Then steps verify via `env.GetView()` (what the user would see)
-
-This keeps tests stable when form layout, field order, or input mechanics change.
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/BDD Workflow.md`
 
 ## Related skills
 
-- `tdd-workflow` - TDD is BDD's inner loop (Red-Green-Refactor)
 - `ginkgo-gomega` - BDD testing framework for Go
 - `cucumber` - Gherkin runner for executable specifications
 - `godog` - Go-specific Gherkin runner

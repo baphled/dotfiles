@@ -8,7 +8,7 @@ category: Testing BDD
 
 ## What I do
 
-I identify and provide remediation for common BDD anti-patterns. I ensure tests remain stable, maintainable, and business-focused by stripping away implementation-specific details.
+I identify common BDD anti-patterns and provide fixes to keep tests stable, maintainable, and business-focused.
 
 ## When to use me
 
@@ -58,12 +58,12 @@ I identify and provide remediation for common BDD anti-patterns. I ensure tests 
 
 ## KaRiya TUI Form Mechanics (CRITICAL)
 
-**ARCHITECTURAL DECISION**: BDD steps MUST be declarative — create data via domain/service layer, test behaviour only.
+BDD steps MUST be declarative — create data via domain/service layer, test behaviour only.
 
 ### Anti-pattern: Form field typing
 
 ```go
-// ❌ WRONG: Types 47 chars one-by-one into a huh form
+// ❌ Types chars one-by-one into huh form
 func iAddANewFact(ctx context.Context, text string) (context.Context, error) {
     env := support.GetAppEnv(ctx)
     env.TypeText(text)  // Fragile, timing-dependent, tests form mechanics
@@ -104,9 +104,9 @@ func iAddANewFact(ctx context.Context, text string) (context.Context, error) {
 }
 ```
 
-### What IS legitimate app interaction (keep as-is)
+### Legitimate app interaction
 
-These are NOT anti-patterns — they test real app navigation behaviour:
+Not anti-patterns — these test real app navigation:
 
 - `env.PressKeyRune('f')` — Opening editors (app navigation)
 - `env.PressKeyRune('q')` — Quitting (app navigation)
@@ -119,6 +119,10 @@ These are NOT anti-patterns — they test real app navigation behaviour:
 
 > If the step is **filling form fields** or **navigating between form controls**, it is an anti-pattern.
 > If the step is **triggering an app action** (open, close, navigate, confirm), it is legitimate.
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/BDD Anti Patterns.md`
 
 ## Related skills
 

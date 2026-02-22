@@ -139,22 +139,14 @@ MUST DO:
 - Keep Update() as thin adapter: route messages → call domain logic → transition state
 
 **Required Architecture**:
-- Pure Domain Layer: All business logic, validation, rules (testable in isolation)
-  - No Bubble Tea or Huh imports
-  - Deterministic and synchronous
-  - Called directly from Godog steps
-- TUI Layer: Rendering adapter only
-  - ExtractInput() methods extract structured data
-  - Update() routes messages and calls domain functions
-  - View() displays results
+- Pure Domain Layer: business logic, validation, rules — no Bubble Tea imports, deterministic, called directly from Godog steps
+- TUI Layer: rendering adapter only — ExtractInput() extracts data, Update() routes messages, View() displays results
 
 **Enforcement Rule** (4-step process for writing tests):
 1. Identify business logic
 2. Extract it into a pure function
 3. Test the pure function with unit tests
 4. Do NOT test the runtime event loop
-
-See: KaRiya Obsidian note "Bubble Tea + Huh Testing Contract"
 
 ## Anti-patterns to avoid
 
@@ -163,6 +155,10 @@ See: KaRiya Obsidian note "Bubble Tea + Huh Testing Contract"
 - ❌ Testing Lip Gloss styling (test content, not colours)
 - ❌ Large integration tests without unit coverage
 - ❌ Ignoring command return values
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Testing-BDD/Bubble Tea Testing.md`
 
 ## Related skills
 

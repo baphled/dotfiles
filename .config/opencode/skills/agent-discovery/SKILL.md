@@ -128,8 +128,11 @@ If you ARE the recommended agent, suppress it and skip to next best match. Preve
 - ❌ Merging with skill discovery (handled by skill-discovery)
 - ❌ Recommending yourself
 
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Core-Universal/Agent Discovery.md`
+
 ## Related skills
-- `skill-discovery` — Automatically discover and load skills (companion skill)
-- `skill-discovery` — External community skill discovery
+- `skill-discovery` — Discovers and loads domain skills based on task context; companion to agent routing
 - `clean-code` — Universal principle
 
