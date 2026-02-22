@@ -60,6 +60,9 @@ Used for project management and branch strategy visualisations.
 - **Rendering Limits**: Large diagrams (100+ nodes) may lag. Break into subgraphs or separate files.
 - **Interactivity**: Link nodes to notes: `click NodeID "[[Other Note]]"`
 - **Live Preview**: Verify in Reading mode; syntax errors prevent rendering.
+- **Multi-line node labels**: `\n` does NOT create a newline in Obsidian's Mermaid renderer. Use `<br/>` inside **quoted** strings instead:
+  - ✅ Correct: `A["first line<br/>second line"]`
+  - ❌ Wrong: `A[first line\nsecond line]`
 
 ## When to use Mermaid vs alternatives
 
@@ -70,11 +73,16 @@ Used for project management and branch strategy visualisations.
 
 ## Anti-patterns to avoid
 
+❌ **Using `\n` for newlines in node labels**: `A[label\nsecond line]` renders literally as `label\nsecond line` in Obsidian. Use `<br/>` inside quoted strings: `A["label<br/>second line"]`.
 ❌ **Monolithic Diagrams**: Trying to fit an entire system into one `flowchart`. It becomes unreadable.
 ❌ **Missing Labels**: Using `A --> B` without describing the transition or relationship.
 ❌ **Inconsistent Naming**: Mixing `CamelCase` and `snake_case` in node IDs or labels.
 ❌ **Over-styling**: Using too many custom colours that clash with the user's Obsidian theme.
 ❌ **Deep Nesting**: Subgraphs inside subgraphs inside subgraphs (max 2 levels recommended).
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Session-Knowledge/Obsidian Mermaid Expert.md`
 
 ## Related skills
 
