@@ -29,30 +29,41 @@ Skill Discovery ensures the agent has the correct domain expertise for every tas
 
 ### Algorithm
 
-1. **PARSE** request for complexity signals.
-2. **IF** any are true → **COMPLEX**:
-   - Multiple files/modules/packages
-   - "write/create/build" + "app/project/feature"
-   - Tests required
-   - Architecture decisions needed
-   - Multiple domains
-3. **IF COMPLEX** → Load relevant domain skills and delegate if necessary.
-4. **IF SIMPLE** → Work directly (single file edit, typo fix, direct answer).
+1. **PARSE** request to identify task type and domain.
+2. **CLASSIFY** by task type (not language):
+   - **Implementation** — Writing code in any language
+   - **Testing** — Writing tests, test fixtures, test harnesses
+   - **Writing/Documentation** — Prose, READMEs, ADRs, runbooks, API docs
+   - **Research/Investigation** — Exploring codebases, understanding systems
+   - **Architecture/Design** — System design, patterns, refactoring
+   - **Security** — Vulnerability assessment, secure coding, audits
+   - **Operations/DevOps** — Deployment, CI/CD, infrastructure, monitoring
+   - **Data Analysis** — Metrics, statistics, analysis, reporting
+   - **Git/Delivery** — Commits, PRs, releases, version management
+   - **Orchestration/Planning** — Task breakdown, delegation, coordination
+3. **LOAD** skills from the Internal Skill Selection Matrix matching the task type.
+4. **DETECT** programming language (if applicable) and load language-specific skills via codebase detection.
+5. **DELEGATE** if complexity warrants (multiple files, architecture decisions, novel problems).
 
 ---
 
 ## Internal Skill Selection Matrix
 
-| Trigger | Category | Skills |
-|---------|----------|--------|
-| Go/golang | unspecified-high | golang, clean-code, architecture |
-| Tests | unspecified-high | ginkgo-gomega, bdd-workflow, tdd-workflow |
-| CLI/TUI | unspecified-high | bubble-tea-expert, ui-design, ux-design |
-| API | unspecified-high | api-design, api-documentation |
-| Database | unspecified-high | gorm-repository, db-operations |
-| Git | quick | git-master, create-pr, auto-rebase |
-| Architecture | ultrabrain | architecture, design-patterns |
-| Documentation | writing | documentation-writing |
+| Task Type | Category | Skills |
+|-----------|----------|--------|
+| **Implementation** (any language) | unspecified-high | clean-code, error-handling, design-patterns |
+| **Testing** (any language) | unspecified-high | bdd-workflow, bdd-best-practices, test-fixtures |
+| **Writing/Documentation** | writing | documentation-writing, british-english, proof-reader |
+| **Research/Investigation** | deep | investigation, research, critical-thinking, epistemic-rigor |
+| **Architecture/Design** | ultrabrain | architecture, design-patterns, systems-thinker, domain-modeling |
+| **Security** | unspecified-high | security, cyber-security, prove-correctness |
+| **Operations/DevOps** | unspecified-high | devops, automation, infrastructure-as-code, monitoring |
+| **Data Analysis** | unspecified-high | epistemic-rigor, question-resolver, math-expert |
+| **Git/Delivery** | quick | git-master, create-pr, release-management |
+| **Orchestration/Planning** | ultrabrain | architecture, systems-thinker, scope-management, estimation |
+| **Refactoring** | deep | refactor, clean-code, design-patterns |
+| **Performance/Optimization** | unspecified-high | performance, profiling, benchmarking |
+| **Debugging/Troubleshooting** | deep | investigation, critical-thinking, logging-observability |
 
 ---
 
@@ -97,3 +108,12 @@ Suggest an external skill when ALL local options are exhausted and ANY of these 
 - **Phase 0 gate** - Runs before all other processing.
 - **Skill-auto-loader-config.jsonc** - Source of truth for baseline and keyword mappings.
 - **Universal Skill** - Always loaded by default.
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Core-Universal/Skill Discovery.md`
+
+## Related skills
+
+- `agent-discovery` — routes to specialist agents; skill-discovery loads domain knowledge
+- `pre-action` — decision framework that benefits from loaded skills

@@ -85,7 +85,11 @@
     "testing": ["bdd-workflow"],
     "implementation": ["clean-code", "error-handling", "design-patterns"],
     "review": ["code-reviewer", "clean-code", "critical-thinking"],
-    "refactoring": ["refactor", "clean-code", "design-patterns"]
+    "refactoring": ["refactor", "clean-code", "design-patterns"],
+    "writing": ["documentation-writing", "british-english", "proof-reader"],
+    "research": ["investigation", "research", "critical-thinking", "epistemic-rigor"],
+    "ops": ["devops", "automation", "infrastructure-as-code", "monitoring"],
+    "data-analysis": ["epistemic-rigor", "question-resolver", "math-expert", "critical-thinking"]
   },
 
   // Focus + language → framework mapping.
@@ -102,9 +106,10 @@
   // Keyword patterns for prompt analysis
   // Ordered by priority (highest first)
   // Patterns are case-insensitive regex strings
+  // Domain-agnostic: covers ALL task types (security, writing, research, ops, data, git, architecture, performance, debugging, orchestration)
   "keyword_patterns": [
     {
-      "pattern": "security|vulnerabilit|auth|encrypt",
+      "pattern": "security|vulnerabilit|auth|encrypt|pentest|audit",
       "skills": [
         "security",
         "cyber-security"
@@ -112,87 +117,69 @@
       "priority": 9
     },
     {
-      "pattern": "playwright|browser|scrape|screenshot",
+      "pattern": "playwright|browser|scrape|screenshot|e2e",
       "skills": [
         "playwright"
       ],
       "priority": 9
     },
-     {
-       "pattern": "test|spec|assert|expect|describe|tdd",
-       "skills": [
-         "bdd-workflow"
-       ],
-       "priority": 8
-     },
-
-     {
-       "pattern": "cli|command.?line|bubble\\.tea|bubbletea|tui|terminal ui",
-       "skills": [
-         "ui-design",
-         "ux-design"
-       ],
-       "priority": 8
-     },
     {
-      "pattern": "refactor|clean|simplif",
+      "pattern": "test|spec|assert|expect|describe|scenario|given|when|then",
       "skills": [
-        "refactor",
-        "clean-code",
-        "design-patterns"
+        "bdd-workflow"
       ],
-      "priority": 7
-    },
-     {
-       "pattern": "database|db|repository|gorm|sql|orm",
-       "skills": [
-         "db-operations",
-         "sql"
-       ],
-       "priority": 7
-     },
-    {
-      "pattern": "api|endpoint|route|handler|rest",
-      "skills": [
-        "api-design",
-        "error-handling"
-      ],
-      "priority": 7
+      "priority": 8
     },
     {
-      "pattern": "concurren|goroutine|channel|mutex|sync",
-      "skills": [
-        "concurrency"
-      ],
-      "priority": 7
-    },
-    {
-      "pattern": "obsidian|vault|zettelkasten|note",
-      "skills": [
-        "obsidian-structure",
-        "obsidian-frontmatter"
-      ],
-      "priority": 7
-    },
-    {
-      "pattern": "architect|design|system design|domain model",
-      "skills": [
-        "architecture",
-        "design-patterns",
-        "domain-modeling"
-      ],
-      "priority": 7
-    },
-    {
-      "pattern": "deploy|ci|cd|pipeline|docker|container",
+      "pattern": "deploy|ci|cd|pipeline|docker|container|kubernetes|infra",
       "skills": [
         "devops",
         "automation"
       ],
+      "priority": 8
+    },
+    {
+      "pattern": "document|readme|adr|runbook|changelog|wiki|blog|write",
+      "skills": [
+        "documentation-writing",
+        "british-english"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "research|investigat|explore|understand|analys|audit",
+      "skills": [
+        "investigation",
+        "research"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "architect|design|system design|domain model|pattern",
+      "skills": [
+        "architecture",
+        "design-patterns"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "data|metric|statistic|report|analytic|dashboard",
+      "skills": [
+        "epistemic-rigor",
+        "question-resolver"
+      ],
+      "priority": 7
+    },
+    {
+      "pattern": "git |commit|rebase|merge|branch|pr|pull request|release",
+      "skills": [
+        "git-advanced",
+        "release-management"
+      ],
       "priority": 6
     },
     {
-      "pattern": "performance|optimis|benchmark|profil",
+      "pattern": "performance|optimis|benchmark|profil|latency|throughput",
       "skills": [
         "performance",
         "profiling"
@@ -200,26 +187,35 @@
       "priority": 6
     },
     {
-      "pattern": "document|readme|adr|runbook",
-      "skills": [
-        "documentation-writing",
-        "british-english"
-      ],
-      "priority": 5
-    },
-    {
-      "pattern": "git |commit|rebase|merge|branch",
-      "skills": [
-        "git-advanced"
-      ],
-      "priority": 6
-    },
-    {
-      "pattern": "error|panic|recover|exception",
+      "pattern": "error|exception|debug|troubleshoot|diagnos|panic|recover",
       "skills": [
         "error-handling"
       ],
       "priority": 6
+    },
+    {
+      "pattern": "refactor|clean|simplif|restructur",
+      "skills": [
+        "refactor",
+        "clean-code"
+      ],
+      "priority": 6
+    },
+    {
+      "pattern": "api|endpoint|route|handler|rest|graphql|webhook",
+      "skills": [
+        "api-design",
+        "error-handling"
+      ],
+      "priority": 6
+    },
+    {
+      "pattern": "obsidian|vault|zettelkasten|note",
+      "skills": [
+        "obsidian-structure",
+        "obsidian-frontmatter"
+      ],
+      "priority": 5
     }
   ]
 }
