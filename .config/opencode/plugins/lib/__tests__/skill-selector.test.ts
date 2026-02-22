@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { selectSkills } from '../skill-selector'
 import type {
   SkillAutoLoaderConfig,
@@ -957,5 +959,29 @@ describe('selectSkills — Focus Suppresses Keyword Patterns', () => {
     expect(result.skills).toContain('refactor')
     expect(result.skills).toContain('clean-code')
     expect(result.skills).toContain('design-patterns')
+  })
+})
+
+describe('Config Cleanup — Go-specific skills not in keyword patterns', () => {
+  // Load the ACTUAL config file (not the hardcoded test fixture)
+  const configPath = resolve(__dirname, '../../skill-auto-loader-config.jsonc')
+  const configText = readFileSync(configPath, 'utf-8')
+  const jsonText = configText.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
+  const actualConfig = JSON.parse(jsonText) as SkillAutoLoaderConfig
+
+  const allKeywordSkills = actualConfig.keyword_patterns.flatMap(
+    (p: { skills: string[] }) => p.skills,
+  )
+
+  it('ginkgo-gomega must not appear in any keyword pattern', () => {
+    expect(allKeywordSkills).not.toContain('ginkgo-gomega')
+  })
+
+  it('gorm-repository must not appear in any keyword pattern', () => {
+    expect(allKeywordSkills).not.toContain('gorm-repository')
+  })
+
+  it('bubble-tea-expert must not appear in any keyword pattern', () => {
+    expect(allKeywordSkills).not.toContain('bubble-tea-expert')
   })
 })

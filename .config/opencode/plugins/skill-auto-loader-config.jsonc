@@ -113,24 +113,22 @@
       ],
       "priority": 9
     },
-    {
-      "pattern": "test|spec|assert|expect|describe|tdd",
-      "skills": [
-        "ginkgo-gomega",
-        "bdd-workflow"
-      ],
-      "priority": 8
-    },
+     {
+       "pattern": "test|spec|assert|expect|describe|tdd",
+       "skills": [
+         "bdd-workflow"
+       ],
+       "priority": 8
+     },
 
-    {
-      "pattern": "cli|command.?line|bubble\\.tea|bubbletea|tui|terminal ui",
-      "skills": [
-        "bubble-tea-expert",
-        "ui-design",
-        "ux-design"
-      ],
-      "priority": 8
-    },
+     {
+       "pattern": "cli|command.?line|bubble\\.tea|bubbletea|tui|terminal ui",
+       "skills": [
+         "ui-design",
+         "ux-design"
+       ],
+       "priority": 8
+     },
     {
       "pattern": "refactor|clean|simplif",
       "skills": [
@@ -140,15 +138,14 @@
       ],
       "priority": 7
     },
-    {
-      "pattern": "database|db|repository|gorm|sql|orm",
-      "skills": [
-        "gorm-repository",
-        "db-operations",
-        "sql"
-      ],
-      "priority": 7
-    },
+     {
+       "pattern": "database|db|repository|gorm|sql|orm",
+       "skills": [
+         "db-operations",
+         "sql"
+       ],
+       "priority": 7
+     },
     {
       "pattern": "api|endpoint|route|handler|rest",
       "skills": [
