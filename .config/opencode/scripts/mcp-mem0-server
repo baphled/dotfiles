@@ -1,34 +1,5 @@
-#!/usr/bin/env node
-/**
- * MCP Server for mem0 Memory
- * 
- * Entry point that runs the TypeScript server using ts-node or compiled JS.
- * 
- * Environment variables:
- * - MEM0_QDRANT_URL: Qdrant server URL (default: http://localhost:6333)
- * - MEM0_OLLAMA_URL: Ollama server URL (default: http://localhost:11434)
- * - MEM0_COLLECTION: Qdrant collection name (default: opencode_memory)
- * - MEM0_EMBEDDING_MODEL: Embedding model (default: nomic-embed-text)
- */
+#!/bin/bash
+# MCP Server wrapper for mem0 Memory
+# Runs the compiled JavaScript server
 
-import { createRequire } from 'module';
-import { dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
-
-const require = createRequire(import.meta.url);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Paths to the server source in plugins/lib
-const serverPath = resolve(__dirname, '../plugins/lib/mcp-mem0-server.ts');
-
-const { execSync } = await import('child_process');
-try {
-  execSync(`npx ts-node ${serverPath}`, { 
-    stdio: 'inherit',
-    cwd: resolve(__dirname, '..')
-  });
-} catch (e) {
-  console.error('Failed to start MCP server:', e);
-  process.exit(1);
-}
+exec /home/baphled/.config/nvm/versions/node/v25.6.0/bin/node /home/baphled/.config/opencode/plugins/lib/dist/mcp-mem0-server.js
