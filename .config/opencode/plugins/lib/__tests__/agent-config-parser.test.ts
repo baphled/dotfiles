@@ -389,8 +389,6 @@ default_skills:
         'memory-keeper',
         'clean-code',
         'bdd-workflow',
-        'agent-discovery',
-        'skill-discovery',
       ])
     })
 

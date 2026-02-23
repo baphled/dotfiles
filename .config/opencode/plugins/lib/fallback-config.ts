@@ -63,7 +63,6 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
     ],
     T1: [
       { provider: 'opencode', model: 'gpt-5-nano', tier: 'T1' },
-      { provider: 'opencode', model: 'minimax-m2.5-free', tier: 'T1' },
       { provider: 'github-copilot', model: 'gpt-5-mini', tier: 'T1' },
       { provider: 'github-copilot', model: 'claude-haiku-4.5', tier: 'T1' },
       { provider: 'github-copilot', model: 'gemini-3-flash-preview', tier: 'T1' },
@@ -100,7 +99,7 @@ export function getProviderMetadata(provider: string): ProviderMetadata {
       provider: 'opencode',
       costModel: 'free',
       rateLimit: { type: 'per-minute', threshold: 60, resetIntervalMs: 60 * 1000 },
-      description: 'OpenCode Zen (free models — Kimi, Big Pickle, MiniMax, GPT-5 Nano)',
+      description: 'OpenCode Zen (Big Pickle, GPT-5 Nano — Kimi/GLM/MiniMax removed Feb 2026)',
       supportsTools: true,
     },
     'github-copilot': {

@@ -2,7 +2,7 @@ import { detectCodebaseLanguages } from '../codebase-detector'
 import { mkdirSync, writeFileSync, rmSync } from 'fs'
 import { join } from 'path'
 import { tmpdir } from 'os'
-import { describe, it, expect, afterEach } from 'bun:test'
+import { describe, it, expect, afterEach } from '@jest/globals'
 
 /**
  * Test helper: create a temporary project directory with marker files.

@@ -7,7 +7,7 @@
  * The injection makes skill loading deterministic by embedding the actual
  * skill content rather than relying on agents to call mcp_skill at runtime.
  */
-import { describe, it, expect, beforeEach, mock } from 'bun:test'
+import { describe, it, expect, beforeEach } from '@jest/globals'
 import { injectSkillContent, orderSkillsBySource, PROMPT_SIZE_CEILING } from '../skill-content-injection'
 import type { SkillSource } from '../skill-selector'
 

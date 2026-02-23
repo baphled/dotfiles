@@ -11,7 +11,7 @@
  *   - skillsWithContent: string[]
  *   - skillsWithoutContent: string[]
  */
-import { describe, it, expect, beforeEach, afterEach, mock, spyOn } from 'bun:test'
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
 import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'fs'
 import { join } from 'path'
 import { tmpdir } from 'os'

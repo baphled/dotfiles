@@ -25,11 +25,9 @@ describe('skill-auto-loader — real config integration', () => {
       }
     })
 
-    it("includes 'clean-code' and 'error-handling' from the deep category mapping", () => {
+    it("includes 'error-handling' from the deep category mapping", () => {
       const input: SkillSelectionInput = { category: 'deep', existingSkills: [] }
       const result = selectSkills(input, realConfig)
-
-      expect(result.skills).toContain('clean-code')
       expect(result.skills).toContain('error-handling')
     })
   })

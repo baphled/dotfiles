@@ -8,6 +8,15 @@ import { existsSync, unlinkSync } from 'fs'
 const DEFAULT_RETRY_AFTER_SECONDS = 60
 const FAILOVER_LOG_FILE = '/home/baphled/.config/opencode/failover.log'
 
+
+/** Models removed from the opencode service (Feb 2026). Binary v1.2.10 still references them. */
+const REMOVED_MODELS = new Set([
+  'kimi-k2.5-free',
+  'glm-5-free',
+  'glm-4.6',
+  'kimi-k2-thinking',
+  'minimax-m2.5-free',
+])
 const MODEL_TIER_MAP: Record<string, string> = {
   'gpt-5-nano': 'T1', 'minimax-m2.5-free': 'T1', 'gpt-5-mini': 'T1',
   'claude-haiku-4.5': 'T1', 'gemini-3-flash-preview': 'T1',
@@ -17,6 +26,7 @@ const MODEL_TIER_MAP: Record<string, string> = {
   'claude-opus-4.5': 'T3', 'claude-opus-4.6': 'T3', 'claude-opus-41': 'T3',
   'gpt-5.1': 'T3', 'gpt-5.2': 'T3', 'gpt-5.1-codex': 'T3',
   'gpt-5.1-codex-mini': 'T3', 'gpt-5.1-codex-max': 'T3', 'gpt-5.2-codex': 'T3',
+  'kimi-k2.5-free': 'T2', 'glm-5-free': 'T1', 'kimi-k2-thinking': 'T2', 'glm-4.6': 'T1',
 }
 
 function resolveModelTier(modelId: string): string {
@@ -74,6 +84,10 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
   return {
     'chat.params': async (input, _output) => {
       if (!input.model?.id) return
+      if (REMOVED_MODELS.has(input.model.id)) {
+        debugLog(`REMOVED MODEL: ${input.model.id} — no longer exists on opencode service. Skipping hook.`)
+        return
+      }
       let currentProviderID = (input.provider as any)?.id ?? input.provider?.info?.id
       if (!currentProviderID) {
         currentProviderID = inferProviderFromModel(input.model.id) || input.model.id.split('/')[0] || input.model.id

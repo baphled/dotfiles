@@ -3,9 +3,7 @@
   "mcp": {
     "memory": {
       "command": [
-        "npx",
-        "-y",
-        "@modelcontextprotocol/server-memory"
+        "/home/baphled/.local/bin/mcp-mem0-server"
       ],
       "type": "local"
     },

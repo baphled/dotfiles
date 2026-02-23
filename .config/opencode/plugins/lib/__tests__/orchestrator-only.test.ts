@@ -196,9 +196,9 @@ describe('orchestrator-only — permission enforcement (deterministic)', () => {
         expect(agents[name]['mode']).not.toBe('subagent')
       })
 
-      it('prompt_append contains DELEGATE AUTOMATICALLY instruction', () => {
+      it('prompt_append contains AUTOMATIC DELEGATION instruction', () => {
         const promptAppend = agents[name]['prompt_append'] as string
-        expect(promptAppend).toContain('DELEGATE AUTOMATICALLY')
+        expect(promptAppend).toContain('AUTOMATIC DELEGATION')
       })
 
       it('prompt_append contains PHASE 0 classification instruction', () => {
