@@ -25,7 +25,7 @@ Every user message MUST be classified before acting. If classification is skippe
 | Testing strategy, test writing, coverage, edge cases | `QA-Engineer` |
 | Code review, PR feedback, change request response | `Code-Reviewer` |
 | Security audits, vulnerability assessment, auth, encryption | `Security-Engineer` |
-| Architecture decisions, RFCs, trade-off analysis, design review | `Tech-Lead` |
+| Architecture decisions, RFCs, trade-off analysis, design review, multi-domain coordination, complex multi-specialist tasks | `Tech-Lead` |
 | CI/CD, infrastructure, containers, deployment, IaC | `DevOps` |
 | Documentation, READMEs, API docs, tutorials, blog posts | `Writer` |
 | Data exploration, log analysis, metrics, reporting | `Data-Analyst` |
@@ -38,6 +38,21 @@ Every user message MUST be classified before acting. If classification is skippe
 | LLM evaluation, model compatibility testing | `Model-Evaluator` |
 
 **Fallback:** No specialist matches → use generic category (`quick`, `deep`, `writing`, `ultrabrain`) with `sisyphus-junior`.
+
+### Agent Tiers
+
+The agent system has two orchestrator tiers:
+
+| Tier | Agents | Delegated by | Purpose |
+|------|--------|--------------|---------|
+| Top-level orchestrator | `sisyphus`, `hephaestus`, `atlas` | User (directly selected) | Entry point — classifies, delegates, verifies |
+| Mid-tier orchestrator | `Tech-Lead` | Top-level orchestrators via `subagent_type="Tech-Lead"` | Decomposes complex multi-specialist tasks, coordinates pipelines |
+| Worker specialist | `Senior-Engineer`, `QA-Engineer`, `Writer`, etc. | Any orchestrator | Executes atomic tasks directly |
+
+Tech-Lead is the **only** mid-tier orchestrator. Use it when:
+- A task spans multiple specialist domains (e.g. implementation + testing + documentation)
+- The correct specialist pipeline isn't obvious
+- Complex tasks need decomposition before delegation to workers
 
 ### Delegation Execution (automatic)
 

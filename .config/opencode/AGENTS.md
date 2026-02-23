@@ -61,11 +61,11 @@ The orchestrator is restricted to the following coordination activities:
 
 ### Specialist Agent Routing
 
-Agents are **composable** — any specialist can delegate to another directly. Use Tech-Lead when multi-domain coordination is needed and the right pipeline isn't obvious. Otherwise, route to the specialist directly.
+Agents are **composable** — any specialist can delegate to another directly. **Tech-Lead is a mid-tier orchestrator** — top-level orchestrators (sisyphus, hephaestus, atlas) delegate to it via `task(subagent_type="Tech-Lead")` for complex multi-domain tasks. It decomposes work and coordinates specialist pipelines. For single-domain tasks, route to the specialist directly.
 
 | Task | Route to |
 |------|----------|
-| Multi-domain coordination, unclear specialist pipeline | Tech-Lead |
+| Multi-domain coordination, complex multi-specialist tasks, unclear specialist pipeline | Tech-Lead |
 | Implementation, bug fix, refactoring | Senior-Engineer |
 | Testing strategy, test writing, coverage | QA-Engineer |
 | Documentation, READMEs, tutorials, content | Writer |
@@ -98,6 +98,8 @@ These agents **cannot** use Edit or Write tools. They classify, delegate, and ve
 | `hephaestus` | deny | allow | Orchestrator (Claude Code) |
 | `atlas` | deny | allow | Orchestrator (OpenCode) |
 | `Tech-Lead` | deny | allow | Engineering orchestrator |
+
+> **Two orchestrator tiers:** `sisyphus`, `hephaestus`, and `atlas` are **top-level** orchestrators selected directly by the user. `Tech-Lead` is a **mid-tier** orchestrator delegated to by top-level orchestrators via `task(subagent_type="Tech-Lead")` for complex multi-specialist coordination.
 
 ### Workers (edit: allow)
 
