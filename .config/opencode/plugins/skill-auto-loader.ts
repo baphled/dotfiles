@@ -13,11 +13,48 @@ import { AgentConfigCache } from './lib/agent-config-parser'
 import { filterSkillsAgainstCache } from './lib/skill-validation-filter'
 import { injectSkillContent } from './lib/skill-content-injection'
 import { detectCodebaseLanguages } from './lib/codebase-detector'
+import { HealthManager } from './lib/provider-health'
+import { getFallbackChain } from './lib/fallback-config'
+
 
 type WarnFn = (message: string) => void
 
 const PLUGIN_DIR = `${process.env.HOME}/.config/opencode/plugins`
 const CONFIG_FILE = join(PLUGIN_DIR, 'skill-auto-loader-config.jsonc')
+
+// Map category to tier for health filtering
+const CATEGORY_TO_TIER: Record<string, string> = {
+  'quick': 'T1',
+  'unspecified-low': 'T1',
+  'visual-engineering': 'T1',
+  'deep': 'T2',
+  'writing': 'T2',
+  'unspecified-high': 'T2',
+  'artistry': 'T3',
+  'ultrabrain': 'T3',
+}
+
+const SUBAGENT_TO_TIER: Record<string, string> = {
+  'explore': 'T1',
+  'librarian': 'T1',
+  'Senior-Engineer': 'T2',
+  'QA-Engineer': 'T2',
+  'Writer': 'T2',
+  'oracle': 'T3',
+  'Tech-Lead': 'T3',
+  'Security-Engineer': 'T3',
+}
+
+function resolveTier(category?: string, subagentType?: string): string | null {
+  if (subagentType && SUBAGENT_TO_TIER[subagentType]) {
+    return SUBAGENT_TO_TIER[subagentType]
+  }
+  if (category && CATEGORY_TO_TIER[category]) {
+    return CATEGORY_TO_TIER[category]
+  }
+  return null
+}
+
 const LOG_FILE = `${process.env.HOME}/.config/opencode/logs/skill-auto-loader.log`
 const LOGS_DIR = `${process.env.HOME}/.config/opencode/logs`
 
@@ -211,8 +248,30 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       // Only intercept task tool calls
       if (input.tool !== 'task') return
 
+
       // Extract args from output
       const args = output.args as Record<string, unknown>
+      
+      // Extract category/subagent_type for health filtering
+      const category = args.category as string | undefined
+      let subagentType = (args.subagent_type ?? args.subagentType) as string | undefined
+      
+      // === Health Filtering: Skip rate-limited providers ===
+      const tier = resolveTier(category, subagentType)
+      if (tier) {
+        const healthManager = new HealthManager()
+        const healthy = healthManager.getHealthyAlternatives(tier)
+        
+        // Get the first healthy model to use as fallback
+        if (healthy.length > 0) {
+          const healthyModel = healthy[0].model
+          const healthyProvider = healthy[0].provider
+          
+          // If we have a healthy alternative, use it
+          args.model = healthyModel
+          args.provider = healthyProvider
+        }
+      }
       
       // Get existing skills from load_skills
       const existingSkills: string[] = Array.isArray(args.load_skills) 
@@ -221,10 +280,6 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
 
       // Get session ID if present
       const sessionId = args.session_id as string | undefined
-
-      // Get category or subagent_type
-      const category = args.category as string | undefined
-       let subagentType = (args.subagent_type ?? args.subagentType) as string | undefined
       
       // Get prompt for keyword analysis
       const prompt = args.prompt as string | undefined
