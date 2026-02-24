@@ -29,6 +29,39 @@ const MODEL_TIER_MAP: Record<string, string> = {
   'kimi-k2.5-free': 'T2', 'glm-5-free': 'T1', 'kimi-k2-thinking': 'T2', 'glm-4.6': 'T1',
 }
 
+/** Map agent names to their model tier for proactive routing */
+const AGENT_TIER_MAP: Record<string, string> = {
+  // T1 — lightweight exploration agents
+  'explore': 'T1',
+  'librarian': 'T1',
+
+  // T2 — implementation/build agents
+  'sisyphus-junior': 'T2',
+  'Senior-Engineer': 'T2',
+  'QA-Engineer': 'T2',
+  'Writer': 'T2',
+  'DevOps': 'T2',
+  'VHS-Director': 'T2',
+  'Embedded-Engineer': 'T2',
+  'Knowledge Base Curator': 'T2',
+  'Model-Evaluator': 'T2',
+  'Code-Reviewer': 'T2',
+  'Editor': 'T2',
+  'Researcher': 'T2',
+  'Data-Analyst': 'T2',
+  'Nix-Expert': 'T2',
+  'Linux-Expert': 'T2',
+  'SysOp': 'T2',
+
+  // T3 — high-reasoning agents
+  'oracle': 'T3',
+  'metis': 'T3',
+  'momus': 'T3',
+}
+
+/** Orchestrator agents — never proactively switch their model */
+const ORCHESTRATOR_AGENTS = new Set(['sisyphus', 'hephaestus', 'atlas', 'Tech-Lead'])
+
 function resolveModelTier(modelId: string): string {
   if (MODEL_TIER_MAP[modelId]) return MODEL_TIER_MAP[modelId]
   for (const [pattern, tier] of Object.entries(MODEL_TIER_MAP)) {
@@ -83,49 +116,75 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
 
   return {
     'chat.params': async (input, _output) => {
+      // 1. Early returns
       if (!input.model?.id) return
       if (REMOVED_MODELS.has(input.model.id)) {
         debugLog(`REMOVED MODEL: ${input.model.id} — no longer exists on opencode service. Skipping hook.`)
         return
       }
+
+      // 2. Extract current provider and tier info
       let currentProviderID = (input.provider as any)?.id ?? input.provider?.info?.id
       if (!currentProviderID) {
         currentProviderID = inferProviderFromModel(input.model.id) || input.model.id.split('/')[0] || input.model.id
       }
       const providerName = extractProviderName(currentProviderID)
-      const tier = resolveModelTier(input.model.id)
+      const modelTier = resolveModelTier(input.model.id)
       const healthKey = `${providerName}/${input.model.id}`
-      
-      // === PROACTIVE MODEL SWITCHING ===
-      // Always get healthy alternatives, not just when rate limited
-      const alternatives = healthManager.getHealthyAlternatives(tier, healthKey)
-      
-      if (alternatives.length > 0 && alternatives[0].model !== input.model.id) {
-        // Switch to healthy model proactively
-        const healthy = alternatives[0]
-        debugLog(`PROACTIVE SWITCH: ${healthKey} -> ${healthy.provider}/${healthy.model}`)
-        input.model.id = healthy.model
-        input.provider = { id: healthy.provider, info: { id: healthy.provider } }
-        await notify(`🔄 Switched to healthy ${healthy.provider}/${healthy.model} for ${tier}`, 'info', 5000)
-        // Update healthKey for usage recording
-        lastModelBySession.set(input.sessionID, { provider: healthy.provider, model: healthy.model })
-        healthManager.recordUsage(healthy.provider)
-        healthManager.flush().catch(() => {})
-        return
+
+      // 3. Determine agent identity
+      const agentName = (input.agent as any)?.name as string | undefined
+      const isOrchestratorAgent = agentName ? ORCHESTRATOR_AGENTS.has(agentName) : true
+      // If no agent name, treat as orchestrator (parent session) — do not proactively switch
+
+      // 4. Subagent proactive routing
+      if (!isOrchestratorAgent && agentName) {
+        const agentTier = AGENT_TIER_MAP[agentName] || 'T2' // Default unknown subagents to T2
+        const alternatives = healthManager.getHealthyAlternatives(agentTier)
+
+        if (alternatives.length > 0) {
+          const pick = alternatives[0]
+          const newKey = `${pick.provider}/${pick.model}`
+
+          // Only switch if the picked model differs from current
+          if (newKey !== healthKey) {
+            debugLog(`PROACTIVE SWITCH: agent=${agentName} tier=${agentTier} ${healthKey} -> ${newKey}`)
+            // ALWAYS set model AND provider as a pair
+            input.model.id = pick.model
+            input.provider = { id: pick.provider, info: { id: pick.provider } } as any
+            await notify(`🔄 ${agentName} (${agentTier}): ${pick.provider}/${pick.model}`, 'info', 5000)
+          }
+
+          // Log and record usage for the (possibly switched) model
+          const finalProvider = pick.provider
+          const finalModel = pick.model
+          const previousModel = lastModelBySession.get(input.sessionID)
+          const isNewOrChanged = !previousModel || previousModel.provider !== finalProvider || previousModel.model !== finalModel
+          if (isNewOrChanged) {
+            debugLog(`MODEL: session=${input.sessionID} agent=${agentName} using ${finalProvider}/${finalModel} (${agentTier})`)
+          }
+          lastModelBySession.set(input.sessionID, { provider: finalProvider, model: finalModel })
+          healthManager.recordUsage(finalProvider)
+          healthManager.flush().catch(() => {})
+          return
+        }
+
+        // No healthy alternatives — log warning, fall through to use current model
+        debugLog(`MODEL: session=${input.sessionID} agent=${agentName} using ${healthKey} (${agentTier}) — no healthy alternatives for tier`)
       }
-      
-      // Fallback: if current model is rate limited, notify
+
+      // 5. Orchestrator / parent session — no proactive switching
+      // Just log model usage and record it
       if (healthManager.isRateLimited(healthKey)) {
         const expiry = healthManager.getRateLimitExpiry(healthKey)
         const expiryText = expiry ? ` until ${new Date(expiry).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}` : ''
         await notify(`⚠️ ${healthKey} rate limited${expiryText}`, 'warning', 8000)
       }
 
-      // Log model usage once per session (or when model changes)
       const previousModel = lastModelBySession.get(input.sessionID)
       const isNewOrChanged = !previousModel || previousModel.provider !== providerName || previousModel.model !== input.model.id
       if (isNewOrChanged) {
-        debugLog(`MODEL: session=${input.sessionID} using ${providerName}/${input.model.id} (${tier})`)
+        debugLog(`MODEL: session=${input.sessionID} agent=${agentName || 'orchestrator'} using ${providerName}/${input.model.id} (${modelTier})`)
       }
       lastModelBySession.set(input.sessionID, { provider: providerName, model: input.model.id })
       healthManager.recordUsage(providerName)
