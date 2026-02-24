@@ -124,13 +124,28 @@ function createNotifier(client: PluginInput['client']) {
 
 const lastModelBySession: Map<string, { provider: string; model: string }> = new Map()
 
+/** Clear all thinking-related keys from provider options when switching to a non-thinking model */
+function clearThinkingOptions(options: Record<string, any>): void {
+  delete options['thinking']
+  delete options['effort']
+  delete options['thinking_budget']
+  delete options['thinkingConfig']
+  delete options['thinkingLevel']
+}
+
+/** Returns true for Claude models that support extended thinking */
+function modelSupportsThinking(modelId: string): boolean {
+  const lower = modelId.toLowerCase()
+  return lower.includes('claude-opus') || lower.includes('claude-sonnet')
+}
+
 const ProviderFailoverPlugin: Plugin = async (_input) => {
   const healthManager = new HealthManager()
   const notify = createNotifier(_input.client)
   await notify('Plugin loaded. Health state initialised.', 'info', 3000)
 
   return {
-    'chat.params': async (input, _output) => {
+    'chat.params': async (input, output) => {
       // 1. Early returns
       if (!input.model?.id) return
       if (REMOVED_MODELS.has(input.model.id)) {
@@ -154,41 +169,37 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
 
       // 4. Subagent proactive routing
       if (!isOrchestratorAgent && agentName) {
-        const agentTier = AGENT_TIER_MAP[agentName] || 'T2' // Default unknown subagents to T2
-        const alternatives = healthManager.getHealthyAlternatives(agentTier)
+        const agentTier = AGENT_TIER_MAP[agentName] || 'T2'
 
-        if (alternatives.length > 0) {
-          const pick = alternatives[0]
-          const newKey = `${pick.provider}/${pick.model}`
-
-          // Only switch if the picked model differs from current
-          if (newKey !== healthKey) {
-            debugLog(`PROACTIVE SWITCH: agent=${agentName} tier=${agentTier} ${healthKey} -> ${newKey}`)
-            // ALWAYS set model AND provider as a pair
+        if (healthManager.isRateLimited(healthKey)) {
+          const alternatives = healthManager.getHealthyAlternatives(agentTier)
+          if (alternatives.length > 0) {
+            const pick = alternatives[0]
+            const newKey = `${pick.provider}/${pick.model}`
+            debugLog(`SWITCH: agent=${agentName} tier=${agentTier} ${healthKey} -> ${newKey}`)
             input.model.id = pick.model
             input.provider = { id: pick.provider, info: { id: pick.provider } } as any
-            // Only notify when switching away from a rate-limited model — preference switches are silent
-            if (healthManager.isRateLimited(healthKey)) {
-              await notify(`🔄 ${agentName} (${agentTier}): ${pick.provider}/${pick.model} (rate limited: ${healthKey})`, 'warning', 6000)
+            if (!modelSupportsThinking(pick.model)) {
+              clearThinkingOptions(output.options)
             }
+            await notify(`🔄 ${agentName} (${agentTier}): switched to ${newKey} (rate limited: ${healthKey})`, 'warning', 6000)
+          } else {
+            debugLog(`RATE LIMITED: agent=${agentName} ${healthKey} — no healthy alternatives for tier ${agentTier}`)
           }
-
-          // Log and record usage for the (possibly switched) model
-          const finalProvider = pick.provider
-          const finalModel = pick.model
-          const previousModel = lastModelBySession.get(input.sessionID)
-          const isNewOrChanged = !previousModel || previousModel.provider !== finalProvider || previousModel.model !== finalModel
-          if (isNewOrChanged) {
-            debugLog(`MODEL: session=${input.sessionID} agent=${agentName} using ${finalProvider}/${finalModel} (${agentTier})`)
-          }
-          lastModelBySession.set(input.sessionID, { provider: finalProvider, model: finalModel })
-          healthManager.recordUsage(finalProvider)
-          healthManager.flush().catch(() => {})
-          return
         }
 
-        // No healthy alternatives — log warning, fall through to use current model
-        debugLog(`MODEL: session=${input.sessionID} agent=${agentName} using ${healthKey} (${agentTier}) — no healthy alternatives for tier`)
+        // Always log and record usage for the model actually being used
+        const finalProvider = (input.provider as any)?.id ?? providerName
+        const finalModel = input.model.id
+        const previousModel = lastModelBySession.get(input.sessionID)
+        const isNewOrChanged = !previousModel || previousModel.provider !== finalProvider || previousModel.model !== finalModel
+        if (isNewOrChanged) {
+          debugLog(`MODEL: session=${input.sessionID} agent=${agentName} using ${finalProvider}/${finalModel} (${agentTier})`)
+        }
+        lastModelBySession.set(input.sessionID, { provider: finalProvider, model: finalModel })
+        healthManager.recordUsage(finalProvider)
+        healthManager.flush().catch(() => {})
+        return
       }
 
       // 5. Orchestrator / parent session — no proactive switching
