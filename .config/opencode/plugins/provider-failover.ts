@@ -167,7 +167,10 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
             // ALWAYS set model AND provider as a pair
             input.model.id = pick.model
             input.provider = { id: pick.provider, info: { id: pick.provider } } as any
-            await notify(`🔄 ${agentName} (${agentTier}): ${pick.provider}/${pick.model}`, 'info', 5000)
+            // Only notify when switching away from a rate-limited model — preference switches are silent
+            if (healthManager.isRateLimited(healthKey)) {
+              await notify(`🔄 ${agentName} (${agentTier}): ${pick.provider}/${pick.model} (rate limited: ${healthKey})`, 'warning', 6000)
+            }
           }
 
           // Log and record usage for the (possibly switched) model

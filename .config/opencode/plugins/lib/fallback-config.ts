@@ -65,21 +65,24 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
       { provider: 'opencode', model: 'gpt-5-nano', tier: 'T1' },
       { provider: 'github-copilot', model: 'gpt-5-mini', tier: 'T1' },
       { provider: 'github-copilot', model: 'claude-haiku-4.5', tier: 'T1' },
+      { provider: 'anthropic', model: 'claude-haiku-4-5', tier: 'T1' },
       { provider: 'github-copilot', model: 'gemini-3-flash-preview', tier: 'T1' },
       { provider: 'ollama-cloud', model: 'llama3.1-8b', tier: 'T1' },
       { provider: 'ollama', model: 'phi4', tier: 'T0', supportsTools: false },
     ],
     T2: [
-      { provider: 'opencode', model: 'big-pickle', tier: 'T2' },
-      { provider: 'github-copilot', model: 'gpt-5', tier: 'T2' },
       { provider: 'github-copilot', model: 'claude-sonnet-4', tier: 'T2' },
-      { provider: 'github-copilot', model: 'gemini-2.5-pro', tier: 'T2' },
-      { provider: 'github-copilot', model: 'gpt-4.1', tier: 'T2' },
+      { provider: 'github-copilot', model: 'gpt-5', tier: 'T2' },
       { provider: 'github-copilot', model: 'claude-sonnet-4.5', tier: 'T2' },
+      { provider: 'anthropic', model: 'claude-sonnet-4-5', tier: 'T2' },
+      { provider: 'anthropic', model: 'claude-sonnet-4', tier: 'T2' },
+      { provider: 'github-copilot', model: 'gpt-4.1', tier: 'T2' },
+      { provider: 'opencode', model: 'big-pickle', tier: 'T2' },
+      { provider: 'github-copilot', model: 'gemini-2.5-pro', tier: 'T2' },
       { provider: 'github-copilot', model: 'grok-code-fast-1', tier: 'T2' },
       { provider: 'github-copilot', model: 'gemini-3-pro-preview', tier: 'T2' },
       { provider: 'ollama-cloud', model: 'llama3.2-13b', tier: 'T2' },
-      { provider: 'ollama', model: 'llama3.2:1b', tier: 'T0', supportsTools: false },
+      { provider: 'ollama', model: 'llama3.2:1b', tier: 'T0', supportsTools: false }
     ],
     T3: [
       { provider: 'github-copilot', model: 'claude-opus-4.6', tier: 'T3' },
@@ -93,7 +96,6 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
       { provider: 'github-copilot', model: 'gpt-5.1-codex-max', tier: 'T3' },
       { provider: 'ollama-cloud', model: 'llama3.1-70b', tier: 'T3' },
       { provider: 'anthropic', model: 'claude-opus-4-6', tier: 'T3' },
-      { provider: 'opencode', model: 'big-pickle', tier: 'T2' },
     ],
   };
 
