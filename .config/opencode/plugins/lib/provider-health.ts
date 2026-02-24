@@ -34,6 +34,7 @@ export class HealthManager {
   constructor() {
     this.data = this.loadFromDisk()
     this.clearExpired()
+    this.atomicWriteSync()  // persist cleaned state immediately — don't leave stale entries on disk
   }
 
   /**
