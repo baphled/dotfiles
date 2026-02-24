@@ -108,7 +108,6 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
         input.provider = { id: healthy.provider, info: { id: healthy.provider } }
         await notify(`🔄 Switched to healthy ${healthy.provider}/${healthy.model} for ${tier}`, 'info', 5000)
         // Update healthKey for usage recording
-        const newHealthKey = `${healthy.provider}/${healthy.model}`
         lastModelBySession.set(input.sessionID, { provider: healthy.provider, model: healthy.model })
         healthManager.recordUsage(healthy.provider)
         healthManager.flush().catch(() => {})
@@ -121,7 +120,13 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
         const expiryText = expiry ? ` until ${new Date(expiry).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}` : ''
         await notify(`⚠️ ${healthKey} rate limited${expiryText}`, 'warning', 8000)
       }
-      
+
+      // Log model usage once per session (or when model changes)
+      const previousModel = lastModelBySession.get(input.sessionID)
+      const isNewOrChanged = !previousModel || previousModel.provider !== providerName || previousModel.model !== input.model.id
+      if (isNewOrChanged) {
+        debugLog(`MODEL: session=${input.sessionID} using ${providerName}/${input.model.id} (${tier})`)
+      }
       lastModelBySession.set(input.sessionID, { provider: providerName, model: input.model.id })
       healthManager.recordUsage(providerName)
       healthManager.flush().catch(() => {})
