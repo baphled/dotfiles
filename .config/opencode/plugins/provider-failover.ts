@@ -95,23 +95,39 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
       const providerName = extractProviderName(currentProviderID)
       const tier = resolveModelTier(input.model.id)
       const healthKey = `${providerName}/${input.model.id}`
+      
+      // === PROACTIVE MODEL SWITCHING ===
+      // Always get healthy alternatives, not just when rate limited
+      const alternatives = healthManager.getHealthyAlternatives(tier, healthKey)
+      
+      if (alternatives.length > 0 && alternatives[0].model !== input.model.id) {
+        // Switch to healthy model proactively
+        const healthy = alternatives[0]
+        debugLog(`PROACTIVE SWITCH: ${healthKey} -> ${healthy.provider}/${healthy.model}`)
+        input.model.id = healthy.model
+        input.provider = { id: healthy.provider, info: { id: healthy.provider } }
+        await notify(`🔄 Switched to healthy ${healthy.provider}/${healthy.model} for ${tier}`, 'info', 5000)
+        // Update healthKey for usage recording
+        const newHealthKey = `${healthy.provider}/${healthy.model}`
+        lastModelBySession.set(input.sessionID, { provider: healthy.provider, model: healthy.model })
+        healthManager.recordUsage(healthy.provider)
+        healthManager.flush().catch(() => {})
+        return
+      }
+      
+      // Fallback: if current model is rate limited, notify
+      if (healthManager.isRateLimited(healthKey)) {
+        const expiry = healthManager.getRateLimitExpiry(healthKey)
+        const expiryText = expiry ? ` until ${new Date(expiry).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}` : ''
+        await notify(`⚠️ ${healthKey} rate limited${expiryText}`, 'warning', 8000)
+      }
+      
       lastModelBySession.set(input.sessionID, { provider: providerName, model: input.model.id })
       healthManager.recordUsage(providerName)
       healthManager.flush().catch(() => {})
-      if (!healthManager.isRateLimited(healthKey)) return
-
-      const expiry = healthManager.getRateLimitExpiry(healthKey)
-      const expiryText = expiry ? ` until ${new Date(expiry).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}` : ''
-      const alternatives = healthManager.getHealthyAlternatives(tier, healthKey)
-      if (alternatives.length > 0) {
-        await notify(`⚠️ ${healthKey} rate limited${expiryText}. Switch to ${alternatives[0].provider}/${alternatives[0].model}`, 'warning', 8000)
-      } else {
-        await notify(`⚠️ ${healthKey} rate limited${expiryText}. No alternatives for ${tier}.`, 'error', 8000)
-      }
     },
 
     event: async ({ event }) => {
-      debugLog(`EVENT: type=${event.type} props=${JSON.stringify(event.properties).substring(0, 500)}`)
       if (event.type !== 'session.status') return
       const props = event.properties as {
         sessionID: string
