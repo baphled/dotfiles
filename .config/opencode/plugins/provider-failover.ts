@@ -59,8 +59,23 @@ const AGENT_TIER_MAP: Record<string, string> = {
   'momus': 'T3',
 }
 
-/** Orchestrator agents — never proactively switch their model */
-const ORCHESTRATOR_AGENTS = new Set(['sisyphus', 'hephaestus', 'atlas', 'Tech-Lead'])
+/** Base names of orchestrator agents (lowercase). Used for display-name-aware matching. */
+const ORCHESTRATOR_BASE_NAMES = new Set(['sisyphus', 'hephaestus', 'atlas', 'tech-lead'])
+
+/**
+ * Check whether an agent is an orchestrator.
+ * Handles display names like "Atlas (Plan Executor)" by extracting the
+ * first token before any space or parenthesis.
+ */
+function isOrchestratorByName(agentName: string): boolean {
+  // Exact match first (e.g. config key 'Tech-Lead' as-is)
+  if (ORCHESTRATOR_BASE_NAMES.has(agentName.toLowerCase())) return true
+  // Extract base token: "Atlas (Plan Executor)" -> "atlas"
+  const baseToken = agentName.toLowerCase().split(/[\s(]/)[0]
+  // Guard: "sisyphus-junior" contains "sisyphus" but is NOT an orchestrator
+  if (baseToken.includes('-')) return false
+  return ORCHESTRATOR_BASE_NAMES.has(baseToken)
+}
 
 function resolveModelTier(modelId: string): string {
   if (MODEL_TIER_MAP[modelId]) return MODEL_TIER_MAP[modelId]
@@ -134,7 +149,7 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
 
       // 3. Determine agent identity
       const agentName = (input.agent as any)?.name as string | undefined
-      const isOrchestratorAgent = agentName ? ORCHESTRATOR_AGENTS.has(agentName) : true
+      const isOrchestratorAgent = agentName ? isOrchestratorByName(agentName) : true
       // If no agent name, treat as orchestrator (parent session) — do not proactively switch
 
       // 4. Subagent proactive routing
