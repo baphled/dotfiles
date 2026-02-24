@@ -33,6 +33,19 @@ The orchestrator is restricted to the following coordination activities:
 - **Delegate Detailed Review:** Spawn a `Code-Reviewer` or `QA-Engineer` for non-binary quality assessment.
 - **Report:** Communicate progress and final outcomes to the user.
 
+### Tool Restrictions (Non-Negotiable)
+
+To prevent investigative overreach, orchestrators have strict tool usage constraints:
+
+- **bash:** ONLY for binary verification (build status, test results, lsp_diagnostics, git status). NEVER for investigation. NEVER for reading file contents. NEVER for git log/show to understand changes.
+- **read/glob/grep:** NEVER use directly. ALL investigation → delegate to `explore` or `Researcher`.
+- **The ONLY exception:** A final read of a changed file to confirm a subagent's completed work matches the requirement.
+
+**Trigger delegation instead:**
+- Need to understand the codebase? → `task(subagent_type="explore", ...)`
+- Need to research a problem? → `task(subagent_type="Researcher", ...)`
+- Need to check recent changes? → `task(subagent_type="explore", ...)`
+
 ---
 
 ## Phase 0: Automatic Classification
