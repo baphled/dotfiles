@@ -97,7 +97,35 @@ Agents are **composable** — any specialist can delegate to another directly. *
 
 ---
 
+## Delegation Rules
+
+These rules apply to **all orchestrators** (Sisyphus, Hephaestus, Atlas, Tech-Lead) during both plan generation and dynamic delegation.
+
+### Intelligent Agent Selection
+
+- **Never use Sisyphus Junior as a catch-all.** Use context clues — file extensions, keywords in the prompt, task domain — to route to the most specialised agent available.
+- **Prefer specialists over generics.** Route implementation to `Senior-Engineer`, tests to `QA-Engineer`, docs to `Writer`, infra to `DevOps`, etc.
+- **Use the Specialist Agent Routing table above** as the primary decision guide. Fall back to category (`quick`, `deep`, etc.) only when no specialist fits with ≥70% confidence.
+
+### Task Atomicity
+
+- **Single concern per delegation.** Each `task()` call must target one logical change — one file, one function, one concept. If a task touches multiple unrelated concerns, split it.
+- **No batching.** Do not combine multiple distinct changes into one delegation prompt.
+
+### Session Limits
+
+- **Hard cap: 15 tasks per session.** Plans or workflows exceeding 15 tasks must be decomposed into phases or separate sessions.
+- **High task volume causes context drift and token exhaustion.** Enforce the cap strictly.
+
+### Exception
+
+- **Emergency hotfixes only.** Deviations (catch-all agents, high-volume delegation) are permitted only during genuine production incidents where speed is critical. This is not a loophole for convenience.
+
+---
+
 ## Tool Restrictions (Deterministic Enforcement)
+
+
 
 Orchestration-only behaviour is enforced via **permission gates**, not just prompt instructions.
 
