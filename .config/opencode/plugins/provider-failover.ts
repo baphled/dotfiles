@@ -89,20 +89,27 @@ function extractProviderName(providerID: string): string {
   const lower = providerID.toLowerCase()
   if (lower === 'opencode' || lower.includes('opencode')) return 'opencode'
   if (lower === 'github-copilot' || lower.includes('copilot') || lower.includes('github')) return 'github-copilot'
-  if (lower.includes('anthropic') || lower.includes('claude')) return 'anthropic'
+  if (lower === 'anthropic' || lower.includes('anthropic')) return 'anthropic'  // must check before 'claude'
   if (lower.includes('ollama-cloud') || lower.includes('ollama.com')) return 'ollama-cloud'
   if (lower.includes('ollama') || lower.includes('localhost') || lower.includes('local')) return 'ollama'
   return lower
 }
 
-function inferProviderFromModel(modelID: string | undefined): string | null {
+function inferProviderFromModel(modelID: string | undefined, explicitProviderID?: string): string | null {
   if (!modelID) return null
+  // If we have an explicit provider ID, trust it over model name inference
+  if (explicitProviderID) {
+    const explicit = extractProviderName(explicitProviderID)
+    if (explicit !== explicitProviderID.toLowerCase()) return explicit // matched a known provider
+  }
   const lower = modelID.toLowerCase()
   if (lower.includes('kimi') || lower.includes('moonshot')) return 'opencode'
   if (lower.includes('big-pickle') || lower.includes('minimax')) return 'opencode'
   if (lower === 'gpt-5-nano') return 'opencode'
   if (lower.includes('gpt-5') || lower.includes('gpt-4') || lower.includes('codex')) return 'github-copilot'
-  if (lower.includes('claude') || lower.includes('gemini') || lower.includes('grok')) return 'github-copilot'
+  if (lower.includes('gemini') || lower.includes('grok')) return 'github-copilot'
+  // claude models: only map to copilot if no explicit provider says otherwise
+  if (lower.includes('claude')) return 'github-copilot'
   if (lower.includes('anthropic')) return 'anthropic'
   if (lower.includes('llama') || lower.includes('phi')) return 'ollama'
   return null
@@ -154,9 +161,15 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
       }
 
       // 2. Extract current provider and tier info
+      // First try explicit provider ID from input
       let currentProviderID = (input.provider as any)?.id ?? input.provider?.info?.id
+      // If no explicit provider ID, try extracting from model string (e.g., "anthropic/claude-sonnet-4-5")
+      if (!currentProviderID && input.model.id.includes('/')) {
+        currentProviderID = input.model.id.split('/')[0]
+      }
+      // Fall back to model name inference only if no provider prefix found
       if (!currentProviderID) {
-        currentProviderID = inferProviderFromModel(input.model.id) || input.model.id.split('/')[0] || input.model.id
+        currentProviderID = inferProviderFromModel(input.model.id) || input.model.id
       }
       const providerName = extractProviderName(currentProviderID)
       const modelTier = resolveModelTier(input.model.id)

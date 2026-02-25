@@ -120,7 +120,7 @@ export function getProviderMetadata(provider: string): ProviderMetadata {
     'github-copilot': {
       provider: 'github-copilot',
       costModel: 'subscription',
-      rateLimit: { type: 'monthly', threshold: 270, resetIntervalMs: 30 * 24 * 60 * 60 * 1000 },
+      rateLimit: { type: 'monthly', threshold: 300, resetIntervalMs: 30 * 24 * 60 * 60 * 1000 },
       description: 'GitHub Copilot (subscription-based, 300 requests/month)',
       supportsTools: true,
     },

@@ -161,6 +161,14 @@ export class HealthManager {
    */
   private isPeriodExpired(record: UsageRecord, resetIntervalMs?: number): boolean {
     if (!resetIntervalMs) return false
+    // For monthly periods, reset on the 1st of each calendar month
+    if (record.periodType === 'monthly') {
+      const periodStart = new Date(record.periodStart)
+      const now = new Date()
+      return now.getFullYear() > periodStart.getFullYear() ||
+        now.getMonth() > periodStart.getMonth()
+    }
+    // For per-minute and other periods, use rolling interval
     const periodStart = new Date(record.periodStart).getTime()
     return Date.now() >= periodStart + resetIntervalMs
   }
