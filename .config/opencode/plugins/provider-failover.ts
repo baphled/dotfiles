@@ -21,7 +21,7 @@ const MODEL_TIER_MAP: Record<string, string> = {
   'gpt-5-nano': 'T1', 'minimax-m2.5-free': 'T1', 'gpt-5-mini': 'T1',
   'claude-haiku-4.5': 'T1', 'gemini-3-flash-preview': 'T1',
   'big-pickle': 'T2', 'gpt-5': 'T2', 'gpt-4.1': 'T2',
-  'claude-sonnet-4': 'T2', 'claude-sonnet-4.5': 'T2', 'grok-code-fast-1': 'T2',
+  'claude-sonnet-4-0': 'T2', 'claude-sonnet-4.5': 'T2', 'grok-code-fast-1': 'T2',
   'gemini-3-pro-preview': 'T2', 'gemini-2.5-pro': 'T2',
   'claude-opus-4.5': 'T3', 'claude-opus-4.6': 'T3', 'claude-opus-41': 'T3',
   'gpt-5.1': 'T3', 'gpt-5.2': 'T3', 'gpt-5.1-codex': 'T3',

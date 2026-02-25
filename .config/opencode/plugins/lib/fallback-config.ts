@@ -71,11 +71,11 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
       { provider: 'ollama', model: 'phi4', tier: 'T0', supportsTools: false },
     ],
     T2: [
-      { provider: 'github-copilot', model: 'claude-sonnet-4', tier: 'T2' },
+      { provider: 'github-copilot', model: 'claude-sonnet-4-0', tier: 'T2' },
       { provider: 'github-copilot', model: 'gpt-5', tier: 'T2' },
       { provider: 'github-copilot', model: 'claude-sonnet-4.5', tier: 'T2' },
       { provider: 'anthropic', model: 'claude-sonnet-4-5', tier: 'T2' },
-      { provider: 'anthropic', model: 'claude-sonnet-4', tier: 'T2' },
+      { provider: 'anthropic', model: 'claude-sonnet-4-0', tier: 'T2' },
       { provider: 'github-copilot', model: 'gpt-4.1', tier: 'T2' },
       { provider: 'opencode', model: 'big-pickle', tier: 'T2' },
       { provider: 'github-copilot', model: 'gemini-2.5-pro', tier: 'T2' },
