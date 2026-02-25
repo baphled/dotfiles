@@ -17,6 +17,7 @@ export interface SkillAutoLoaderConfig {
   max_auto_skills_bytes?: number
   focus_language_mappings?: Record<string, Record<string, string[]>>
   keyword_patterns: Array<{ pattern: string; skills: string[]; priority: number }>
+  agent_patterns?: Array<{ pattern: string; agent: string; priority: number }>
 }
 
 export interface SkillSelectionInput {
@@ -69,14 +70,11 @@ export function selectSkills(
 
   // Edge case: session continuation - skip Tier 2 and Tier 3 if configured
   if (input.sessionId && config.skip_on_session_continue) {
-    // Merge with existing skills and return (baseline only)
+    // Skip auto-injection entirely, preserve existing skills only
     const allSkills = new Set<string>(input.existingSkills)
-    for (const skill of autoSkillsSet) {
-      allSkills.add(skill)
-    }
     return {
       skills: Array.from(allSkills),
-      sources: sources
+      sources: []
     }
   }
 
@@ -248,4 +246,45 @@ export function selectSkills(
     skills: Array.from(allSkills),
     sources: finalSources
   }
+}
+
+export interface AgentRoutingResult {
+  agent: string | null
+  matched_pattern: string | null
+  priority: number
+}
+
+export function selectAgent(prompt: string, config: SkillAutoLoaderConfig): AgentRoutingResult {
+  const trimmedPrompt = prompt.trim()
+  if (trimmedPrompt.length === 0) {
+    return { agent: null, matched_pattern: null, priority: 0 }
+  }
+
+  const patterns = config.agent_patterns
+  if (!patterns || patterns.length === 0) {
+    return { agent: null, matched_pattern: null, priority: 0 }
+  }
+
+  let bestMatch: AgentRoutingResult = { agent: null, matched_pattern: null, priority: 0 }
+
+  for (const patternConfig of patterns) {
+    try {
+      const regex = new RegExp(patternConfig.pattern, 'i')
+      if (!regex.test(trimmedPrompt)) {
+        continue
+      }
+
+      if (patternConfig.priority > bestMatch.priority) {
+        bestMatch = {
+          agent: patternConfig.agent,
+          matched_pattern: patternConfig.pattern,
+          priority: patternConfig.priority
+        }
+      }
+    } catch {
+      continue
+    }
+  }
+
+  return bestMatch
 }
