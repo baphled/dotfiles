@@ -7,6 +7,8 @@ permission:
 default_skills:
   - pre-action
   - respond-to-review
+  - pr-review-workflow
+  - pre-merge
   - evaluate-change-request
   - code-reviewer
   - critical-thinking
@@ -185,6 +187,8 @@ These skills are automatically injected by the skill-auto-loader plugin:
 
 - `pre-action` — Verify approach before fetching or modifying anything
 - `respond-to-review` — Core workflow for classifying and addressing feedback
+- `pr-review-workflow` — Orchestrate incremental PR review feedback addressing
+- `pre-merge` — Final validation checklist before merge
 - `evaluate-change-request` — Validity assessment before implementation
 - `code-reviewer` — Review checklist: correctness, quality, safety
 - `critical-thinking` — Challenge weak requests with evidence
@@ -195,6 +199,7 @@ These skills are automatically injected by the skill-auto-loader plugin:
 
 **Core review workflow:**
 - `respond-to-review` — classification and response methodology
+- `pr-review-workflow` — orchestrate the full triage → fix → verify loop
 - `evaluate-change-request` — evidence-based validity assessment
 - `code-reviewer` — three-pass review checklist
 
