@@ -216,6 +216,13 @@
         "obsidian-frontmatter"
       ],
       "priority": 5
+    },
+    {
+      "pattern": "pr review|review feedback|change request|code review feedback|respond to review|address review|review comment",
+      "skills": [
+        "pr-review-workflow"
+      ],
+      "priority": 8
     }
   ]
 }
