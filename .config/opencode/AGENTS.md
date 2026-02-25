@@ -179,6 +179,52 @@ These skills load on EVERY task() call:
 - `skill-discovery` — Automatically discover and load appropriate skills based on task context
 - `agent-discovery` — Automatically discover and route to appropriate specialist agents
 
+## Knowledge Lookup Protocol
+
+**BEFORE any investigation, codebase read, or web search — in this order:**
+
+1. `mcp_memory_search_nodes` — fastest, session-persistent
+2. `mcp_vault-rag_query_vault` — semantic search across all KB docs
+3. Codebase or web — only if both above return nothing
+
+**After significant work:** capture findings via `mcp_memory_create_entities` or `mcp_memory_add_observations`.
+
+**Violations:**
+- ❌ Reading files to understand a system without checking memory first
+- ❌ Asking the user for context already in the KB
+- ❌ Storing to memory without searching first (creates duplicates)
+
+## KB Curator Auto-Trigger Protocol
+
+**After ANY significant work, trigger KB Curator as a fire-and-forget background task.**
+
+Mandatory triggers — the completing agent MUST fire KB Curator after:
+
+1. **Agentic flow changes** — agent, skill, command, or plugin files created/modified/deleted
+2. **Project deliverables** — feature implemented, bug fixed, refactoring completed
+3. **Configuration changes** — `oh-my-opencode.jsonc`, `AGENTS.md`, or system config modified
+4. **New knowledge captured** — memory graph updated with significant entities or observations
+
+Format: `task(subagent_type="Knowledge Base Curator", run_in_background=true, load_skills=[], prompt="Sync: {what changed}")`
+
+**Violations:**
+- ❌ Completing work without triggering KB Curator
+- ❌ Running KB Curator synchronously (must be background/fire-and-forget)
+- ❌ Only triggering for config changes but ignoring project work
+
+## Skill Injection Limits
+
+**Orchestrators carry ZERO skills. Subagents cap at 3–4.**
+
+- **Orchestrators** (sisyphus, hephaestus, atlas, Tech-Lead): `load_skills=[]` always. Guidance comes from `prompt_append` and `AGENTS.md` only. Context compaction drops injected skill markdown in long-running sessions.
+- **Subagents**: Maximum 3–4 task-relevant skills per `task()` call. More risks context bloat.
+- **On-demand retrieval**: Any agent can call `mcp_skill` tool mid-task to fetch skill content without front-loading.
+
+**Violations:**
+- ❌ Orchestrator delegations with `load_skills=["skill-1", ...]`
+- ❌ Subagent delegations with more than 4 skills
+- ❌ Front-loading skills "just in case" — include only what is directly relevant
+
 ---
 
 ## Commit Rules
@@ -257,8 +303,8 @@ criteria do not exist. The overhead is not worth it.
 
 ## Three Pillars
 
-1. **Always-Active Discipline** — pre-action, memory-keeper, search first
-2. **Parallel Execution** — Independent tasks in single message
+1. **Knowledge-First** — memory graph → vault-RAG → codebase (in that order, every time)
+2. **Parallel Execution** — Independent tasks in a single message
 3. **Progressive Disclosure** — Load only what's needed
 
 ---
