@@ -8,21 +8,46 @@ category: Core Universal
 
 ## What I do
 
-I force deliberate thinking before significant action: clarify the goal, understand constraints, evaluate options, and choose the best approach rather than reacting immediately.
+I produce a **PREFLIGHT** before any tool calls: clarify goal, identify constraints, plan steps, and mark which calls can run in parallel. This is the PLAN phase — execution comes after via `parallel-execution`.
 
 ## When to use me
 
-- Always load automatically before major coding, deployment, or irreversible changes
+- **Always** — produce PREFLIGHT before first tool call in any task
+- Before irreversible actions (deployment, deletion, commits)
 - When facing unclear requirements or multiple viable approaches
-- Before committing to an architecture or design decision
 
-## Core principles
+## PREFLIGHT Schema (by role)
 
-1. Stop and think—pause before acting
-2. Clarify intent—state goal, constraints, success criteria
-3. Evaluate options—consider at least 2 approaches before deciding
-4. Choose consciously—make explicit trade-off decisions
-5. Verify understanding—confirm you've grasped the problem
+**Orchestrators** (sisyphus, hephaestus, atlas, Tech-Lead):
+```
+PREFLIGHT:
+  Goal: <one sentence>
+  Constraints: <limits, policies, blockers>
+  Plan: <≤5 numbered steps>
+  Parallel: <which steps are independent>
+  Stop: <conditions to halt or escalate>
+```
+
+**Workers** (Senior-Engineer, QA-Engineer, Writer, etc.):
+```
+PREFLIGHT:
+  Assumptions: <what I believe to be true>
+  Plan: <≤5 numbered steps>
+  Parallel: <which steps are independent>
+  Risks: <what could go wrong>
+```
+
+**Read-only** (explore, Researcher, Data-Analyst):
+```
+PREFLIGHT:
+  Assumptions: <what I believe to be true>
+  Plan: <≤3 numbered steps>
+  Parallel: <which reads/searches can batch>
+```
+
+## After PREFLIGHT
+
+Once PREFLIGHT is complete, use `parallel-execution` skill to batch all independent calls identified in the Parallel field.
 
 ## Mid-chain reflection (sequential tool use)
 
@@ -48,12 +73,11 @@ This is distinct from upfront pre-action thinking — it is reactive, triggered 
 new information from tool results. Most valuable in long tool chains, policy-heavy
 environments, and sequential decisions where mistakes compound.
 
-## Decision triggers
+## Related skills
 
-- Always-active: load with every agent session automatically
-- Load before `critical-thinking` for rigorous analysis of complex decisions
-- Load with `memory-keeper` to capture decision reasoning
-- For detailed decision frameworks, refer to Obsidian vault (memory-keeper will point there)
+- `parallel-execution` — Execute phase: batch independent calls after PREFLIGHT
+- `memory-keeper` — Capture decision reasoning
+- `critical-thinking` — Rigorous analysis for complex decisions
 
 ## KB Reference
 

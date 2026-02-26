@@ -8,23 +8,22 @@ category: Session Knowledge
 
 ## What I do
 
-I maximise efficiency by identifying and executing independent tasks in parallel. This reduces token overhead by avoiding sequential context rebuilding and provides efficiency metrics to token-cost-estimation.
+I am the **EXECUTE phase** — after `pre-action` PREFLIGHT planning, I batch all independent tool calls into a single message. This reduces token overhead by avoiding sequential context rebuilding.
+
+**Workflow**: `pre-action` (PREFLIGHT) → `parallel-execution` (EXECUTE)
 
 ## When to use me
 
-- When multiple independent operations are needed
-- During investigation phases (read multiple files)
-- During verification phases (run multiple checks)
-- When token-cost-estimation identifies parallelisation opportunities
-- When reducing total session duration
+- **After PREFLIGHT** — batch calls marked as Parallel in the plan
+- During investigation (read multiple files in one call)
+- During verification (lint + test + arch-check in one call)
 
 ## Core principles
 
-1. **Identify independence** - No output dependencies, no shared state
-2. **Batch aggressively** - Single message, multiple tool calls
-3. **Never serialise independent work** - Sequential = waste
-4. **Measure savings** - Track parallel vs sequential cost
-5. **Know dependencies** - Dependent tasks MUST sequence
+1. **Plan first** — Use `pre-action` PREFLIGHT to identify independent work
+2. **Batch aggressively** — Single message, multiple tool calls
+3. **Respect dependencies** — Dependent tasks MUST sequence
+4. **Measure savings** — Track parallel vs sequential cost
 
 ## Parallelisation Patterns
 
@@ -75,20 +74,11 @@ Savings: ~30-50% vs sequential
 - Investigate → Fix → Verify
 - Query → Process results
 
-## Integration with token-cost-estimation
+## Integration with pre-action
 
-### Pre-Session
-1. Review task breakdown
-2. Identify parallelisation opportunities
-3. Estimate savings
-
-### During Session
-- Execute parallel where identified
-- Track actual savings
-
-### Post-Session
-- Compare parallel vs would-be-sequential
-- Record savings in memory-keeper
+1. **PREFLIGHT** identifies which steps are independent
+2. **EXECUTE** batches those steps into parallel tool calls
+3. **Mid-chain reflection** (from pre-action) reassesses after results
 
 ## Anti-patterns to avoid
 
@@ -104,7 +94,6 @@ Savings: ~30-50% vs sequential
 
 ## Related skills
 
-- `token-cost-estimation` - Benefits from parallel efficiency
-- `token-efficiency` - Complementary efficiency techniques
-- `task-tracker` - Track parallel vs sequential execution
-- `time-management` - Parallelism reduces duration
+- `pre-action` — PREFLIGHT phase: plan before this skill executes
+- `token-cost-estimation` — Benefits from parallel efficiency
+- `token-efficiency` — Complementary efficiency techniques
