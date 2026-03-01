@@ -34,6 +34,7 @@ const AGENT_TIER_MAP: Record<string, string> = {
   // T1 — lightweight exploration agents
   'explore': 'T1',
   'librarian': 'T1',
+  'multimodal-looker': 'T1',
 
   // T2 — implementation/build agents
   'sisyphus-junior': 'T2',
@@ -52,6 +53,9 @@ const AGENT_TIER_MAP: Record<string, string> = {
   'Nix-Expert': 'T2',
   'Linux-Expert': 'T2',
   'SysOp': 'T2',
+  'Security-Engineer': 'T2',
+  'Tech-Lead': 'T2',
+  'prometheus': 'T2',
 
   // T3 — high-reasoning agents
   'oracle': 'T3',
@@ -105,12 +109,10 @@ function inferProviderFromModel(modelID: string | undefined, explicitProviderID?
   const lower = modelID.toLowerCase()
   if (lower.includes('kimi') || lower.includes('moonshot')) return 'opencode'
   if (lower.includes('big-pickle') || lower.includes('minimax')) return 'opencode'
-  if (lower === 'gpt-5-nano') return 'opencode'
+  if (lower === 'gpt-5-nano') return 'github-copilot'
   if (lower.includes('gpt-5') || lower.includes('gpt-4') || lower.includes('codex')) return 'github-copilot'
   if (lower.includes('gemini') || lower.includes('grok')) return 'github-copilot'
   // claude models: only map to copilot if no explicit provider says otherwise
-  if (lower.includes('claude')) return 'github-copilot'
-  if (lower.includes('anthropic')) return 'anthropic'
   if (lower.includes('llama') || lower.includes('phi')) return 'ollama'
   return null
 }
@@ -161,15 +163,26 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
       }
 
       // 2. Extract current provider and tier info
-      // First try explicit provider ID from input
-      let currentProviderID = (input.provider as any)?.id ?? input.provider?.info?.id
-      // If no explicit provider ID, try extracting from model string (e.g., "anthropic/claude-sonnet-4-5")
-      if (!currentProviderID && input.model.id.includes('/')) {
+      // Model-specific inference MUST be checked FIRST, before explicit provider or prefix extraction
+      // First: try model name inference (highest priority)
+      const inferredProvider = inferProviderFromModel(input.model.id)
+      let currentProviderID: string
+      if (inferredProvider) {
+        currentProviderID = inferredProvider
+        // Update input.provider to match the inferred provider (same pattern as lines 199-200)
+        input.provider = { id: inferredProvider, info: { id: inferredProvider } } as any
+      } else if ((input.provider as any)?.id) {
+        // Second: fall back to explicit provider ID from input
+        currentProviderID = (input.provider as any).id
+      } else if (input.provider?.info?.id) {
+        // Second (alt): fall back to explicit provider info ID
+        currentProviderID = input.provider.info.id
+      } else if (input.model.id.includes('/')) {
+        // Third: try extracting from model string (e.g., "anthropic/claude-sonnet-4-5")
         currentProviderID = input.model.id.split('/')[0]
-      }
-      // Fall back to model name inference only if no provider prefix found
-      if (!currentProviderID) {
-        currentProviderID = inferProviderFromModel(input.model.id) || input.model.id
+      } else {
+        // Final fallback: use model ID itself
+        currentProviderID = input.model.id
       }
       const providerName = extractProviderName(currentProviderID)
       const modelTier = resolveModelTier(input.model.id)

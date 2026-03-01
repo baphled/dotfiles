@@ -297,11 +297,9 @@ default_skills:
         `---
 description: Senior software engineer
 default_skills:
-  - pre-action
-  - memory-keeper
   - clean-code
-  - bdd-workflow
-  - agent-discovery
+  - error-handling
+  - design-patterns
 ---
 `,
       )
@@ -311,10 +309,9 @@ default_skills:
         `---
 description: Quality assurance expert
 default_skills:
-  - pre-action
   - bdd-workflow
-  - critical-thinking
-  - agent-discovery
+  - bdd-best-practices
+  - prove-correctness
 ---
 `,
       )
@@ -331,13 +328,7 @@ default_skills:
 
       expect(config).toBeDefined()
       expect(config?.name).toBe('Senior-Engineer')
-      expect(config?.defaultSkills).toEqual([
-        'pre-action',
-        'memory-keeper',
-        'clean-code',
-        'bdd-workflow',
-        'agent-discovery',
-      ])
+      expect(config?.defaultSkills).toEqual(['clean-code', 'error-handling', 'design-patterns'])
     })
 
     it('returns correct config for QA-Engineer including all default_skills', () => {
@@ -346,10 +337,9 @@ default_skills:
       expect(config).toBeDefined()
       expect(config?.name).toBe('QA-Engineer')
       expect(config?.defaultSkills).toEqual([
-        'pre-action',
         'bdd-workflow',
-        'critical-thinking',
-        'agent-discovery',
+        'bdd-best-practices',
+        'prove-correctness',
       ])
     })
 
@@ -384,12 +374,7 @@ default_skills:
       const config = cache.getAgentConfig('Senior-Engineer')
 
       expect(config).toBeDefined()
-      expect(config?.defaultSkills).toEqual([
-        'pre-action',
-        'memory-keeper',
-        'clean-code',
-        'bdd-workflow',
-      ])
+      expect(config?.defaultSkills).toEqual(['clean-code', 'error-handling', 'design-patterns'])
     })
 
     it('parses QA-Engineer with correct default_skills', () => {
@@ -397,12 +382,9 @@ default_skills:
 
       expect(config).toBeDefined()
       expect(config?.defaultSkills).toEqual([
-        'pre-action',
         'bdd-workflow',
-        'critical-thinking',
-        'agent-discovery',
-        'memory-keeper',
-        'skill-discovery',
+        'bdd-best-practices',
+        'prove-correctness',
       ])
     })
 

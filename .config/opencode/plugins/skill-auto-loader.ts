@@ -11,9 +11,6 @@ import { join } from 'path'
 import { selectSkills, type SkillAutoLoaderConfig, type SkillSelectionInput } from './lib/skill-selector'
 import { AgentConfigCache } from './lib/agent-config-parser'
 import { filterSkillsAgainstCache } from './lib/skill-validation-filter'
-import { injectSkillContent } from './lib/skill-content-injection'
-import { detectCodebaseLanguages } from './lib/codebase-detector'
-
 
 type WarnFn = (message: string) => void
 
@@ -26,25 +23,11 @@ const LOGS_DIR = `${process.env.HOME}/.config/opencode/logs`
 
 // Default config if file missing
 const DEFAULT_CONFIG: SkillAutoLoaderConfig = {
-  baseline_skills: ['pre-action', 'memory-keeper'],
-  max_auto_skills: 5,
+  baseline_skills: ['skill-discovery', 'discipline'],
+  max_auto_skills: 6,
   skip_on_session_continue: true,
-  category_mappings: {
-    'visual-engineering': ['frontend-ui-ux', 'accessibility', 'clean-code'],
-    'ultrabrain': ['architecture', 'critical-thinking', 'systems-thinker'],
-    'deep': ['clean-code', 'error-handling'],
-    'quick': ['clean-code'],
-    'artistry': ['design-patterns', 'critical-thinking'],
-    'writing': ['british-english', 'documentation-writing'],
-    'unspecified-low': ['clean-code'],
-    'unspecified-high': ['clean-code', 'error-handling']
-  },
-  subagent_mappings: {
-    'explore': [],
-    'librarian': [],
-    'oracle': ['critical-thinking', 'architecture', 'systems-thinker'],
-    'sisyphus-junior': []
-  },
+  category_mappings: {},
+  subagent_mappings: {},
   keyword_patterns: []
 }
 
@@ -84,11 +67,6 @@ function logInjection(event: {
   existing: string[]
   final: string[]
   sources: Array<{ skill: string; source: string; pattern?: string }>
-  contentInjected: boolean
-  contentSizeBytes: number
-  skillsWithContent: string[]
-  skillsWithoutContent: string[]
-  skillsDropped: string[]
 }): void {
   try {
     const line = JSON.stringify(event) + '\n'
@@ -172,18 +150,6 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   agentCache = new AgentConfigCache(undefined, warnViaToast)
   await agentCache.init()
 
-  // Detect codebase languages at init time
-  // codebaseSkills from codebase detection, passed to selectSkills as Tier 2.5
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let codebaseSkills: string[] = []
-  try {
-    const projectDir = _input.directory
-    const detection = await detectCodebaseLanguages(projectDir)
-    codebaseSkills = detection.skills
-  } catch {
-    // Non-fatal: codebase detection failure should not prevent plugin from loading
-  }
-
   // Attempt to initialise skill content cache (Task 4 parallel module)
   try {
     // Dynamic require so a missing module doesn't prevent the plugin from loading
@@ -202,10 +168,6 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
   } catch {
     notify('skill-content-cache module not available, skill existence validation will be skipped', 'warning')
   }
-
-  // Build skill sizes map for byte budget enforcement in selectSkills
-  // Starts empty; the selector treats missing entries as 0 bytes (no-op when empty)
-  const skillSizes = new Map<string, number>()
 
   notify('Skill Auto-Loader loaded', 'info', 3000)
 
@@ -258,11 +220,10 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
         existingSkills,
         sessionId,
         agentDefaultSkills,
-        codebaseSkills
       }
 
       // Run skill selection
-      const result = selectSkills(selectionInput, config, skillSizes)
+      const result = selectSkills(selectionInput, config)
 
       // === Skill Existence Validation ===
       // Filter out any skills that don't have a corresponding SKILL.md file.
@@ -273,39 +234,12 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
       if (validatedSkills.length > 0) {
         args.load_skills = validatedSkills
 
-        // === Content Injection ===
-        // Inject skill CONTENT directly into args.prompt for deterministic loading.
-        // This avoids relying on agents to call mcp_skill at runtime.
-        const originalPrompt = (args.prompt as string | undefined) ?? ''
-        const injectionResult = injectSkillContent({
-          skills: validatedSkills,
-          sources: result.sources,
-          originalPrompt,
-          skillCache,
-          baselineSkills: config.baseline_skills,
-        })
-
-        if (injectionResult.ceilingExceeded) {
-          notify(
-            `Skill content budget exceeded, ${injectionResult.skillsDropped.length} skill(s) dropped: ${injectionResult.skillsDropped.join(', ')}`,
-            'warning'
-          )
-        }
-        if (injectionResult.injected) {
-          args.prompt = injectionResult.prompt
-        }
+        // Inject skill names into prompt so agents know which skills to load
+        const currentPrompt = (args.prompt as string) || ''
+        const skillLine = `Your load_skills: [${validatedSkills.join(', ')}]. Call mcp_skill(name) for each before starting work.`
+        args.prompt = skillLine + '\n\n' + currentPrompt
 
         // Log the injection event
-        const contentSizeBytes = injectionResult.injected
-          ? injectionResult.prompt.length - originalPrompt.length
-          : 0
-        const skillsWithContent = validatedSkills.filter(
-          s => skillCache?.getSkillContent(s) !== undefined
-        )
-        const skillsWithoutContent = validatedSkills.filter(
-          s => !skillCache?.getSkillContent(s)
-        )
-
         logInjection({
           timestamp: new Date().toISOString(),
           tool: input.tool,
@@ -315,11 +249,6 @@ const SkillAutoLoaderPlugin: Plugin = async (_input) => {
           existing: existingSkills,
           final: validatedSkills,
           sources: result.sources as Array<{ skill: string; source: string; pattern?: string }>,
-          contentInjected: injectionResult.injected,
-          contentSizeBytes,
-          skillsWithContent,
-          skillsWithoutContent,
-          skillsDropped: injectionResult.skillsDropped,
         })
 
         // Show toast notification

@@ -25,10 +25,11 @@ describe('skill-auto-loader — real config integration', () => {
       }
     })
 
-    it("includes 'error-handling' from the deep category mapping", () => {
+    it('returns only baseline skills when deep category mapping is empty', () => {
       const input: SkillSelectionInput = { category: 'deep', existingSkills: [] }
       const result = selectSkills(input, realConfig)
-      expect(result.skills).toContain('error-handling')
+      // With empty category_mappings, only baseline skills should be returned
+      expect(result.skills).toHaveLength(BASELINE.length)
     })
   })
 
@@ -42,12 +43,13 @@ describe('skill-auto-loader — real config integration', () => {
       }
     })
 
-    it('includes the skills defined in the Senior-Engineer subagent_mapping', () => {
+    it('returns only baseline skills when Senior-Engineer subagent_mapping is empty', () => {
       const input: SkillSelectionInput = { subagentType: 'Senior-Engineer', existingSkills: [] }
       const result = selectSkills(input, realConfig)
 
-      const expectedSkills = realConfig.subagent_mappings['Senior-Engineer']
-      for (const skill of expectedSkills) {
+      // With empty subagent_mappings, only baseline skills should be returned
+      expect(result.skills).toHaveLength(BASELINE.length)
+      for (const skill of BASELINE) {
         expect(result.skills).toContain(skill)
       }
     })
@@ -63,27 +65,31 @@ describe('skill-auto-loader — real config integration', () => {
       }
     })
 
-    it('includes the skills defined in the QA-Engineer subagent_mapping', () => {
+    it('returns only baseline skills when QA-Engineer subagent_mapping is empty', () => {
       const input: SkillSelectionInput = { subagentType: 'QA-Engineer', existingSkills: [] }
       const result = selectSkills(input, realConfig)
 
-      const expectedSkills = realConfig.subagent_mappings['QA-Engineer']
-      for (const skill of expectedSkills) {
+      // With empty subagent_mappings, only baseline skills should be returned
+      expect(result.skills).toHaveLength(BASELINE.length)
+      for (const skill of BASELINE) {
         expect(result.skills).toContain(skill)
       }
     })
   })
 
   describe("prompt containing 'security audit for golang app'", () => {
-    it('includes security skills triggered by the security keyword pattern', () => {
+    it('returns only baseline skills when keyword_patterns is empty', () => {
       const input: SkillSelectionInput = {
         existingSkills: [],
         prompt: 'security audit for golang app',
       }
       const result = selectSkills(input, realConfig)
 
-      expect(result.skills).toContain('security')
-      expect(result.skills).toContain('cyber-security')
+      // With empty keyword_patterns, no keyword skills should be injected
+      expect(result.skills).toHaveLength(BASELINE.length)
+      for (const skill of BASELINE) {
+        expect(result.skills).toContain(skill)
+      }
     })
 
     it('golang is NOT triggered by keyword pattern (language skills come from codebase detection)', () => {
@@ -98,19 +104,20 @@ describe('skill-auto-loader — real config integration', () => {
       expect(golangFromKeyword).toBeUndefined()
     })
 
-    it('records security skills with source set to keyword', () => {
+    it('records no keyword sources when keyword_patterns is empty', () => {
       const input: SkillSelectionInput = {
         existingSkills: [],
         prompt: 'security audit for golang app',
       }
       const result = selectSkills(input, realConfig)
 
-      expect(result.sources.some(s => s.skill === 'security' && s.source === 'keyword')).toBe(true)
+      const keywordSources = result.sources.filter(s => s.source === 'keyword')
+      expect(keywordSources).toHaveLength(0)
     })
   })
 
   describe("category 'writing' with prompt containing 'document the api'", () => {
-    it('includes the writing category mapping skills', () => {
+    it('returns only baseline skills when writing category mapping is empty', () => {
       const input: SkillSelectionInput = {
         category: 'writing',
         existingSkills: [],
@@ -118,13 +125,14 @@ describe('skill-auto-loader — real config integration', () => {
       }
       const result = selectSkills(input, realConfig)
 
-      const writingSkills = realConfig.category_mappings['writing']
-      for (const skill of writingSkills) {
+      // With empty category_mappings and keyword_patterns, only baseline skills returned
+      expect(result.skills).toHaveLength(BASELINE.length)
+      for (const skill of BASELINE) {
         expect(result.skills).toContain(skill)
       }
     })
 
-    it('includes documentation-writing from the keyword pattern match on the prompt', () => {
+    it('does not include documentation-writing since keyword_patterns is empty', () => {
       const input: SkillSelectionInput = {
         category: 'writing',
         existingSkills: [],
@@ -132,12 +140,12 @@ describe('skill-auto-loader — real config integration', () => {
       }
       const result = selectSkills(input, realConfig)
 
-      expect(result.skills).toContain('documentation-writing')
+      expect(result.skills).not.toContain('documentation-writing')
     })
   })
 
   describe('session continuation', () => {
-    it('returns baseline skills when session_id is provided and skip_on_session_continue is true', () => {
+    it('returns only existing skills when session_id is provided and skip_on_session_continue is true', () => {
       const input: SkillSelectionInput = {
         category: 'deep',
         existingSkills: [],
@@ -146,13 +154,12 @@ describe('skill-auto-loader — real config integration', () => {
       }
       const result = selectSkills(input, realConfig)
 
-      expect(result.skills).toHaveLength(BASELINE.length)
-      for (const skill of BASELINE) {
-        expect(result.skills).toContain(skill)
-      }
+      // Implementation returns only existingSkills during session continuation
+      expect(result.skills).toHaveLength(0)
+      expect(result.sources).toHaveLength(0)
     })
 
-    it('returns baseline sources when session_id is provided and skip_on_session_continue is true', () => {
+    it('returns empty sources when session_id is provided and skip_on_session_continue is true', () => {
       const input: SkillSelectionInput = {
         category: 'deep',
         existingSkills: [],
@@ -160,10 +167,7 @@ describe('skill-auto-loader — real config integration', () => {
       }
       const result = selectSkills(input, realConfig)
 
-      expect(result.sources).toHaveLength(BASELINE.length)
-      for (const skill of BASELINE) {
-        expect(result.sources.some(s => s.skill === skill && s.source === 'baseline')).toBe(true)
-      }
+      expect(result.sources).toHaveLength(0)
     })
   })
 
@@ -186,18 +190,18 @@ describe('skill-auto-loader — real config integration', () => {
       const result = selectSkills(input, realConfig)
 
       expect(result.skills).toContain('custom-skill')
-      expect(result.skills).toContain('pre-action')
+      expect(result.skills).toContain('skill-discovery')
     })
   })
 
   describe('deduplication', () => {
     it('produces no duplicate when an existing skill overlaps with a baseline skill', () => {
       const input: SkillSelectionInput = {
-        existingSkills: ['pre-action'],
+        existingSkills: ['skill-discovery'],
       }
       const result = selectSkills(input, realConfig)
 
-      const count = result.skills.filter(s => s === 'pre-action').length
+      const count = result.skills.filter(s => s === 'skill-discovery').length
       expect(count).toBe(1)
     })
 

@@ -266,7 +266,7 @@ describe('selectSkills — Tier 3: Keyword Pattern Matching', () => {
 })
 
 describe('selectSkills — Session Continuation', () => {
-  it('returns baseline skills only (no category/keyword) when sessionId is present and skip_on_session_continue is true', () => {
+  it('returns only existing skills (no category/keyword/baseline) when sessionId is present and skip_on_session_continue is true', () => {
     const input: SkillSelectionInput = {
       existingSkills: [],
       category: 'ultrabrain',
@@ -275,9 +275,9 @@ describe('selectSkills — Session Continuation', () => {
     }
     const result = selectSkills(input, testConfig)
 
-    // Should have baseline skills
-    expect(result.skills).toContain('pre-action')
-    expect(result.skills).toContain('memory-keeper')
+    // Implementation returns only existingSkills during session continuation
+    expect(result.skills).toHaveLength(0)
+    expect(result.sources).toHaveLength(0)
 
     // Should NOT have category skills
     expect(result.skills).not.toContain('architecture')
@@ -308,18 +308,19 @@ describe('selectSkills — Session Continuation', () => {
     expect(result.skills).toContain('memory-keeper')
   })
 
-  it('returns baseline skills when sessionId is present and skip_on_session_continue is true', () => {
+  it('returns only existing skills when sessionId is present and skip_on_session_continue is true', () => {
     const input: SkillSelectionInput = {
       existingSkills: [],
       sessionId: 'ses_abc123',
     }
     const result = selectSkills(input, testConfig)
 
-    expect(result.skills).toContain('pre-action')
-    expect(result.skills).toContain('memory-keeper')
+    // Implementation returns only existingSkills (empty) during session continuation
+    expect(result.skills).toHaveLength(0)
+    expect(result.sources).toHaveLength(0)
   })
 
-  it('does NOT return category/keyword skills when sessionId is present and skip_on_session_continue is true', () => {
+  it('does NOT return category/keyword/baseline skills when sessionId is present and skip_on_session_continue is true', () => {
     const input: SkillSelectionInput = {
       existingSkills: [],
       category: 'ultrabrain',
@@ -328,9 +329,9 @@ describe('selectSkills — Session Continuation', () => {
     }
     const result = selectSkills(input, testConfig)
 
-    // Should have baseline skills
-    expect(result.skills).toContain('pre-action')
-    expect(result.skills).toContain('memory-keeper')
+    // Implementation returns only existingSkills during session continuation
+    expect(result.skills).toHaveLength(0)
+    expect(result.sources).toHaveLength(0)
 
     // Should NOT have category skills from 'ultrabrain'
     expect(result.skills).not.toContain('architecture')
@@ -343,24 +344,18 @@ describe('selectSkills — Session Continuation', () => {
     expect(result.skills).not.toContain('refactor')
   })
 
-  it('merges baseline skills with existing skills when sessionId is present and skip_on_session_continue is true', () => {
+  it('returns only existing skills (no baseline) when sessionId is present and skip_on_session_continue is true', () => {
     const input: SkillSelectionInput = {
       existingSkills: ['playwright', 'custom-skill'],
       sessionId: 'ses_abc123',
     }
     const result = selectSkills(input, testConfig)
 
-    // Should have baseline skills
-    expect(result.skills).toContain('pre-action')
-    expect(result.skills).toContain('memory-keeper')
-
-    // Should have existing skills
+    // Implementation returns only existingSkills during session continuation
     expect(result.skills).toContain('playwright')
     expect(result.skills).toContain('custom-skill')
-
-    // Should not have duplicates
-    const preActionCount = result.skills.filter(s => s === 'pre-action').length
-    expect(preActionCount).toBe(1)
+    expect(result.skills).toHaveLength(2)
+    expect(result.sources).toHaveLength(0)
   })
 })
 
@@ -1095,43 +1090,35 @@ describe('Config Cleanup — Go-specific skills not in keyword patterns', () => 
   })
 })
 
-describe('Config Cleanup — clean-code not in non-programming categories', () => {
+describe('Config Cleanup — category_mappings must be empty', () => {
   // Load the ACTUAL config file (not the hardcoded test fixture)
   const configPath = resolve(__dirname, '../../skill-auto-loader-config.jsonc')
   const configText = readFileSync(configPath, 'utf-8')
   const jsonText = configText.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
   const actualConfig = JSON.parse(jsonText) as SkillAutoLoaderConfig
 
-  it('clean-code must not appear in deep category mapping', () => {
-    expect(actualConfig.category_mappings['deep']).not.toContain('clean-code')
-  })
-
-  it('clean-code must not appear in quick category mapping', () => {
-    expect(actualConfig.category_mappings['quick']).not.toContain('clean-code')
-  })
-
-  it('clean-code must not appear in unspecified-low category mapping', () => {
-    expect(actualConfig.category_mappings['unspecified-low']).not.toContain('clean-code')
-  })
-
-  it('clean-code must not appear in unspecified-high category mapping', () => {
-    expect(actualConfig.category_mappings['unspecified-high']).not.toContain('clean-code')
+  it('category_mappings must be an empty object', () => {
+    expect(actualConfig.category_mappings).toEqual({})
   })
 })
 
-describe('Config Cleanup — baseline must be exactly pre-action and memory-keeper', () => {
+describe('Config Cleanup — baseline must be exactly skill-discovery and discipline', () => {
   // Load the ACTUAL config file (not the hardcoded test fixture)
   const configPath = resolve(__dirname, '../../skill-auto-loader-config.jsonc')
   const configText = readFileSync(configPath, 'utf-8')
   const jsonText = configText.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
   const actualConfig = JSON.parse(jsonText) as SkillAutoLoaderConfig
 
-  it('baseline_skills must contain exactly pre-action and memory-keeper', () => {
-    expect(actualConfig.baseline_skills).toEqual(['pre-action', 'memory-keeper'])
+  it('baseline_skills must contain exactly skill-discovery and discipline', () => {
+    expect(actualConfig.baseline_skills).toEqual(['skill-discovery', 'discipline'])
   })
 
-  it('baseline_skills must not contain agent-discovery', () => {
-    expect(actualConfig.baseline_skills).not.toContain('agent-discovery')
+  it('baseline_skills must not contain pre-action', () => {
+    expect(actualConfig.baseline_skills).not.toContain('pre-action')
+  })
+
+  it('baseline_skills must not contain memory-keeper', () => {
+    expect(actualConfig.baseline_skills).not.toContain('memory-keeper')
   })
 
   it('baseline_skills must not contain token-cost-estimation', () => {

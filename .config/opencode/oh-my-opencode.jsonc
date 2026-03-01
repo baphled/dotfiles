@@ -32,9 +32,15 @@
       "ralph-loop": false
     }
   },
+  "categories": {
+    "deep": { "model": "github-copilot/gpt-5.2-codex" },
+    "ultrabrain": { "model": "github-copilot/gpt-5.2-codex" },
+    "visual-engineering": { "model": "github-copilot/gemini-3-pro-preview" },
+    "artistry": { "model": "github-copilot/gemini-3-pro-preview" }
+  },
   "agents": {
     "sisyphus": {
-      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after significant work.",
+      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after significant work.\nPROVIDER: Always call provider-health(tier=X, recommend=true) BEFORE every task() delegation.\nSKILLS: BEFORE starting work, call mcp_skill('discipline') and mcp_skill('agent-discovery'). Then call mcp_skill(name) for EACH skill in your load_skills list.",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -43,7 +49,7 @@
       }
     },
     "sisyphus-junior": {
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe is true about the task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which file reads/searches can run simultaneously]\n  Risks: [what could go wrong]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping, no shortcuts\n2. Batch ALL independent tool calls (reads, searches, diagnostics) in a single message\n3. Test-first: write failing test → implement → verify green → refactor\n4. Verify each change with lsp_diagnostics before moving on\n5. No type suppression (as any, @ts-ignore, @ts-expect-error)\n6. Search memory/vault BEFORE investigating codebase\n7. If a step seems unnecessary: complete it anyway, then report to orchestrator\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "allow",
@@ -52,7 +58,7 @@
       }
     },
     "hephaestus": {
-      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after significant work.",
+      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after significant work.\nPROVIDER: Always call provider-health(tier=X, recommend=true) BEFORE every task() delegation.\nSKILLS: BEFORE starting work, call mcp_skill('discipline') and mcp_skill('agent-discovery'). Then call mcp_skill(name) for EACH skill in your load_skills list.",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -61,7 +67,7 @@
       }
     },
     "atlas": {
-      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after significant work.",
+      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after significant work.\nPROVIDER: Always call provider-health(tier=X, recommend=true) BEFORE every task() delegation.\nSKILLS: BEFORE starting work, call mcp_skill('discipline') and mcp_skill('agent-discovery'). Then call mcp_skill(name) for EACH skill in your load_skills list.",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -70,26 +76,32 @@
       }
     },
     "oracle": {
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip."
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list.",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "deny"
+      }
     },
     "librarian": {
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip."
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
     },
     "explore": {
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip."
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
     },
     "metis": {
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip."
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
     },
     "momus": {
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip."
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
     },
     "multimodal-looker": {
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip."
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
     },
     "Senior-Engineer": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe is true about the task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which file reads/searches can run simultaneously]\n  Risks: [what could go wrong]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping, no shortcuts\n2. Batch ALL independent tool calls (reads, searches, diagnostics) in a single message\n3. Test-first: write failing test → implement → verify green → refactor\n4. Verify each change with lsp_diagnostics before moving on\n5. No type suppression (as any, @ts-ignore, @ts-expect-error)\n6. Search memory/vault BEFORE investigating codebase\n7. If a step seems unnecessary: complete it anyway, then report to orchestrator\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "allow",
@@ -99,7 +111,7 @@
     },
     "Tech-Lead": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after significant work.",
+      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after significant work.\nPROVIDER: Always call provider-health(tier=X, recommend=true) BEFORE every task() delegation.\nSKILLS: BEFORE starting work, call mcp_skill('discipline') and mcp_skill('agent-discovery'). Then call mcp_skill(name) for EACH skill in your load_skills list.",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -109,7 +121,7 @@
     },
     "Writer": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe about the writing task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which reads/research can run simultaneously]\n  Style: [audience, tone, format constraints]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping\n2. Batch ALL independent reads/searches in a single message\n3. British English throughout all written content\n4. Search memory/vault BEFORE investigating codebase\n5. Cite sources with file paths when referencing code or docs\n6. If a step seems unnecessary: complete it anyway, then report\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "deny",
@@ -119,7 +131,7 @@
     },
     "QA-Engineer": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe is true about the task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which file reads/searches can run simultaneously]\n  Risks: [what could go wrong]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping, no shortcuts\n2. Batch ALL independent tool calls (reads, searches, diagnostics) in a single message\n3. Test-first: write failing test → implement → verify green → refactor\n4. Verify each change with lsp_diagnostics before moving on\n5. No type suppression (as any, @ts-ignore, @ts-expect-error)\n6. Search memory/vault BEFORE investigating codebase\n7. If a step seems unnecessary: complete it anyway, then report to orchestrator\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "allow",
@@ -129,7 +141,7 @@
     },
     "VHS-Director": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe is true about the task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which file reads/searches can run simultaneously]\n  Risks: [what could go wrong]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping, no shortcuts\n2. Batch ALL independent tool calls (reads, searches, diagnostics) in a single message\n3. Test-first: write failing test → implement → verify green → refactor\n4. Verify each change with lsp_diagnostics before moving on\n5. No type suppression (as any, @ts-ignore, @ts-expect-error)\n6. Search memory/vault BEFORE investigating codebase\n7. If a step seems unnecessary: complete it anyway, then report to orchestrator\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "allow",
@@ -139,7 +151,7 @@
     },
     "DevOps": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe is true about the task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which file reads/searches can run simultaneously]\n  Risks: [what could go wrong]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping, no shortcuts\n2. Batch ALL independent tool calls (reads, searches, diagnostics) in a single message\n3. Test-first: write failing test → implement → verify green → refactor\n4. Verify each change with lsp_diagnostics before moving on\n5. No type suppression (as any, @ts-ignore, @ts-expect-error)\n6. Search memory/vault BEFORE investigating codebase\n7. If a step seems unnecessary: complete it anyway, then report to orchestrator\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "allow",
@@ -149,7 +161,7 @@
     },
     "Security-Engineer": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe about the situation]\n  Plan: [≤3 numbered steps]\n  Parallel: [which searches/reads can run simultaneously]\n\nRULES (violations = failure):\n1. Read-only: you advise, you do NOT modify files\n2. Batch ALL independent reads/searches in a single message\n3. Search memory/vault BEFORE investigating codebase\n4. Evidence over assumption — cite file paths and line numbers\n5. Execute EVERY step prescribed — no skipping\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Advise only — do NOT modify files. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -159,7 +171,7 @@
     },
     "Data-Analyst": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe about the situation]\n  Plan: [≤3 numbered steps]\n  Parallel: [which searches/reads can run simultaneously]\n\nRULES (violations = failure):\n1. Read-only: you advise, you do NOT modify files\n2. Batch ALL independent reads/searches in a single message\n3. Search memory/vault BEFORE investigating codebase\n4. Evidence over assumption — cite file paths and line numbers\n5. Execute EVERY step prescribed — no skipping\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Advise only — do NOT modify files. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -169,7 +181,7 @@
     },
     "Embedded-Engineer": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe is true about the task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which file reads/searches can run simultaneously]\n  Risks: [what could go wrong]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping, no shortcuts\n2. Batch ALL independent tool calls (reads, searches, diagnostics) in a single message\n3. Test-first: write failing test → implement → verify green → refactor\n4. Verify each change with lsp_diagnostics before moving on\n5. No type suppression (as any, @ts-ignore, @ts-expect-error)\n6. Search memory/vault BEFORE investigating codebase\n7. If a step seems unnecessary: complete it anyway, then report to orchestrator\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "allow",
@@ -179,7 +191,7 @@
     },
     "Nix-Expert": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe about the situation]\n  Plan: [≤3 numbered steps]\n  Parallel: [which searches/reads can run simultaneously]\n\nRULES (violations = failure):\n1. Read-only: you advise, you do NOT modify files\n2. Batch ALL independent reads/searches in a single message\n3. Search memory/vault BEFORE investigating codebase\n4. Evidence over assumption — cite file paths and line numbers\n5. Execute EVERY step prescribed — no skipping\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Advise only — do NOT modify files. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -189,7 +201,7 @@
     },
     "Linux-Expert": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe about the situation]\n  Plan: [≤3 numbered steps]\n  Parallel: [which searches/reads can run simultaneously]\n\nRULES (violations = failure):\n1. Read-only: you advise, you do NOT modify files\n2. Batch ALL independent reads/searches in a single message\n3. Search memory/vault BEFORE investigating codebase\n4. Evidence over assumption — cite file paths and line numbers\n5. Execute EVERY step prescribed — no skipping\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Advise only — do NOT modify files. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -199,7 +211,7 @@
     },
     "SysOp": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe about the situation]\n  Plan: [≤3 numbered steps]\n  Parallel: [which searches/reads can run simultaneously]\n\nRULES (violations = failure):\n1. Read-only: you advise, you do NOT modify files\n2. Batch ALL independent reads/searches in a single message\n3. Search memory/vault BEFORE investigating codebase\n4. Evidence over assumption — cite file paths and line numbers\n5. Execute EVERY step prescribed — no skipping\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Advise only — do NOT modify files. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "deny",
         "bash": "allow",
@@ -209,7 +221,7 @@
     },
     "Knowledge Base Curator": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe about the writing task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which reads/research can run simultaneously]\n  Style: [audience, tone, format constraints]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping\n2. Batch ALL independent reads/searches in a single message\n3. British English throughout all written content\n4. Search memory/vault BEFORE investigating codebase\n5. Cite sources with file paths when referencing code or docs\n6. If a step seems unnecessary: complete it anyway, then report\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "deny",
@@ -219,10 +231,49 @@
     },
     "Model-Evaluator": {
       "mode": "subagent",
-      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Assumptions: [what you believe is true about the task]\n  Plan: [≤5 numbered steps]\n  Parallel: [which file reads/searches can run simultaneously]\n  Risks: [what could go wrong]\n\nRULES (violations = failure):\n1. Execute EVERY step prescribed by skills and task prompt — no skipping, no shortcuts\n2. Batch ALL independent tool calls (reads, searches, diagnostics) in a single message\n3. Test-first: write failing test → implement → verify green → refactor\n4. Verify each change with lsp_diagnostics before moving on\n5. No type suppression (as any, @ts-ignore, @ts-expect-error)\n6. Search memory/vault BEFORE investigating codebase\n7. If a step seems unnecessary: complete it anyway, then report to orchestrator\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "deny"
+      }
+    },
+    "Code-Reviewer": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "deny"
+      }
+    },
+    "Editor": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "deny",
+        "webfetch": "allow",
+        "external_directory": "deny"
+      }
+    },
+    "Researcher": {
+      "mode": "subagent",
+      "prompt_append": "Advise only — do NOT modify files. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "allow",
+        "external_directory": "deny"
+      }
+    },
+    "prometheus": {
+      "prompt_append": "Plan only — do NOT modify files or write code. BEFORE starting work, call mcp_skill('discipline'), then load your thinking skills: mcp_skill('critical-thinking'), mcp_skill('epistemic-rigor'), mcp_skill('assumption-tracker'), mcp_skill('systems-thinker'), mcp_skill('scope-management'), mcp_skill('estimation'). Then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. Produce a structured plan with clear task breakdown. When the plan is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
         "webfetch": "allow",
         "external_directory": "deny"
       }

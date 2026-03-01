@@ -704,7 +704,7 @@ skill-integrate:
 # Git & Compliance Operations
 # =============================================================================
 
-.PHONY: ai-commit check-compliance
+.PHONY: ai-commit check-compliance health-check
 
 # Create a properly attributed commit for AI-generated code
 # Usage: AI_MODEL="model-name" [AI_AGENT="agent-name"] make ai-commit FILE=path/to/commit.txt
@@ -727,6 +727,10 @@ check-compliance:
 	@# TODO: Implement actual compliance checks (linting, tests, etc.)
 	@echo "✅ Compliance checks passed"
 
+# Run agentic flow health check to validate system configuration
+# Usage: make health-check
+health-check:
+	@bun run scripts/agentic-health-check.ts
 # =============================================================================
 # Vault Sync
 # =============================================================================

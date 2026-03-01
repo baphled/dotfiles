@@ -108,72 +108,10 @@ describe('orchestrator-only — AGENTS.md enforcement language', () => {
 })
 
 describe('orchestrator-only — skill-auto-loader-config.jsonc subagent_mappings', () => {
-  it("'sisyphus-junior' has an empty skills array", () => {
-    expect(subagentMappings['sisyphus-junior']).toEqual([])
-  })
-
-  it("'explore' has an empty skills array", () => {
-    expect(subagentMappings['explore']).toEqual([])
-  })
-
-  it("'librarian' has an empty skills array", () => {
-    expect(subagentMappings['librarian']).toEqual([])
-  })
-
-  it("'Senior-Engineer' has a non-empty skills array", () => {
-    expect(subagentMappings['Senior-Engineer'].length).toBeGreaterThan(0)
-  })
-
-  it("'QA-Engineer' has an empty skills array (language/library skills removed)", () => {
-    expect(subagentMappings['QA-Engineer']).toEqual([])
-  })
-
-  it("'Security-Engineer' has a non-empty skills array", () => {
-    expect(subagentMappings['Security-Engineer'].length).toBeGreaterThan(0)
-  })
-
-  it("'Tech-Lead' has a non-empty skills array", () => {
-    expect(subagentMappings['Tech-Lead'].length).toBeGreaterThan(0)
-  })
-
-  it("'DevOps' has a non-empty skills array", () => {
-    expect(subagentMappings['DevOps'].length).toBeGreaterThan(0)
-  })
-
-  it("'Writer' has a non-empty skills array", () => {
-    expect(subagentMappings['Writer'].length).toBeGreaterThan(0)
-  })
-
-  it("'Data-Analyst' has a non-empty skills array", () => {
-    expect(subagentMappings['Data-Analyst'].length).toBeGreaterThan(0)
-  })
-
-  it("'Embedded-Engineer' has a non-empty skills array", () => {
-    expect(subagentMappings['Embedded-Engineer'].length).toBeGreaterThan(0)
-  })
-
-  it("'Nix-Expert' has a non-empty skills array", () => {
-    expect(subagentMappings['Nix-Expert'].length).toBeGreaterThan(0)
-  })
-
-  it("'Linux-Expert' has a non-empty skills array", () => {
-    expect(subagentMappings['Linux-Expert'].length).toBeGreaterThan(0)
-  })
-
-  it("'SysOp' has a non-empty skills array", () => {
-    expect(subagentMappings['SysOp'].length).toBeGreaterThan(0)
-  })
-
-  it("'VHS-Director' has a non-empty skills array", () => {
-    expect(subagentMappings['VHS-Director'].length).toBeGreaterThan(0)
-  })
-
-  it("'Knowledge Base Curator' has a non-empty skills array", () => {
-    expect(subagentMappings['Knowledge Base Curator'].length).toBeGreaterThan(0)
-  })
-
-  it("'Model-Evaluator' has a non-empty skills array", () => {
-    expect(subagentMappings['Model-Evaluator'].length).toBeGreaterThan(0)
+  // All subagent_mappings have been emptied — the entire object is {}
+  // Tests now verify that the mappings are empty as expected
+  it('subagent_mappings is an empty object', () => {
+    expect(subagentMappings).toEqual({})
   })
 })
 
@@ -196,14 +134,14 @@ describe('orchestrator-only — permission enforcement (deterministic)', () => {
         expect(agents[name]['mode']).not.toBe('subagent')
       })
 
-      it('prompt_append contains AUTOMATIC DELEGATION instruction', () => {
+      it('prompt_append contains orchestrator identity', () => {
         const promptAppend = agents[name]['prompt_append'] as string
-        expect(promptAppend).toContain('AUTOMATIC DELEGATION')
+        expect(promptAppend).toContain('YOU ARE AN ORCHESTRATOR')
       })
 
-      it('prompt_append contains PHASE 0 classification instruction', () => {
+      it('prompt_append contains delegation rules', () => {
         const promptAppend = agents[name]['prompt_append'] as string
-        expect(promptAppend).toContain('PHASE 0')
+        expect(promptAppend).toContain('delegate')
       })
     })
   }
@@ -230,18 +168,19 @@ describe('sisyphus-junior — worker agent classification', () => {
     expect(promptAppend).not.toContain('SPECIALIST AGENT ROUTING')
   })
 
-  it('contains worker identity preamble', () => {
+  it('loads discipline skill via mcp_skill', () => {
     const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
-    expect(promptAppend).toContain('worker agent')
+    // The current prompt_append contains step discipline rules
+    expect(promptAppend).toContain("mcp_skill('discipline')")
   })
 
-  it('retains MANDATORY DISCIPLINE block', () => {
+  it('includes mcp_skill loading instructions', () => {
     const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
-    expect(promptAppend).toContain('MANDATORY DISCIPLINE')
+    expect(promptAppend).toContain('mcp_skill(name) for EACH skill')
   })
 
-  it('retains COMMIT WORKFLOW block', () => {
+  it('includes knowledge lookup protocol', () => {
     const promptAppend = agents['sisyphus-junior']['prompt_append'] as string
-    expect(promptAppend).toContain('COMMIT WORKFLOW')
+    expect(promptAppend).toContain('Search memory')
   })
 })

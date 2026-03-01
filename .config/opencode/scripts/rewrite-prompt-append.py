@@ -153,7 +153,7 @@ AGENT_TEMPLATES: dict[str, str] = {
     "Linux-Expert": READ_ONLY_TEMPLATE,
     "SysOp": READ_ONLY_TEMPLATE,
     # LOOKUP (pure research/consultation)
-    "oracle": LOOKUP_TEMPLATE,
+    "oracle": WORKER_TEMPLATE,
     "librarian": LOOKUP_TEMPLATE,
     "explore": LOOKUP_TEMPLATE,
     "metis": LOOKUP_TEMPLATE,
