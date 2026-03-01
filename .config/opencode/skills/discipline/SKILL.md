@@ -38,10 +38,11 @@ Execute EVERY step prescribed by your skills, workflow, and task prompt. No skip
 
 ### MANDATORY triggers (no exceptions)
 
-Two situations ALWAYS require delegating to KB Curator before your task is considered complete:
+Three situations ALWAYS require delegating to KB Curator before your task is considered complete:
 
-1. **Setup changes** — Any modification to agent files, skill files, command files, `AGENTS.md`, `opencode.json`, or any OpenCode configuration. Delegate immediately after the change is verified.
-2. **Project or feature completion** — When a feature, task set, or project milestone is finished. Delegate to document what was built, changed, or decided.
+1. **Project or feature work** — When a feature, task set, or project milestone is completed. Document what was built, changed, or decided.
+2. **Exploration or investigation findings** — When research, codebase exploration, or investigation produces new understanding. Document discoveries, patterns found, and conclusions reached.
+3. **Agentic flow or config changes** — Any modification to agent files, skill files, command files, `AGENTS.md`, `opencode.json`, or any OpenCode configuration. Delegate immediately after the change is verified.
 
 Run KB Curator as a **fire-and-forget background task** so it does not block your work:
 
