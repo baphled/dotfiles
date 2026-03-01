@@ -45,7 +45,7 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "sisyphus-junior": {
@@ -54,7 +54,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "hephaestus": {
@@ -63,7 +63,7 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "atlas": {
@@ -72,7 +72,7 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "oracle": {
@@ -81,7 +81,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "librarian": {
@@ -106,7 +106,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Tech-Lead": {
@@ -116,7 +116,7 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Writer": {
@@ -126,7 +126,7 @@
         "edit": "allow",
         "bash": "deny",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "QA-Engineer": {
@@ -136,7 +136,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "VHS-Director": {
@@ -146,7 +146,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "DevOps": {
@@ -156,7 +156,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Security-Engineer": {
@@ -166,7 +166,7 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Data-Analyst": {
@@ -176,7 +176,7 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Embedded-Engineer": {
@@ -186,7 +186,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Nix-Expert": {
@@ -196,7 +196,7 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Linux-Expert": {
@@ -206,7 +206,7 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "SysOp": {
@@ -216,17 +216,17 @@
         "edit": "deny",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Knowledge Base Curator": {
       "mode": "subagent",
-      "prompt_append": "Work continuously until the task is fully complete. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "prompt_append": "You are a WORKER agent — write and edit files DIRECTLY. Never delegate, never use call_omo_agent. BEFORE starting work, call mcp_skill(name) for EACH skill in your load_skills list (SKIP discipline — its KB Curator section does not apply to you). Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
       "permission": {
         "edit": "allow",
         "bash": "deny",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Model-Evaluator": {
@@ -236,7 +236,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Code-Reviewer": {
@@ -246,7 +246,7 @@
         "edit": "allow",
         "bash": "allow",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Editor": {
@@ -256,7 +256,7 @@
         "edit": "allow",
         "bash": "deny",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "Researcher": {
@@ -266,7 +266,7 @@
         "edit": "deny",
         "bash": "deny",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     },
     "prometheus": {
@@ -275,7 +275,7 @@
         "edit": "deny",
         "bash": "deny",
         "webfetch": "allow",
-        "external_directory": "deny"
+        "external_directory": "allow"
       }
     }
   },

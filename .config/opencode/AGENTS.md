@@ -143,6 +143,20 @@ task(subagent_type="Knowledge Base Curator", run_in_background=true, load_skills
 
 ---
 
+## Worktree Safety Rules
+
+Agents may work in git worktrees outside the main working directory.
+
+**Protected branches (NEVER modify without explicit user permission):**
+- `main` worktree
+- `next` worktree
+
+Before operating in ANY worktree, verify:
+1. Which worktree/branch you are in
+2. That it is NOT a protected branch (main, next) unless the user explicitly granted permission
+
+> Modifying a protected worktree without explicit permission is a **blocking violation**.
+
 ## Skill Injection Limits
 
 - **Orchestrators:** `load_skills=[]` always.

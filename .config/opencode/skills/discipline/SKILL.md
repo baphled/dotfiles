@@ -65,11 +65,25 @@ For other work, invoke KB Curator when there is lasting documentation value:
 
 > Skip KB Curator for: routine task execution, minor code fixes, refactors with no new behaviour.
 
+## Worktree Safety (MANDATORY)
+
+Agents may work in git worktrees outside the main working directory. Two branches are **protected**:
+
+- **main** — Production branch. NEVER modify unless the user explicitly grants permission.
+- **next** — Integration branch. NEVER modify unless the user explicitly grants permission.
+
+Before operating in any worktree:
+1. Verify which worktree/branch you are in
+2. Confirm it is NOT a protected branch — or that the user explicitly authorised it
+
+Modifying a protected worktree without explicit permission is a **blocking violation**.
+
 ## Anti-patterns to avoid
 
 - Skipping steps because they "seem unnecessary"
 - Self-authorising shortcuts without orchestrator approval
 - Producing stubs or placeholders instead of real work
+- Modifying main or next worktrees without explicit user permission
 - Forgetting KB Curator after setup changes or project completion
 - Running KB Curator synchronously when it should be fire-and-forget
 
