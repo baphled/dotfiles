@@ -125,11 +125,21 @@ Sub-agents MUST execute EVERY prescribed step. No skipping. No self-authorisatio
 
 **After significant work:** capture via `mcp_memory_create_entities` or `mcp_memory_add_observations`.
 
-## KB Curator Auto-Trigger
+## KB Curator Auto-Trigger (NON-NEGOTIABLE)
 
-After significant work, fire as background task: `task(subagent_type="Knowledge Base Curator", run_in_background=true, load_skills=[], prompt="Sync: {what changed}")`
+Fire KB Curator as a background task after ANY of these three categories. Do NOT wait to be asked.
 
-Mandatory triggers: agentic flow changes, project deliverables, configuration changes, new knowledge captured.
+```typescript
+task(subagent_type="Knowledge Base Curator", run_in_background=true, load_skills=[], prompt="Sync: {what changed}")
+```
+
+### Mandatory trigger categories
+
+1. **Project or feature work** — Feature completion, task set done, project milestone reached. Document what was built, changed, or decided.
+2. **Exploration or investigation** — Research, codebase exploration, or investigation that produced new understanding. Document discoveries, patterns, and conclusions.
+3. **Agentic flow or config changes** — Any modification to agent files, skill files, commands, `AGENTS.md`, `oh-my-opencode.jsonc`, or OpenCode configuration.
+
+> Skipping KB Curator for these categories is a **blocking violation**.
 
 ---
 
