@@ -197,8 +197,8 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
       if (!isOrchestratorAgent && agentName) {
         const agentTier = AGENT_TIER_MAP[agentName] || 'T2'
 
-        if (healthManager.isRateLimited(healthKey)) {
-          const alternatives = healthManager.getHealthyAlternatives(agentTier)
+        if (healthManager.isRateLimited(healthKey) || healthManager.isModelRateLimitedByAnyProvider(input.model.id)) {
+          const alternatives = healthManager.getHealthyAlternatives(agentTier, healthKey)
           if (alternatives.length > 0) {
             const pick = alternatives[0]
             const newKey = `${pick.provider}/${pick.model}`
@@ -254,9 +254,9 @@ const ProviderFailoverPlugin: Plugin = async (_input) => {
       }
       if (props.status.type !== 'retry') return
       const message = (props.status.message || '').toLowerCase()
-      const isRateLimit = message.includes('rate limit') || message.includes('too many requests') || message.includes('429')
+      const isRateLimit = message.includes('rate limit') || message.includes('too many requests') || message.includes('429') || message.includes('free usage exceeded') || message.includes('exceeded') || message.includes('add credits') || message.includes('quota')
       if (!isRateLimit) {
-        debugLog(`RETRY (non-rate-limit): session=${props.sessionID}, attempt=${props.status.attempt}`)
+        debugLog(`RETRY (non-rate-limit): session=${props.sessionID}, attempt=${props.status.attempt}, message=${props.status.message || '(empty)'}`)
         return
       }
       const sessionInfo = lastModelBySession.get(props.sessionID)

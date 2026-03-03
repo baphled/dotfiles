@@ -56,6 +56,22 @@ export class HealthManager {
   }
 
   /**
+   * Check if a model is rate-limited under any provider.
+   * Handles the case where rate limits are stored under a different provider
+   * key than what appears in the fallback chain.
+   */
+  isModelRateLimitedByAnyProvider(model: string): boolean {
+    const now = Date.now()
+    const suffix = `/${model}`
+    for (const [key, expiry] of Object.entries(this.data.rateLimits)) {
+      if (key.endsWith(suffix) && new Date(expiry).getTime() > now) {
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
    * Get the rate-limit expiry timestamp for a provider/model, or null if not rate-limited
    */
   getRateLimitExpiry(key: string): string | null {
@@ -87,7 +103,7 @@ export class HealthManager {
 
       // Skip excluded key and rate-limited entries
       if (excludeKey && key === excludeKey) continue
-      if (this.isRateLimited(key)) continue
+      if (this.isRateLimited(key) || this.isModelRateLimitedByAnyProvider(entry.model)) continue
 
       healthy.push(entry)
     }

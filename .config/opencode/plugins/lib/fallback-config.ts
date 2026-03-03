@@ -62,7 +62,6 @@ export function getFallbackChain(tier: string): ProviderEntry[] {
       { provider: 'ollama', model: 'phi4', tier: 'T0', supportsTools: false },
     ],
     T1: [
-      { provider: 'opencode', model: 'gpt-5-nano', tier: 'T1' },
       { provider: 'github-copilot', model: 'gpt-5-mini', tier: 'T1' },
       { provider: 'github-copilot', model: 'claude-haiku-4.5', tier: 'T1' },
       { provider: 'anthropic', model: 'claude-haiku-4-5', tier: 'T1' },

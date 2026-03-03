@@ -117,7 +117,7 @@ Sub-agents MUST execute EVERY prescribed step. No skipping. No self-authorisatio
 
 ## Universal Skills (AUTO-LOAD)
 
-`pre-action`, `memory-keeper`, `skill-discovery` — loaded on every `task()` call.
+`pre-action`, `memory-keeper`, `skill-discovery`, `parallel-execution` — loaded on every `task()` call.
 
 ## Knowledge Lookup Protocol
 

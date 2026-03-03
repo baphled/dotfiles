@@ -181,17 +181,22 @@ describe('Recommend Model', () => {
       expect(result).toContain(`${chain[0].provider}/${chain[0].model}`)
     })
 
-    test('expired rate limit is treated as healthy', () => {
+    test('filters model rate-limited under different provider key', () => {
       const hm = new HealthManager()
-      const chain = getFallbackChain('T1')
-      const firstKey = `${chain[0].provider}/${chain[0].model}`
-
-      hm.markRateLimited(firstKey, 0)
-
-      const result = getRecommendation(hm, 'T1')
-
+      const chain = getFallbackChain('T2')
+      
+      // Rate limit the first model under a DIFFERENT provider key
+      // (simulates inferProviderFromModel returning different provider than chain)
+      const firstModel = chain[0].model
+      const wrongProviderKey = `wrong-provider/${firstModel}`
+      hm.markRateLimited(wrongProviderKey, 60)
+      
+      const result = getRecommendation(hm, 'T2')
+      
+      // Should NOT recommend the rate-limited model, even under a different provider
       expect(result).toContain('✅')
-      expect(result).toContain(`${chain[0].provider}/${chain[0].model}`)
+      expect(result).not.toContain(firstModel)
+      expect(result).toContain(`${chain[1].provider}/${chain[1].model}`)
     })
   })
 
@@ -224,6 +229,35 @@ describe('Recommend Model', () => {
       expect(result).toContain('✅')
       expect(result).toContain('ollama')
       expect(result).toContain(chain[0].model)
+    })
+  })
+
+  describe('cross-provider rate-limit detection', () => {
+    test('isModelRateLimitedByAnyProvider catches cross-provider rate limits', () => {
+      const hm = new HealthManager()
+      
+      // Mark model under provider-a
+      hm.markRateLimited('provider-a/some-model', 60)
+      
+      // Should detect it regardless of provider prefix
+      expect(hm.isModelRateLimitedByAnyProvider('some-model')).toBe(true)
+      expect(hm.isModelRateLimitedByAnyProvider('other-model')).toBe(false)
+    })
+  })
+
+  describe('fallback chain composition', () => {
+    test('unavailable opencode models excluded from fallback chains', () => {
+      for (const tier of ['T0', 'T1', 'T2', 'T3']) {
+        const chain = getFallbackChain(tier)
+        const gpt5NanoEntries = chain.filter(e => e.provider === 'opencode' && e.model === 'gpt-5-nano')
+        expect(gpt5NanoEntries).toEqual([])
+      }
+    })
+
+    test('big-pickle remains in T2 fallback chain', () => {
+      const chain = getFallbackChain('T2')
+      const bigPickle = chain.find(e => e.provider === 'opencode' && e.model === 'big-pickle')
+      expect(bigPickle).toBeDefined()
     })
   })
 })
