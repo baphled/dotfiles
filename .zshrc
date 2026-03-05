@@ -131,3 +131,5 @@ export QLTY_INSTALL="$HOME/.qlty"
 export PATH="$QLTY_INSTALL/bin:$PATH"
 source /home/baphled/.config/op/plugins.sh
 export PATH="$HOME/.luarocks/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.opencode/bin:$PATH"

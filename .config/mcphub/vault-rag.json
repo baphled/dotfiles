@@ -1,0 +1,52 @@
+{
+  "name": "vault-rag",
+  "version": "1.0.0",
+  "description": "MCP server for querying Obsidian vaults via Qdrant",
+  "tools": [
+    {
+      "name": "query_vault",
+      "description": "Query an Obsidian vault knowledge base",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "vault": {
+            "type": "string",
+            "description": "Vault name",
+            "enum": ["baphled"]
+          },
+          "question": {
+            "type": "string",
+            "description": "Question to ask about the vault content"
+          },
+          "top_k": {
+            "type": "integer",
+            "description": "Number of sources to retrieve",
+            "default": 5
+          }
+        },
+        "required": ["vault", "question"]
+      }
+    },
+    {
+      "name": "sync_vault",
+      "description": "Sync a vault to Qdrant vector database",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "vault": {
+            "type": "string",
+            "description": "Vault name to sync",
+            "enum": ["baphled"]
+          }
+        },
+        "required": ["vault"]
+      }
+    },
+    {
+      "name": "list_vaults",
+      "description": "List all configured vaults"
+    }
+  ],
+  "command": "python3",
+  "args": ["/home/baphled/.local/bin/mcp-vault-server"]
+}

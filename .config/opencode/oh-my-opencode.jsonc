@@ -1,0 +1,305 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "disabled_mcps": [],
+  "git_master": {
+    "commit_footer": false,
+    "include_co_authored_by": false
+  },
+  "sisyphus_agent": {
+    "disabled": false,
+    "default_builder_enabled": false,
+    "planner_enabled": true,
+    "replace_plan": true
+  },
+  "ralph_loop": {
+    "enabled": true,
+    "default_max_iterations": 25
+  },
+  "comment_checker": {
+    "custom_prompt": "VIOLATION: Inline comments detected. This project strictly forbids inline comments. Only docblock-style documentation (JSDoc, GoDoc, PHPDoc, Python docstrings) is permitted on functions, methods, classes, and exported types. Remove ALL inline comments immediately and replace with proper docblocks where the comment documents a public API. Trivial or obvious comments must be deleted entirely.\n\nDetected comments:\n{{comments}}"
+  },
+  "notification": {
+    "force_enable": true
+  },
+  "claude_code": {
+    "mcp": true,
+    "commands": true,
+    "skills": true,
+    "agents": true,
+    "hooks": true,
+    "plugins": true,
+    "plugins_override": {
+      "ralph-loop": false
+    }
+  },
+  "categories": {
+    "deep": { "model": "github-copilot/gpt-5" },
+    "ultrabrain": { "model": "github-copilot/gpt-5.2-codex" },
+    "visual-engineering": { "model": "github-copilot/gemini-3-pro-preview" },
+    "artistry": { "model": "github-copilot/gemini-3-pro-preview" }
+  },
+  "agents": {
+    "sisyphus": {
+      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after: (1) project/feature work completion, (2) exploration or investigation findings, (3) agentic flow or config changes. Non-negotiable — do NOT wait to be asked.\nPROVIDER: Always call provider-health(tier=X, recommend=true) BEFORE every task() delegation.\nSKILLS: BEFORE starting work, call mcp_skill('discipline') and mcp_skill('agent-discovery'). Then call mcp_skill(name) for EACH skill in your load_skills list.",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "sisyphus-junior": {
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "hephaestus": {
+      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after: (1) project/feature work completion, (2) exploration or investigation findings, (3) agentic flow or config changes. Non-negotiable — do NOT wait to be asked.\nPROVIDER: Always call provider-health(tier=X, recommend=true) BEFORE every task() delegation.\nSKILLS: BEFORE starting work, call mcp_skill('discipline') and mcp_skill('agent-discovery'). Then call mcp_skill(name) for EACH skill in your load_skills list.",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "atlas": {
+      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after: (1) project/feature work completion, (2) exploration or investigation findings, (3) agentic flow or config changes. Non-negotiable — do NOT wait to be asked.\nPROVIDER: Always call provider-health(tier=X, recommend=true) BEFORE every task() delegation.\nSKILLS: BEFORE starting work, call mcp_skill('discipline') and mcp_skill('agent-discovery'). Then call mcp_skill(name) for EACH skill in your load_skills list.",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "oracle": {
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list.",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "librarian": {
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
+    },
+    "explore": {
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
+    },
+    "metis": {
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
+    },
+    "momus": {
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
+    },
+    "multimodal-looker": {
+      "prompt_append": "<CRITICAL>\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Question: [what you need to find out]\n  Sources: [which tools/searches to use]\n  Parallel: [which searches can run simultaneously]\n\nRULES:\n1. Batch ALL independent searches in a single message\n2. Search memory/vault BEFORE investigating codebase\n3. Evidence over assumption — cite file paths and line numbers\n4. Return structured, actionable findings\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nSKILLS: BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list."
+    },
+    "Senior-Engineer": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Tech-Lead": {
+      "mode": "subagent",
+      "prompt_append": "<CRITICAL>\nYOU ARE AN ORCHESTRATOR. You coordinate — you do NOT implement.\n\nBEFORE YOUR FIRST TOOL CALL, output a PREFLIGHT:\n  Goal: [what you're trying to achieve]\n  Constraints: [scope limits, what NOT to touch]\n  Plan: [≤5 numbered steps]\n  Parallel: [which steps are independent and can run simultaneously]\n  Stop: [when to stop and report back]\n\nRULES (violations = failure):\n1. NEVER use Edit/Write tools — delegate ALL implementation to task()\n2. NEVER read files for investigation — delegate to explore/librarian\n3. Batch ALL independent task() calls in a single message\n4. Delegate to specialists: Senior-Engineer, QA-Engineer, Writer, DevOps, etc.\n5. Verify results with binary checks only (build, test, lsp_diagnostics)\n6. Enforce step discipline on sub-agents — they MUST NOT skip prescribed steps\n7. Search memory → vault → codebase (in that order) before any investigation\n\nBefore tools: produce Preflight.\n</CRITICAL>\n\nCOMMIT: Use git_master for planning, make ai-commit FILE=tmp/commit.txt for execution. Never raw git commit -m.\nKNOWLEDGE: mcp_memory_search_nodes → mcp_vault-rag_query_vault → codebase. Never skip.\nKB CURATOR: Fire task(subagent_type=\"Knowledge Base Curator\", run_in_background=true) after: (1) project/feature work completion, (2) exploration or investigation findings, (3) agentic flow or config changes. Non-negotiable — do NOT wait to be asked.\nPROVIDER: Always call provider-health(tier=X, recommend=true) BEFORE every task() delegation.\nSKILLS: BEFORE starting work, call mcp_skill('discipline') and mcp_skill('agent-discovery'). Then call mcp_skill(name) for EACH skill in your load_skills list.",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Writer": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "deny",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "QA-Engineer": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "VHS-Director": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "DevOps": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Security-Engineer": {
+      "mode": "subagent",
+      "prompt_append": "Advise only — do NOT modify files. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Data-Analyst": {
+      "mode": "subagent",
+      "prompt_append": "Advise only — do NOT modify files. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Embedded-Engineer": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Nix-Expert": {
+      "mode": "subagent",
+      "prompt_append": "Advise only — do NOT modify files. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Linux-Expert": {
+      "mode": "subagent",
+      "prompt_append": "Advise only — do NOT modify files. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "SysOp": {
+      "mode": "subagent",
+      "prompt_append": "Advise only — do NOT modify files. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Knowledge Base Curator": {
+      "mode": "subagent",
+      "prompt_append": "You are a WORKER agent — write and edit files DIRECTLY. Never delegate, never use call_omo_agent. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill(name) for EACH skill in your load_skills list (SKIP discipline — its KB Curator section does not apply to you). Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "deny",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Model-Evaluator": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Code-Reviewer": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Editor": {
+      "mode": "subagent",
+      "prompt_append": "Work continuously until the task is fully complete. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Running lint + test? ONE message, 2 bash calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When the task is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "allow",
+        "bash": "deny",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "Researcher": {
+      "mode": "subagent",
+      "prompt_append": "Advise only — do NOT modify files. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. When your analysis is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    },
+    "prometheus": {
+      "prompt_append": "Plan only — do NOT modify files or write code. ⚡ PARALLEL EXECUTION (MANDATORY): NEVER make sequential tool calls when they're independent. Reading 3 files? ONE message, 3 read calls. Searching 2 patterns? ONE message, 2 grep calls. If calls don't depend on each other's output, they MUST be batched. Sequential independent calls = wasted tokens and time. BEFORE starting work, call mcp_skill('discipline'), then load your thinking skills: mcp_skill('critical-thinking'), mcp_skill('epistemic-rigor'), mcp_skill('assumption-tracker'), mcp_skill('systems-thinker'), mcp_skill('scope-management'), mcp_skill('estimation'). Then call mcp_skill(name) for EACH skill in your load_skills list. Search memory → vault → codebase before investigating. Produce a structured plan with clear task breakdown. When the plan is fully complete, output: <promise>DONE</promise>",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "allow",
+        "external_directory": "allow"
+      }
+    }
+  },
+  "experimental": {
+    "dynamic_context_pruning": {
+      "enabled": true,
+      "notification": "minimal",
+      "turn_protection": {
+        "enabled": true,
+        "turns": 3
+      },
+      "strategies": {
+        "deduplication": {
+          "enabled": true
+        },
+        "supersede_writes": {
+          "enabled": true,
+          "aggressive": false
+        },
+        "purge_errors": {
+          "enabled": true,
+          "turns": 5
+        }
+      }
+    }
+  }
+}

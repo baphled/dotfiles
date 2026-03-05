@@ -1,0 +1,377 @@
+[
+{
+  "name": "analyze",
+  "display_name": "Analyze",
+  "description": "Analyze system impacts and interconnections for a change",
+  "agent": "tech-lead",
+  "content": "\n# Code Analysis\n\nAnalyze code for issues, improvements, and system impacts.\n\n## Skills Loaded\n\n- `code-reading`\n- `systems-thinker`\n- `investigation`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "bdd",
+  "display_name": "BDD",
+  "description": "Develop a feature using BDD workflow - scenario first, then implementation",
+  "agent": "senior-engineer",
+  "content": "\n# BDD Feature Development\n\nDevelop feature using Behavior-Driven Development with smallest-change workflow.\n\n## Skills Loaded\n\n- `cucumber`\n- `ginkgo-gomega`\n- `bdd-workflow`\n- `playwright`\n- `clean-code`\n\n## Process\n\n1. **Write Scenario (Gherkin)**\n2. **Translate to test framework**\n3. **Smallest-Change Cycle:**\n   - Run test → See it fail\n   - Add smallest change to pass ONE thing\n   - Run test again\n   - Repeat until GREEN\n4. **Refactor when green**\n5. **Commit**\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "benchmark",
+  "display_name": "Benchmark",
+  "description": "Create and run benchmarks to measure code performance",
+  "agent": "senior-engineer",
+  "content": "\n# Performance Benchmarking\n\nBenchmark performance of specific code.\n\n## Skills Loaded\n\n- `benchmarking`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "bug",
+  "display_name": "Bug",
+  "description": "Create a bug report for an issue",
+  "agent": "senior-engineer",
+  "content": "\n# Create Bug Report\n\nCreate and document bug report.\n\n## Skills Loaded\n\n- `create-bug`\n\n## Purpose\n\nSystematically document bugs with reproduction steps, expected vs actual behavior, and context.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "challenge",
+  "display_name": "Challenge",
+  "description": "Challenge a solution or idea to find weaknesses before implementation",
+  "agent": "tech-lead",
+  "content": "\n# Challenge Design Decision\n\nStress-test design decisions before implementation.\n\n## Skills Loaded\n\n- `devils-advocate`\n\n## Purpose\n\nFind weaknesses, edge cases, and potential issues before committing to implementation.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "check-compliance",
+  "display_name": "Check Compliance",
+  "description": "Run comprehensive project compliance checks",
+  "agent": "qa-engineer",
+  "content": "\n# Check Compliance\n\nRun comprehensive project compliance checks.\n\n## Validates\n\n- Build passes\n- All tests pass\n- Coverage thresholds met\n- No linter warnings\n- Architecture boundaries respected\n- Security scans pass\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "check",
+  "display_name": "Check",
+  "description": "Run comprehensive compliance and quality checks",
+  "agent": "qa-engineer",
+  "content": "\n# Compliance Checks\n\nRun comprehensive quality and compliance checks.\n\n## Skills Loaded\n\n- `check-compliance`\n\n## Checks Run\n\n1. Full compliance: `make check-compliance`\n2. Architecture validation: `make check-intent-architecture`\n3. Pattern enforcement: `make check-patterns`\n4. Security scan: `make gosec`\n5. Test suite: `make test`\n6. Coverage (modified packages)\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "cleanup",
+  "display_name": "Cleanup",
+  "description": "Clean up code applying Boy Scout Rule",
+  "agent": "senior-engineer",
+  "content": "\n# Code Cleanup\n\nClean up code following Boy Scout Rule.\n\n## Actions\n\n- Remove dead code\n- Fix formatting\n- Improve naming\n- Update documentation\n- Remove unused imports\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "commit",
+  "display_name": "Commit",
+  "description": "Prepare and create a properly attributed commit",
+  "agent": "senior-engineer",
+  "content": "\n# Create AI-Attributed Commit\n\nPrepare and create properly attributed commit.\n\n## ⚠️ CRITICAL COMMIT RULES ⚠️\n\n1. **MANDATORY:** All commits MUST include AI attribution with correct environment variables\n2. **NEVER use `git commit` directly** - Always use `make ai-commit`\n3. **VERIFY** AI_AGENT and AI_MODEL are set correctly before committing\n4. **NO EXCEPTIONS** - This applies to ALL commits, every time\n\n## Skills Loaded\n\n- `git-master` (oh-my-opencode) - Atomic commit planning, style detection, dependency ordering\n- `ai-commit` - Execution with AI attribution\n- `code-reviewer` - Pre-commit review\n\n## Hybrid Workflow\n\n**git_master (oh-my-opencode) handles PLANNING, make ai-commit handles EXECUTION.**\n\n### Phase 1: Planning (git_master)\n1. Review changes: `git status` and `git diff --cached`\n2. git_master analyses:\n   - Detects commit style from last 30 commits (semantic, plain, short)\n   - Detects language (British English, Korean, etc.)\n   - Splits into atomic commits (3+ files → 2+ commits min)\n   - Orders by dependency (utilities → models → services → endpoints)\n   - Pairs tests with implementation\n\n### Phase 2: Pre-Commit Checks\n3. Run compliance: `make check-compliance`\n4. Verify test coverage ≥ 95% for modified packages\n\n### Phase 3: Execution\n5. For each planned commit:\n   - **NEW COMMIT**: Write message to `/tmp/commit.txt` → `make ai-commit FILE=/tmp/commit.txt`\n   - **FIXUP COMMIT**: Use `git commit --fixup=<hash>` directly\n\n6. Verify attribution in commits: `git log --oneline`\n\n**CRITICAL**: NEVER use `git commit -m` for new commits - always use make ai-commit\n\n## Commit Types\n\n- `feat:` - New feature\n- `fix:` - Bug fix\n- `docs:` - Documentation\n- `refactor:` - Code restructuring\n- `test:` - Tests\n- `chore:` - Maintenance\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "complete",
+  "display_name": "Complete",
+  "description": "Verify a task is truly complete with no loose ends",
+  "agent": "task-completer",
+  "content": "\n# Complete Task\n\nMark current task as complete with final validation.\n\n## Process\n\n1. Run full compliance check\n2. Verify all tests pass\n3. Check coverage thresholds\n4. Create final commit if needed\n5. Mark task complete\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "continue",
+  "display_name": "Continue",
+  "description": "Alias for /sessions - list and switch between sessions",
+  "agent": "session-manager",
+  "content": "\n# Continue Session\n\nContinue work from a previous session or list and switch between sessions.\n\n## Actions\n\n- Load relevant skills from previous session\n- Check git status\n- Run compliance checks\n- Resume at last checkpoint\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "debt",
+  "display_name": "Debt",
+  "description": "Identify and document technical debt",
+  "agent": "tech-lead",
+  "content": "\n# Track Technical Debt\n\nIdentify and document technical debt.\n\n## Skills Loaded\n\n- `tech-debt`\n- `investigation`\n\n## Purpose\n\nIdentify, document, and prioritize technical debt for future improvement.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "debug",
+  "display_name": "Debug",
+  "description": "Debugging workflow - diagnose and fix issues with rules enforcement",
+  "agent": "senior-engineer",
+  "content": "\n# Debug\n\nDebug and fix failing tests or issues.\n\n## Process\n\n1. Load `debug-test` skill\n2. Run failing test with verbose output\n3. Analyze failure\n4. Identify root cause\n5. Implement fix\n6. Verify test passes\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "decide",
+  "display_name": "Decide",
+  "description": "Evaluate options and make a technical decision with rigorous analysis",
+  "agent": "tech-lead",
+  "content": "\n# Decision Analysis\n\nAnalyze decision with trade-offs.\n\n## Skills Loaded\n\n- `trade-off-analysis`\n- `justify-decision`\n\n## Framework\n\n1. Define criteria\n2. Score options\n3. Consider trade-offs\n4. Document decision\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "dev",
+  "display_name": "Dev",
+  "description": "Development task workflow - write code with TDD and core rules",
+  "agent": "senior-engineer",
+  "content": "\n# Development Task\n\nExecute a development task following TDD and clean code principles.\n\n## Skills Loaded\n\n- `software-engineer`\n- `golang` / `ruby` / `javascript` / `cpp` (language-specific)\n- `bdd-workflow`\n- `clean-code`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "fix-arch",
+  "display_name": "Fix Arch",
+  "description": "Fix architecture violations detected by check-compliance",
+  "agent": "senior-engineer",
+  "content": "\n# Fix Architecture Violations\n\nFix architectural layer violations.\n\n## Skills Loaded\n\n- `fix-architecture`\n\n## Validates\n\n- Screens don't import intents\n- UIKit doesn't import screens\n- Behaviors don't import screens\n- Service doesn't import CLI\n- Repository doesn't import service\n- Domain imports nothing\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "fix",
+  "display_name": "Fix",
+  "description": "Fix a bug following TDD with regression test",
+  "agent": "senior-engineer",
+  "content": "\n# Fix Bug\n\nFix bugs following TDD workflow with regression test.\n\n## Process\n\n1. Write failing test reproducing bug\n2. Fix implementation\n3. Verify test passes\n4. Run full test suite\n5. Create commit\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "implement",
+  "display_name": "Implement",
+  "description": "Implement a feature following TDD and clean code principles",
+  "agent": "senior-engineer",
+  "content": "\n# Implement Feature\n\nImplement a feature following TDD workflow.\n\n## Process\n\n1. Load `bdd-workflow` skill\n2. RED: Write failing test\n3. GREEN: Implement to pass\n4. REFACTOR: Clean up\n5. Run compliance checks\n6. Create commit\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "init-long-running",
+  "display_name": "Init Long Running",
+  "description": "Initialise a long-running project harness for multi-session agent work",
+  "agent": "senior-engineer",
+  "content": "\n# Initialise Long-Running Project\n\nSet up the scaffolding for a complex project that will span multiple agent sessions.\nRun this ONCE at the start — subsequent sessions use `/implement` with the\n`long-running-agent` skill loaded.\n\n## When to use\n\n- Starting a project too large for a single context window\n- Before beginning any multi-day development effort\n- When multiple agent sessions will work on the same codebase sequentially\n\n## Process\n\n1. Load `long-running-agent` skill\n2. Analyse requirements from `$ARGUMENTS`\n3. Create `feature_list.json` with ALL features marked `\"passes\": false`\n   - Be comprehensive — include functional, UI, edge case, and error features\n   - Order by priority (highest first = most critical path)\n   - Aim for 30–200 features depending on project scope\n4. Create `claude-progress.txt` with session 1 header\n5. Create `init.sh` — starts dev server and runs basic smoke test (exits 0 on success)\n6. Make initial git commit: `chore: initialise long-running agent harness`\n7. Report: feature count, estimated sessions, recommended next command\n\n## Subsequent sessions\n\nEach subsequent session should:\n- Load `long-running-agent` skill\n- Read `claude-progress.txt` and `git log --oneline -20`\n- Pick ONE feature from `feature_list.json`\n- Implement, test, commit, update progress\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "init-project",
+  "display_name": "Init Project",
+  "description": "Initialize a new project with all essential configuration files",
+  "agent": "sysop",
+  "content": "\n# Initialize New Project\n\nCreate new project with complete CI/CD setup and automation.\n\n## Creates\n\n- `.github/workflows/ci.yml` - CI pipeline\n- `.github/workflows/release.yml` - Release pipeline\n- `.git-hooks/pre-commit` - Pre-commit validation\n- `.git-hooks/commit-msg` - Commit message linting\n- `.commitlintrc.json` - Conventional commits config\n- `.releaserc.json` - Semantic release config\n- `CHANGELOG.md` - Release notes\n- `Makefile` - Build automation\n- `.gitignore` - Ignore patterns\n- `README.md` - Project documentation\n- `AGENTS.md` - AI agent instructions\n\n## Project Type Detection\n\n- **Go:** `go.mod` or `*.go` files\n- **Node.js:** `package.json` or `node_modules`\n- **Python:** `requirements.txt`, `pyproject.toml`, `*.py`\n- **Mixed:** Multiple languages\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "init-project-skill",
+  "display_name": "Init Project Skill",
+  "description": "Initialize a new project with complete automation setup",
+  "agent": "sysop",
+  "content": "\n# Create Project Automation Skill\n\nCreate a new project automation skill package.\n\n## Purpose\n\nGenerate reusable automation skills for project-specific workflows.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "install-git-hooks",
+  "display_name": "Install Git Hooks",
+  "description": "Install and configure git hooks for AI attribution and validation",
+  "agent": "sysop",
+  "content": "\n# Setup Git Hooks\n\nInstall and configure git hooks for compliance.\n\n## Sets Up\n\n- Pre-commit hook (formatting, tests, secrets)\n- Commit-msg hook (conventional commits)\n- Configures `core.hooksPath`\n\n## Hooks Validate\n\n- Code formatting (gofmt)\n- Tests pass\n- No debug statements\n- Secrets detection\n- Commit message format\n\n## Home Repo Hooks\n\n### Post-commit: Vault Sync (`~/.git/hooks/post-commit`)\n\nAutomatically keeps the vault JSON cache in sync whenever opencode configuration files change.\n\n**Trigger**: Fires after every commit to the home repo (`~`).\n\n**Behaviour**:\n1. Inspects the commit's changed files for paths matching `.config/opencode/(agents|skills|commands)/`.\n2. If any match, runs `scripts/sync-opencode-config.sh` from the vault root (`~/vaults/baphled/`).\n3. Stages and commits the updated `assets/opencode/*.json` files in the vault repo.\n\n**Non-blocking**: Errors are logged but do not prevent the triggering commit from completing.\n\n**Manual equivalent**: `make vault-sync` from `~/.config/opencode/`.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "investigate",
+  "display_name": "Investigate",
+  "description": "Investigate a codebase or project producing structured Obsidian documentation",
+  "agent": "data-analyst",
+  "content": "\n# Investigate Project\n\nConduct a systematic codebase investigation using parallel agent exploration.\n\n## Skills Loaded\n\n- `investigation`\n- `research`\n- `parallel-execution`\n- `memory-keeper`\n- `obsidian-structure`\n- `obsidian-dataview-expert`\n\n## Purpose\n\nRun a full project investigation that produces 6 structured documents in the Obsidian vault:\n- Executive Summary (The Good/Bad/Ugly)\n- Architecture Deep Dive\n- Technical Debt Analysis\n- Testing Strategy Assessment\n- CI/CD Assessment\n- Prioritised Recommendations\n\nResults are stored in `1. Projects/{Project}/Investigations/{YYYY-MM-DD}/` with auto-generated DataviewJS indexes.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "maintain",
+  "display_name": "Maintain",
+  "description": "Run housekeeping and maintenance tasks on the codebase",
+  "agent": "sysop",
+  "content": "\n# Maintenance Tasks\n\nPerform routine maintenance tasks.\n\n## Skills Loaded\n\n- `housekeeping`\n\n## Tasks\n\n- Dependency updates\n- Code cleanup\n- Documentation refresh\n- Security patches\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "new-intent",
+  "display_name": "New Intent",
+  "description": "Create a new intent with proper architecture",
+  "agent": "senior-engineer",
+  "content": "\n# Create New Intent\n\nCreate new intent following architecture patterns.\n\n## Skills Loaded\n\n- `create-intent`\n- `architecture`\n\n## Creates\n\n- Intent directory structure\n- Constants file\n- Context file\n- Main intent file\n- Initializer function\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "new-repo",
+  "display_name": "New Repo",
+  "description": "Create a new repository with proper patterns",
+  "agent": "sysop",
+  "content": "\n# Create New Repository\n\nCreate new GitHub repository with standard structure.\n\n## Purpose\n\nInitialize a new repository with proper configuration, documentation, and CI/CD setup.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "new-skill",
+  "display_name": "New Skill",
+  "description": "Create a new skill, command, or agent with full integration into all workflows and documentation",
+  "agent": "senior-engineer",
+  "content": "\n# Create New Skill, Command, or Agent\n\nCreate a new OpenCode component (skill, command, or agent) with full integration across the entire system.\n\n## Skills Loaded\n\n- `new-skill`\n- `knowledge-base`\n- `obsidian-structure`\n- `obsidian-frontmatter`\n- `memory-keeper`\n\n## Purpose\n\nScaffold and fully integrate a new skill, command, or agent into all required locations. This command eliminates repeated discovery by encoding every integration point.\n\n## Workflow\n\n### Phase 0: Determine Component Type\n\nAsk the user what they want to create:\n\n1. **Skill** -- A composable knowledge module (SKILL.md + KB doc + inventory + workflows)\n2. **Command** -- A slash command entry point (command.md + Commands Reference + workflow docs)\n3. **Agent** -- A specialised subagent (agent.md + Agents Reference + flowchart)\n\nGet from the user:\n- **Name** (kebab-case, e.g. `investigation`, `new-intent`)\n- **Description** (one sentence)\n- **Category/Domain** for skills (e.g. Workflow Orchestration, Testing BDD, Code Quality)\n- **Agent assignment** for commands (e.g. senior-engineer, data-analyst)\n\n---\n\n### Phase 1: Create the Component File\n\nUse the **senior-engineer** agent.\n\n#### If Skill:\n\nCreate `~/.config/opencode/skills/{name}/SKILL.md`:\n\n```markdown\n---\nname: {name}\ndescription: {description}\n---\n\n# Skill: {name}\n\n## What I do\n2-3 sentences explaining core purpose.\n\n## When to use me\n- Bullet points for specific contexts\n\n## Core principles\n1. Principle one\n2. Principle two\n3. Principle three\n\n## Patterns & examples\nConcrete patterns with code examples.\n\n## Anti-patterns to avoid\n- Common mistakes\n\n## KB Reference\n\nFull coverage: `~/vaults/baphled/3. Resources/Knowledge Base/Skills/{Category}/{Name}.md`\n\n## Related skills\n- `skill-a` - Pairs with this when doing X\n```\n\n**Constraints:** Max 5KB. Frontmatter: ONLY name + description. Always include `## KB Reference` pointing to the Obsidian KB doc.\n\n#### If Command:\n\nCreate `~/.config/opencode/commands/{name}.md`:\n\n```markdown\n---\ndescription: {description}\nagent: {agent}\n---\n\n# {Title}\n\n{Brief explanation}\n\n## Skills Loaded\n\n- `skill-1`\n- `skill-2`\n\n## Purpose\n\n{What this command does and when to use it}\n\n$ARGUMENTS\n```\n\n#### If Agent:\n\nCreate `~/.config/opencode/agents/{name}.md`:\n\n```markdown\n---\ndescription: {description}\nmode: subagent\ntools:\n  write: {bool}\n  edit: {bool}\n  bash: {bool}\npermission:\n  skill:\n    \"*\": \"allow\"\n---\n\n# {Name} Agent\n\n{Role description}\n\n## When to use this agent\n- {contexts}\n\n## Key responsibilities\n1. {responsibility}\n\n## Always-active skills\n- `pre-action` - {reason}\n- `{skill}` - {reason}\n\n## Skills to load\n- `{skill}` - {description}\n```\n\n---\n\n### Phase 2: Create Knowledge Base Documentation\n\nUse the **writer** agent. Create the Obsidian KB doc.\n\n#### For Skills:\n\nCreate `/home/baphled/vaults/baphled/3. Resources/Knowledge Base/Skills/{Category}/{Name}.md`:\n\n```yaml\n---\nid: {name}\naliases:\n  - {Display Name}\ncategory: {Category}\ntags:\n  - type/note\n  - skill/{name}\n  - area/{domain}\n  - system/opencode\ncreated: {YYYY-MM-DDTHH:MM}\nmodified: {YYYY-MM-DDTHH:MM}\nlead: {description}\n---\n```\n\nInclude: When to Use, full workflow/process, conventions, anti-patterns, related skills, related notes.\n\n#### For Commands:\n\nUpdate `/home/baphled/vaults/baphled/3. Resources/Tech/OpenCode/Commands Reference.md`:\n- Add the command to the correct category table\n- Update the \"By Agent\" counts section\n\n#### For Agents:\n\nCreate `/home/baphled/vaults/baphled/3. Resources/Knowledge Base/Agents/{name}.md`\n\nUpdate `/home/baphled/vaults/baphled/3. Resources/Tech/OpenCode/Agents Reference.md`:\n- Add to the agents table\n- Add a Mermaid flowchart\n- Update agent count\n\n---\n\n### Phase 3: Update Inventories and Dashboards\n\nUse the **senior-engineer** agent. Run these updates in parallel:\n\n#### For Skills (ALL of these are required):\n\n1. **Skills Inventory** (`3. Resources/Tech/OpenCode/Skills Inventory.md`):\n   - Add skill to correct domain section with sequential number\n   - Update domain count in Domain Overview table\n   - Update total skill count in header and body\n\n2. **Skills Dashboard** (`3. Resources/Knowledge Base/Skills.md`):\n   - Update category count in the Skill Organisation table\n   - Update total skill count in header (`lead:`) and body\n   - Add to Common Skill Pairings table if it has notable pairings\n\n3. **Skills Relationship Mapping** (`3. Resources/Tech/OpenCode/Skills Relationship Mapping.md`):\n   - Add agent flow diagram showing when/how the skill loads\n   - Add to the correct skill grouping section\n   - Add to \"When Skills Appear Together\" pairings table\n\n#### For Commands:\n\n4. **Commands Reference** (`3. Resources/Tech/OpenCode/Commands Reference.md`):\n   - Add to the correct category table\n   - Update \"By Agent\" counts\n\n#### For Agents:\n\n5. **Agents Reference** (`3. Resources/Tech/OpenCode/Agents Reference.md`):\n   - Add to the 10 Agents table (now 11)\n   - Add Mermaid flowchart\n   - Update count references\n\n---\n\n### Phase 4: Integrate into Workflows\n\nUse the **senior-engineer** agent.\n\n#### For Skills:\n\n1. **Identify commands that should load this skill**:\n   - Check all 42 commands in `~/.config/opencode/commands/`\n   - Add the skill to the `## Skills Loaded` section of relevant commands\n\n2. **Identify agents that should have access**:\n   - Check all agents in `~/.config/opencode/agents/`\n   - Add to `## Skills to load` section of relevant agents\n\n3. **Update Common Workflows** (`3. Resources/Tech/OpenCode/Common Workflows.md`):\n   - If the skill defines a new workflow, add a full workflow section\n   - Add to the Workflow Selection Guide table\n   - Add a cross-workflow pattern if applicable\n\n#### For Commands:\n\n4. **Update Common Workflows**:\n   - Add command to the Workflow Selection Guide table\n   - Add cross-workflow patterns showing where this command fits\n\n#### For Agents:\n\n5. **Update Commands Reference** to show which commands use the new agent\n\n---\n\n### Phase 5: Update Related Skills\n\nUse the **senior-engineer** agent.\n\nFor each skill listed in the new skill's \"Related skills\" section:\n- Read the related skill's SKILL.md\n- Add a back-reference to the new skill in their \"Related skills\" section\n- Only if the reference is meaningful (don't force it)\n\n---\n\n### Phase 6: Store in Memory\n\nUse the **memory-keeper** pattern.\n\n1. Create a memory entity for the new component\n2. Add observations about its purpose, location, and integration points\n3. Create relations to related entities (commands, agents, other skills)\n\n---\n\n### Phase 7: Sync the Vault\n\nRun from `~/.config/opencode/`:\n\n```bash\nmake vault-sync\n```\n\nThis regenerates the vault's JSON cache (`assets/opencode/*.json`) so Obsidian dashboards reflect the new component immediately. The post-commit hook in `~/.git/hooks/post-commit` also runs this automatically when opencode config files are committed, but running manually confirms the sync succeeded.\n\n---\n\n## Checklist (Must Complete ALL)\n\n### Skill Creation Checklist\n\n- [ ] SKILL.md created at `~/.config/opencode/skills/{name}/SKILL.md`\n- [ ] KB doc created at `3. Resources/Knowledge Base/Skills/{Category}/{Name}.md`\n- [ ] Skills Inventory updated (number, count, total)\n- [ ] Skills Dashboard updated (count, total, pairings)\n- [ ] Skills Relationship Mapping updated (flow, grouping, pairings)\n- [ ] Relevant commands updated with skill in `## Skills Loaded`\n- [ ] Relevant agents updated with skill in `## Skills to load`\n- [ ] Common Workflows updated (if new workflow)\n- [ ] Related skills back-referenced\n- [ ] Memory graph updated\n- [ ] Run `make vault-sync` to update vault JSON cache\n\n### Command Creation Checklist\n\n- [ ] Command file created at `~/.config/opencode/commands/{name}.md`\n- [ ] Commands Reference updated (table, agent counts)\n- [ ] Common Workflows updated (selection guide, cross-patterns)\n- [ ] Memory graph updated\n- [ ] Run `make vault-sync` to update vault JSON cache\n\n### Agent Creation Checklist\n\n- [ ] Agent file created at `~/.config/opencode/agents/{name}.md`\n- [ ] KB doc created at `3. Resources/Knowledge Base/Agents/{name}.md`\n- [ ] Agents Reference updated (table, flowchart, count)\n- [ ] Commands Reference updated (agent counts)\n- [ ] Memory graph updated\n- [ ] Run `make vault-sync` to update vault JSON cache\n\n---\n\n## File Locations Reference\n\n| What | Where |\n|------|-------|\n| Skills | `~/.config/opencode/skills/{name}/SKILL.md` |\n| Commands | `~/.config/opencode/commands/{name}.md` |\n| Agents | `~/.config/opencode/agents/{name}.md` |\n| Skill KB docs | `~/vaults/baphled/3. Resources/Knowledge Base/Skills/{Category}/{Name}.md` |\n| Agent KB docs | `~/vaults/baphled/3. Resources/Knowledge Base/Agents/{Name}.md` |\n| Skills Inventory | `~/vaults/baphled/3. Resources/Tech/OpenCode/Skills Inventory.md` |\n| Skills Dashboard | `~/vaults/baphled/3. Resources/Knowledge Base/Skills.md` |\n| Skills Mapping | `~/vaults/baphled/3. Resources/Tech/OpenCode/Skills Relationship Mapping.md` |\n| Common Workflows | `~/vaults/baphled/3. Resources/Tech/OpenCode/Common Workflows.md` |\n| Commands Reference | `~/vaults/baphled/3. Resources/Tech/OpenCode/Commands Reference.md` |\n| Agents Reference | `~/vaults/baphled/3. Resources/Tech/OpenCode/Agents Reference.md` |\n| Skill Structure | `~/vaults/baphled/3. Resources/Tech/OpenCode/Skill Structure.md` |\n| Skills Creation Guide | `~/vaults/baphled/3. Resources/Tech/OpenCode/Skills Creation Guide.md` |\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "note",
+  "display_name": "Note",
+  "description": "Create a new Zettelkasten note in the Obsidian vault",
+  "agent": "writer",
+  "content": "\n# Create Note\n\nCreate a new Zettelkasten note in the Obsidian vault.\n\n## Skills Loaded\n\n- `note-taking`\n- `obsidian-structure`\n\n## Purpose\n\nCapture knowledge, insights, and learnings in a structured format for future reference.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "optimize",
+  "display_name": "Optimize",
+  "description": "Optimize code performance using profiling and benchmarking",
+  "agent": "senior-engineer",
+  "content": "\n# Performance Optimization\n\nOptimize performance with benchmarking.\n\n## Process\n\n1. Benchmark current performance\n2. Identify bottlenecks\n3. Implement optimizations\n4. Benchmark again\n5. Verify improvements\n6. Create commit\n\n## Skills Loaded\n\n- `performance`\n- `benchmarking`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "pr",
+  "display_name": "PR",
+  "description": "Create a pull request targeting next branch",
+  "agent": "senior-engineer",
+  "content": "\n# Create Pull Request\n\nCreate pull request to `next` branch.\n\n## Skills Loaded\n\n- `create-pr`\n\n## Process\n\n1. Run compliance checks\n2. Push branch to remote\n3. Create PR with template\n4. Link related issues\n5. Request reviewers\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "pr-poll",
+  "display_name": "PR Poll",
+  "description": "Continuously monitor PR and handle tasks until cancelled",
+  "agent": "pr-monitor",
+  "content": "\n# Poll PR for Updates\n\nMonitor PR for changes and updates.\n\n## Checks\n\n- New comments\n- CI status changes\n- Review approvals\n- Merge conflicts\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "pr-ready",
+  "display_name": "PR Ready",
+  "description": "Generate merge readiness summary for current PR",
+  "agent": "qa-engineer",
+  "content": "\n# PR Merge Readiness Summary\n\nGenerate comprehensive merge readiness summary.\n\n## Skills Loaded\n\n- `pr-monitor`\n- `respond-to-review`\n\n## Process\n\n1. Gather PR data\n2. Check CI status\n3. Generate summary with:\n   - Review summary\n   - CI status\n   - Pre-merge checklist\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "pr-status",
+  "display_name": "PR Status",
+  "description": "Check PR status with interactive options for next actions",
+  "agent": "senior-engineer",
+  "content": "\n# Check PR Status\n\nCheck current PR status across all open PRs.\n\n## Shows\n\n- CI status for each PR\n- Review status\n- Merge conflicts\n- Outdated branches\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "qa",
+  "display_name": "QA",
+  "description": "Quality Assurance workflow - verify, find gaps, capture unintended behaviour",
+  "agent": "qa-engineer",
+  "content": "\n# Quality Assurance\n\nComprehensive quality assurance workflow.\n\n## Focus\n\n- Test coverage gaps\n- Edge cases and boundary conditions\n- Error handling\n- Adversarial testing\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "refactor",
+  "display_name": "Refactor",
+  "description": "Refactor code following clean code and Boy Scout Rule",
+  "agent": "senior-engineer",
+  "content": "\n# Safe Refactoring\n\nRefactor code safely with compliance checks.\n\n## Process\n\n1. Ensure all tests pass (GREEN)\n2. Make refactoring changes\n3. Run tests continuously\n4. Run compliance checks\n5. Create commit\n\n## Skills Loaded\n\n- `refactor`\n- `clean-code`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "research",
+  "display_name": "Research",
+  "description": "Research and understand a codebase area, pattern, or technology",
+  "agent": "data-analyst",
+  "content": "\n# Research and Investigation\n\nResearch technical topics or solutions.\n\n## Skills Loaded\n\n- `research`\n- `investigation`\n\n## Purpose\n\nSystematic investigation to understand codebases, patterns, or technologies.\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "respond-review",
+  "display_name": "Respond Review",
+  "description": "Evaluate and respond to all change requests - PR reviews, issues, feedback, and requests",
+  "agent": "Code-Reviewer",
+  "content": "\n# Respond to Change Requests\n\nFetch, evaluate, and address all change requests on a pull request using the `gh` CLI.\n\n## Skills Loaded\n\n- `respond-to-review`\n- `evaluate-change-request`\n- `github-expert`\n\n## Usage\n\nPass the PR number as the argument:\n\n```\n/respond-review 173\n```\n\n## Scope\n\nThis command handles all change request types:\n\n- **PR CHANGES_REQUESTED reviews** — Blocking reviewer feedback fetched via `gh api`\n- **Inline review comments** — File:line annotations fetched via `gh api .../comments`\n- **General PR comments** — Non-inline feedback via `gh pr view --comments`\n- **Issue feedback** — Comments on GitHub issues\n- **Verbal/chat requests** — Feedback from discussions and messages\n\n## Workflow\n\n1. **Fetch** — Auto-detect repo, fetch `CHANGES_REQUESTED` reviews and inline comments via `gh`\n2. **TodoWrite** — Create one todo per comment before touching any code\n3. **Classify** — Accept / Challenge / Clarify / Defer each item\n4. **Execute** — Implement accepted changes; gather evidence for challenges\n5. **Verify** — `make test`, `lsp_diagnostics`, `go build ./...` for every accepted change\n6. **Respond** — Post consolidated summary via `gh pr review {PR} --comment`\n7. **Check CI** — `gh pr checks {PR}`\n\n## Response Types\n\n- **Accept** — Implement + verify + provide before/after evidence\n- **Challenge** — Cite code or tests; mark REJECTED\n- **Clarify** — Post targeted question via `gh pr review`\n- **Defer** — Create follow-up issue; justify non-blocking\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "review",
+  "display_name": "Review",
+  "description": "Code review workflow - enforce rules and quality before merge",
+  "agent": "qa-engineer",
+  "content": "\n# Code Review\n\nPerform comprehensive code review.\n\n## Skills Loaded\n\n- `code-reviewer`\n\n## Checks\n\n- Clean code principles\n- Architecture compliance\n- Security issues\n- Performance concerns\n- Test coverage\n- Documentation\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "security-check",
+  "display_name": "Security Check",
+  "description": "Run security audit on code",
+  "agent": "security-engineer",
+  "content": "\n# Security Audit\n\nRun security vulnerability scans.\n\n## Runs\n\n- gosec - Go security checker\n- Dependency vulnerability scan\n- Secret detection\n- Common vulnerability patterns\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "start",
+  "display_name": "Start",
+  "description": "Start a new development session with context-aware options",
+  "agent": "session-manager",
+  "content": "\n# Start Development Session\n\nStart a new development session with validation and context loading.\n\n## Process\n\n1. Load `session-start` skill\n2. Run `make session-start`\n3. Verify critical rules:\n   - Feature branches only (never commit to next/main)\n   - TDD workflow (test first)\n   - **COMMIT RULES (NO EXCEPTIONS):**\n     - Use `/commit` command with MANDATORY AI attribution\n     - ALWAYS set AI_AGENT and AI_MODEL environment variables\n     - NEVER use `git commit` directly\n     - Format: `AI_AGENT=\"Opencode\" AI_MODEL=\"Claude Opus 4.5\" make ai-commit FILE=/tmp/commit.txt`\n   - Run `make check-compliance` before and after\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "task",
+  "display_name": "Task",
+  "description": "Create a development task with acceptance criteria",
+  "agent": "senior-engineer",
+  "content": "\n# Create Development Task\n\nCreate well-structured development task.\n\n## Skills Loaded\n\n- `create-task`\n\n## Creates\n\n- Task with acceptance criteria\n- Technical guidance\n- Definition of done\n- Estimated effort\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "test",
+  "display_name": "Test",
+  "description": "Testing workflow - write and debug tests with TDD and BDD",
+  "agent": "qa-engineer",
+  "content": "\n# Testing Workflow\n\nWrite and debug tests with TDD and BDD approaches.\n\n## Skills Loaded\n\n- `bdd-workflow`\n- `ginkgo-gomega` / `jest` / `rspec-testing` / `embedded-testing` / `playwright`\n- `test-fixtures`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "vhs-docs",
+  "display_name": "VHS Docs",
+  "description": "Generate VHS tape for documentation - create feature demos and tutorials",
+  "agent": "vhs-director",
+  "content": "\n# VHS Documentation Demo\n\nGenerate VHS tape for documentation and tutorial content.\n\n## Purpose\n\nCreate terminal recordings for documentation:\n- Demonstrate feature usage\n- Ensure clear, reproducible steps\n- Optimise for learning (proper pacing, annotations)\n- Create tutorial content\n- Show best practices in action\n\n## Context\n\nThis command routes to the VHS Director agent with documentation-specific context. The agent will:\n1. Identify documentation context (README, tutorial, guide)\n2. Create tape showing feature usage\n3. Ensure clear, reproducible steps\n4. Optimise for learning (proper pacing, annotations)\n\n## Skills Loaded\n\n- `vhs`\n- `documentation-writing`\n- `tutorial-writing`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "vhs",
+  "display_name": "VHS",
+  "description": "Terminal recording - generate VHS tapes for evidence, demos, and documentation",
+  "agent": "vhs-director",
+  "content": "\n# Terminal Recording (VHS)\n\nGenerate VHS tapes for evidence, demos, and documentation using the VHS Director agent.\n\n## Subcommands\n\n- `vhs pr` - Generate PR evidence tape\n- `vhs qa` - Generate QA validation tape\n- `vhs docs` - Generate documentation demo tape\n- `vhs render` - Generate tape from specification\n\n## Skills Loaded\n\n- `vhs`\n\n## Purpose\n\nCreate terminal recordings for:\n- Evidence of functionality\n- Demo videos\n- Documentation\n- Tutorial content\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "vhs-pr",
+  "display_name": "VHS PR",
+  "description": "Generate VHS tape for PR evidence - demonstrate changes visually",
+  "agent": "vhs-director",
+  "content": "\n# VHS PR Evidence\n\nGenerate VHS tape for pull request evidence.\n\n## Purpose\n\nCreate terminal recordings that demonstrate PR changes visually:\n- Show before/after functionality\n- Demonstrate new features\n- Validate UI/CLI changes\n- Provide visual evidence for code review\n\n## Context\n\nThis command routes to the VHS Director agent with PR-specific context. The agent will:\n1. Analyse the PR diff to understand changes\n2. Identify UI/CLI changes to demonstrate\n3. Create tape showing before/after or new functionality\n4. Upload GIF to PR comment\n\n## Skills Loaded\n\n- `vhs`\n- `git-master`\n- `github-expert`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "vhs-qa",
+  "display_name": "VHS QA",
+  "description": "Generate VHS tape for QA validation - demonstrate test scenarios and edge cases",
+  "agent": "vhs-director",
+  "content": "\n# VHS QA Validation\n\nGenerate VHS tape for QA validation and bug reproduction.\n\n## Purpose\n\nCreate terminal recordings that validate test scenarios:\n- Demonstrate test execution\n- Show pass/fail states clearly\n- Document edge cases tested\n- Provide visual evidence of bug reproduction\n- Validate error handling\n\n## Context\n\nThis command routes to the VHS Director agent with QA-specific context. The agent will:\n1. Understand test scenarios to validate\n2. Create tape demonstrating test execution\n3. Show pass/fail states clearly\n4. Document edge cases tested\n\n## Skills Loaded\n\n- `vhs`\n- `critical-thinking`\n- `ux-design`\n\n$ARGUMENTS"
+}
+,
+{
+  "name": "worktree",
+  "display_name": "Worktree",
+  "description": "Manage Git worktrees for parallel development",
+  "agent": "senior-engineer",
+  "content": "\n# Git Worktree Operations\n\nManage Git worktrees for parallel development.\n\n## Skills Loaded\n\n- `git-worktree`\n\n## Operations\n\n- Create worktree\n- List worktrees\n- Remove worktree\n- Switch between worktrees\n\n$ARGUMENTS"
+}
+]

@@ -1,0 +1,37 @@
+{
+  "local": [
+    {
+      "filename": "event-logger.ts",
+      "size_bytes": 3021,
+      "preview": "import type { Plugin } from \"@opencode-ai/plugin\"\nimport { appendFileSync, writeFileSync } from \"fs\"\n\nconst LOG_FILE = \"/tmp/opencode-events.log\"\n\n// Initialise log file with header on plugin load\ncon"
+    },
+    {
+      "filename": "model-context.ts",
+      "size_bytes": 1753,
+      "preview": "import type { Plugin } from \"@opencode-ai/plugin\"\nimport { existsSync, readFileSync } from \"fs\"\n\nconst CACHE_DIR = `${process.env.HOME}/.cache/opencode`\nconst MODELS_CACHE = `${CACHE_DIR}/models.json`"
+    },
+    {
+      "filename": "provider-failover.ts",
+      "size_bytes": 12775,
+      "preview": "/** Provider Failover Plugin — rate-limit tracking and alternative suggestions */\nimport type { Plugin, PluginInput } from '@opencode-ai/plugin'\nimport { tool } from '@opencode-ai/plugin'\nimport { H"
+    },
+    {
+      "filename": "skill-auto-loader.ts",
+      "size_bytes": 10117,
+      "preview": "/**\n * Skill Auto-Loader Plugin\n * \n * Intercepts task() calls via tool.execute.before hook\n * and auto-injects context-aware skills into load_skills.\n */\n\nimport type { Plugin, PluginInput } from '@o"
+    }
+  ],
+  "external": [
+    {
+      "name": "opencode-anthropic-auth",
+      "version": "0.0.13",
+      "spec": "opencode-anthropic-auth@0.0.13"
+    },
+    {
+      "name": "oh-my-opencode",
+      "version": "unknown",
+      "spec": "oh-my-opencode"
+    }
+  ],
+  "dependencies": {}
+}

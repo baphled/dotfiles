@@ -1,0 +1,181 @@
+---
+name: respond-to-review
+description: Manage and execute code review feedback through evaluation, classification, implementation, and evidence reporting.
+category: General Cross Cutting
+---
+
+# Skill: respond-to-review
+
+## What I do
+
+I provide a methodology for handling code review feedback. I guide the transition from receiving a request to delivering a verified solution. I ensure every piece of feedback is addressed, implemented, and verified—or professionally challenged with evidence.
+
+## When to use me
+
+- Processing feedback from pull request reviews or peer comments.
+- Addressing change requests from orchestrators or stakeholders.
+- Justifying why a suggested change is incorrect, out of scope, or unnecessary.
+- Reporting implementation progress on complex, multi-step feedback.
+
+## Response workflow
+
+Before starting, use `evaluate-change-request` to understand the impact. Never implement blindly.
+
+1. **Identify & Track**: Create a `TodoWrite` list with ALL requests from the review.
+2. **Classify**: Assign each request a type: Accept, Challenge, Clarify, or Defer.
+3. **Execute**: Implement the fix (Accept) or gather evidence (Challenge).
+4. **Verify**: Use `lsp_diagnostics` and run specific tests to ensure correctness.
+5. **Document**: Record before/after states and specific verification commands.
+6. **Reply to each comment individually on GitHub**: Ensure every thread is addressed.
+7. **Rebase onto target branch and push**: Keep the branch up-to-date.
+8. **Report**: Summarise work using the `AGENTS.md` Change Request Summary format.
+
+## GitHub Comment Replies (MANDATORY)
+
+Every review comment must receive an individual reply on GitHub. A consolidated summary is insufficient because reviewers need to see their specific threads addressed.
+
+### Commands for Replies
+
+```bash
+# List PR review comments with IDs
+gh api repos/{owner}/{repo}/pulls/{PR}/comments --jq '.[] | {id: .id, path: .path, line: .line, body: .body[:80]}'
+
+# Reply to a specific comment
+gh api repos/{owner}/{repo}/pulls/{PR}/comments -X POST -f body="Addressed — [description]" -F in_reply_to={comment_id}
+```
+
+### Reply Templates
+
+- **Accept**: "Addressed — implemented the suggested fix and verified with tests."
+- **Challenge**: "Rejected — [reason with evidence/link to code]."
+- **Clarify**: "Clarification needed — [specific question about intent or implementation]."
+- **Defer**: "Deferred — valid point, created follow-up issue #123 to address this separately."
+
+### Anti-patterns to avoid
+
+- ❌ Posting only a consolidated summary without per-comment replies.
+- ❌ Replying "Done" without explaining what was actually changed.
+
+## Thread Resolution (MANDATORY)
+
+After replying to a comment and pushing the fix, you must resolve the review thread. GitHub's REST API cannot resolve threads; the GraphQL API is required.
+
+### Commands for Thread Resolution
+
+```bash
+# Get thread IDs and resolution status
+gh api graphql -f query='{
+  repository(owner: "OWNER", name: "REPO") {
+    pullRequest(number: NUM) {
+      reviewThreads(first: 50) {
+        nodes {
+          id
+          isResolved
+          comments(first: 1) {
+            nodes {
+              databaseId
+              body
+            }
+          }
+        }
+      }
+    }
+  }
+}'
+
+# Resolve a specific thread
+gh api graphql -f query='mutation {
+  resolveReviewThread(input: {threadId: "THREAD_ID"}) {
+    thread {
+      isResolved
+    }
+  }
+}'
+```
+
+## Single Commit for Related Fixes
+
+When addressing multiple related review comments, batch the fixes into a single logical commit rather than creating one commit per comment. This keeps the PR history clean and easier to review.
+
+## Rebase Before Push (MANDATORY)
+
+After addressing all comments, always rebase onto the target branch before pushing. This keeps the branch up-to-date and avoids "Not up to date" CI failures.
+
+### Commands for Rebasing
+
+```bash
+# Rebase onto target branch
+git fetch origin {target} && git rebase origin/{target}
+
+# Push with lease safety
+git push --force-with-lease
+```
+
+### Anti-patterns to avoid
+
+- ❌ Pushing fix commits without rebasing — leaves the PR behind the target branch.
+- ❌ Using a standard `git push -f` when `--force-with-lease` is safer.
+
+## The 4 Response Types
+
+### 1. Accept (Implement + Verify + Evidence)
+- **When**: Valid bug fix, optimisation, or style violation.
+- **Action**: Implement, verify with tests, and mark as `ADDRESSED`.
+- **Note**: Ensure no regressions by running integration tests.
+
+### 2. Challenge (Defend + Evidence)
+- **When**: Request is based on a false premise or violates project rules.
+- **Action**: Cite code or test results to prove current state is correct.
+- **Note**: Mark as `REJECTED` in the summary with a clear "Why".
+
+### 3. Clarify (Query + Context)
+- **When**: Feedback is ambiguous, contradictory, or lacks detail.
+- **Action**: Ask specific questions with context (e.g., "Refactor loop or extract function?").
+
+### 4. Defer (Justify + Issue)
+- **When**: Valid but out of scope for the current task.
+- **Action**: Create a follow-up issue and justify why it shouldn't block the merge.
+
+## Evidence Documentation Pattern
+
+Reviewers require proof of work. Use this pattern for every item:
+- **Location**: `file_path:line_number`
+- **Before**: `[original snippet]`
+- **After**: `[modified snippet]`
+- **Verification**: "Ran `pytest` - all 15 tests passed."
+
+## Tone and Professionalism
+
+- **Objective**: Focus on logic and project requirements, not personal preference.
+- **Constructive**: Challenge the idea, not the person. Use "This might lead to X".
+- **Accountable**: Acknowledge valid catches. Admitting mistakes builds trust.
+- **Complete**: Never ignore a comment. Every nitpick deserves a status.
+
+## Edge Cases
+
+- **Ambiguous Feedback**: Never guess. Clarification saves rework.
+- **Conflicting Reviewers**: Surface the conflict early. Request a decision before proceeding.
+- **Stale Comments**: If code changed in a previous commit, mark as `FALSE POSITIVE`.
+- **Violating Rules**: If asked to bypass tests, reject by citing `AGENTS.md` mandates.
+
+## Completeness Tracking
+
+Task completion is defined by the checklist, not just finishing code.
+- Before: Create `TodoWrite` with all requests.
+- During: Mark items as `in_progress`.
+- After: Verify every item in `TodoWrite` is `completed`.
+- Final: Generate the `Change Request Summary` report.
+
+## KB Reference
+
+`~/vaults/baphled/3. Resources/Knowledge Base/AI Development System/Skills/Code-Quality/Respond To Review.md`
+
+## Related skills
+
+- `evaluate-change-request` – Assessment of feedback validity.
+- `critical-thinking` – Evaluating logic and finding counter-evidence.
+- `prove-correctness` – Generating test results needed for evidence.
+- `code-reviewer` – Understanding reviewer perspectives and severity.
+- `checklist-discipline` – Maintaining tracking for 100% coverage.
+- `auto-rebase` – Automatically rebase PRs and resolve conflicts.
+- `github-expert` – GitHub CLI expertise for PR workflows.

@@ -1,0 +1,5 @@
+#!/bin/bash
+# MCP Server wrapper for mem0 Memory
+# Runs the compiled JavaScript server
+
+exec /home/baphled/.config/nvm/versions/node/v25.6.0/bin/node /home/baphled/.config/opencode/plugins/lib/dist/mcp-mem0-server.js

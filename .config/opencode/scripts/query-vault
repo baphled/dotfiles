@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""
+Query vault knowledge base
+Usage: query-vault <vault-name> "your question"
+"""
+import os
+import sys
+import json
+import argparse
+from pathlib import Path
+
+CONFIG_PATH = Path.home() / ".config/vault-rag/config.json"
+
+def load_config():
+    """Load vault configuration"""
+    if not CONFIG_PATH.exists():
+        print(f"Error: Config not found at {CONFIG_PATH}")
+        sys.exit(1)
+    
+    with open(CONFIG_PATH) as f:
+        return json.load(f)
+
+def query_vault(vault_name: str, question: str, config: dict, top_k: int = 5):
+    """Query a specific vault"""
+    try:
+        import qdrant_client
+        from llama_index.core import VectorStoreIndex, Settings
+        from llama_index.vector_stores.qdrant import QdrantVectorStore
+        from llama_index.embeddings.fastembed import FastEmbedEmbedding
+    except ImportError as e:
+        print(f"Error: Missing dependency - {e}")
+        sys.exit(1)
+
+    vaults = config.get("vaults", {})
+    
+    if vault_name not in vaults:
+        print(f"Error: Unknown vault '{vault_name}'")
+        print(f"Available: {', '.join(vaults.keys())}")
+        sys.exit(1)
+    
+    qdrant_cfg = config.get("qdrant", {})
+    host = qdrant_cfg.get("host", "localhost")
+    port = qdrant_cfg.get("port", 6333)
+    collection_name = f"vault_{vault_name}"
+    
+    # Connect to Qdrant
+    client = qdrant_client.QdrantClient(host=host, port=port)
+    
+    # Load index with hybrid search settings
+    embed_cfg = config.get("embedding", {})
+    enable_hybrid = embed_cfg.get("enable_hybrid", False)
+
+    vector_store = QdrantVectorStore(
+        client=client,
+        collection_name=collection_name,
+        enable_hybrid=enable_hybrid
+    )
+
+    # Set embedding model to avoid OpenAI default
+    model_name = embed_cfg.get("model", "BAAI/bge-small-en-v1.5")
+    Settings.embed_model = FastEmbedEmbedding(model_name=model_name)
+
+    # Disable LLM for retrieval-only mode
+    Settings.llm = None
+
+    index = VectorStoreIndex.from_vector_store(vector_store=vector_store)
+
+    # Query with retrieval only (no LLM generation)
+    from llama_index.core.retrievers import VectorIndexRetriever
+    retriever = VectorIndexRetriever(
+        index=index,
+        similarity_top_k=top_k
+    )
+    
+    # Retrieve nodes directly
+    from llama_index.core.query_engine import RetrieverQueryEngine
+    from llama_index.core.response_synthesizers import get_response_synthesizer
+    
+    response_synthesizer = get_response_synthesizer(response_mode="no_text")
+    query_engine = RetrieverQueryEngine(
+        retriever=retriever,
+        response_synthesizer=response_synthesizer
+    )
+    
+    response = query_engine.query(question)
+    
+    print(f"\n❓ Question: {question}")
+    print(f"\n💡 Answer:\n{response}")
+    print(f"\n📚 Sources:")
+    for node in response.source_nodes:
+        file_name = node.metadata.get('file_name', 'Unknown')
+        score = getattr(node, 'score', 0.0)
+        print(f"  - {file_name}: {score:.3f}")
+    
+    return response
+
+def list_vaults(config: dict):
+    """List configured vaults"""
+    print("Available vaults:")
+    print("-" * 50)
+    for name in config.get("vaults", {}).keys():
+        print(f"  - {name}")
+    print(f"\nConfig: {CONFIG_PATH}")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Query Obsidian vault knowledge bases"
+    )
+    parser.add_argument(
+        "vault",
+        nargs="?",
+        help="Vault name to query"
+    )
+    parser.add_argument(
+        "question",
+        nargs="*",
+        help="Question to ask"
+    )
+    parser.add_argument(
+        "--list", "-l",
+        action="store_true",
+        help="List available vaults"
+    )
+    parser.add_argument(
+        "--top-k", "-k",
+        type=int,
+        default=5,
+        help="Number of results to retrieve (default: 5)"
+    )
+    
+    args = parser.parse_args()
+    config = load_config()
+    
+    if args.list:
+        list_vaults(config)
+    elif args.vault and args.question:
+        question = " ".join(args.question)
+        query_vault(args.vault, question, config, args.top_k)
+    else:
+        parser.print_help()
+        print("\n\nExamples:")
+        print('  query-vault baphled "What are my active projects?"')
+        print('  query-vault baphled "Summarize recent notes"')
+        print('  query-vault --list')
+
+if __name__ == "__main__":
+    main()

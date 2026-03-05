@@ -1,0 +1,58 @@
+{
+  "synced_at": "2026-02-22T14:17:07Z",
+  "config_path": "/home/baphled/.config/opencode",
+  "component_counts": {
+    "agents": 15,
+    "skills": 153,
+    "commands": 47,
+    "plugins": 4
+  },
+  "opencode_json": {
+    "$schema": "https://opencode.ai/config.json",
+    "mcp": {
+      "memory": {
+        "command": [
+          "npx",
+          "-y",
+          "@modelcontextprotocol/server-memory"
+        ],
+        "type": "local"
+      },
+      "vault-rag": {
+        "command": [
+          "/home/baphled/.local/bin/mcp-vault-server"
+        ],
+        "type": "local"
+      }
+    },
+    "plugin": [
+      "opencode-anthropic-auth@0.0.13",
+      "oh-my-opencode"
+    ],
+    "provider": {
+      "ollama": {
+        "models": {
+          "glm-4.7:cloud": {
+            "_launch": true,
+            "name": "GLM 4.7 Cloud"
+          },
+          "kimi-k2.5:cloud": {
+            "_launch": true,
+            "name": "Kimi K2.5 Cloud"
+          }
+        },
+        "name": "Ollama (local)",
+        "npm": "@ai-sdk/openai-compatible",
+        "options": {
+          "baseURL": "http://localhost:11434/v1"
+        }
+      }
+    }
+  },
+  "package_json": {
+    "dependencies": {
+      "@opencode-ai/plugin": "1.2.10"
+    }
+  },
+  "agents_md": "# Claude Code Agent System\n\n# 🚨 THE GOLDEN RULE: ORCHESTRATOR ALWAYS DELEGATES 🚨\n\n**The orchestrator (Sisyphus/main agent) performs ZERO implementation. No exceptions.**\n\n### MANDATORY DELEGATION PATTERN\nEvery task that requires file modification or content creation MUST follow this flow:\n1. **Understand** the requirement.\n2. **Select** the appropriate `task()` category.\n3. **Delegate** implementation to a subagent via the `task()` tool.\n4. **Verify** the subagent's work.\n\n### DELEGATION EXAMPLES\n- **Typo fix:** Delegate to `quick`.\n- **New function:** Delegate to `deep`.\n- **Documentation update:** Delegate to `writing`.\n- **Refactoring:** Delegate to `ultrabrain`.\n\n### 🚫 BLOCKING VIOLATIONS (ANTI-PATTERNS)\n- ❌ **Direct File Editing:** Orchestrator using `write` or `edit` tools directly.\n- ❌ **\"Quick Fix\" Trap:** Doing a small change directly because \"it's faster\".\n- ❌ **The \"Simplicity\" Lie:** Deciding a task is too simple to delegate. Even a single line change gets delegated.\n- ❌ **Investigative Overreach:** Reading 5+ files to \"understand\" instead of delegating the exploration to a subagent.\n\n---\n\n## Phase 0: Automatic Classification\n\n**Execute BEFORE any tool call.**\n\n### Algorithm\n\n```\n1. PARSE request\n2. SELECT appropriate category:\n   - quick: Single file, typo, config\n   - writing: Documentation, prose\n   - deep: Multi-file, investigation\n   - ultrabrain: Architecture, novel problems\n3. DELEGATE via task() with skills\n4. VERIFY results\n```\n\n| Task Type | Category | Tier |\n|-----------|----------|------|\n| Typo fix, single file | quick | T1 |\n| Documentation, prose | writing | T2 |\n| Multi-file, investigation | deep | T2 |\n| Architecture, complex logic | ultrabrain | T3 |\n\n### Specialist Agent Routing\n\n| Task | Route to |\n|------|----------|\n| Complex engineering tasks, multi-file features, coordination of specialists | Tech-Lead |\n| Specific implementation, bug fix, single-scope refactor (delegated from Tech-Lead) | Senior-Engineer |\n\n---\n\n## Tool Restrictions (Deterministic Enforcement)\n\nOrchestration-only behaviour is enforced via **permission gates**, not just prompt instructions.\n\n### Orchestrators (edit: deny)\n\nThese agents **cannot** use Edit or Write tools. They classify, delegate, and verify — nothing else.\n\n| Agent | `edit` | `bash` | Role |\n|-------|--------|--------|------|\n| `sisyphus` | deny | allow | Primary orchestrator |\n| `hephaestus` | deny | allow | Orchestrator (Claude Code) |\n| `atlas` | deny | allow | Orchestrator (OpenCode) |\n| `Tech-Lead` | deny | allow | Engineering orchestrator |\n\n### Workers (edit: allow)\n\nThese agents **can** modify files. They receive delegated tasks from orchestrators.\n\n| Agent | `edit` | `bash` | Role |\n|-------|--------|--------|------|\n| `sisyphus-junior` | allow | allow | Generic worker (category fallback) |\n| `Senior-Engineer` | allow | allow | Software engineering |\n| `QA-Engineer` | allow | allow | Testing and quality |\n| `Code-Reviewer` | allow | allow | PR change request response |\n| `Writer` | allow | deny | Documentation |\n| `DevOps` | allow | allow | Infrastructure |\n| `VHS-Director` | allow | allow | Terminal recordings |\n| `Embedded-Engineer` | allow | allow | Firmware |\n| `Knowledge Base Curator` | allow | deny | Knowledge management |\n| `Model-Evaluator` | allow | allow | Model testing |\n\n### Read-Only Specialists (edit: deny)\n\nThese agents advise but do not modify files.\n\n| Agent | `edit` | `bash` | Role |\n|-------|--------|--------|------|\n| `Security-Engineer` | deny | allow | Security auditing |\n| `Data-Analyst` | deny | allow | Data analysis |\n| `Nix-Expert` | deny | allow | Nix guidance |\n| `Linux-Expert` | deny | allow | Linux guidance |\n| `SysOp` | deny | allow | Operations guidance |\n\n### Why permissions, not just prompts?\n\nPrompt-based rules (\"NEVER edit files directly\") are non-deterministic — models can ignore them. Permission gates are **enforced by the framework** and cannot be bypassed.\n\n---\n\n## Universal Skills (AUTO-LOAD)\n\nThese skills load on EVERY task() call:\n- `pre-action` — Decision framework\n- `memory-keeper` — Capture discoveries  \n- `skill-discovery` — Automatically discover and load appropriate skills based on task context\n- `agent-discovery` — Automatically discover and route to appropriate specialist agents\n\n---\n\n## Commit Rules\n\n**MANDATORY:** Use `git_master` skill for planning, `make ai-commit` for execution.\n\n1. **Planning:** `git_master` for atomic commits, style detection, dependency ordering\n2. **New commits:** Write to `tmp/commit.txt`, run `make ai-commit FILE=tmp/commit.txt`\n3. **Fixups:** `git commit --fixup=<hash>` directly\n4. **Before first commit:** Run `make check-compliance`\n\n**NEVER use raw `git commit -m` for new commits.**\n\n---\n\n## Change Request Verification\n\nWhen addressing review feedback:\n1. **Identify** — Locate each request\n2. **Understand** — What exactly is being asked?\n3. **Verify** — Read actual code to confirm change\n4. **Document** — File, before/after, verification\n5. **Report** — Status: ADDRESSED, FALSE POSITIVE, or REJECTED\n\n**Evidence required:** File path, before state, after state, proof of change.\n\n---\n\n## Model Routing\n\n**Match complexity to tier:**\n\n| Tier | When | Models |\n|------|------|--------|\n| T1 | Exploration, search | gpt-5-mini, Haiku |\n| T2 | Implementation, tests, writing | gpt-5, Sonnet 4 |\n| T3 | Architecture, novel problems | Opus 4.6 |\n\n| Category | Tier |\n|----------|------|\n| quick, unspecified-low | T1 |\n| deep, visual-engineering, writing, unspecified-high | T2 |\n| ultrabrain, artistry | T3 |\n\n**Pre-delegation health check (MANDATORY):** Before delegating, call `provider-health(tier=X, recommend=true)` to get the best available model with sufficient capacity. Pass `estimated_requests=N` for large tasks. This avoids wasting round trips on rate-limited or nearly-exhausted providers.\n\n**Capacity tracking:** Usage is counted per provider. Providers near their limits (e.g. Copilot 270/300 monthly) are skipped for expensive tasks.\n\n**Failover:** If rate limited or insufficient capacity, auto-switch to next provider in tier.\n\n---\n\n## Evaluator-Optimizer Workflow\n\nUse when output quality improves measurably through critique. Two signs of good fit:\n(1) a human's feedback demonstrably improves the output; (2) the evaluator can\nprovide that feedback autonomously.\n\n| Trigger                 | Generator       | Evaluator          |\n|-------------------------|-----------------|--------------------|\n| Code needs review       | Senior-Engineer | QA-Engineer        |\n| Documentation quality   | Writer          | Tech-Lead          |\n| Security audit          | Senior-Engineer | Security-Engineer  |\n| Architecture review     | Senior-Engineer | Tech-Lead          |\n\n**Pattern:**\n1. Generator produces output\n2. Evaluator critiques with specific, actionable feedback\n3. Generator revises based on critique\n4. Repeat until criteria met (max 3 iterations)\n\n**Do not use for:** Simple tasks, single-file changes, or when clear evaluation\ncriteria do not exist. The overhead is not worth it.\n\n---\n\n## Three Pillars\n\n1. **Always-Active Discipline** — pre-action, memory-keeper, search first\n2. **Parallel Execution** — Independent tasks in single message\n3. **Progressive Disclosure** — Load only what's needed\n\n---\n\n## Communication\n\n**Style:** Direct, plain, no validation.\n\n- No \"Great question!\" or \"I love that idea!\"\n- No over-apologising\n- No verbose intros/outros\n- Disagree plainly\n- Get to the point"
+}
