@@ -56,6 +56,47 @@ gh api repos/{owner}/{repo}/pulls/{PR}/comments -X POST -f body="Addressed — [
 - ❌ Posting only a consolidated summary without per-comment replies.
 - ❌ Replying "Done" without explaining what was actually changed.
 
+## Thread Resolution (MANDATORY)
+
+After replying to a comment and pushing the fix, you must resolve the review thread. GitHub's REST API cannot resolve threads; the GraphQL API is required.
+
+### Commands for Thread Resolution
+
+```bash
+# Get thread IDs and resolution status
+gh api graphql -f query='{
+  repository(owner: "OWNER", name: "REPO") {
+    pullRequest(number: NUM) {
+      reviewThreads(first: 50) {
+        nodes {
+          id
+          isResolved
+          comments(first: 1) {
+            nodes {
+              databaseId
+              body
+            }
+          }
+        }
+      }
+    }
+  }
+}'
+
+# Resolve a specific thread
+gh api graphql -f query='mutation {
+  resolveReviewThread(input: {threadId: "THREAD_ID"}) {
+    thread {
+      isResolved
+    }
+  }
+}'
+```
+
+## Single Commit for Related Fixes
+
+When addressing multiple related review comments, batch the fixes into a single logical commit rather than creating one commit per comment. This keeps the PR history clean and easier to review.
+
 ## Rebase Before Push (MANDATORY)
 
 After addressing all comments, always rebase onto the target branch before pushing. This keeps the branch up-to-date and avoids "Not up to date" CI failures.

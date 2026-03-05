@@ -118,3 +118,4 @@ Describe("UserService", func() {
 - `cucumber` - Gherkin runner for executable specifications
 - `godog` - Go-specific Gherkin runner
 - `clean-code` - Apply during the refactor phase
+- `vhs` - Automated TUI acceptance testing via terminal recordings

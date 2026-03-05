@@ -36,6 +36,40 @@ Use the `gh` command to stay updated.
 Address all comments before re-requesting a review.
 - **Pattern**, Fix the issue, push the change, and then reply to the comment confirming the fix. If you disagree, explain your reasoning clearly and politely.
 
+### Resolving review threads
+After addressing a review comment and replying, resolve the thread via the GraphQL API.
+
+```bash
+# Get thread IDs
+gh api graphql -f query='{
+  repository(owner: "OWNER", name: "REPO") {
+    pullRequest(number: NUM) {
+      reviewThreads(first: 50) {
+        nodes {
+          id
+          isResolved
+          comments(first: 1) {
+            nodes {
+              databaseId
+              body
+            }
+          }
+        }
+      }
+    }
+  }
+}'
+
+# Resolve thread
+gh api graphql -f query='mutation {
+  resolveReviewThread(input: {threadId: "THREAD_ID"}) {
+    thread {
+      isResolved
+    }
+  }
+}'
+```
+
 ### Monitoring for conflicts
 Keep your branch up to date with the base branch.
 - **Action**, Regularly rebase or merge the base branch (e.g., `main`) into your PR branch to catch conflicts early.
@@ -50,6 +84,7 @@ Help reviewers by providing context.
 - ❌ **Merging with failed checks**, never merge a PR if CI/CD checks have failed, unless there is an exceptional and documented reason.
 - ❌ **Ignoring negative reviews**, merging a PR without addressing a "Request Changes" review from a teammate.
 - ❌ **Too many commits**, avoid pushing dozens of tiny "fix typo" commits. Squash or clean up your history before the final merge.
+- ❌ **Leaving threads unresolved after addressing them**. Addressed threads should always be resolved to clear them for the reviewer.
 
 ## KB Reference
 

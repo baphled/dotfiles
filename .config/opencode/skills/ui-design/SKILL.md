@@ -59,3 +59,4 @@ Keep the user informed about background tasks.
 - `bubble-tea-expert`, for building TUIs with the Elm architecture.
 - `huh`, for building interactive forms.
 - `accessibility`, for making your TUI inclusive.
+- `vhs`, for recording terminal demos to evaluate visual clarity.

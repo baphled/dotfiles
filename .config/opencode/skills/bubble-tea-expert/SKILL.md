@@ -165,3 +165,4 @@ func (m model) View() string {
 - `huh` - Interactive forms built on Bubble Tea
 - `ui-design` - Visual hierarchy and layout principles
 - `golang` - Core Go idioms used in Bubble Tea
+- `vhs` - Terminal recording for TUI demos and documentation

@@ -45,6 +45,10 @@ I guide PR creation: branch naming, commit organisation, description writing, an
    Push branch
    Create PR via gh CLI
    Request reviewers
+
+5. MONITOR
+   Check for automated review comments (Copilot, bots).
+   Address individually, resolve threads, commit fixes.
 ```
 
 ## Patterns & examples
@@ -121,6 +125,7 @@ EOF
 - ❌ WIP commits in final PR (squash before review)
 - ❌ No description (reviewers shouldn't have to guess intent)
 - ❌ Targeting main directly (go through next first)
+- ❌ Ignoring automated review comments after PR creation
 
 ## KB Reference
 
@@ -133,3 +138,5 @@ EOF
 - `code-reviewer` - What reviewers look for
 - `pre-merge` - Final checks before merging
 - `pr-monitor` - Monitoring PR status after creation
+- `respond-to-review` - Methodology for addressing review feedback
+- `pr-review-workflow` - Workflow for addressing review comments and resolving threads
