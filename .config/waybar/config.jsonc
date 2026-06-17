@@ -132,7 +132,7 @@
     "show-passive-items": true
   },
   "clock": {
-    "format": "  {:%OI:%M %p}",
+    "format": "  {:%H:%M}",
     "on-click": "ghostty --class='com.waybar.calcurse' --title='waybar_calcurse' -e zsh --login -c calcurse",
     // Uncomment to enable right-click calcurse-caldav sync (you need to set it up in calcurse config)
     //"on-click-right": "notify-send \"Running calcurse-caldav...\" \"$(calcurse-caldav)\"",
