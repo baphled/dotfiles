@@ -1,0 +1,116 @@
+# ashell 0.10.0 config — replaces waybar (Catppuccin Mocha)
+position = "Top"
+layer = "Top"
+enable_esc_key = true
+
+[modules]
+left = [ [ "appLauncher", "Updates" ], "Workspaces" ]
+center = [ "MediaPlayer" ]
+right = [ "SystemInfo", [ "KeyboardLayout", "Tray", "Tempo" ], [ "Notifications", "Privacy", "Settings" ] ]
+
+[[CustomModule]]
+name = "appLauncher"
+icon = "󰀻"
+command = "nwg-drawer"
+
+[updates]
+check_cmd = "checkupdates; paru -Qua"
+update_cmd = 'ghostty --class="com.waybar.garuda" -e zsh -c "garuda-update && (read -p \"Update complete. Press Enter to exit.\" && exit 0) || (read -p \"Update failed. Press Enter to exit.\" && exit 1)" &'
+interval = 3600
+
+[workspaces]
+visibility_mode = "All"
+indicator_format = "Name"
+enable_workspace_filling = true
+max_workspaces = 10
+workspace_names = [ "\uF120", "\uF040", "\uF269", "\U000F04B1", "\uF19D", "\uF0E0", "\uF15C", "\uE5FE", "\uF108", "\uF2D2" ]
+
+
+[keyboard_layout]
+labels = { "English (US)" = "US", "English (United Kingdom)" = "GB" }
+
+[system_info]
+indicators = [ "Cpu", "Memory", "Temperature" ]
+interval = 5
+
+[system_info.cpu]
+warn_threshold = 60
+alert_threshold = 80
+
+[system_info.memory]
+warn_threshold = 70
+alert_threshold = 85
+
+[media_player]
+indicator_format = "IconAndText"
+indicator_fields = ["Artist", "Title"]
+max_text_length = 40
+
+[tray]
+right_click = "Menu"
+
+[tempo]
+clock_format = "%a %d %b %R"
+
+[notifications]
+show_timestamps = true
+show_bodies = true
+grouped = true
+toast = true
+toast_position = "TopRight"
+toast_max_height = 400
+
+[settings]
+lock_cmd = "pidof hyprlock || hyprlock"
+shutdown_cmd = "shutdown now"
+suspend_cmd = "systemctl suspend"
+reboot_cmd = "systemctl reboot"
+logout_cmd = "loginctl kill-user $(whoami)"
+audio_sinks_more_cmd = "pavucontrol -t 3"
+audio_sources_more_cmd = "pavucontrol -t 4"
+wifi_more_cmd = "nm-connection-editor"
+vpn_more_cmd = "nm-connection-editor"
+bluetooth_more_cmd = "blueberry"
+battery_format = "IconAndPercentage"
+audio_indicator_format = "IconAndPercentage"
+volume_step = 5
+indicators = [ "IdleInhibitor", "PowerProfile", "Audio", "Microphone", "Bluetooth", "Network", "Vpn", "Battery", "Brightness" ]
+
+[osd]
+enabled = true
+timeout = 1500
+show_volume_percentage = true
+show_brightness_percentage = true
+
+[animations]
+enabled = true
+
+[appearance]
+font_name = "AnonymicePro Nerd Font"
+scale_factor = 1.5
+blur = "auto"
+primary_color = "#89b4fa"
+success_color = "#a6e3a1"
+warning_color = "#f9e2af"
+danger_color = "#f38ba8"
+text_color = "#cdd6f4"
+workspace_colors = [ "#89b4fa", "#cba6f7", "#94e2d5", "#f9e2af" ]
+
+[appearance.opacity]
+default = 0.9
+bar = 0.9
+menu = 0.95
+osd = 0.95
+notifications = 0.95
+
+[appearance.bar]
+surface = "transparent"
+margin = "none"
+
+[appearance.menu]
+backdrop = 0.3
+
+[appearance.background_color]
+base = "#1e1e2e"
+weak = "#313244"
+strong = "#45475a"
