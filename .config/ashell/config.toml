@@ -6,7 +6,7 @@ enable_esc_key = true
 [modules]
 left = [ [ "appLauncher", "Updates" ], "Workspaces" ]
 center = [ "MediaPlayer" ]
-right = [ "SystemInfo", [ "KeyboardLayout", "Tray", "Tempo" ], [ "Notifications", "Privacy", "Settings" ] ]
+right = [ "SystemInfo", [ "KeyboardLayout", "Tray" ], [ "Notifications", "Privacy", "Settings", "Tempo" ] ]
 
 [[CustomModule]]
 name = "appLauncher"
