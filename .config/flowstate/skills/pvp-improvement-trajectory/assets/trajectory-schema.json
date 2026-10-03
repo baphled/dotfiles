@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PvP Improvement Trajectory Report",
+  "type": "object",
+  "required": ["generated_at", "block_size", "matches", "blocks", "quality"],
+  "properties": {
+    "generated_at": {"type": "string"},
+    "block_size": {"type": "integer", "minimum": 1},
+    "quality": {"type": "object"},
+    "matches": {"type": "array", "items": {"type": "object"}},
+    "blocks": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": true
+}
