@@ -19,6 +19,3 @@
 [submodule ".themes/plugins/fzf-tab"]
 	path = .themes/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
-[submodule ".config/opencode"]
-	path = .config/opencode
-	url = https://github.com/baphled/dotopencode.git
