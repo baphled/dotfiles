@@ -47,12 +47,13 @@ zinit ice as"command" from"gh-r" \
   atpull"%atclone" src"init.zsh"
 zinit light starship/starship
 
+
 # Customize to your needs...
 export EDITOR=nvim
 export VISUAL=nvim
 export NVM_DIR=~/.config/nvm
 
-[[ -n "$TMUX" ]] && export TERM=tmux-256color || export TERM=xterm-kitty
+[[ -n "$TMUX" ]] && export TERM=tmux-256color || export TERM=xterm-ghostty
 export COLORTERM=truecolor
 
 # renaming multiple files at once
@@ -91,10 +92,11 @@ compinit
 # automatically load bash completion functions
 autoload -U +X bashcompinit && bashcompinit
 
+
+# Initialize television shell integration (overrides fzf's Ctrl-T and Ctrl-R)
+eval "$(tv init zsh)"
 zi cdreplay -q
 zi cdlist -q &>/dev/null
-
-eval "$(zoxide init zsh)"
 
 # Bindings.
 bindkey -v
@@ -131,3 +133,5 @@ export QLTY_INSTALL="$HOME/.qlty"
 export PATH="$QLTY_INSTALL/bin:$PATH"
 source /home/baphled/.config/op/plugins.sh
 export PATH="$HOME/.luarocks/bin:$PATH"
+
+eval "$(zoxide init zsh)"
