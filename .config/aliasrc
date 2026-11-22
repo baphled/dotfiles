@@ -4,7 +4,7 @@ alias cd="z"
 
 alias mmv='noglob zmv -W'
 
-alias fp='sesh connect $(sesh list | fzf)'
+alias fp='tv sesh'
 
 # Replace ls with eza
 alias ls='eza -al --color=always --group-directories-first --icons' # preferred listing
@@ -13,13 +13,7 @@ alias l='eza -l --color=always --group-directories-first --icons'  # long format
 alias lt='eza -aT --color=always --group-directories-first --icons' # tree listing
 alias l.='eza -ald --color=always --group-directories-first --icons .*' # show only dotfiles
 
-alias rfv="rg --color=always --line-number --no-heading --smart-case \"${*:-}\" |
-  fzf --ansi \
-      --color \"hl:-1:underline,hl+:-1:underline:reverse\" \
-      --delimiter : \
-      --preview 'bat --color=always {1} --highlight-line {2}' \
-      --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-      --bind 'enter:become(vim {1} +{2})"
+alias rfv='tv text'
 
 # Replace some more things with better alternatives
 alias cat='bat --style header --style snip --style changes --style header'
