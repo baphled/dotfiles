@@ -1,0 +1,47 @@
+# projects.toml: TV channel for quickly navigating to project directories
+# Uses fd to find project directories and provides preview + actions
+
+[metadata]
+name = "projects"
+description = "Navigate to project directories using fd"
+requirements = ["fd", "bat"]
+
+[source]
+# Find all directories matching common project patterns
+command = "fd -H -d 3 -t d '(node_modules|\\.git|Makefile|Cargo.toml|go.mod|package.json)' ~/ --exec dirname {} \\; | sort -u"
+ansi = true
+offset = 0
+
+[preview]
+# Preview the project directory with tree structure and file count
+command = "eza -la --color=always --group-directories-first --icons -d 1 {1}"
+
+[keybindings]
+# Default action: open in nvim at the directory
+enter = "open_nvim"
+# Alternative: enter tmux session for the project
+t = "tmux_session"
+# Alternative: cd to project and open zsh shell
+o = "open_shell"
+# Copy project path to clipboard
+y = "copy_path"
+
+[actions.open_nvim]
+# Open the selected project in nvim
+command = "nvim {1}"
+mode = "execute"
+
+[actions.tmux_session]
+# Create or attach to a tmux session named after the project directory
+command = "tmux new-session -d -s \"$(basename {1})\" -c {1} 2>/dev/null || tmux attach-session -t \"$(basename {1})\" -c {1}"
+mode = "execute"
+
+[actions.open_shell]
+# Change directory and open zsh shell
+command = "cd {1} && zsh"
+mode = "execute"
+
+[actions.copy_path]
+# Copy the full project path to clipboard
+command = "echo -n '{1}' | xclip -selection clipboard && echo 'Copied: {1}'"
+mode = "fork"

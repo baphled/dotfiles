@@ -1,0 +1,54 @@
+# my-dotfiles.toml: TV channel for navigating dotfiles and config directories
+# Uses fd to find all dotfiles and important config directories
+
+[metadata]
+name = "my-dotfiles"
+description = "Navigate important dotfiles and configuration files"
+requirements = ["fd", "bat", "grep"]
+
+[source]
+# Find important dotfiles and config directories, excluding common unimportant ones
+command = "fd -H '^\\.' ~/ --max-depth 1 --type f --exclude '.cache' --exclude '.local' --exclude '.mozilla' --exclude '.bash_history' --exclude '.zsh_history' --exclude '.lesshst' | sort"
+ansi = true
+offset = 0
+
+[preview]
+# Preview the dotfile with syntax highlighting
+command = "bat --color=always --style header,snip,changes {1}"
+
+[keybindings]
+# Default: open in nvim
+enter = "edit_nvim"
+# View file in bat with pager
+v = "view_bat"
+# Edit with fallback editor selection
+e = "edit_selector"
+# Copy path to clipboard
+y = "copy_path"
+# Show file info (size, modified date, permissions)
+i = "file_info"
+
+[actions.edit_nvim]
+# Edit the selected dotfile in nvim
+command = "nvim {1}"
+mode = "execute"
+
+[actions.view_bat]
+# View the file in bat pager (full screen)
+command = "bat --color=always --paging=always {1}"
+mode = "execute"
+
+[actions.edit_selector]
+# Let user choose editor: nvim, vim, nano, or echo the path
+command = "printf 'nvim\\nvim\\nnano\\necho (show path)' | fzf | xargs -I {} sh -c 'case {} in nvim) nvim {1} ;; vim) vim {1} ;; nano) nano {1} ;; *) echo {1} ;; esac'"
+mode = "execute"
+
+[actions.copy_path]
+# Copy the absolute path to clipboard
+command = "echo -n '{1}' | xclip -selection clipboard && echo 'Copied: {1}'"
+mode = "fork"
+
+[actions.file_info]
+# Show file information (size, modified date, permissions)
+command = "ls -lh {1} && echo '' && file {1}"
+mode = "execute"

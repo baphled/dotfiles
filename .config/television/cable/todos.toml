@@ -1,0 +1,54 @@
+# todos.toml: TV channel for finding and managing todo items across the system
+# Searches for common todo markers (TODO, FIXME, HACK, XXX) in project files
+
+[metadata]
+name = "todos"
+description = "Find and navigate to todo items in your projects"
+requirements = ["rg", "fd", "bat"]
+
+[source]
+# Search for common todo markers across project files, excluding build artifacts and deps
+command = "rg -n '(TODO|FIXME|HACK|XXX|BUG|NOTE|WARN):?\\s+' -g '!{node_modules,vendor,build,dist,.git,.cache,target}' . 2>/dev/null | sort -u || echo '(No todos found)'"
+ansi = true
+offset = 0
+
+[preview]
+# Preview the file context around the todo item
+command = "echo {1} | cut -d: -f1,2 | awk -F: '{ file=$1; line=$2; cmd = \"bat --color=always --line-range=\" line-3 \":\" line+3 \" \\\"\" file \"\\\" 2>/dev/null || cat \\\"\" file \"\\\"\"; system(cmd); }'"
+
+[keybindings]
+# Default: open file in nvim at the todo line
+enter = "open_nvim_line"
+# Edit the file in vim
+v = "open_vim_line"
+# Show all todos in the same file
+t = "todos_in_file"
+# Copy path to clipboard
+y = "copy_path_line"
+# Create a new todo from template
+n = "new_todo"
+
+[actions.open_nvim_line]
+# Open the file in nvim at the line with the todo
+command = "echo {1} | cut -d: -f1,2 | awk -F: '{print $1 \" +\" $2}' | xargs nvim"
+mode = "execute"
+
+[actions.open_vim_line]
+# Open the file in vim at the line with the todo
+command = "echo {1} | cut -d: -f1,2 | awk -F: '{print $1 \" +\" $2}' | xargs vim"
+mode = "execute"
+
+[actions.todos_in_file]
+# Show all todos in the current file
+command = "echo {1} | cut -d: -f1 | xargs -I {} rg -n '(TODO|FIXME|HACK|XXX|BUG|NOTE|WARN):?\\s+' {} | fzf --preview 'bat --color=always --highlight-line {2} {1}' --preview-window 'up,50%'"
+mode = "execute"
+
+[actions.copy_path_line]
+# Copy the file and line number to clipboard
+command = "echo {1} | awk -F: '{print $1 \":\" $2}' | xargs -I {} sh -c 'echo -n \"{}\" | xclip -selection clipboard && echo \"Copied: {}\"'"
+mode = "fork"
+
+[actions.new_todo]
+# Create a new todo item (opens editor)
+command = "nvim +'read !date +\"## TODO [%Y-%m-%d]\"' +'set ft=markdown' +'$' +'startinsert'"
+mode = "execute"
